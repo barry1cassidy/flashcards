@@ -14,6 +14,7 @@ import SettingsPage from './pages/SettingsPage'
 import LibraryPage from './pages/LibraryPage'
 import LibraryGroupPage from './pages/LibraryGroupPage'
 import LibraryDeckPage from './pages/LibraryDeckPage'
+import SavingIndicator from './pages/SavingIndicator'
 
 function DocumentLang() {
   const { t, i18n } = useTranslation()
@@ -61,6 +62,7 @@ export default function App() {
   return (
     <AuthProvider>
       <DocumentLang />
+      <SavingIndicator />
       <Routes>
         <Route
           path="/login"

@@ -1,3 +1,5 @@
+import { beginSaving, endSaving, isWriteRequest } from './saving'
+
 const TOKEN_KEY = 'flashcards.token'
 
 export function getToken() {
@@ -22,7 +24,21 @@ export async function api(path, options = {}) {
     headers['Content-Type'] = 'application/json'
   }
 
-  const response = await fetch(path, { ...options, headers })
+  const track = isWriteRequest(options.method)
+  if (track) {
+    beginSaving()
+  }
+  try {
+    return await send(path, { ...options, headers })
+  } finally {
+    if (track) {
+      endSaving()
+    }
+  }
+}
+
+async function send(path, options) {
+  const response = await fetch(path, options)
   if (response.status === 401) {
     setToken(null)
     if (!path.startsWith('/api/auth/')) {
