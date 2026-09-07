@@ -1,0 +1,2 @@
+ALTER TABLE cards
+    ADD COLUMN hint TEXT NULL;

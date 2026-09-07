@@ -1,0 +1,19 @@
+---
+description: Keep the React frontend portable for a future Ionic iOS/Android app
+globs: frontend/**/*.{js,jsx,css}
+alwaysApply: true
+---
+
+# Ionic-ready frontend (later, not now)
+
+Do not add Ionic or Capacitor yet. Keep the Vite React web app, but choose patterns that wrap cleanly later.
+
+- **Pages stay self-contained.** One screen per route; logic in hooks. App chrome (header + left menu) lives in `AppLayout`, not in each page.
+- **Navigation:** keep `react-router-dom`. Prefer `Link` / `useNavigate` over `window.location` (except a last-resort auth bounce). The left menu is a split pane on wide screens and an overlay drawer on small ones — that maps to Ionic `IonSplitPane` + `IonMenu`.
+- **API:** keep `fetch` behind `api.js`. Do not scatter absolute localhost URLs. A configurable base URL will be needed for native later.
+- **Dialogs:** do not add new `window.prompt`, `window.confirm`, or `window.alert`. Use in-app modals/forms (existing confirms can stay until touched).
+- **Pointers:** every action must work with tap, not hover-only. Hover is extra, never the only way. Accordion sections open on tap.
+- **Inputs:** prefer real `<button>` / `<input>` with ~44px tap targets. File pickers and color inputs should stay isolated (Capacitor plugins later).
+- **Storage:** keep token access in `api.js` (`localStorage` is fine for web; native will swap to Preferences).
+- **CSS:** prefer flex/grid and CSS variables. Use `--safe-top` / `--safe-bottom` (and `viewport-fit=cover`) instead of `100vh`-only layouts; `100dvh` is the web fallback. No hover-only disclosure.
+- **Do not** add PWA-only APIs, browser extensions, or desktop-only drag-and-drop as the sole path for a feature.

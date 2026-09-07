@@ -1,0 +1,52 @@
+There is no separate “quiz score” table. All three modes write the same SM-2 state onto your copy of each card. The deck header is just a rollup of that state.
+
+What is stored
+Progress lives in card_reviews, one row per personal card (card_id is the primary key):
+
+Column	Meaning
+repetitions
+Successful reviews in a row (HARD / GOOD / EASY). AGAIN resets this to 0.
+ease_factor
+How “easy” the card is (starts at 2.50, floor 1.30).
+interval_days
+Days until it should come back.
+due_date
+Next day it is eligible.
+last_reviewed_at
+When you last rated it.
+Nothing stores Flip vs Quiz vs Write. Nothing stores a session percentage. A wrong quiz answer and tapping Again in Flip hit the same path: POST /api/cards/{id}/review with a rating, then Sm2Scheduler updates that row.
+
+New cards have no review row until the first rating. Until then they count as due.
+
+How the three modes produce a rating
+Flip — you pick the rating:
+
+Again → quality 1 (fail)
+Hard → 3
+Good → 4
+Easy → 5
+Quiz — multiple choice from other backs in the same deck. Match is case-insensitive trim. Correct → Good. Wrong → Again. No Hard/Easy.
+
+Write — same match against the back. Correct → Good. Wrong → Again.
+
+So Quiz and Write are a two-outcome version of the same scheduler. Flip is the only mode that can send Hard or Easy.
+
+After a fail (Again): repetitions go to 0, interval is 1 day, due tomorrow. After a pass: first success waits 1 day, second 6 days, later interval × ease (Hard ×1.2, Easy ×1.3). Ease also nudges up or down from the quality number.
+
+A study session is up to 20 due cards (unreviewed, or due_date today or earlier). New cards are queued after already-due ones.
+
+How that becomes the deck summary
+The numbers on My Decks / the deck page come from DeckService.statsFor, not from a score log:
+
+Cards — rows in cards for that deck.
+Due — no review yet, or due_date is today or earlier. After you pass a card it leaves Due until that date.
+Learned — repetitions >= 1 (you have passed it at least once). Again can drop it back out of Learned.
+Last studied — latest last_reviewed_at on any card in the deck.
+The “session complete / N cards reviewed” line is only in the browser for that session. It is not saved.
+
+Library decks
+Browsing Library does not create reviews. Scores never attach to library_cards.
+
+Add to My Decks (or Study from Library) copies into your decks / cards, tagged with decks.library_deck_id. Those new cards start with no card_reviews, so the copy shows as all due, 0 learned.
+
+From then on it is a normal personal deck: Flip/Quiz/Write update your copied card_ids. Another user adding the same library deck gets their own cards and their own review rows. Adding the same library deck twice does not duplicate; it reuses your existing copy, including whatever progress you already have.

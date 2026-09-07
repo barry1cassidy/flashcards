@@ -1,0 +1,5 @@
+# Copy this file to google-sso.yml in this same folder (backend/).
+# google-sso.yml is gitignored. Paste the Web client ID from Google Cloud Console.
+app:
+  google:
+    client-id: YOUR_CLIENT_ID.apps.googleusercontent.com

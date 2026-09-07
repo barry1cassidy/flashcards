@@ -1,0 +1,54 @@
+You are continuing work on Flashcards, a web app at C:\flashcards (git repo). Barry Cassidy (barry@zerve.io) is the owner. Do not commit unless asked. Do not kill processes (especially whatever is already on port 8080) unless asked. Do not add Ionic/Capacitor yet — keep the Vite React web app, but follow .cursor/rules/ionic-ready-frontend.mdc (self-contained pages, react-router-dom, fetch via api.js, tap not hover-only, ~44px targets, --safe-top/--safe-bottom/100dvh, no new window.alert/confirm/prompt).
+
+What the product is
+Personal flashcard app: create decks, study with Flip / Quiz / Write, SM-2 spaced repetition. Cards have front, back, optional hint. Decks have front/back TTS languages. Users organize decks into Sets (UI term). Internally/API they are still groups (/api/groups, table deck_groups, pages GroupsPage / GroupDetailPage). Frontend routes are /sets with redirects from /groups. There is also a shared Library of language phrasebooks. i18n is English + Spanish (frontend/src/i18n/locales/). Settings: appearance Light/Dark, UI language, deck sort. New accounts default DARK.
+
+Stack and how to run
+Backend: Java 21, Spring Boot 4.1.1, MySQL 8, Flyway, JWT. JDK on this machine: C:\Program Files\Microsoft\jdk-21.0.12.101-hotspot. cd backend then .\mvnw.cmd spring-boot:run. Port 8080. Hibernate ddl-auto: validate. After new Flyway files, restart Spring Boot — an old Java process often sits on 8080.
+Frontend: React + Vite. cd frontend then npm run dev. Usually http://localhost:5173/ (sometimes 5174). Proxies /api to 8080.
+DB: localhost:3306, database/user/password flashcards. See README for Docker/docker-compose.yml.
+Google SSO: GIS ID-token → POST /api/auth/google. Client ID lives in gitignored frontend/.env.local and backend/google-sso.yml. Example client ID used in this project: 1028164258199-4lplnk88kb1slf0ahjr8qg92q2moefpc.apps.googleusercontent.com.
+Flyway: V1 init (users, decks, cards, card_reviews) … V2 theme, V3 deck groups, V4 locale, V5/V6 languages, V7 hint, V8 deck sort, V9 Google (password_hash nullable, google_sub), V10 library tables + decks.library_deck_id.
+
+Backend architecture
+Package root com.flashcards. Controllers under /api/*, JWT auth except login/register/google. Jackson 3 uses tools.jackson.databind (not com.fasterxml.jackson).
+
+Main surfaces:
+
+/api/auth — register, login, Google, GET/PATCH /me
+/api/decks + /api/decks/{id}/cards — CRUD
+/api/groups — personal sets
+/api/decks/{id}/study and POST /api/cards/{id}/review — SM-2. card_reviews is 1:1 with card_id, so two users cannot share the same card row for progress.
+/api/decks/{id}/import and /export — CSV front,back,hint
+/api/library — shared catalog (authenticated)
+Library is separate tables on purpose (library_groups, library_decks, library_cards), not null-user_id rows in personal tables. Catalog is shared, read-only, attributed. Studying copies into the user’s decks so SM-2 stays per-user. POST /api/library/decks/{id}/add is idempotent (uk_decks_user_library). Copy lands in a personal set named after the language (find by name case-insensitive, else create). decks.library_deck_id points at the catalog deck.
+
+Library content: where it came from
+Not a Flyway data migration.
+
+Source: English Wikivoyage phrasebooks, CC BY-SA 4.0. Do not copy Duolingo/Anki/Say It Travel. Attribution is stored per language and shown on library group pages.
+Ingest (offline): backend/scripts/ingest-wikivoyage-library.mjs hits the MediaWiki API (needs a User-Agent; retries/delay for 429s) and writes backend/src/main/resources/library/phrasebooks.json. Optional: node scripts/ingest-wikivoyage-library.mjs chinese to merge one language. Seed throws if a language produces 0 decks.
+Runtime seed: LibrarySeed (ApplicationRunner) loads that JSON only if library_groups is empty. If tables are half-seeded, wipe library tables or skip — it will not refresh in place.
+Catalog shape: 20 languages as library “groups” (Spanish, French, German, Italian, Portuguese, Chinese (Mandarin), Japanese, Korean, Arabic, Russian, Hindi, Turkish, Dutch, Polish, Swedish, Greek, Vietnamese, Thai, Indonesian, Hebrew). Same 10 decks each where Wikivoyage had enough phrases: Greetings & courtesy, Survival phrases, Numbers, Time & dates, Getting around, Somewhere to stay, Money, Eating out, Shopping, Help & emergencies (~20 cards). Some languages are thinner (Hindi/Hebrew/etc.).
+Mandarin: characters on card back, pinyin as hint (e.g. front Hello. / back 你好。 / hint Nǐ hǎo). Logic in the ingest parser for zh-CN.
+Frontend architecture
+Vite React, react-router-dom, i18next. Auth token in localStorage via frontend/src/api.js. Theme in theme.js (LIGHT → light kinetic palette; anything else dark).
+
+Guest: /login is a marketing landing page (kinetic design), /register is signup with the same chrome (MarketingHeader, Brand).
+Authed chrome: AppLayout + left SideMenu (split pane desktop, overlay drawer mobile) + AppHeader. Menu: My Decks, Manage Sets, divider, Library, Settings at the bottom.
+Routes: / decks, /sets, /decks/:id, /decks/:id/study/:mode, /settings, /library, /library/groups/:id, /library/decks/:id.
+Pages in frontend/src/pages/. Study in StudyPage.jsx. Speech in SpeakButton / tts.js (lang prop, not language).
+Design: kinetic concept from c:\Users\barry\Downloads\files\flashcards-concept-b-kinetic.html — navy #0B0E17, cobalt #4C6FFF, coral, gold, mint; fonts Space Grotesk / Inter / JetBrains Mono; logo mark ⇄ with cobalt→coral gradient. CSS variables in frontend/src/index.css. Title Case for menus/headings.
+Product/design decisions to preserve
+Copy library decks rather than studying shared cards in place (because of 1:1 reviews).
+Keep library tables separate from personal decks/sets.
+Mandarin: hanzi back, pinyin hint.
+“Sets” in UI; “groups” in API/code is OK.
+Prefer in-app modals; tap-first; no Ionic yet.
+Likely next-agent pitfalls
+8080 may be an old Spring process without V10/seed. Restart Spring after migrations. Look for log Seeded language library: ….
+If library UI is empty, seed skipped or JSON missing, or backend not restarted.
+Jackson 3: tools.jackson imports.
+Google client ID is not in git.
+Verify UI in the browser when changing frontend (user rule).
+Start by reading README.md, frontend/src/App.jsx, backend/src/main/java/com/flashcards/library/, and backend/src/main/resources/library/phrasebooks.json (sample only — file is large).

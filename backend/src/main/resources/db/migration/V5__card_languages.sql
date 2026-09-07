@@ -1,0 +1,3 @@
+ALTER TABLE cards
+    ADD COLUMN front_language VARCHAR(16) NOT NULL DEFAULT 'en-US',
+    ADD COLUMN back_language VARCHAR(16) NOT NULL DEFAULT 'en-US';

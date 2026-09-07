@@ -1,0 +1,29 @@
+# Java
+backend/target/
+backend/.idea/
+*.class
+*.jar
+*.war
+hs_err_pid*
+
+# Node
+frontend/node_modules/
+frontend/dist/
+
+# Env / secrets
+.env
+.env.local
+backend/google-sso.yml
+backend/src/main/resources/application-local.yml
+*.pem
+*client_secret*.json
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.iml
+
+# Logs
+*.log

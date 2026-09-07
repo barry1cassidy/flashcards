@@ -1,0 +1,79 @@
+Language library sources
+Search for a shared, not-user-owned phrase library: English into about 20 languages, the same 10 units everywhere, licensed for reuse. Compared Wikivoyage, Tatoeba, LibreLingo, FSI/Peace Corps, Speak phrasebook, and commercial apps. Recommendation below; open this canvas beside the chat to keep the catalog while we implement.
+
+Recommended source: Wikivoyage phrasebooks
+English Wikivoyage publishes a shared phrasebook template (Basics, Problems, Numbers, Time, Transportation, Lodging, Money, Eating, Shopping, and more) used across languages. Spanish and Mandarin pages both follow it. License is CC BY-SA 4.0: we can ship a library if we attribute the article and keep derivatives under the same license. Fetch via the public MediaWiki API (en.wikivoyage.org), not by scraping a commercial app.
+20
+Language groups (v1)
+10
+Same decks in every group
+~20
+Cards per deck
+CC BY-SA
+Wikivoyage text license
+What I compared
+Source	License	Same units across languages?	Coverage	Fit
+Wikivoyage phrasebooks
+CC BY-SA 4.0	Yes — same section template in every language	Dozens of languages; 20+ are complete enough	Use this
+Tatoeba	CC BY 2.0 FR	No — raw sentence pairs, not themed units	Hundreds of languages, uneven quality	Later / extra cards
+Speak phrasebook	CC0	Yes, but only 6 emergency categories	20 languages, 50 phrases total	Too small / wrong topics
+LibreLingo courses	Mostly CC (software is AGPL)	Per-course, not the same 10 units	A handful of language pairs	Not enough coverage
+FSI / Peace Corps (Live Lingua, Yojik)	US government public domain	No — full courses, not matching phrase lists	Many languages, dated textbooks	Skip for v1
+Say It Travel, AnkiWeb, Duolingo, Memrise
+All rights reserved / mixed / none stated	Varies	Often good, not ours to copy	Do not use
+Sources: Wikivoyage phrasebook template and Spanish / Mandarin pages; Tatoeba downloads (CC BY 2.0 FR); Speak phrasebook (CC0, 50×20); LibreLingo courses; FSI/Peace Corps via Live Lingua and Yojik. Say It Travel has no reuse license.
+
+Catalog shape
+One library group per language, ten identical decks inside each group. Search should hit both, so “Spanish greetings” and “Eating out Japanese” both work. Group names drop “Language Basics” — the library already means beginner phrases, and the language name is what people type.
+
+Groups (languages)
+Display as the language name, with a short subtitle like “English → Spanish”. These 20 are widely learned and have usable Wikivoyage phrase lists. We can swap any that turn out thin when we parse the pages.
+
+Library group	Example search hits
+Spanish	Spanish · Greetings & courtesy · Eating out
+French	French · Greetings & courtesy · Eating out
+German	German · Greetings & courtesy · Eating out
+Italian	Italian · Greetings & courtesy · Eating out
+Portuguese	Portuguese · Greetings & courtesy · Eating out
+Chinese (Mandarin)	Chinese (Mandarin) · Greetings & courtesy · Eating out
+Japanese	Japanese · Greetings & courtesy · Eating out
+Korean	Korean · Greetings & courtesy · Eating out
+Arabic	Arabic · Greetings & courtesy · Eating out
+Russian	Russian · Greetings & courtesy · Eating out
+Hindi	Hindi · Greetings & courtesy · Eating out
+Turkish	Turkish · Greetings & courtesy · Eating out
+Dutch	Dutch · Greetings & courtesy · Eating out
+Polish	Polish · Greetings & courtesy · Eating out
+Swedish	Swedish · Greetings & courtesy · Eating out
+Greek	Greek · Greetings & courtesy · Eating out
+Vietnamese	Vietnamese · Greetings & courtesy · Eating out
+Thai	Thai · Greetings & courtesy · Eating out
+Indonesian	Indonesian · Greetings & courtesy · Eating out
+Hebrew	Hebrew · Greetings & courtesy · Eating out
+Decks (same 10 in every group)
+Names follow traveler situations, not “Unit 1”. Wikivoyage’s Bars, Driving, Colors, and Authority sections are skipped or folded in so we stay at ten decks of about twenty cards. There is no separate “business travel” list in the source; Money + Getting around + Help cover that need without inventing a unit that would drift by language.
+
+#	Deck name	What is on the cards	Wikivoyage section
+1	Greetings & courtesy	Hello, how are you, names, please, thanks, yes/no	Basics (first half)
+2	Survival phrases	I don't understand, do you speak English, toilet, sorry	Basics (second half)
+3	Numbers	0–20, 100, 1000, more/less	Numbers (trimmed)
+4	Time & dates	Now, today, days of the week, clock time	Time
+5	Getting around	Tickets, directions, taxi, airport	Transportation
+6	Somewhere to stay	Rooms, nights, breakfast, checkout	Lodging
+7	Money	Cards, ATM, exchange, how much	Money
+8	Eating out	Table, menu, diet, the check	Eating
+9	Shopping	How much, too expensive, I need…	Shopping
+10	Help & emergencies	Lost, doctor, police, help	Problems (+ a little Authority)
+How this maps to the app
+Library vs My decks
+This content is not owned by a user. Add a left-menu item such as Library (alongside My decks). Opening it lists the 20 language groups. Search on that screen filters groups and decks: “Spanish”, “greetings”, “Chinese eating”.
+
+A library deck can later be copied into the user’s own decks if they want to edit or mix cards. The canonical set stays shared. Attribution for Wikivoyage belongs on the library deck (link to the phrasebook page and CC BY-SA 4.0), not on the user’s private copy unless we keep serving the same text.
+
+Public API: en.wikivoyage.org/w/api.php. Reuse rules: How to re-use Wikivoyage guides.
+
+Do not copy
+Duolingo, Babbel, Memrise, Anki shared decks, and sites like Say It Travel are the wrong shape legally even when the phrases look similar. Short everyday sentences are common, but their collections, order, and wording are not a free dataset. Wikivoyage is the one that is both themed and explicitly licensed for this.
+
+If this catalog looks right
+Next step is product work: a Library menu, system-owned groups/decks, and a one-time import of the ten Wikivoyage sections (trimmed to ~20 cards) for each language. Say if you want that built next.

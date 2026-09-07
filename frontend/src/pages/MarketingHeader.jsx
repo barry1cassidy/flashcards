@@ -1,0 +1,166 @@
+import { useEffect, useRef, useState } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
+import { useAuth } from '../AuthContext'
+import { translateError } from '../i18n/errors'
+import GoogleSignInButton, { getGoogleClientId } from './GoogleSignInButton'
+import LanguageSwitcher from './LanguageSwitcher'
+import Brand from './Brand'
+
+export default function MarketingHeader({ showLoginForm = false }) {
+  const { t } = useTranslation()
+  const location = useLocation()
+  const [open, setOpen] = useState(false)
+  const authRef = useRef(null)
+  const onLogin = location.pathname === '/login'
+  const modesHref = onLogin ? '#modes' : '/login#modes'
+  const libraryHref = onLogin ? '#library' : '/login#library'
+  const whyHref = onLogin ? '#stat' : '/login#stat'
+
+  useEffect(() => {
+    function onPointerDown(event) {
+      if (authRef.current && !authRef.current.contains(event.target)) {
+        setOpen(false)
+      }
+    }
+    function onKeyDown(event) {
+      if (event.key === 'Escape') {
+        setOpen(false)
+      }
+    }
+    document.addEventListener('pointerdown', onPointerDown)
+    document.addEventListener('keydown', onKeyDown)
+    return () => {
+      document.removeEventListener('pointerdown', onPointerDown)
+      document.removeEventListener('keydown', onKeyDown)
+    }
+  }, [])
+
+  return (
+    <header className="marketing-header">
+      <nav className="marketing-nav">
+        <Link to="/login" className="marketing-logo">
+          <Brand />
+        </Link>
+        <div className="marketing-links">
+          <a href={modesHref}>{t('marketing.studyModes')}</a>
+          <a href={libraryHref}>{t('library.title')}</a>
+          <a href={whyHref}>{t('marketing.whyItWorks')}</a>
+        </div>
+        <div className="marketing-auth" ref={authRef}>
+          <LanguageSwitcher variant="pills" />
+          {showLoginForm ? (
+            <>
+              <button
+                className="btn login-btn"
+                type="button"
+                aria-expanded={open}
+                aria-controls="login-panel"
+                onClick={() => setOpen((value) => !value)}
+              >
+                {t('auth.signIn')}
+              </button>
+              {open ? (
+                <div id="login-panel" className="login-drop">
+                  <LoginFields />
+                </div>
+              ) : null}
+            </>
+          ) : (
+            <Link className="btn login-btn" to="/login">
+              {t('auth.signIn')}
+            </Link>
+          )}
+        </div>
+      </nav>
+    </header>
+  )
+}
+
+function LoginFields() {
+  const { t, i18n } = useTranslation()
+  const { login, loginWithGoogle } = useAuth()
+  const navigate = useNavigate()
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+  const [busy, setBusy] = useState(false)
+  const googleEnabled = Boolean(getGoogleClientId())
+
+  async function finishLogin(work) {
+    setError('')
+    setBusy(true)
+    try {
+      await work()
+      navigate('/', { replace: true })
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  async function onSubmit(event) {
+    event.preventDefault()
+    await finishLogin(() => login(email, password))
+  }
+
+  return (
+    <>
+      {error ? <div className="error">{translateError(t, error)}</div> : null}
+      {googleEnabled ? (
+        <>
+          <GoogleSignInButton
+            disabled={busy}
+            onCredential={(idToken) =>
+              finishLogin(() => loginWithGoogle(idToken, i18n.resolvedLanguage === 'es' ? 'es' : 'en'))
+            }
+          />
+          <p className="auth-divider">
+            <span>{t('auth.orEmail')}</span>
+          </p>
+        </>
+      ) : null}
+      <form onSubmit={onSubmit} className="stack">
+        <label>
+          {t('auth.email')}
+          <input
+            type="email"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+            required
+            autoComplete="email"
+            placeholder="you@example.com"
+          />
+        </label>
+        <label>
+          {t('auth.password')}
+          <input
+            type="password"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+            required
+            autoComplete="current-password"
+            placeholder="••••••••"
+          />
+        </label>
+        <button className="btn primary" type="submit" disabled={busy}>
+          {busy ? t('auth.signingIn') : t('auth.continue')}
+        </button>
+      </form>
+      <Link className="login-alt" to="/register">
+        {t('auth.newHere')} {t('auth.createFreeAccount')}
+      </Link>
+    </>
+  )
+}
+
+export function MarketingFooter() {
+  const { t } = useTranslation()
+  return (
+    <footer className="site-end">
+      <span>{t('marketing.copyright', { year: 2026 })}</span>
+      <span>{t('marketing.builtFor')}</span>
+    </footer>
+  )
+}
