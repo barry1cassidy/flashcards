@@ -11,5 +11,8 @@ public record StudySessionResponse(
         List<StudyCardResponse> cards,
         LocalDate nextDueDate,
         StudyScope studyScope,
-        StudyOrder studyOrder) {
+        StudyOrder studyOrder,
+        int cardCount,
+        int hardCount,
+        String filter) {
 }

@@ -10,6 +10,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import com.flashcards.review.ReviewRating;
+
 public interface CardRepository extends JpaRepository<Card, UUID> {
 
     List<Card> findByDeckIdOrderByPositionAscIdAsc(UUID deckId);
@@ -28,5 +30,16 @@ public interface CardRepository extends JpaRepository<Card, UUID> {
     List<Card> findStudyQueue(
             @Param("deckId") UUID deckId,
             @Param("today") LocalDate today,
+            Pageable pageable);
+
+    @Query("""
+            SELECT c FROM Card c
+            JOIN CardReview r ON r.card = c
+            WHERE c.deck.id = :deckId AND r.lastRating = :rating
+            ORDER BY c.position ASC, c.id ASC
+            """)
+    List<Card> findHardQueue(
+            @Param("deckId") UUID deckId,
+            @Param("rating") ReviewRating rating,
             Pageable pageable);
 }

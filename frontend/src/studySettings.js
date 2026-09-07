@@ -4,11 +4,6 @@ export const STUDY_ORDERS = [
   { value: 'RANDOM', labelKey: 'settings.studyOrderRandom' },
 ]
 
-export const STUDY_SCOPES = [
-  { value: 'DUE_ONLY', labelKey: 'settings.studyScopeDue' },
-  { value: 'ALL', labelKey: 'settings.studyScopeAll' },
-]
-
 export const RESTUDY_WAITS = [
   { value: 'ONE_DAY', labelKey: 'settings.restudyWaitDay' },
   { value: 'IMMEDIATE', labelKey: 'settings.restudyWaitNow' },
@@ -16,10 +11,6 @@ export const RESTUDY_WAITS = [
 
 export function normalizeStudyOrder(value) {
   return STUDY_ORDERS.some((item) => item.value === value) ? value : 'POSITION'
-}
-
-export function normalizeStudyScope(value) {
-  return STUDY_SCOPES.some((item) => item.value === value) ? value : 'DUE_ONLY'
 }
 
 export function normalizeRestudyWait(value) {

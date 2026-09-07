@@ -59,19 +59,16 @@ public class StudyService {
     }
 
     @Transactional(readOnly = true)
-    public StudySessionResponse startSession(UUID userId, UUID deckId, String mode) {
+    public StudySessionResponse startSession(UUID userId, UUID deckId, String mode, String filter) {
         String normalized = normalizeMode(mode);
+        String normalizedFilter = normalizeFilter(filter);
         deckService.requireOwned(userId, deckId);
         User user = requireUser(userId);
-        StudyScope scope = user.getStudyScope() == null ? StudyScope.DUE_ONLY : user.getStudyScope();
         StudyOrder order = user.getStudyOrder() == null ? StudyOrder.POSITION : user.getStudyOrder();
-        List<Card> queue;
-        if (scope == StudyScope.ALL) {
-            queue = new ArrayList<>(cardRepository.findByDeckIdOrderByPositionAscIdAsc(deckId));
-        } else {
-            queue = new ArrayList<>(
-                    cardRepository.findStudyQueue(deckId, LocalDate.now(), PageRequest.of(0, SESSION_SIZE)));
-        }
+        List<Card> queue = new ArrayList<>(
+                "HARD".equals(normalizedFilter)
+                        ? cardRepository.findHardQueue(deckId, ReviewRating.HARD, PageRequest.of(0, SESSION_SIZE))
+                        : cardRepository.findStudyQueue(deckId, LocalDate.now(), PageRequest.of(0, SESSION_SIZE)));
         applyOrder(queue, order);
         List<Card> deckCards = "QUIZ".equals(normalized)
                 ? cardRepository.findByDeckIdOrderByPositionAscIdAsc(deckId)
@@ -80,7 +77,10 @@ public class StudyService {
                 .map(card -> toStudyCard(card, normalized, deckCards))
                 .toList();
         LocalDate nextDue = cardReviewRepository.findNextDueAfter(deckId, LocalDate.now()).orElse(null);
-        return new StudySessionResponse(normalized, cards, nextDue, scope, order);
+        int cardCount = cardRepository.countByDeckId(deckId);
+        int hardCount = cardReviewRepository.countByDeckIdAndLastRating(deckId, ReviewRating.HARD);
+        return new StudySessionResponse(
+                normalized, cards, nextDue, StudyScope.DUE_ONLY, order, cardCount, hardCount, normalizedFilter);
     }
 
     @Transactional
@@ -91,6 +91,7 @@ public class StudyService {
         CardReview review = cardReviewRepository.findByCardId(cardId)
                 .orElseGet(() -> CardReview.newFor(card, today));
         sm2Scheduler.apply(review, rating, today);
+        review.setLastRating(rating);
         if (user.getRestudyWait() == RestudyWait.IMMEDIATE) {
             review.setDueDate(today);
         }
@@ -100,9 +101,11 @@ public class StudyService {
     }
 
     @Transactional
-    public int resetDueDates(UUID userId) {
-        requireUser(userId);
-        return cardReviewRepository.resetDueDatesForUser(userId, LocalDate.now());
+    public int resetDueDates(UUID userId, UUID deckId) {
+        var deck = deckService.requireOwned(userId, deckId);
+        int updated = cardReviewRepository.resetDueDatesForDeck(userId, deckId, LocalDate.now());
+        deck.setUpdatedAt(java.time.Instant.now());
+        return updated;
     }
 
     private User requireUser(UUID userId) {
@@ -129,6 +132,20 @@ public class StudyService {
             throw new ApiException(HttpStatus.BAD_REQUEST, "Unknown study mode");
         }
         return value;
+    }
+
+    private static String normalizeFilter(String filter) {
+        if (filter == null || filter.isBlank()) {
+            return "DUE";
+        }
+        String value = filter.trim().toUpperCase(Locale.ROOT);
+        if ("DUE".equals(value)) {
+            return "DUE";
+        }
+        if ("HARD".equals(value)) {
+            return "HARD";
+        }
+        throw new ApiException(HttpStatus.BAD_REQUEST, "Unknown study filter");
     }
 
     private static StudyCardResponse toStudyCard(Card card, String mode, List<Card> deckCards) {

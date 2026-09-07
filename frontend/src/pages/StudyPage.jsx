@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams, useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { api } from '../api'
 import { translateError } from '../i18n/errors'
@@ -8,10 +8,12 @@ import { stopSpeaking } from '../tts'
 import SpeakButton from './SpeakButton'
 import MatchListStudy from './MatchListStudy'
 import AudioReviewStudy from './AudioReviewStudy'
+import ConfirmModal from './ConfirmModal'
 
 export default function StudyPage() {
   const { t } = useTranslation()
   const { id, mode } = useParams()
+  const [searchParams] = useSearchParams()
   const [cards, setCards] = useState([])
   const [index, setIndex] = useState(0)
   const [revealed, setRevealed] = useState(false)
@@ -21,10 +23,16 @@ export default function StudyPage() {
   const [feedback, setFeedback] = useState(null)
   const [done, setDone] = useState(false)
   const [reviewed, setReviewed] = useState(0)
+  const [correctCount, setCorrectCount] = useState(0)
+  const [hardSessionCount, setHardSessionCount] = useState(0)
+  const [againCount, setAgainCount] = useState(0)
+  const [cardCount, setCardCount] = useState(0)
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
   const [exitKind, setExitKind] = useState('')
   const [nextDueDate, setNextDueDate] = useState(null)
+  const [confirmReset, setConfirmReset] = useState(false)
+  const [hardCount, setHardCount] = useState(0)
 
   const current = cards[index]
   const normalizedMode = (mode || 'flip').toLowerCase()
@@ -33,8 +41,12 @@ export default function StudyPage() {
     normalizedMode === 'match' ? (done ? total : Math.min(reviewed + 1, total || 1)) : total ? Math.min(index + 1, total) : 0
   const progressPct = done ? 100 : total ? (currentNumber / total) * 100 : 0
 
-  async function loadSession() {
-    const session = await api(`/api/decks/${id}/study?mode=${normalizedMode}`)
+  async function loadSession(filter = 'due') {
+    const params = new URLSearchParams({ mode: normalizedMode })
+    if (filter === 'hard') {
+      params.set('filter', 'hard')
+    }
+    const session = await api(`/api/decks/${id}/study?${params}`)
     setCards(session.cards || [])
     setIndex(0)
     setRevealed(false)
@@ -43,13 +55,26 @@ export default function StudyPage() {
     setWritten('')
     setFeedback(null)
     setReviewed(0)
+    setCorrectCount(0)
+    setHardSessionCount(0)
+    setAgainCount(0)
+    setCardCount(session.cardCount || 0)
+    setHardCount(session.hardCount || 0)
     setExitKind('')
     setNextDueDate(session.nextDueDate || null)
     setDone((session.cards || []).length === 0)
   }
 
+  async function refreshStudyStats() {
+    const session = await api(`/api/decks/${id}/study?mode=${normalizedMode}`)
+    setHardCount(session.hardCount || 0)
+    setNextDueDate(session.nextDueDate || null)
+    setCardCount(session.cardCount || 0)
+  }
+
   useEffect(() => {
-    loadSession().catch((err) => setError(err.message))
+    const filter = searchParams.get('filter') === 'hard' ? 'hard' : 'due'
+    loadSession(filter).catch((err) => setError(err.message))
   }, [id, normalizedMode])
 
   useEffect(() => {
@@ -92,6 +117,17 @@ export default function StudyPage() {
     setExitKind('')
   }
 
+  function tallyRating(rating) {
+    if (rating === 'AGAIN') {
+      setAgainCount((count) => count + 1)
+    } else if (rating === 'HARD') {
+      setHardSessionCount((count) => count + 1)
+    } else {
+      setCorrectCount((count) => count + 1)
+    }
+    setReviewed((count) => count + 1)
+  }
+
   async function submitRating(rating, pauseMs = 0) {
     if (!current || busy) {
       return
@@ -113,8 +149,13 @@ export default function StudyPage() {
         await new Promise((resolve) => setTimeout(resolve, waitMs))
       }
       const nextIndex = index + 1
-      setReviewed((count) => count + 1)
+      tallyRating(rating)
       if (nextIndex >= cards.length) {
+        try {
+          await refreshStudyStats()
+        } catch (statsErr) {
+          setError(statsErr.message)
+        }
         setDone(true)
         setExitKind('')
       } else {
@@ -154,7 +195,7 @@ export default function StudyPage() {
         method: 'POST',
         body: JSON.stringify({ rating }),
       })
-      setReviewed((count) => count + 1)
+      tallyRating(rating)
     } catch (err) {
       setError(err.message)
       throw err
@@ -176,15 +217,44 @@ export default function StudyPage() {
 
   function doneMessage() {
     if (reviewed === 0) {
+      if (cardCount === 0) {
+        return t('study.emptyDeck')
+      }
       if (nextDueDate) {
         return t('study.nothingDueUntil', { date: formatDay(nextDueDate) })
       }
       return t('study.nothingDue')
     }
     if (nextDueDate) {
-      return t('study.reviewedUntil', { count: reviewed, date: formatDay(nextDueDate) })
+      return t('study.nextDueOn', { date: formatDay(nextDueDate) })
     }
     return t('study.reviewedSoon', { count: reviewed })
+  }
+
+  async function studyThisDeckAgain() {
+    setConfirmReset(false)
+    setError('')
+    setBusy(true)
+    try {
+      await api(`/api/decks/${id}/study/reset-due`, { method: 'POST' })
+      await loadSession('due')
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  async function studyHardCards() {
+    setError('')
+    setBusy(true)
+    try {
+      await loadSession('hard')
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setBusy(false)
+    }
   }
 
   return (
@@ -219,29 +289,58 @@ export default function StudyPage() {
       {done ? (
         <div className="study-card done-card">
           <h2>{reviewed === 0 ? t('study.caughtUp') : t('study.niceWork')}</h2>
+          {reviewed > 0 ? (
+            <div className={`study-results${normalizedMode === 'flip' || normalizedMode === 'audio' ? ' study-results-3' : ''}`}>
+              <div className="study-result">
+                <strong>{correctCount}</strong>
+                <span>{t('study.resultsCorrect')}</span>
+              </div>
+              {normalizedMode === 'flip' || normalizedMode === 'audio' ? (
+                <div className="study-result">
+                  <strong>{hardSessionCount}</strong>
+                  <span>{t('study.hard')}</span>
+                </div>
+              ) : null}
+              <div className="study-result">
+                <strong>{againCount}</strong>
+                <span>{t('study.resultsAgain')}</span>
+              </div>
+            </div>
+          ) : null}
           <p>{doneMessage()}</p>
-          <p className="muted">
-            {t('study.changeSchedule')}{' '}
-            <Link to="/settings#study-options">{t('settings.studyOptions')}</Link>
-          </p>
+          {cardCount > 0 ? (
+            <p className="muted">{reviewed > 0 ? t('study.restartDeckHint') : t('study.restartDeckHintWaiting')}</p>
+          ) : null}
+          {hardCount > 0 ? <p className="muted">{t('study.studyHardHint')}</p> : null}
           <div className="header-actions">
-            <Link className="btn primary" to={`/decks/${id}`}>
+            {cardCount > 0 ? (
+              <button className="btn primary" type="button" disabled={busy} onClick={() => setConfirmReset(true)}>
+                {t('study.restartDeck')}
+              </button>
+            ) : null}
+            {hardCount > 0 ? (
+              <button className="btn" type="button" disabled={busy} onClick={studyHardCards}>
+                {t('study.studyHard')}
+              </button>
+            ) : null}
+            <Link className={cardCount > 0 ? 'btn' : 'btn primary'} to={`/decks/${id}`}>
               {t('nav.backToDeck')}
             </Link>
-            <button
-              className="btn"
-              type="button"
-              onClick={() => {
-                setError('')
-                loadSession().catch((err) => setError(err.message))
-              }}
-            >
-              {t('study.studyAgain')}
-            </button>
           </div>
         </div>
       ) : current && normalizedMode === 'match' ? (
-        <MatchListStudy cards={cards} onGrade={gradeMatch} onComplete={() => setDone(true)} />
+        <MatchListStudy
+          cards={cards}
+          onGrade={gradeMatch}
+          onComplete={async () => {
+            try {
+              await refreshStudyStats()
+            } catch (err) {
+              setError(err.message)
+            }
+            setDone(true)
+          }}
+        />
       ) : current && normalizedMode === 'audio' ? (
         <AudioReviewStudy
           card={current}
@@ -368,6 +467,15 @@ export default function StudyPage() {
       ) : (
         <div className="empty">{t('study.loadingCards')}</div>
       )}
+      {confirmReset ? (
+        <ConfirmModal
+          title={t('study.restartDeckTitle')}
+          message={reviewed > 0 ? t('study.restartDeckMessage') : t('study.restartDeckMessageWaiting')}
+          confirmLabel={t('study.restartDeckConfirm')}
+          onConfirm={studyThisDeckAgain}
+          onCancel={() => setConfirmReset(false)}
+        />
+      ) : null}
     </div>
   )
 }

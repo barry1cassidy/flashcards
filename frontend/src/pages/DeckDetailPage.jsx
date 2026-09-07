@@ -36,6 +36,7 @@ export default function DeckDetailPage() {
   const [back, setBack] = useState('')
   const [hint, setHint] = useState('')
   const [editing, setEditing] = useState(null)
+  const [cardFormOpen, setCardFormOpen] = useState(false)
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
   const [confirm, setConfirm] = useState(null)
@@ -79,6 +80,7 @@ export default function DeckDetailPage() {
       setBack('')
       setHint('')
       setEditing(null)
+      setCardFormOpen(false)
       await load()
     } catch (err) {
       setError(err.message)
@@ -88,9 +90,15 @@ export default function DeckDetailPage() {
   }
 
   async function deleteCard(cardId) {
-    await api(`/api/cards/${cardId}`, { method: 'DELETE' })
-    setConfirm(null)
-    await load()
+    setError('')
+    try {
+      await api(`/api/cards/${cardId}`, { method: 'DELETE' })
+      setConfirm(null)
+      await load()
+    } catch (err) {
+      setError(err.message)
+      setConfirm(null)
+    }
   }
 
   async function deleteDeck() {
@@ -218,6 +226,35 @@ export default function DeckDetailPage() {
     moveCard(from, index)
   }
 
+  function openAddCard() {
+    setEditing(null)
+    setFront('')
+    setBack('')
+    setHint('')
+    setError('')
+    setCardFormOpen(true)
+  }
+
+  function openEditCard(card) {
+    setEditing(card)
+    setFront(card.front)
+    setBack(card.back)
+    setHint(card.hint || '')
+    setError('')
+    setCardFormOpen(true)
+  }
+
+  function closeCardForm() {
+    if (busy) {
+      return
+    }
+    setCardFormOpen(false)
+    setEditing(null)
+    setFront('')
+    setBack('')
+    setHint('')
+  }
+
   if (!deck) {
     return (
       <div className="page">
@@ -321,6 +358,9 @@ export default function DeckDetailPage() {
             {t('decks.cardsSection')}
           </h2>
           <div className="header-actions">
+            <button className="btn primary" type="button" onClick={openAddCard}>
+              {t('decks.addCard')}
+            </button>
             <button className="btn" type="button" onClick={() => fileRef.current?.click()}>
               {t('decks.importCsv')}
             </button>
@@ -330,44 +370,6 @@ export default function DeckDetailPage() {
             <input ref={fileRef} type="file" accept=".csv,text/csv" hidden onChange={importCsv} />
           </div>
         </div>
-        <form className="card-form" onSubmit={saveCard}>
-          <textarea
-            placeholder={t('decks.front')}
-            value={front}
-            onChange={(e) => setFront(e.target.value)}
-            required
-          />
-          <textarea
-            placeholder={t('decks.back')}
-            value={back}
-            onChange={(e) => setBack(e.target.value)}
-            required
-          />
-          <textarea
-            placeholder={t('decks.hintPlaceholder')}
-            value={hint}
-            onChange={(e) => setHint(e.target.value)}
-          />
-          <div className="header-actions">
-            <button className="btn primary" type="submit" disabled={busy}>
-              {editing ? t('decks.saveCard') : t('decks.addCard')}
-            </button>
-            {editing ? (
-              <button
-                className="btn ghost"
-                type="button"
-                onClick={() => {
-                  setEditing(null)
-                  setFront('')
-                  setBack('')
-                  setHint('')
-                }}
-              >
-                {t('common.cancel')}
-              </button>
-            ) : null}
-          </div>
-        </form>
         {cards.length === 0 ? (
           <div className="empty">{t('decks.emptyCards')}</div>
         ) : (
@@ -428,12 +430,7 @@ export default function DeckDetailPage() {
                     <button
                       className="btn ghost"
                       type="button"
-                      onClick={() => {
-                        setEditing(card)
-                        setFront(card.front)
-                        setBack(card.back)
-                        setHint(card.hint || '')
-                      }}
+                      onClick={() => openEditCard(card)}
                     >
                       {t('common.edit')}
                     </button>
@@ -458,6 +455,47 @@ export default function DeckDetailPage() {
           </>
         )}
       </section>
+      {cardFormOpen ? (
+        <div className="modal-backdrop" onClick={closeCardForm}>
+          <form
+            className="modal card-edit-modal"
+            onClick={(event) => event.stopPropagation()}
+            onSubmit={saveCard}
+          >
+            <h2>{editing ? t('decks.editCardTitle') : t('decks.addCard')}</h2>
+            {error ? <div className="error">{translateError(t, error)}</div> : null}
+            <label>
+              {t('decks.front')}
+              <textarea
+                value={front}
+                onChange={(event) => setFront(event.target.value)}
+                required
+                autoFocus
+              />
+            </label>
+            <label>
+              {t('decks.back')}
+              <textarea value={back} onChange={(event) => setBack(event.target.value)} required />
+            </label>
+            <label>
+              {t('decks.hint')}
+              <textarea
+                value={hint}
+                placeholder={t('decks.hintPlaceholder')}
+                onChange={(event) => setHint(event.target.value)}
+              />
+            </label>
+            <div className="header-actions">
+              <button className="btn primary" type="submit" disabled={busy}>
+                {editing ? t('decks.saveCard') : t('decks.addCard')}
+              </button>
+              <button className="btn ghost" type="button" disabled={busy} onClick={closeCardForm}>
+                {t('common.cancel')}
+              </button>
+            </div>
+          </form>
+        </div>
+      ) : null}
       {editingDeck ? (
         <div className="modal-backdrop" onClick={() => setEditingDeck(false)}>
           <form className="modal" onClick={(event) => event.stopPropagation()} onSubmit={saveDeckDetails}>
@@ -487,11 +525,23 @@ export default function DeckDetailPage() {
       ) : null}
       {studyOpen ? (
         <StudyModeModal
-          onSelect={(mode) => {
+          hardCount={deck.hardCount || 0}
+          onSelect={(mode, filter) => {
             setStudyOpen(false)
-            navigate(`/decks/${id}/study/${mode}`)
+            const path = `/decks/${id}/study/${mode}`
+            navigate(filter === 'hard' ? `${path}?filter=hard` : path)
           }}
           onCancel={() => setStudyOpen(false)}
+        />
+      ) : null}
+      {confirm ? (
+        <ConfirmModal
+          title={confirm.title}
+          message={confirm.message}
+          confirmLabel={confirm.confirmLabel}
+          danger
+          onConfirm={confirm.onConfirm}
+          onCancel={() => setConfirm(null)}
         />
       ) : null}
     </div>

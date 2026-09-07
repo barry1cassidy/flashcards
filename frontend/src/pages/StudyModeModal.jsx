@@ -9,7 +9,7 @@ const MODES = [
   { id: 'audio', titleKey: 'study.audio', hintKey: 'study.audioHint' },
 ]
 
-export default function StudyModeModal({ onSelect, onCancel, hint }) {
+export default function StudyModeModal({ onSelect, onCancel, hint, hardCount = 0 }) {
   const { t } = useTranslation()
 
   useEffect(() => {
@@ -51,6 +51,22 @@ export default function StudyModeModal({ onSelect, onCancel, hint }) {
               </span>
             </button>
           ))}
+          {hardCount > 0 ? (
+            <button
+              className="study-mode-item study-hard-item"
+              type="button"
+              onClick={() => onSelect('flip', 'hard')}
+            >
+              <ModeIcon name="hard" />
+              <span className="study-mode-copy">
+                <strong>{t('study.studyHard')}</strong>
+                <span>{t('study.studyHardHint')}</span>
+              </span>
+              <span className="study-mode-chevron" aria-hidden="true">
+                ›
+              </span>
+            </button>
+          ) : null}
         </div>
       </div>
     </div>
@@ -78,6 +94,8 @@ function ModeIcon({ name }) {
           <rect x="3.5" y="13" width="4" height="7" rx="1.5" />
           <rect x="16.5" y="13" width="4" height="7" rx="1.5" />
         </>
+      ) : name === 'hard' ? (
+        <path d="M4 18l5-8 3 4 3-6 5 10H4z" />
       ) : (
         <>
           <rect x="4" y="5" width="12" height="14" rx="2" />

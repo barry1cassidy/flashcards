@@ -11,6 +11,8 @@ import com.flashcards.card.Card;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -50,6 +52,10 @@ public class CardReview {
 
     @Column(name = "last_reviewed_at")
     private Instant lastReviewedAt;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "last_rating", length = 16)
+    private ReviewRating lastRating;
 
     public static CardReview newFor(Card card, LocalDate today) {
         CardReview review = new CardReview();

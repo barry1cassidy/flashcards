@@ -140,6 +140,48 @@ h1 {
   padding: var(--safe-top) var(--safe-right) var(--safe-bottom) var(--safe-left);
 }
 
+.saving-indicator {
+  position: fixed;
+  top: calc(12px + var(--safe-top));
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 80;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 8px 16px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--card);
+  box-shadow: var(--shadow);
+  color: var(--text);
+  font-weight: 600;
+  pointer-events: none;
+}
+
+.saving-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--line);
+  border-top-color: var(--cobalt);
+  border-radius: 50%;
+  animation: saving-spin 0.7s linear infinite;
+}
+
+@keyframes saving-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .saving-spinner {
+    animation: none;
+    border-top-color: var(--cobalt);
+  }
+}
+
 .app-frame {
   display: flex;
   min-height: 100vh;
@@ -595,6 +637,38 @@ textarea {
   border-radius: inherit;
   background: linear-gradient(90deg, var(--cobalt), var(--mint));
   transition: width 0.35s ease;
+}
+
+.study-results {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin: 4px 0 8px;
+}
+
+.study-results-3 {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.study-result {
+  display: grid;
+  gap: 4px;
+  padding: 16px 12px;
+  border-radius: 12px;
+  background: var(--surface-2);
+  text-align: center;
+}
+
+.study-result strong {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  line-height: 1.1;
+}
+
+.study-result span {
+  color: var(--muted);
+  font-size: 0.9rem;
+  font-weight: 600;
 }
 
 .flip-stage {
@@ -1328,6 +1402,19 @@ textarea {
   border-bottom: 0;
 }
 
+.study-hard-item {
+  margin-top: 8px;
+  border-top: 1px solid var(--line);
+}
+
+.study-mode-item:has(+ .study-hard-item) {
+  border-bottom: 0;
+}
+
+.study-hard-item .study-mode-icon {
+  color: var(--gold);
+}
+
 .study-mode-icon {
   width: 24px;
   height: 24px;
@@ -1360,6 +1447,12 @@ textarea {
 
 .modal textarea {
   min-height: 88px;
+}
+
+.card-edit-modal {
+  width: min(520px, 100%);
+  max-height: min(80dvh, 720px);
+  overflow: auto;
 }
 
 .group-edit {

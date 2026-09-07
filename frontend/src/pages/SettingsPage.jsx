@@ -3,25 +3,15 @@ import { useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '../AuthContext'
 import { DECK_SORTS, normalizeDeckSort } from '../deckSort'
-import {
-  RESTUDY_WAITS,
-  STUDY_ORDERS,
-  STUDY_SCOPES,
-  normalizeRestudyWait,
-  normalizeStudyOrder,
-  normalizeStudyScope,
-} from '../studySettings'
+import { RESTUDY_WAITS, STUDY_ORDERS, normalizeRestudyWait, normalizeStudyOrder } from '../studySettings'
 import { LOCALES } from '../i18n'
 import { translateError } from '../i18n/errors'
-import ConfirmModal from './ConfirmModal'
 
 export default function SettingsPage() {
   const { t, i18n } = useTranslation()
   const location = useLocation()
-  const { user, setTheme, setLocale, setDeckSort, setStudyOrder, setStudyScope, setRestudyWait, resetDueDates } =
-    useAuth()
+  const { user, setTheme, setLocale, setDeckSort, setStudyOrder, setRestudyWait } = useAuth()
   const [error, setError] = useState('')
-  const [confirmReset, setConfirmReset] = useState(false)
 
   useEffect(() => {
     if (location.hash !== '#study-options') {
@@ -34,7 +24,6 @@ export default function SettingsPage() {
   const locale = i18n.resolvedLanguage === 'es' ? 'es' : 'en'
   const deckSort = normalizeDeckSort(user?.deckSort)
   const studyOrder = normalizeStudyOrder(user?.studyOrder)
-  const studyScope = normalizeStudyScope(user?.studyScope)
   const restudyWait = normalizeRestudyWait(user?.restudyWait)
 
   async function run(work) {
@@ -130,23 +119,6 @@ export default function SettingsPage() {
           ))}
         </div>
 
-        <h3 className="settings-subhead">{t('settings.studyScope')}</h3>
-        <p className="muted">{t('settings.studyScopeHint')}</p>
-        <div className="radio-list" role="radiogroup" aria-label={t('settings.studyScope')}>
-          {STUDY_SCOPES.map((option) => (
-            <label key={option.value} className={`radio-row ${studyScope === option.value ? 'selected' : ''}`}>
-              <input
-                type="radio"
-                name="studyScope"
-                value={option.value}
-                checked={studyScope === option.value}
-                onChange={() => run(() => setStudyScope(option.value))}
-              />
-              {t(option.labelKey)}
-            </label>
-          ))}
-        </div>
-
         <h3 className="settings-subhead">{t('settings.restudyWait')}</h3>
         <p className="muted">{t('settings.restudyWaitHint')}</p>
         <div className="radio-list" role="radiogroup" aria-label={t('settings.restudyWait')}>
@@ -163,26 +135,7 @@ export default function SettingsPage() {
             </label>
           ))}
         </div>
-
-        <h3 className="settings-subhead">{t('settings.resetDue')}</h3>
-        <p className="muted">{t('settings.resetDueHint')}</p>
-        <button className="btn" type="button" onClick={() => setConfirmReset(true)}>
-          {t('settings.resetDueButton')}
-        </button>
       </section>
-
-      {confirmReset ? (
-        <ConfirmModal
-          title={t('settings.resetDueTitle')}
-          message={t('settings.resetDueMessage')}
-          confirmLabel={t('settings.resetDueConfirm')}
-          onConfirm={async () => {
-            setConfirmReset(false)
-            await run(() => resetDueDates())
-          }}
-          onCancel={() => setConfirmReset(false)}
-        />
-      ) : null}
     </div>
   )
 }

@@ -15,5 +15,6 @@ public record DeckResponse(
         long cardCount,
         long dueCount,
         long learnedCount,
-        Instant lastStudiedAt) {
+        Instant lastStudiedAt,
+        long hardCount) {
 }

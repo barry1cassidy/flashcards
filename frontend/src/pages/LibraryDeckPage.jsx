@@ -5,6 +5,7 @@ import { api } from '../api'
 import { translateError } from '../i18n/errors'
 import { GroupBadge } from './ColorPicker'
 import SpeakButton from './SpeakButton'
+import ConfirmModal from './ConfirmModal'
 import StudyModeModal from './StudyModeModal'
 import { normalizeSpeechLanguage } from '../speechLanguages'
 
@@ -16,19 +17,62 @@ export default function LibraryDeckPage() {
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
   const [studyOpen, setStudyOpen] = useState(false)
+  const [copyConfirmOpen, setCopyConfirmOpen] = useState(false)
+  const [hardCount, setHardCount] = useState(0)
 
   useEffect(() => {
     api(`/api/library/decks/${id}`)
-      .then(setDeck)
+      .then(async (libraryDeck) => {
+        setDeck(libraryDeck)
+        if (!libraryDeck.copiedDeckId) {
+          setHardCount(0)
+          return
+        }
+        try {
+          const copy = await api(`/api/decks/${libraryDeck.copiedDeckId}`)
+          setHardCount(copy.hardCount || 0)
+        } catch {
+          setHardCount(0)
+        }
+      })
       .catch((err) => setError(err.message))
   }, [id])
 
-  async function addAndStudy(mode) {
+  function onStudyClick() {
+    if (deck?.copiedDeckId) {
+      setStudyOpen(true)
+      return
+    }
+    setCopyConfirmOpen(true)
+  }
+
+  async function confirmCopyThenPickMode() {
+    setCopyConfirmOpen(false)
     setError('')
     setBusy(true)
     try {
       const copy = await api(`/api/library/decks/${id}/add`, { method: 'POST' })
-      navigate(`/decks/${copy.id}/study/${mode}`)
+      setDeck((current) => (current ? { ...current, copiedDeckId: copy.id } : current))
+      setHardCount(copy.hardCount || 0)
+      setStudyOpen(true)
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  async function addAndStudy(mode, filter = 'due') {
+    setError('')
+    setBusy(true)
+    try {
+      let deckId = deck?.copiedDeckId
+      if (!deckId) {
+        const copy = await api(`/api/library/decks/${id}/add`, { method: 'POST' })
+        deckId = copy.id
+      }
+      const path = `/decks/${deckId}/study/${mode}`
+      navigate(filter === 'hard' ? `${path}?filter=hard` : path)
     } catch (err) {
       setError(err.message)
     } finally {
@@ -42,6 +86,7 @@ export default function LibraryDeckPage() {
     try {
       const copy = await api(`/api/library/decks/${id}/add`, { method: 'POST' })
       setDeck((current) => (current ? { ...current, copiedDeckId: copy.id } : current))
+      setHardCount(copy.hardCount || 0)
     } catch (err) {
       setError(err.message)
     } finally {
@@ -78,7 +123,7 @@ export default function LibraryDeckPage() {
               <p className="muted">{t('decks.cards', { count: deck.cards.length })}</p>
             </div>
             <div className="header-actions">
-              <button className="btn primary" type="button" disabled={busy} onClick={() => setStudyOpen(true)}>
+              <button className="btn primary" type="button" disabled={busy} onClick={onStudyClick}>
                 {t('decks.study')}
               </button>
               {deck.copiedDeckId ? (
@@ -115,12 +160,21 @@ export default function LibraryDeckPage() {
           </section>
         </>
       ) : null}
+      {copyConfirmOpen ? (
+        <ConfirmModal
+          title={t('library.copyConfirmTitle')}
+          message={t('library.copyConfirmMessage')}
+          confirmLabel={t('library.copyConfirm')}
+          onConfirm={confirmCopyThenPickMode}
+          onCancel={() => setCopyConfirmOpen(false)}
+        />
+      ) : null}
       {studyOpen ? (
         <StudyModeModal
-          hint={t('library.studyHint')}
-          onSelect={(mode) => {
+          hardCount={hardCount}
+          onSelect={(mode, filter) => {
             setStudyOpen(false)
-            addAndStudy(mode)
+            addAndStudy(mode, filter)
           }}
           onCancel={() => setStudyOpen(false)}
         />

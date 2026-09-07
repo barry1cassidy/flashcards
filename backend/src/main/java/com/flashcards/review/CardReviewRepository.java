@@ -35,11 +35,19 @@ public interface CardReviewRepository extends JpaRepository<CardReview, UUID> {
             """)
     Optional<LocalDate> findNextDueAfter(@Param("deckId") UUID deckId, @Param("today") LocalDate today);
 
+    @Query("""
+            SELECT COUNT(r) FROM CardReview r
+            JOIN r.card c
+            WHERE c.deck.id = :deckId AND r.lastRating = :rating
+            """)
+    int countByDeckIdAndLastRating(@Param("deckId") UUID deckId, @Param("rating") ReviewRating rating);
+
     @Modifying
     @Query("""
             UPDATE CardReview r
             SET r.dueDate = :today
-            WHERE r.card.deck.user.id = :userId
+            WHERE r.card.deck.id = :deckId AND r.card.deck.user.id = :userId
             """)
-    int resetDueDatesForUser(@Param("userId") UUID userId, @Param("today") LocalDate today);
+    int resetDueDatesForDeck(
+            @Param("userId") UUID userId, @Param("deckId") UUID deckId, @Param("today") LocalDate today);
 }

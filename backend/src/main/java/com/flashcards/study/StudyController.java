@@ -28,8 +28,9 @@ public class StudyController {
     public StudySessionResponse start(
             Authentication authentication,
             @PathVariable UUID deckId,
-            @RequestParam(defaultValue = "flip") String mode) {
-        return studyService.startSession(AuthSupport.requireUser(authentication).id(), deckId, mode);
+            @RequestParam(defaultValue = "flip") String mode,
+            @RequestParam(defaultValue = "due") String filter) {
+        return studyService.startSession(AuthSupport.requireUser(authentication).id(), deckId, mode, filter);
     }
 
     @PostMapping("/api/cards/{id}/review")
@@ -40,9 +41,9 @@ public class StudyController {
         return studyService.review(AuthSupport.requireUser(authentication).id(), id, request.rating());
     }
 
-    @PostMapping("/api/study/reset-due")
+    @PostMapping("/api/decks/{deckId}/study/reset-due")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void resetDue(Authentication authentication) {
-        studyService.resetDueDates(AuthSupport.requireUser(authentication).id());
+    public void resetDue(Authentication authentication, @PathVariable UUID deckId) {
+        studyService.resetDueDates(AuthSupport.requireUser(authentication).id(), deckId);
     }
 }

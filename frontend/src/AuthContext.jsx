@@ -80,14 +80,8 @@ export function AuthProvider({ children }) {
       async setStudyOrder(studyOrder) {
         return patchUser(setUser, user, { studyOrder })
       },
-      async setStudyScope(studyScope) {
-        return patchUser(setUser, user, { studyScope })
-      },
       async setRestudyWait(restudyWait) {
         return patchUser(setUser, user, { restudyWait })
-      },
-      async resetDueDates() {
-        await api('/api/study/reset-due', { method: 'POST' })
       },
       async setLocale(locale) {
         await applyLocale(locale)
