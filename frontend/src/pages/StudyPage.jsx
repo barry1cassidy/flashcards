@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { api } from '../api'
 import { translateError } from '../i18n/errors'
 import { formatDay } from '../i18n/format'
-import { canSpeak } from '../tts'
+import { stopSpeaking } from '../tts'
 import SpeakButton from './SpeakButton'
 import MatchListStudy from './MatchListStudy'
 import AudioReviewStudy from './AudioReviewStudy'
@@ -54,9 +54,7 @@ export default function StudyPage() {
 
   useEffect(() => {
     return () => {
-      if (canSpeak()) {
-        window.speechSynthesis.cancel()
-      }
+      stopSpeaking()
     }
   }, [index, id])
 

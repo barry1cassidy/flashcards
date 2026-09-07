@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { canSpeak, speak } from '../tts'
+import { canSpeak, speak, stopSpeaking } from '../tts'
 
 export default function AudioReviewStudy({ card, revealed, busy, exitKind, onReveal, onRate }) {
   const { t } = useTranslation()
@@ -12,7 +12,7 @@ export default function AudioReviewStudy({ card, revealed, busy, exitKind, onRev
     }
     speak(card.front, card.frontLanguage)
     return () => {
-      window.speechSynthesis.cancel()
+      stopSpeaking()
     }
   }, [card, revealed, speechOk])
 
@@ -22,7 +22,7 @@ export default function AudioReviewStudy({ card, revealed, busy, exitKind, onRev
     }
     speak(card.back, card.backLanguage)
     return () => {
-      window.speechSynthesis.cancel()
+      stopSpeaking()
     }
   }, [card, revealed, speechOk])
 

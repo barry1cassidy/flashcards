@@ -1,19 +1,39 @@
+let playTimer = 0
+
 export function canSpeak() {
   return typeof window !== 'undefined' && 'speechSynthesis' in window
+}
+
+export function stopSpeaking() {
+  if (playTimer) {
+    window.clearTimeout(playTimer)
+    playTimer = 0
+  }
+  if (!canSpeak()) {
+    return
+  }
+  window.speechSynthesis.cancel()
 }
 
 export function speak(text, lang = 'en-US') {
   if (!canSpeak() || !text) {
     return
   }
-  const utterance = new SpeechSynthesisUtterance(text)
-  utterance.lang = lang
-  const voice = pickVoice(lang)
+  const utterance = new SpeechSynthesisUtterance(String(text))
+  utterance.lang = lang || 'en-US'
+  const voice = pickVoice(utterance.lang)
   if (voice) {
     utterance.voice = voice
   }
-  window.speechSynthesis.cancel()
-  window.speechSynthesis.speak(utterance)
+  stopSpeaking()
+  // Chromium drops speak() in the same turn as cancel(), and can stay paused.
+  playTimer = window.setTimeout(() => {
+    playTimer = 0
+    window.speechSynthesis.speak(utterance)
+    if (window.speechSynthesis.paused) {
+      window.speechSynthesis.resume()
+    }
+  }, 50)
 }
 
 function pickVoice(lang) {
