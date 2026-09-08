@@ -1,0 +1,807 @@
+{
+  "groups": [
+    {
+      "slug": "arithmetic-facts",
+      "name": "Arithmetic Facts",
+      "sourceUrl": "",
+      "sourceTitle": "Arithmetic Facts",
+      "attribution": "Original Flashcards catalog of common arithmetic facts for grade-school practice.",
+      "sourceLanguage": "en-US",
+      "targetLanguage": "en-US",
+      "decks": [
+        {
+          "slug": "times-tables-2-4",
+          "name": "Times Tables 2–4",
+          "description": "Multiplication facts for 2, 3, and 4.",
+          "position": 0,
+          "cards": [
+            {
+              "front": "2 × 1",
+              "back": "2"
+            },
+            {
+              "front": "2 × 2",
+              "back": "4"
+            },
+            {
+              "front": "2 × 3",
+              "back": "6"
+            },
+            {
+              "front": "2 × 4",
+              "back": "8"
+            },
+            {
+              "front": "2 × 5",
+              "back": "10"
+            },
+            {
+              "front": "2 × 6",
+              "back": "12"
+            },
+            {
+              "front": "2 × 7",
+              "back": "14"
+            },
+            {
+              "front": "2 × 8",
+              "back": "16"
+            },
+            {
+              "front": "2 × 9",
+              "back": "18"
+            },
+            {
+              "front": "2 × 10",
+              "back": "20"
+            },
+            {
+              "front": "2 × 11",
+              "back": "22"
+            },
+            {
+              "front": "2 × 12",
+              "back": "24"
+            },
+            {
+              "front": "3 × 1",
+              "back": "3"
+            },
+            {
+              "front": "3 × 2",
+              "back": "6"
+            },
+            {
+              "front": "3 × 3",
+              "back": "9"
+            },
+            {
+              "front": "3 × 4",
+              "back": "12"
+            },
+            {
+              "front": "3 × 5",
+              "back": "15"
+            },
+            {
+              "front": "3 × 6",
+              "back": "18"
+            },
+            {
+              "front": "3 × 7",
+              "back": "21"
+            },
+            {
+              "front": "3 × 8",
+              "back": "24"
+            },
+            {
+              "front": "3 × 9",
+              "back": "27"
+            },
+            {
+              "front": "3 × 10",
+              "back": "30"
+            },
+            {
+              "front": "3 × 11",
+              "back": "33"
+            },
+            {
+              "front": "3 × 12",
+              "back": "36"
+            },
+            {
+              "front": "4 × 1",
+              "back": "4"
+            },
+            {
+              "front": "4 × 2",
+              "back": "8"
+            },
+            {
+              "front": "4 × 3",
+              "back": "12"
+            },
+            {
+              "front": "4 × 4",
+              "back": "16"
+            },
+            {
+              "front": "4 × 5",
+              "back": "20"
+            },
+            {
+              "front": "4 × 6",
+              "back": "24"
+            },
+            {
+              "front": "4 × 7",
+              "back": "28"
+            },
+            {
+              "front": "4 × 8",
+              "back": "32"
+            },
+            {
+              "front": "4 × 9",
+              "back": "36"
+            },
+            {
+              "front": "4 × 10",
+              "back": "40"
+            },
+            {
+              "front": "4 × 11",
+              "back": "44"
+            },
+            {
+              "front": "4 × 12",
+              "back": "48"
+            }
+          ]
+        },
+        {
+          "slug": "times-tables-5-7",
+          "name": "Times Tables 5–7",
+          "description": "Multiplication facts for 5, 6, and 7.",
+          "position": 1,
+          "cards": [
+            {
+              "front": "5 × 1",
+              "back": "5"
+            },
+            {
+              "front": "5 × 2",
+              "back": "10"
+            },
+            {
+              "front": "5 × 3",
+              "back": "15"
+            },
+            {
+              "front": "5 × 4",
+              "back": "20"
+            },
+            {
+              "front": "5 × 5",
+              "back": "25"
+            },
+            {
+              "front": "5 × 6",
+              "back": "30"
+            },
+            {
+              "front": "5 × 7",
+              "back": "35"
+            },
+            {
+              "front": "5 × 8",
+              "back": "40"
+            },
+            {
+              "front": "5 × 9",
+              "back": "45"
+            },
+            {
+              "front": "5 × 10",
+              "back": "50"
+            },
+            {
+              "front": "5 × 11",
+              "back": "55"
+            },
+            {
+              "front": "5 × 12",
+              "back": "60"
+            },
+            {
+              "front": "6 × 1",
+              "back": "6"
+            },
+            {
+              "front": "6 × 2",
+              "back": "12"
+            },
+            {
+              "front": "6 × 3",
+              "back": "18"
+            },
+            {
+              "front": "6 × 4",
+              "back": "24"
+            },
+            {
+              "front": "6 × 5",
+              "back": "30"
+            },
+            {
+              "front": "6 × 6",
+              "back": "36"
+            },
+            {
+              "front": "6 × 7",
+              "back": "42"
+            },
+            {
+              "front": "6 × 8",
+              "back": "48"
+            },
+            {
+              "front": "6 × 9",
+              "back": "54"
+            },
+            {
+              "front": "6 × 10",
+              "back": "60"
+            },
+            {
+              "front": "6 × 11",
+              "back": "66"
+            },
+            {
+              "front": "6 × 12",
+              "back": "72"
+            },
+            {
+              "front": "7 × 1",
+              "back": "7"
+            },
+            {
+              "front": "7 × 2",
+              "back": "14"
+            },
+            {
+              "front": "7 × 3",
+              "back": "21"
+            },
+            {
+              "front": "7 × 4",
+              "back": "28"
+            },
+            {
+              "front": "7 × 5",
+              "back": "35"
+            },
+            {
+              "front": "7 × 6",
+              "back": "42"
+            },
+            {
+              "front": "7 × 7",
+              "back": "49"
+            },
+            {
+              "front": "7 × 8",
+              "back": "56"
+            },
+            {
+              "front": "7 × 9",
+              "back": "63"
+            },
+            {
+              "front": "7 × 10",
+              "back": "70"
+            },
+            {
+              "front": "7 × 11",
+              "back": "77"
+            },
+            {
+              "front": "7 × 12",
+              "back": "84"
+            }
+          ]
+        },
+        {
+          "slug": "times-tables-8-12",
+          "name": "Times Tables 8–12",
+          "description": "Multiplication facts for 8 through 12.",
+          "position": 2,
+          "cards": [
+            {
+              "front": "8 × 1",
+              "back": "8"
+            },
+            {
+              "front": "8 × 2",
+              "back": "16"
+            },
+            {
+              "front": "8 × 3",
+              "back": "24"
+            },
+            {
+              "front": "8 × 4",
+              "back": "32"
+            },
+            {
+              "front": "8 × 5",
+              "back": "40"
+            },
+            {
+              "front": "8 × 6",
+              "back": "48"
+            },
+            {
+              "front": "8 × 7",
+              "back": "56"
+            },
+            {
+              "front": "8 × 8",
+              "back": "64"
+            },
+            {
+              "front": "8 × 9",
+              "back": "72"
+            },
+            {
+              "front": "8 × 10",
+              "back": "80"
+            },
+            {
+              "front": "8 × 11",
+              "back": "88"
+            },
+            {
+              "front": "8 × 12",
+              "back": "96"
+            },
+            {
+              "front": "9 × 1",
+              "back": "9"
+            },
+            {
+              "front": "9 × 2",
+              "back": "18"
+            },
+            {
+              "front": "9 × 3",
+              "back": "27"
+            },
+            {
+              "front": "9 × 4",
+              "back": "36"
+            },
+            {
+              "front": "9 × 5",
+              "back": "45"
+            },
+            {
+              "front": "9 × 6",
+              "back": "54"
+            },
+            {
+              "front": "9 × 7",
+              "back": "63"
+            },
+            {
+              "front": "9 × 8",
+              "back": "72"
+            },
+            {
+              "front": "9 × 9",
+              "back": "81"
+            },
+            {
+              "front": "9 × 10",
+              "back": "90"
+            },
+            {
+              "front": "9 × 11",
+              "back": "99"
+            },
+            {
+              "front": "9 × 12",
+              "back": "108"
+            },
+            {
+              "front": "10 × 1",
+              "back": "10"
+            },
+            {
+              "front": "10 × 2",
+              "back": "20"
+            },
+            {
+              "front": "10 × 3",
+              "back": "30"
+            },
+            {
+              "front": "10 × 4",
+              "back": "40"
+            },
+            {
+              "front": "10 × 5",
+              "back": "50"
+            },
+            {
+              "front": "10 × 6",
+              "back": "60"
+            },
+            {
+              "front": "10 × 7",
+              "back": "70"
+            },
+            {
+              "front": "10 × 8",
+              "back": "80"
+            },
+            {
+              "front": "10 × 9",
+              "back": "90"
+            },
+            {
+              "front": "10 × 10",
+              "back": "100"
+            },
+            {
+              "front": "10 × 11",
+              "back": "110"
+            },
+            {
+              "front": "10 × 12",
+              "back": "120"
+            },
+            {
+              "front": "11 × 1",
+              "back": "11"
+            },
+            {
+              "front": "11 × 2",
+              "back": "22"
+            },
+            {
+              "front": "11 × 3",
+              "back": "33"
+            },
+            {
+              "front": "11 × 4",
+              "back": "44"
+            },
+            {
+              "front": "11 × 5",
+              "back": "55"
+            },
+            {
+              "front": "11 × 6",
+              "back": "66"
+            },
+            {
+              "front": "11 × 7",
+              "back": "77"
+            },
+            {
+              "front": "11 × 8",
+              "back": "88"
+            },
+            {
+              "front": "11 × 9",
+              "back": "99"
+            },
+            {
+              "front": "11 × 10",
+              "back": "110"
+            },
+            {
+              "front": "11 × 11",
+              "back": "121"
+            },
+            {
+              "front": "11 × 12",
+              "back": "132"
+            },
+            {
+              "front": "12 × 1",
+              "back": "12"
+            },
+            {
+              "front": "12 × 2",
+              "back": "24"
+            },
+            {
+              "front": "12 × 3",
+              "back": "36"
+            },
+            {
+              "front": "12 × 4",
+              "back": "48"
+            },
+            {
+              "front": "12 × 5",
+              "back": "60"
+            },
+            {
+              "front": "12 × 6",
+              "back": "72"
+            },
+            {
+              "front": "12 × 7",
+              "back": "84"
+            },
+            {
+              "front": "12 × 8",
+              "back": "96"
+            },
+            {
+              "front": "12 × 9",
+              "back": "108"
+            },
+            {
+              "front": "12 × 10",
+              "back": "120"
+            },
+            {
+              "front": "12 × 11",
+              "back": "132"
+            },
+            {
+              "front": "12 × 12",
+              "back": "144"
+            }
+          ]
+        },
+        {
+          "slug": "addition-to-20",
+          "name": "Addition to 20",
+          "description": "Sums that total 11 through 20.",
+          "position": 3,
+          "cards": [
+            {
+              "front": "9 + 2",
+              "back": "11"
+            },
+            {
+              "front": "8 + 3",
+              "back": "11"
+            },
+            {
+              "front": "7 + 4",
+              "back": "11"
+            },
+            {
+              "front": "6 + 5",
+              "back": "11"
+            },
+            {
+              "front": "9 + 3",
+              "back": "12"
+            },
+            {
+              "front": "8 + 4",
+              "back": "12"
+            },
+            {
+              "front": "7 + 5",
+              "back": "12"
+            },
+            {
+              "front": "6 + 6",
+              "back": "12"
+            },
+            {
+              "front": "9 + 4",
+              "back": "13"
+            },
+            {
+              "front": "8 + 5",
+              "back": "13"
+            },
+            {
+              "front": "7 + 6",
+              "back": "13"
+            },
+            {
+              "front": "9 + 5",
+              "back": "14"
+            },
+            {
+              "front": "8 + 6",
+              "back": "14"
+            },
+            {
+              "front": "7 + 7",
+              "back": "14"
+            },
+            {
+              "front": "9 + 6",
+              "back": "15"
+            },
+            {
+              "front": "8 + 7",
+              "back": "15"
+            },
+            {
+              "front": "9 + 7",
+              "back": "16"
+            },
+            {
+              "front": "8 + 8",
+              "back": "16"
+            },
+            {
+              "front": "9 + 8",
+              "back": "17"
+            },
+            {
+              "front": "9 + 9",
+              "back": "18"
+            },
+            {
+              "front": "11 + 9",
+              "back": "20"
+            },
+            {
+              "front": "12 + 8",
+              "back": "20"
+            },
+            {
+              "front": "13 + 7",
+              "back": "20"
+            },
+            {
+              "front": "14 + 6",
+              "back": "20"
+            },
+            {
+              "front": "15 + 5",
+              "back": "20"
+            },
+            {
+              "front": "16 + 4",
+              "back": "20"
+            },
+            {
+              "front": "17 + 3",
+              "back": "20"
+            },
+            {
+              "front": "18 + 2",
+              "back": "20"
+            }
+          ]
+        },
+        {
+          "slug": "fraction-basics",
+          "name": "Fraction Basics",
+          "description": "Simple equivalents, mixed numbers, and percent links.",
+          "position": 4,
+          "cards": [
+            {
+              "front": "1/2 as a decimal",
+              "back": "0.5"
+            },
+            {
+              "front": "1/4 as a decimal",
+              "back": "0.25"
+            },
+            {
+              "front": "3/4 as a decimal",
+              "back": "0.75"
+            },
+            {
+              "front": "1/5 as a decimal",
+              "back": "0.2"
+            },
+            {
+              "front": "1/10 as a decimal",
+              "back": "0.1"
+            },
+            {
+              "front": "1/8 as a decimal",
+              "back": "0.125"
+            },
+            {
+              "front": "1/3 as a decimal (approx.)",
+              "back": "0.333…"
+            },
+            {
+              "front": "2/3 as a decimal (approx.)",
+              "back": "0.666…"
+            },
+            {
+              "front": "1/2 as a percent",
+              "back": "50%"
+            },
+            {
+              "front": "1/4 as a percent",
+              "back": "25%"
+            },
+            {
+              "front": "3/4 as a percent",
+              "back": "75%"
+            },
+            {
+              "front": "1/5 as a percent",
+              "back": "20%"
+            },
+            {
+              "front": "1/10 as a percent",
+              "back": "10%"
+            },
+            {
+              "front": "1/8 as a percent",
+              "back": "12.5%"
+            },
+            {
+              "front": "Simplify 2/4",
+              "back": "1/2"
+            },
+            {
+              "front": "Simplify 3/9",
+              "back": "1/3"
+            },
+            {
+              "front": "Simplify 4/8",
+              "back": "1/2"
+            },
+            {
+              "front": "Simplify 6/9",
+              "back": "2/3"
+            },
+            {
+              "front": "Simplify 8/12",
+              "back": "2/3"
+            },
+            {
+              "front": "Simplify 10/15",
+              "back": "2/3"
+            },
+            {
+              "front": "Mixed number for 5/2",
+              "back": "2 1/2"
+            },
+            {
+              "front": "Mixed number for 7/4",
+              "back": "1 3/4"
+            },
+            {
+              "front": "Improper fraction for 2 1/2",
+              "back": "5/2"
+            },
+            {
+              "front": "Improper fraction for 1 3/4",
+              "back": "7/4"
+            },
+            {
+              "front": "1/2 + 1/2",
+              "back": "1"
+            },
+            {
+              "front": "1/4 + 1/4",
+              "back": "1/2"
+            },
+            {
+              "front": "1/3 + 1/3",
+              "back": "2/3"
+            },
+            {
+              "front": "1/2 + 1/4",
+              "back": "3/4"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

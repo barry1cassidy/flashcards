@@ -87,10 +87,15 @@ export default function LibraryGroupPage() {
             ))}
           </div>
           <p className="muted small">
-            {group.attribution}{' '}
-            <a href={group.sourceUrl} target="_blank" rel="noreferrer">
-              {group.sourceTitle}
-            </a>
+            {group.attribution}
+            {group.sourceUrl ? (
+              <>
+                {' '}
+                <a href={group.sourceUrl} target="_blank" rel="noreferrer">
+                  {group.sourceTitle}
+                </a>
+              </>
+            ) : null}
           </p>
         </>
       ) : null}

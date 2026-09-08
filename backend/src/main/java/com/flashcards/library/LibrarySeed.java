@@ -25,6 +25,17 @@ public class LibrarySeed implements ApplicationRunner {
             "#C2410C", "#BE123C", "#0369A1", "#15803D", "#A16207",
             "#1D4ED8", "#B45309", "#047857", "#6D28D9", "#334155"
     };
+    private static final String PHRASEBOOKS = "library/phrasebooks.json";
+    private static final String[] SUBJECT_CATALOGS = {
+            "library/geography.json",
+            "library/arithmetic.json",
+            "library/civics.json",
+            "library/human-body.json",
+            "library/sat-math.json",
+            "library/sat-reading-writing.json",
+            "library/biology.json",
+            "library/us-history.json"
+    };
 
     private final LibraryGroupRepository groupRepository;
     private final LibraryDeckRepository deckRepository;
@@ -45,64 +56,105 @@ public class LibrarySeed implements ApplicationRunner {
     @Override
     @Transactional
     public void run(ApplicationArguments args) throws Exception {
-        if (groupRepository.count() > 0) {
-            return;
+        if (groupRepository.findBySlug("spanish").isEmpty()) {
+            loadCatalog(PHRASEBOOKS);
         }
-        ClassPathResource resource = new ClassPathResource("library/phrasebooks.json");
+        for (String catalog : SUBJECT_CATALOGS) {
+            loadCatalog(catalog);
+        }
+    }
+
+    private void loadCatalog(String classpath) throws Exception {
+        ClassPathResource resource = new ClassPathResource(classpath);
         if (!resource.exists()) {
-            log.warn("Library catalog is missing; skipping seed");
+            log.warn("Library catalog is missing; skipping {}", classpath);
             return;
         }
         try (InputStream stream = resource.getInputStream()) {
             JsonNode root = objectMapper.readTree(stream);
             JsonNode groups = root.path("groups");
-            int index = 0;
-            int deckCount = 0;
-            int cardCount = 0;
+            int addedGroups = 0;
+            int addedDecks = 0;
+            int addedCards = 0;
             for (JsonNode groupNode : groups) {
                 if (groupNode.path("decks").isEmpty()) {
                     continue;
                 }
-                LibraryGroup group = new LibraryGroup();
-                group.setSlug(groupNode.path("slug").asText());
-                group.setName(groupNode.path("name").asText());
-                group.setColor(COLORS[index % COLORS.length]);
-                group.setSourceLanguage(groupNode.path("sourceLanguage").asText("en-US"));
-                group.setTargetLanguage(groupNode.path("targetLanguage").asText("en-US"));
-                group.setSourceUrl(groupNode.path("sourceUrl").asText());
-                group.setSourceTitle(groupNode.path("sourceTitle").asText());
-                group.setAttribution(groupNode.path("attribution").asText());
-                groupRepository.save(group);
-                int position = 0;
-                for (JsonNode deckNode : groupNode.path("decks")) {
-                    LibraryDeck deck = new LibraryDeck();
-                    deck.setGroup(group);
-                    deck.setSlug(deckNode.path("slug").asText());
-                    deck.setName(deckNode.path("name").asText());
-                    String description = deckNode.path("description").asText(null);
-                    deck.setDescription(description == null || description.isBlank() ? null : description);
-                    deck.setPosition(deckNode.path("position").asInt(position));
-                    deckRepository.save(deck);
-                    int cardPosition = 0;
-                    List<LibraryCard> cards = new ArrayList<>();
-                    for (JsonNode cardNode : deckNode.path("cards")) {
-                        LibraryCard card = new LibraryCard();
-                        card.setDeck(deck);
-                        card.setFront(cardNode.path("front").asText());
-                        card.setBack(cardNode.path("back").asText());
-                        String hint = cardNode.path("hint").asText(null);
-                        card.setHint(hint == null || hint.isBlank() ? null : hint);
-                        card.setPosition(cardPosition++);
-                        cards.add(card);
-                    }
-                    cardRepository.saveAll(cards);
-                    deckCount += 1;
-                    cardCount += cards.size();
-                    position += 1;
-                }
-                index += 1;
+                SeedResult result = seedGroup(groupNode);
+                addedGroups += result.groups();
+                addedDecks += result.decks();
+                addedCards += result.cards();
             }
-            log.info("Seeded language library: {} groups, {} decks, {} cards", index, deckCount, cardCount);
+            if (addedGroups > 0 || addedDecks > 0) {
+                log.info(
+                        "Seeded library catalog {}: {} groups, {} decks, {} cards",
+                        classpath,
+                        addedGroups,
+                        addedDecks,
+                        addedCards);
+            }
         }
+    }
+
+    private SeedResult seedGroup(JsonNode groupNode) {
+        String slug = groupNode.path("slug").asText();
+        LibraryGroup group = groupRepository.findBySlug(slug).orElse(null);
+        int groupsCreated = 0;
+        if (group == null) {
+            group = new LibraryGroup();
+            group.setSlug(slug);
+            group.setName(groupNode.path("name").asText());
+            group.setColor(COLORS[(int) (groupRepository.count() % COLORS.length)]);
+            group.setSourceLanguage(groupNode.path("sourceLanguage").asText("en-US"));
+            group.setTargetLanguage(groupNode.path("targetLanguage").asText("en-US"));
+            group.setSourceUrl(groupNode.path("sourceUrl").asText(""));
+            group.setSourceTitle(groupNode.path("sourceTitle").asText(""));
+            group.setAttribution(groupNode.path("attribution").asText(""));
+            groupRepository.save(group);
+            groupsCreated = 1;
+        }
+        int nextPosition = deckRepository.findByGroupIdOrderByPositionAscIdAsc(group.getId()).stream()
+                .mapToInt(LibraryDeck::getPosition)
+                .max()
+                .orElse(-1)
+                + 1;
+        int decksCreated = 0;
+        int cardsCreated = 0;
+        int jsonPosition = 0;
+        for (JsonNode deckNode : groupNode.path("decks")) {
+            String deckSlug = deckNode.path("slug").asText();
+            if (deckRepository.findByGroup_IdAndSlug(group.getId(), deckSlug).isPresent()) {
+                jsonPosition += 1;
+                continue;
+            }
+            LibraryDeck deck = new LibraryDeck();
+            deck.setGroup(group);
+            deck.setSlug(deckSlug);
+            deck.setName(deckNode.path("name").asText());
+            String description = deckNode.path("description").asText(null);
+            deck.setDescription(description == null || description.isBlank() ? null : description);
+            deck.setPosition(groupsCreated == 1 ? deckNode.path("position").asInt(jsonPosition) : nextPosition++);
+            deckRepository.save(deck);
+            int cardPosition = 0;
+            List<LibraryCard> cards = new ArrayList<>();
+            for (JsonNode cardNode : deckNode.path("cards")) {
+                LibraryCard card = new LibraryCard();
+                card.setDeck(deck);
+                card.setFront(cardNode.path("front").asText());
+                card.setBack(cardNode.path("back").asText());
+                String hint = cardNode.path("hint").asText(null);
+                card.setHint(hint == null || hint.isBlank() ? null : hint);
+                card.setPosition(cardPosition++);
+                cards.add(card);
+            }
+            cardRepository.saveAll(cards);
+            decksCreated += 1;
+            cardsCreated += cards.size();
+            jsonPosition += 1;
+        }
+        return new SeedResult(groupsCreated, decksCreated, cardsCreated);
+    }
+
+    private record SeedResult(int groups, int decks, int cards) {
     }
 }

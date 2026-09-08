@@ -13,6 +13,8 @@ public interface LibraryDeckRepository extends JpaRepository<LibraryDeck, UUID> 
 
     List<LibraryDeck> findByGroupIdOrderByPositionAscIdAsc(UUID groupId);
 
+    Optional<LibraryDeck> findByGroup_IdAndSlug(UUID groupId, String slug);
+
     @Query("""
             SELECT d FROM LibraryDeck d
             JOIN FETCH d.group

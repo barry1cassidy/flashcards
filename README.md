@@ -132,5 +132,31 @@ mitochondria,powerhouse of the cell
 ```
 backend/    Spring Boot REST API
 frontend/   React (Vite) app
-docker-compose.yml
+docker-compose.yml          MySQL for local development
+docker-compose.prod.yml     Nginx + API + MySQL for a small VM
 ```
+
+## Deploy (cheap VM)
+
+The production compose file runs Nginx (the React build + `/api` proxy), Spring Boot, and MySQL on one host. The frontend already calls `/api` with relative URLs, so you do not need a domain or a separate static host yet. HTTP on a Lightsail IP is enough to start.
+
+Recommended box: **AWS Lightsail $10/month (2 GB RAM)**. Java 21 + MySQL is uncomfortable on 1 GB. Skip GCP e2-micro until the app is tiny and tuned.
+
+On a fresh Ubuntu instance:
+
+```bash
+sudo apt-get update
+sudo apt-get install -y ca-certificates curl git
+curl -fsSL https://get.docker.com | sudo sh
+sudo usermod -aG docker $USER
+# log out and back in so docker works without sudo
+git clone https://github.com/barry1cassidy/flashcards.git
+cd flashcards
+cp .env.example .env
+# edit .env: set MYSQL_PASSWORD, MYSQL_ROOT_PASSWORD, and APP_JWT_SECRET
+docker compose -f docker-compose.prod.yml up -d --build
+```
+
+Open `http://YOUR_LIGHTSAIL_IP/`. Open Lightsail firewall for HTTP (80). Do not publish 3306. Google sign-in needs that `http://IP` origin added to the OAuth client; password sign-in works without it.
+
+The first API image build downloads Maven and can take several minutes. After that, `docker compose -f docker-compose.prod.yml up -d --build` picks up git pulls.

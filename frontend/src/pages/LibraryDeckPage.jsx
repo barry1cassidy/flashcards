@@ -158,7 +158,7 @@ export default function LibraryDeckPage() {
                     <p>
                       <SpeakButton text={card.back} lang={backLanguage} /> {card.back}
                     </p>
-                    {card.hint ? <p className="muted">{t('decks.hint')}: {card.hint}</p> : null}
+                    {card.hint ? <p className="muted card-hint">{t('decks.hint')}: {card.hint}</p> : null}
                   </div>
                 </div>
               ))}

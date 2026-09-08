@@ -1,0 +1,379 @@
+{
+  "groups": [
+    {
+      "slug": "sat-reading-writing",
+      "name": "SAT Reading & Writing",
+      "sourceUrl": "",
+      "sourceTitle": "SAT Reading & Writing",
+      "attribution": "Original Flashcards catalog of grammar rules and academic vocabulary useful for Digital SAT Reading and Writing. Not College Board material and not official SAT questions.",
+      "sourceLanguage": "en-US",
+      "targetLanguage": "en-US",
+      "decks": [
+        {
+          "slug": "grammar-rules",
+          "name": "Grammar Rules",
+          "description": "Agreement, modifiers, and sentence structure.",
+          "position": 0,
+          "cards": [
+            {
+              "front": "A complete sentence needs",
+              "back": "a subject and a verb (and a complete thought)"
+            },
+            {
+              "front": "A fragment is",
+              "back": "an incomplete sentence"
+            },
+            {
+              "front": "A run-on is",
+              "back": "two sentences jammed together without proper punctuation"
+            },
+            {
+              "front": "A comma splice is",
+              "back": "two independent clauses joined only by a comma"
+            },
+            {
+              "front": "Subject-verb agreement means",
+              "back": "the verb matches the subject in number"
+            },
+            {
+              "front": "In “The list of items is long,” the subject is",
+              "back": "list (singular)"
+            },
+            {
+              "front": "Pronoun-antecedent agreement means",
+              "back": "a pronoun matches the noun it refers to"
+            },
+            {
+              "front": "A dangling modifier",
+              "back": "has nothing clear in the sentence to modify"
+            },
+            {
+              "front": "A misplaced modifier",
+              "back": "is too far from the word it describes"
+            },
+            {
+              "front": "Parallel structure means",
+              "back": "items in a list use the same grammatical form"
+            },
+            {
+              "front": "Who vs whom: use who as",
+              "back": "the subject"
+            },
+            {
+              "front": "Who vs whom: use whom as",
+              "back": "the object"
+            },
+            {
+              "front": "Its vs it’s: it’s means",
+              "back": "it is"
+            },
+            {
+              "front": "Its vs it’s: its means",
+              "back": "possessive (belonging to it)"
+            },
+            {
+              "front": "They’re vs their vs there: their means",
+              "back": "possessive"
+            },
+            {
+              "front": "Affect vs effect: affect is usually",
+              "back": "the verb (to influence)"
+            },
+            {
+              "front": "Affect vs effect: effect is usually",
+              "back": "the noun (a result)"
+            },
+            {
+              "front": "Fewer vs less: fewer is for",
+              "back": "countable things"
+            },
+            {
+              "front": "Than vs then: than is used for",
+              "back": "comparison"
+            },
+            {
+              "front": "A coordinating conjunction can be remembered as",
+              "back": "FANBOYS"
+            },
+            {
+              "front": "What does FANBOYS stand for?",
+              "back": "for, and, nor, but, or, yet, so"
+            }
+          ]
+        },
+        {
+          "slug": "punctuation",
+          "name": "Punctuation",
+          "description": "Commas, semicolons, colons, and dashes.",
+          "position": 1,
+          "cards": [
+            {
+              "front": "Use a period to",
+              "back": "end a complete statement"
+            },
+            {
+              "front": "Use a question mark to",
+              "back": "end a direct question"
+            },
+            {
+              "front": "A semicolon joins",
+              "back": "two closely related independent clauses"
+            },
+            {
+              "front": "A colon after a complete sentence can",
+              "back": "introduce a list, quote, or explanation"
+            },
+            {
+              "front": "Use a comma before FANBOYS when",
+              "back": "it joins two independent clauses"
+            },
+            {
+              "front": "Do not use a comma when FANBOYS joins",
+              "back": "two words or two phrases (not two sentences)"
+            },
+            {
+              "front": "Use commas to separate",
+              "back": "items in a list of three or more"
+            },
+            {
+              "front": "An Oxford comma is",
+              "back": "the comma before “and” in a list"
+            },
+            {
+              "front": "Set off a nonessential clause with",
+              "back": "commas"
+            },
+            {
+              "front": "Do not use commas around a clause that is",
+              "back": "essential to the meaning"
+            },
+            {
+              "front": "An em dash can",
+              "back": "set off an extra thought, like commas or parentheses"
+            },
+            {
+              "front": "Apostrophes show",
+              "back": "possession or a contraction"
+            },
+            {
+              "front": "Plural nouns usually take an apostrophe",
+              "back": "after the s (students’)"
+            },
+            {
+              "front": "Quotation marks enclose",
+              "back": "exact words someone wrote or said"
+            },
+            {
+              "front": "A hyphen joins",
+              "back": "some compound words or modifiers before a noun"
+            },
+            {
+              "front": "Parentheses enclose",
+              "back": "extra information that is less central"
+            }
+          ]
+        },
+        {
+          "slug": "academic-vocabulary",
+          "name": "Academic Vocabulary",
+          "description": "High-utility words that show up in passages and choices.",
+          "position": 2,
+          "cards": [
+            {
+              "front": "ambiguous",
+              "back": "having more than one possible meaning"
+            },
+            {
+              "front": "advocate",
+              "back": "to support or argue for"
+            },
+            {
+              "front": "convey",
+              "back": "to communicate or make known"
+            },
+            {
+              "front": "depict",
+              "back": "to show or portray"
+            },
+            {
+              "front": "emphasize",
+              "back": "to give special importance to"
+            },
+            {
+              "front": "imply",
+              "back": "to suggest without stating directly"
+            },
+            {
+              "front": "infer",
+              "back": "to conclude from evidence"
+            },
+            {
+              "front": "undermine",
+              "back": "to weaken or damage"
+            },
+            {
+              "front": "corroborate",
+              "back": "to confirm with evidence"
+            },
+            {
+              "front": "refute",
+              "back": "to prove wrong"
+            },
+            {
+              "front": "concede",
+              "back": "to admit a point, often unwillingly"
+            },
+            {
+              "front": "skeptical",
+              "back": "doubtful; not easily convinced"
+            },
+            {
+              "front": "plausible",
+              "back": "believable; seeming reasonable"
+            },
+            {
+              "front": "inherent",
+              "back": "built-in; existing as a natural part"
+            },
+            {
+              "front": "subsequent",
+              "back": "coming after"
+            },
+            {
+              "front": "prior",
+              "back": "coming before"
+            },
+            {
+              "front": "conventional",
+              "back": "usual; following accepted ways"
+            },
+            {
+              "front": "innovative",
+              "back": "new and original"
+            },
+            {
+              "front": "scarcity",
+              "back": "a shortage; not enough of something"
+            },
+            {
+              "front": "abundant",
+              "back": "plentiful"
+            },
+            {
+              "front": "detrimental",
+              "back": "harmful"
+            },
+            {
+              "front": "beneficial",
+              "back": "helpful"
+            },
+            {
+              "front": "tentative",
+              "back": "not final; hesitant"
+            },
+            {
+              "front": "assert",
+              "back": "to state firmly"
+            },
+            {
+              "front": "cite",
+              "back": "to quote or refer to as evidence"
+            },
+            {
+              "front": "hypothesis",
+              "back": "a testable proposed explanation"
+            },
+            {
+              "front": "relevant",
+              "back": "closely connected to the matter at hand"
+            },
+            {
+              "front": "redundant",
+              "back": "unnecessarily repetitive"
+            }
+          ]
+        },
+        {
+          "slug": "transition-words",
+          "name": "Transition Words",
+          "description": "How linking words change the relationship between ideas.",
+          "position": 3,
+          "cards": [
+            {
+              "front": "However signals",
+              "back": "contrast"
+            },
+            {
+              "front": "Therefore signals",
+              "back": "a result or conclusion"
+            },
+            {
+              "front": "Moreover signals",
+              "back": "an added supporting point"
+            },
+            {
+              "front": "For example signals",
+              "back": "an illustration"
+            },
+            {
+              "front": "In contrast signals",
+              "back": "a difference"
+            },
+            {
+              "front": "Meanwhile signals",
+              "back": "something happening at the same time"
+            },
+            {
+              "front": "Consequently signals",
+              "back": "a result"
+            },
+            {
+              "front": "Nevertheless signals",
+              "back": "contrast despite what came before"
+            },
+            {
+              "front": "Likewise signals",
+              "back": "similarity"
+            },
+            {
+              "front": "Specifically signals",
+              "back": "a narrower detail"
+            },
+            {
+              "front": "In other words signals",
+              "back": "a restatement"
+            },
+            {
+              "front": "On the other hand signals",
+              "back": "an opposing point"
+            },
+            {
+              "front": "As a result signals",
+              "back": "an effect"
+            },
+            {
+              "front": "Although signals",
+              "back": "a concession or contrast"
+            },
+            {
+              "front": "Because signals",
+              "back": "a reason"
+            },
+            {
+              "front": "Unless signals",
+              "back": "a condition that must be met"
+            },
+            {
+              "front": "Meanwhile vs therefore: meanwhile is about",
+              "back": "time, not cause"
+            },
+            {
+              "front": "A transition must match",
+              "back": "the logical relationship between the two sentences"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

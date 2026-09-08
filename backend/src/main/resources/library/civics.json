@@ -1,0 +1,526 @@
+{
+  "groups": [
+    {
+      "slug": "us-civics",
+      "name": "U.S. Civics",
+      "sourceUrl": "https://www.uscis.gov/citizenship/find-study-materials-and-resources/study-for-the-test/100-civics-questions-and-answers-with-mp3-audio-english-version",
+      "sourceTitle": "100 Civics Questions and Answers (2008 version)",
+      "attribution": "Questions and answers from U.S. Citizenship and Immigration Services (USCIS), 2008 civics test. U.S. government work, public domain. Officeholder names can change — confirm at uscis.gov/citizenship/testupdates.",
+      "sourceLanguage": "en-US",
+      "targetLanguage": "en-US",
+      "decks": [
+        {
+          "slug": "american-democracy",
+          "name": "American Democracy",
+          "description": "Constitution, rights, and the rule of law (questions 1–12).",
+          "position": 0,
+          "cards": [
+            {
+              "front": "What is the supreme law of the land?",
+              "back": "the Constitution"
+            },
+            {
+              "front": "What does the Constitution do?",
+              "back": "sets up the government",
+              "hint": "Also accepted: defines the government; protects basic rights of Americans"
+            },
+            {
+              "front": "The idea of self-government is in the first three words of the Constitution. What are these words?",
+              "back": "We the People"
+            },
+            {
+              "front": "What is an amendment?",
+              "back": "a change (to the Constitution)",
+              "hint": "Also accepted: an addition (to the Constitution)"
+            },
+            {
+              "front": "What do we call the first ten amendments to the Constitution?",
+              "back": "the Bill of Rights"
+            },
+            {
+              "front": "What is one right or freedom from the First Amendment?",
+              "back": "speech",
+              "hint": "Also accepted: religion; assembly; press; petition the government"
+            },
+            {
+              "front": "How many amendments does the Constitution have?",
+              "back": "twenty-seven (27)"
+            },
+            {
+              "front": "What did the Declaration of Independence do?",
+              "back": "announced our independence (from Great Britain)",
+              "hint": "Also accepted: declared our independence; said the United States is free (from Great Britain)"
+            },
+            {
+              "front": "What are two rights in the Declaration of Independence?",
+              "back": "life and liberty",
+              "hint": "Also accepted with pursuit of happiness"
+            },
+            {
+              "front": "What is freedom of religion?",
+              "back": "You can practice any religion, or not practice a religion."
+            },
+            {
+              "front": "What is the economic system in the United States?",
+              "back": "capitalist economy",
+              "hint": "Also accepted: market economy"
+            },
+            {
+              "front": "What is the “rule of law”?",
+              "back": "Everyone must follow the law.",
+              "hint": "Also accepted: leaders / government must obey the law; no one is above the law"
+            }
+          ]
+        },
+        {
+          "slug": "system-of-government",
+          "name": "System of Government",
+          "description": "Branches, Congress, and the presidency (questions 13–36).",
+          "position": 1,
+          "cards": [
+            {
+              "front": "Name one branch or part of the government.",
+              "back": "Congress",
+              "hint": "Also accepted: legislative; President; executive; the courts; judicial"
+            },
+            {
+              "front": "What stops one branch of government from becoming too powerful?",
+              "back": "checks and balances",
+              "hint": "Also accepted: separation of powers"
+            },
+            {
+              "front": "Who is in charge of the executive branch?",
+              "back": "the President"
+            },
+            {
+              "front": "Who makes federal laws?",
+              "back": "Congress",
+              "hint": "Also accepted: Senate and House of Representatives; the national legislature"
+            },
+            {
+              "front": "What are the two parts of the U.S. Congress?",
+              "back": "the Senate and House of Representatives"
+            },
+            {
+              "front": "How many U.S. Senators are there?",
+              "back": "one hundred (100)"
+            },
+            {
+              "front": "We elect a U.S. Senator for how many years?",
+              "back": "six (6)"
+            },
+            {
+              "front": "Who is one of your state’s U.S. Senators now?",
+              "back": "Answers vary by state",
+              "hint": "D.C. and territories have no U.S. Senators"
+            },
+            {
+              "front": "The House of Representatives has how many voting members?",
+              "back": "four hundred thirty-five (435)"
+            },
+            {
+              "front": "We elect a U.S. Representative for how many years?",
+              "back": "two (2)"
+            },
+            {
+              "front": "Name your U.S. Representative.",
+              "back": "Answers vary by district"
+            },
+            {
+              "front": "Who does a U.S. Senator represent?",
+              "back": "all people of the state"
+            },
+            {
+              "front": "Why do some states have more Representatives than other states?",
+              "back": "the state’s population",
+              "hint": "Also accepted: they have more people"
+            },
+            {
+              "front": "We elect a President for how many years?",
+              "back": "four (4)"
+            },
+            {
+              "front": "In what month do we vote for President?",
+              "back": "November"
+            },
+            {
+              "front": "What is the name of the President of the United States now?",
+              "back": "Donald J. Trump",
+              "hint": "Confirm at uscis.gov/citizenship/testupdates"
+            },
+            {
+              "front": "What is the name of the Vice President of the United States now?",
+              "back": "JD Vance",
+              "hint": "Confirm at uscis.gov/citizenship/testupdates"
+            },
+            {
+              "front": "If the President can no longer serve, who becomes President?",
+              "back": "the Vice President"
+            },
+            {
+              "front": "If both the President and the Vice President can no longer serve, who becomes President?",
+              "back": "the Speaker of the House"
+            },
+            {
+              "front": "Who is the Commander in Chief of the military?",
+              "back": "the President"
+            },
+            {
+              "front": "Who signs bills to become laws?",
+              "back": "the President"
+            },
+            {
+              "front": "Who vetoes bills?",
+              "back": "the President"
+            },
+            {
+              "front": "What does the President’s Cabinet do?",
+              "back": "advises the President"
+            },
+            {
+              "front": "What are two Cabinet-level positions?",
+              "back": "Secretary of State and Secretary of Defense",
+              "hint": "Many Cabinet titles are accepted, including Attorney General and Vice President"
+            }
+          ]
+        },
+        {
+          "slug": "courts-and-federalism",
+          "name": "Courts and Federalism",
+          "description": "The judiciary, federal vs state powers, and parties (questions 37–47).",
+          "position": 2,
+          "cards": [
+            {
+              "front": "What does the judicial branch do?",
+              "back": "reviews laws",
+              "hint": "Also accepted: explains laws; resolves disputes; decides if a law goes against the Constitution"
+            },
+            {
+              "front": "What is the highest court in the United States?",
+              "back": "the Supreme Court"
+            },
+            {
+              "front": "How many justices are on the Supreme Court?",
+              "back": "nine (9)",
+              "hint": "Confirm at uscis.gov/citizenship/testupdates"
+            },
+            {
+              "front": "Who is the Chief Justice of the United States now?",
+              "back": "John Roberts",
+              "hint": "Confirm at uscis.gov/citizenship/testupdates"
+            },
+            {
+              "front": "What is one power of the federal government?",
+              "back": "to print money",
+              "hint": "Also accepted: declare war; create an army; make treaties"
+            },
+            {
+              "front": "What is one power of the states?",
+              "back": "provide schooling and education",
+              "hint": "Also accepted: police; fire departments; driver’s licenses; zoning"
+            },
+            {
+              "front": "Who is the Governor of your state now?",
+              "back": "Answers vary by state",
+              "hint": "D.C. does not have a governor"
+            },
+            {
+              "front": "What is the capital of your state?",
+              "back": "Answers vary by state"
+            },
+            {
+              "front": "What are the two major political parties in the United States?",
+              "back": "Democratic and Republican"
+            },
+            {
+              "front": "What is the political party of the President now?",
+              "back": "Republican",
+              "hint": "Confirm at uscis.gov/citizenship/testupdates"
+            },
+            {
+              "front": "What is the name of the Speaker of the House of Representatives now?",
+              "back": "Mike Johnson",
+              "hint": "Confirm at uscis.gov/citizenship/testupdates"
+            }
+          ]
+        },
+        {
+          "slug": "rights-and-responsibilities",
+          "name": "Rights and Responsibilities",
+          "description": "Voting, citizenship, and civic duties (questions 48–57).",
+          "position": 3,
+          "cards": [
+            {
+              "front": "Describe one amendment about who can vote.",
+              "back": "Citizens eighteen (18) and older can vote",
+              "hint": "Also accepted: no poll tax; any citizen can vote; a male citizen of any race can vote"
+            },
+            {
+              "front": "What is one responsibility that is only for United States citizens?",
+              "back": "serve on a jury",
+              "hint": "Also accepted: vote in a federal election"
+            },
+            {
+              "front": "Name one right only for United States citizens.",
+              "back": "vote in a federal election",
+              "hint": "Also accepted: run for federal office"
+            },
+            {
+              "front": "What are two rights of everyone living in the United States?",
+              "back": "freedom of speech and freedom of religion",
+              "hint": "Also accepted: expression; assembly; petition; the right to bear arms"
+            },
+            {
+              "front": "What do we show loyalty to when we say the Pledge of Allegiance?",
+              "back": "the United States",
+              "hint": "Also accepted: the flag"
+            },
+            {
+              "front": "What is one promise you make when you become a United States citizen?",
+              "back": "obey the laws of the United States",
+              "hint": "Also accepted: give up loyalty to other countries; defend the Constitution; serve if needed; be loyal"
+            },
+            {
+              "front": "How old do citizens have to be to vote for President?",
+              "back": "eighteen (18) and older"
+            },
+            {
+              "front": "What are two ways that Americans can participate in their democracy?",
+              "back": "vote and run for office",
+              "hint": "Also accepted: join a party or civic group; help a campaign; contact officials; write a newspaper"
+            },
+            {
+              "front": "When is the last day you can send in federal income tax forms?",
+              "back": "April 15"
+            },
+            {
+              "front": "When must all men register for the Selective Service?",
+              "back": "at age eighteen (18)",
+              "hint": "Also accepted: between 18 and 26"
+            }
+          ]
+        },
+        {
+          "slug": "colonial-america",
+          "name": "Colonial America and Independence",
+          "description": "Colonies, the Revolution, and the Founders (questions 58–70).",
+          "position": 4,
+          "cards": [
+            {
+              "front": "What is one reason colonists came to America?",
+              "back": "freedom",
+              "hint": "Also accepted: political liberty; religious freedom; economic opportunity; escape persecution"
+            },
+            {
+              "front": "Who lived in America before the Europeans arrived?",
+              "back": "Native Americans",
+              "hint": "Also accepted: American Indians"
+            },
+            {
+              "front": "What group of people was taken to America and sold as slaves?",
+              "back": "Africans",
+              "hint": "Also accepted: people from Africa"
+            },
+            {
+              "front": "Why did the colonists fight the British?",
+              "back": "high taxes (taxation without representation)",
+              "hint": "Also accepted: quartering of troops; no self-government"
+            },
+            {
+              "front": "Who wrote the Declaration of Independence?",
+              "back": "Thomas Jefferson"
+            },
+            {
+              "front": "When was the Declaration of Independence adopted?",
+              "back": "July 4, 1776"
+            },
+            {
+              "front": "Name three of the 13 original states.",
+              "back": "New York, Virginia, and Georgia",
+              "hint": "Any three of the original thirteen are accepted"
+            },
+            {
+              "front": "What happened at the Constitutional Convention?",
+              "back": "The Constitution was written.",
+              "hint": "Also accepted: the Founding Fathers wrote the Constitution"
+            },
+            {
+              "front": "When was the Constitution written?",
+              "back": "1787"
+            },
+            {
+              "front": "Name one writer of the Federalist Papers.",
+              "back": "James Madison",
+              "hint": "Also accepted: Alexander Hamilton; John Jay; Publius"
+            },
+            {
+              "front": "What is one thing Benjamin Franklin is famous for?",
+              "back": "U.S. diplomat",
+              "hint": "Also accepted: oldest member of the Constitutional Convention; first Postmaster General; Poor Richard’s Almanac; free libraries"
+            },
+            {
+              "front": "Who is the “Father of Our Country”?",
+              "back": "George Washington"
+            },
+            {
+              "front": "Who was the first President?",
+              "back": "George Washington"
+            }
+          ]
+        },
+        {
+          "slug": "later-american-history",
+          "name": "Later American History",
+          "description": "The 1800s through September 11 (questions 71–87).",
+          "position": 5,
+          "cards": [
+            {
+              "front": "What territory did the United States buy from France in 1803?",
+              "back": "the Louisiana Territory",
+              "hint": "Also accepted: Louisiana"
+            },
+            {
+              "front": "Name one war fought by the United States in the 1800s.",
+              "back": "the Civil War",
+              "hint": "Also accepted: War of 1812; Mexican-American War; Spanish-American War"
+            },
+            {
+              "front": "Name the U.S. war between the North and the South.",
+              "back": "the Civil War",
+              "hint": "Also accepted: the War between the States"
+            },
+            {
+              "front": "Name one problem that led to the Civil War.",
+              "back": "slavery",
+              "hint": "Also accepted: economic reasons; states’ rights"
+            },
+            {
+              "front": "What was one important thing that Abraham Lincoln did?",
+              "back": "freed the slaves (Emancipation Proclamation)",
+              "hint": "Also accepted: saved the Union; led the United States during the Civil War"
+            },
+            {
+              "front": "What did the Emancipation Proclamation do?",
+              "back": "freed the slaves",
+              "hint": "Also accepted: freed slaves in the Confederacy / most Southern states"
+            },
+            {
+              "front": "What did Susan B. Anthony do?",
+              "back": "fought for women’s rights",
+              "hint": "Also accepted: fought for civil rights"
+            },
+            {
+              "front": "Name one war fought by the United States in the 1900s.",
+              "back": "World War II",
+              "hint": "Also accepted: World War I; Korean War; Vietnam War; Persian Gulf War"
+            },
+            {
+              "front": "Who was President during World War I?",
+              "back": "Woodrow Wilson"
+            },
+            {
+              "front": "Who was President during the Great Depression and World War II?",
+              "back": "Franklin Roosevelt"
+            },
+            {
+              "front": "Who did the United States fight in World War II?",
+              "back": "Japan, Germany, and Italy"
+            },
+            {
+              "front": "Before he was President, Eisenhower was a general. What war was he in?",
+              "back": "World War II"
+            },
+            {
+              "front": "During the Cold War, what was the main concern of the United States?",
+              "back": "Communism"
+            },
+            {
+              "front": "What movement tried to end racial discrimination?",
+              "back": "civil rights (movement)"
+            },
+            {
+              "front": "What did Martin Luther King, Jr. do?",
+              "back": "fought for civil rights",
+              "hint": "Also accepted: worked for equality for all Americans"
+            },
+            {
+              "front": "What major event happened on September 11, 2001, in the United States?",
+              "back": "Terrorists attacked the United States."
+            },
+            {
+              "front": "Name one American Indian tribe in the United States.",
+              "back": "Cherokee",
+              "hint": "Many federally recognized tribes are accepted, including Navajo, Sioux, Apache, and others"
+            }
+          ]
+        },
+        {
+          "slug": "symbols-and-holidays",
+          "name": "Symbols, Geography, and Holidays",
+          "description": "Rivers, territories, the flag, and national holidays (questions 88–100).",
+          "position": 6,
+          "cards": [
+            {
+              "front": "Name one of the two longest rivers in the United States.",
+              "back": "Mississippi River",
+              "hint": "Also accepted: Missouri River"
+            },
+            {
+              "front": "What ocean is on the West Coast of the United States?",
+              "back": "Pacific Ocean"
+            },
+            {
+              "front": "What ocean is on the East Coast of the United States?",
+              "back": "Atlantic Ocean"
+            },
+            {
+              "front": "Name one U.S. territory.",
+              "back": "Puerto Rico",
+              "hint": "Also accepted: U.S. Virgin Islands; American Samoa; Northern Mariana Islands; Guam"
+            },
+            {
+              "front": "Name one state that borders Canada.",
+              "back": "Maine",
+              "hint": "Also accepted: New Hampshire, Vermont, New York, and several others"
+            },
+            {
+              "front": "Name one state that borders Mexico.",
+              "back": "Texas",
+              "hint": "Also accepted: California; Arizona; New Mexico"
+            },
+            {
+              "front": "What is the capital of the United States?",
+              "back": "Washington, D.C."
+            },
+            {
+              "front": "Where is the Statue of Liberty?",
+              "back": "New York Harbor",
+              "hint": "Also accepted: Liberty Island; New Jersey; Hudson River"
+            },
+            {
+              "front": "Why does the flag have 13 stripes?",
+              "back": "because there were 13 original colonies"
+            },
+            {
+              "front": "Why does the flag have 50 stars?",
+              "back": "because there is one star for each state"
+            },
+            {
+              "front": "What is the name of the national anthem?",
+              "back": "The Star-Spangled Banner"
+            },
+            {
+              "front": "When do we celebrate Independence Day?",
+              "back": "July 4"
+            },
+            {
+              "front": "Name two national U.S. holidays.",
+              "back": "Independence Day and Thanksgiving",
+              "hint": "Many pairs are accepted, including New Year’s Day, Memorial Day, and Christmas"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

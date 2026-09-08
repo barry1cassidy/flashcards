@@ -562,6 +562,10 @@ textarea {
   min-width: 0;
 }
 
+.card-hint {
+  margin-top: 10px;
+}
+
 .reorder-controls {
   display: flex;
   align-items: center;

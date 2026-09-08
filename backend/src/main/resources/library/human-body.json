@@ -1,0 +1,511 @@
+{
+  "groups": [
+    {
+      "slug": "human-body",
+      "name": "Human Body",
+      "sourceUrl": "",
+      "sourceTitle": "Human Body",
+      "attribution": "Original Flashcards catalog of introductory anatomy and physiology terms.",
+      "sourceLanguage": "en-US",
+      "targetLanguage": "en-US",
+      "decks": [
+        {
+          "slug": "skeletal-system",
+          "name": "Skeletal System",
+          "description": "Bones, joints, and what the skeleton does.",
+          "position": 0,
+          "cards": [
+            {
+              "front": "How many bones are in an adult human skeleton?",
+              "back": "206"
+            },
+            {
+              "front": "What is the longest bone in the body?",
+              "back": "femur"
+            },
+            {
+              "front": "What bone protects the brain?",
+              "back": "skull (cranium)"
+            },
+            {
+              "front": "What is the common name for the clavicle?",
+              "back": "collarbone"
+            },
+            {
+              "front": "What is the common name for the scapula?",
+              "back": "shoulder blade"
+            },
+            {
+              "front": "What is the common name for the sternum?",
+              "back": "breastbone"
+            },
+            {
+              "front": "What are the bones of the fingers and toes called?",
+              "back": "phalanges"
+            },
+            {
+              "front": "What is the kneecap called?",
+              "back": "patella"
+            },
+            {
+              "front": "What bone is in the upper arm?",
+              "back": "humerus"
+            },
+            {
+              "front": "Which two bones are in the forearm?",
+              "back": "radius and ulna"
+            },
+            {
+              "front": "Which two bones are in the lower leg?",
+              "back": "tibia and fibula"
+            },
+            {
+              "front": "What is the shinbone?",
+              "back": "tibia"
+            },
+            {
+              "front": "What are the bones of the spine called?",
+              "back": "vertebrae"
+            },
+            {
+              "front": "How many pairs of ribs do humans have?",
+              "back": "12"
+            },
+            {
+              "front": "What mineral is stored in bones and needed for muscle contraction?",
+              "back": "calcium"
+            },
+            {
+              "front": "What tissue connects bone to bone?",
+              "back": "ligament"
+            },
+            {
+              "front": "What tissue connects muscle to bone?",
+              "back": "tendon"
+            },
+            {
+              "front": "What is the soft tissue inside bones that makes blood cells?",
+              "back": "bone marrow"
+            },
+            {
+              "front": "What type of joint is the shoulder?",
+              "back": "ball-and-socket"
+            },
+            {
+              "front": "What type of joint is the knee?",
+              "back": "hinge"
+            },
+            {
+              "front": "What is cartilage?",
+              "back": "Flexible connective tissue that cushions joints"
+            },
+            {
+              "front": "What is the main job of the skeleton?",
+              "back": "Support, protection, and movement"
+            }
+          ]
+        },
+        {
+          "slug": "muscular-system",
+          "name": "Muscular System",
+          "description": "Muscle types and how movement works.",
+          "position": 1,
+          "cards": [
+            {
+              "front": "What are the three types of muscle?",
+              "back": "skeletal, smooth, and cardiac"
+            },
+            {
+              "front": "Which muscle type is under voluntary control?",
+              "back": "skeletal muscle"
+            },
+            {
+              "front": "Which muscle type is found in the heart?",
+              "back": "cardiac muscle"
+            },
+            {
+              "front": "Which muscle type lines organs such as the stomach?",
+              "back": "smooth muscle"
+            },
+            {
+              "front": "What protein filaments slide to make a muscle contract?",
+              "back": "actin and myosin"
+            },
+            {
+              "front": "What is the large chest muscle used in pushing?",
+              "back": "pectoralis major"
+            },
+            {
+              "front": "What is the large muscle of the upper arm that flexes the elbow?",
+              "back": "biceps brachii"
+            },
+            {
+              "front": "What muscle on the back of the upper arm extends the elbow?",
+              "back": "triceps brachii"
+            },
+            {
+              "front": "What is the large muscle of the buttock?",
+              "back": "gluteus maximus"
+            },
+            {
+              "front": "What is the calf muscle?",
+              "back": "gastrocnemius"
+            },
+            {
+              "front": "What muscle group is on the front of the thigh?",
+              "back": "quadriceps"
+            },
+            {
+              "front": "What muscle group is on the back of the thigh?",
+              "back": "hamstrings"
+            },
+            {
+              "front": "What is the main breathing muscle under the lungs?",
+              "back": "diaphragm"
+            },
+            {
+              "front": "What is atrophy?",
+              "back": "Loss of muscle mass from disuse"
+            },
+            {
+              "front": "What energy molecule do muscles use to contract?",
+              "back": "ATP"
+            },
+            {
+              "front": "What is a sprain?",
+              "back": "Stretch or tear of a ligament"
+            },
+            {
+              "front": "What is a strain?",
+              "back": "Stretch or tear of a muscle or tendon"
+            },
+            {
+              "front": "What do muscles produce as a waste during intense exercise?",
+              "back": "lactic acid"
+            }
+          ]
+        },
+        {
+          "slug": "circulatory-system",
+          "name": "Circulatory System",
+          "description": "Heart, blood, and vessels.",
+          "position": 2,
+          "cards": [
+            {
+              "front": "What is the main job of the circulatory system?",
+              "back": "Carry oxygen, nutrients, and waste"
+            },
+            {
+              "front": "How many chambers does the human heart have?",
+              "back": "four"
+            },
+            {
+              "front": "Which chambers receive blood?",
+              "back": "atria"
+            },
+            {
+              "front": "Which chambers pump blood out?",
+              "back": "ventricles"
+            },
+            {
+              "front": "Which side of the heart pumps blood to the lungs?",
+              "back": "right side"
+            },
+            {
+              "front": "Which side of the heart pumps blood to the body?",
+              "back": "left side"
+            },
+            {
+              "front": "What vessels carry blood away from the heart?",
+              "back": "arteries"
+            },
+            {
+              "front": "What vessels carry blood toward the heart?",
+              "back": "veins"
+            },
+            {
+              "front": "What are the smallest blood vessels?",
+              "back": "capillaries"
+            },
+            {
+              "front": "What is the largest artery?",
+              "back": "aorta"
+            },
+            {
+              "front": "What oxygen-carrying protein is in red blood cells?",
+              "back": "hemoglobin"
+            },
+            {
+              "front": "What blood cells fight infection?",
+              "back": "white blood cells"
+            },
+            {
+              "front": "What cell fragments help blood clot?",
+              "back": "platelets"
+            },
+            {
+              "front": "What is plasma?",
+              "back": "The liquid part of blood"
+            },
+            {
+              "front": "What valve is between the left atrium and left ventricle?",
+              "back": "mitral (bicuspid) valve"
+            },
+            {
+              "front": "What is a pulse?",
+              "back": "The beat of blood through an artery"
+            },
+            {
+              "front": "What is blood pressure?",
+              "back": "Force of blood against artery walls"
+            },
+            {
+              "front": "What is the pacemaker of the heart?",
+              "back": "SA node"
+            },
+            {
+              "front": "Where does blood pick up oxygen?",
+              "back": "the lungs"
+            },
+            {
+              "front": "What is the liquid that leaks from capillaries and is returned by lymph vessels?",
+              "back": "lymph"
+            }
+          ]
+        },
+        {
+          "slug": "respiratory-system",
+          "name": "Respiratory System",
+          "description": "Lungs and gas exchange.",
+          "position": 3,
+          "cards": [
+            {
+              "front": "What is the main job of the respiratory system?",
+              "back": "Exchange oxygen and carbon dioxide"
+            },
+            {
+              "front": "What is the windpipe called?",
+              "back": "trachea"
+            },
+            {
+              "front": "What is the voice box called?",
+              "back": "larynx"
+            },
+            {
+              "front": "What flap keeps food out of the airway?",
+              "back": "epiglottis"
+            },
+            {
+              "front": "What are the two tubes that branch from the trachea?",
+              "back": "bronchi"
+            },
+            {
+              "front": "What are the tiny air sacs where gas exchange happens?",
+              "back": "alveoli"
+            },
+            {
+              "front": "What muscle contracts to pull air into the lungs?",
+              "back": "diaphragm"
+            },
+            {
+              "front": "What gas do we inhale for cells to use?",
+              "back": "oxygen"
+            },
+            {
+              "front": "What gas do we exhale as a waste?",
+              "back": "carbon dioxide"
+            },
+            {
+              "front": "What is the throat region shared by food and air?",
+              "back": "pharynx"
+            },
+            {
+              "front": "What covers the lungs and lines the chest cavity?",
+              "back": "pleura"
+            },
+            {
+              "front": "What is the typical resting breathing rate for an adult?",
+              "back": "about 12–20 breaths per minute"
+            },
+            {
+              "front": "What is asthma?",
+              "back": "Airway inflammation that makes breathing hard"
+            },
+            {
+              "front": "Why is smoking harmful to alveoli?",
+              "back": "It damages air sacs and reduces oxygen exchange"
+            },
+            {
+              "front": "What tiny hairs sweep mucus out of the airways?",
+              "back": "cilia"
+            },
+            {
+              "front": "What is the dome-shaped muscle below the lungs?",
+              "back": "diaphragm"
+            }
+          ]
+        },
+        {
+          "slug": "digestive-system",
+          "name": "Digestive System",
+          "description": "From mouth to intestine, plus related organs.",
+          "position": 4,
+          "cards": [
+            {
+              "front": "What is the main job of the digestive system?",
+              "back": "Break down food and absorb nutrients"
+            },
+            {
+              "front": "Where does digestion begin?",
+              "back": "the mouth"
+            },
+            {
+              "front": "What enzyme in saliva starts breaking down starch?",
+              "back": "amylase"
+            },
+            {
+              "front": "What tube carries food from the mouth to the stomach?",
+              "back": "esophagus"
+            },
+            {
+              "front": "What wave-like muscle motion moves food along?",
+              "back": "peristalsis"
+            },
+            {
+              "front": "What acid in the stomach helps digest protein?",
+              "back": "hydrochloric acid"
+            },
+            {
+              "front": "What is the first part of the small intestine?",
+              "back": "duodenum"
+            },
+            {
+              "front": "Where are most nutrients absorbed?",
+              "back": "small intestine"
+            },
+            {
+              "front": "What organ makes bile?",
+              "back": "liver"
+            },
+            {
+              "front": "Where is bile stored?",
+              "back": "gallbladder"
+            },
+            {
+              "front": "What organ makes insulin and digestive enzymes?",
+              "back": "pancreas"
+            },
+            {
+              "front": "What does the large intestine mainly absorb?",
+              "back": "water"
+            },
+            {
+              "front": "What is the last part of the large intestine?",
+              "back": "rectum"
+            },
+            {
+              "front": "What are the finger-like folds that increase intestinal surface area?",
+              "back": "villi"
+            },
+            {
+              "front": "What is the flap of tissue hanging at the back of the throat?",
+              "back": "uvula"
+            },
+            {
+              "front": "What is the common name for the colon?",
+              "back": "large intestine"
+            },
+            {
+              "front": "What nutrient is broken down first in the mouth?",
+              "back": "carbohydrates (starch)"
+            },
+            {
+              "front": "What is the churned food mixture that leaves the stomach?",
+              "back": "chyme"
+            }
+          ]
+        },
+        {
+          "slug": "nervous-system",
+          "name": "Nervous System",
+          "description": "Brain, nerves, and senses.",
+          "position": 5,
+          "cards": [
+            {
+              "front": "What is the main control organ of the nervous system?",
+              "back": "the brain"
+            },
+            {
+              "front": "What are the two main parts of the nervous system?",
+              "back": "central and peripheral"
+            },
+            {
+              "front": "What makes up the central nervous system?",
+              "back": "brain and spinal cord"
+            },
+            {
+              "front": "What is a nerve cell called?",
+              "back": "neuron"
+            },
+            {
+              "front": "What part of a neuron receives signals?",
+              "back": "dendrites"
+            },
+            {
+              "front": "What part of a neuron sends signals away?",
+              "back": "axon"
+            },
+            {
+              "front": "What is the gap between two neurons called?",
+              "back": "synapse"
+            },
+            {
+              "front": "What chemical carries a signal across a synapse?",
+              "back": "neurotransmitter"
+            },
+            {
+              "front": "What lobe is important for vision?",
+              "back": "occipital lobe"
+            },
+            {
+              "front": "What lobe is important for hearing?",
+              "back": "temporal lobe"
+            },
+            {
+              "front": "What lobe is important for planning and decision-making?",
+              "back": "frontal lobe"
+            },
+            {
+              "front": "What lobe is important for touch and spatial sense?",
+              "back": "parietal lobe"
+            },
+            {
+              "front": "What part of the brain controls balance and coordination?",
+              "back": "cerebellum"
+            },
+            {
+              "front": "What part of the brain controls breathing and heartbeat?",
+              "back": "brain stem (medulla)"
+            },
+            {
+              "front": "What is a reflex?",
+              "back": "A fast response that does not need the brain to decide first"
+            },
+            {
+              "front": "What is the covering that speeds signals on many axons?",
+              "back": "myelin"
+            },
+            {
+              "front": "What is the largest part of the human brain?",
+              "back": "cerebrum"
+            },
+            {
+              "front": "What sense organ detects light?",
+              "back": "the eye (retina)"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

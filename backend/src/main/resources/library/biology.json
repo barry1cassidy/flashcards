@@ -1,0 +1,279 @@
+{
+  "groups": [
+    {
+      "slug": "biology-terms",
+      "name": "Biology Terms",
+      "sourceUrl": "",
+      "sourceTitle": "Biology Terms",
+      "attribution": "Original Flashcards catalog of introductory biology vocabulary.",
+      "sourceLanguage": "en-US",
+      "targetLanguage": "en-US",
+      "decks": [
+        {
+          "slug": "cell-biology",
+          "name": "Cell Biology",
+          "description": "Organelles, membranes, and cell types.",
+          "position": 0,
+          "cards": [
+            {
+              "front": "What is the basic unit of life?",
+              "back": "the cell"
+            },
+            {
+              "front": "What surrounds every cell and controls what enters?",
+              "back": "cell membrane"
+            },
+            {
+              "front": "What is the jelly-like interior of a cell?",
+              "back": "cytoplasm"
+            },
+            {
+              "front": "What organelle stores DNA in eukaryotes?",
+              "back": "nucleus"
+            },
+            {
+              "front": "What organelle makes ATP?",
+              "back": "mitochondrion"
+            },
+            {
+              "front": "What organelle does photosynthesis?",
+              "back": "chloroplast"
+            },
+            {
+              "front": "What structure gives plant cells a rigid shape?",
+              "back": "cell wall"
+            },
+            {
+              "front": "What organelle sorts and packages proteins?",
+              "back": "Golgi apparatus"
+            },
+            {
+              "front": "What organelle makes proteins?",
+              "back": "ribosome"
+            },
+            {
+              "front": "What is the ER?",
+              "back": "endoplasmic reticulum (a membrane network)"
+            },
+            {
+              "front": "What does rough ER have that smooth ER lacks?",
+              "back": "ribosomes"
+            },
+            {
+              "front": "What is a vacuole?",
+              "back": "a storage sac, large in plant cells"
+            },
+            {
+              "front": "What organelle digests waste in animal cells?",
+              "back": "lysosome"
+            },
+            {
+              "front": "Prokaryotes lack a",
+              "back": "nucleus"
+            },
+            {
+              "front": "Eukaryotes have a",
+              "back": "nucleus and membrane-bound organelles"
+            },
+            {
+              "front": "Plant cells have, but animal cells usually lack,",
+              "back": "a cell wall and chloroplasts"
+            },
+            {
+              "front": "What is diffusion?",
+              "back": "Movement from high to low concentration"
+            },
+            {
+              "front": "What is osmosis?",
+              "back": "Diffusion of water across a membrane"
+            },
+            {
+              "front": "What is the powerhouse of the cell?",
+              "back": "mitochondrion"
+            },
+            {
+              "front": "What molecule carries genetic instructions?",
+              "back": "DNA"
+            }
+          ]
+        },
+        {
+          "slug": "genetics",
+          "name": "Genetics",
+          "description": "DNA, traits, and inheritance.",
+          "position": 1,
+          "cards": [
+            {
+              "front": "What does DNA stand for?",
+              "back": "deoxyribonucleic acid"
+            },
+            {
+              "front": "What are the four DNA bases?",
+              "back": "A, T, C, and G"
+            },
+            {
+              "front": "Which base pairs with adenine?",
+              "back": "thymine"
+            },
+            {
+              "front": "Which base pairs with cytosine?",
+              "back": "guanine"
+            },
+            {
+              "front": "What is a gene?",
+              "back": "A segment of DNA that codes for a trait or product"
+            },
+            {
+              "front": "What is a chromosome?",
+              "back": "A packaged structure of DNA and protein"
+            },
+            {
+              "front": "How many chromosomes are in typical human body cells?",
+              "back": "46"
+            },
+            {
+              "front": "What is an allele?",
+              "back": "A version of a gene"
+            },
+            {
+              "front": "What does dominant mean?",
+              "back": "The allele that shows in the phenotype if present"
+            },
+            {
+              "front": "What does recessive mean?",
+              "back": "The allele that shows only if two copies are present"
+            },
+            {
+              "front": "Genotype is",
+              "back": "the genetic makeup"
+            },
+            {
+              "front": "Phenotype is",
+              "back": "the observable trait"
+            },
+            {
+              "front": "Homozygous means",
+              "back": "two of the same allele"
+            },
+            {
+              "front": "Heterozygous means",
+              "back": "two different alleles"
+            },
+            {
+              "front": "What is mitosis?",
+              "back": "Cell division that makes two identical body cells"
+            },
+            {
+              "front": "What is meiosis?",
+              "back": "Cell division that makes gametes with half the chromosomes"
+            },
+            {
+              "front": "What is a mutation?",
+              "back": "A change in DNA"
+            },
+            {
+              "front": "What is RNA’s job in protein synthesis?",
+              "back": "Carry the code and help assemble amino acids"
+            },
+            {
+              "front": "What did Mendel study?",
+              "back": "inheritance in pea plants"
+            },
+            {
+              "front": "A Punnett square predicts",
+              "back": "possible genotypes of offspring"
+            }
+          ]
+        },
+        {
+          "slug": "ecology",
+          "name": "Ecology",
+          "description": "Ecosystems, energy, and populations.",
+          "position": 2,
+          "cards": [
+            {
+              "front": "What is ecology?",
+              "back": "The study of how organisms interact with each other and their environment"
+            },
+            {
+              "front": "What is a habitat?",
+              "back": "The place where an organism lives"
+            },
+            {
+              "front": "What is a niche?",
+              "back": "An organism’s role in its ecosystem"
+            },
+            {
+              "front": "A producer makes food by",
+              "back": "photosynthesis (or chemosynthesis)"
+            },
+            {
+              "front": "A consumer gets energy by",
+              "back": "eating other organisms"
+            },
+            {
+              "front": "A decomposer breaks down",
+              "back": "dead material and recycles nutrients"
+            },
+            {
+              "front": "What is a food chain?",
+              "back": "A single path of energy from producers to consumers"
+            },
+            {
+              "front": "What is a food web?",
+              "back": "Overlapping food chains in an ecosystem"
+            },
+            {
+              "front": "About how much energy moves to the next trophic level?",
+              "back": "about 10%"
+            },
+            {
+              "front": "What is a population?",
+              "back": "Members of one species in an area"
+            },
+            {
+              "front": "What is a community?",
+              "back": "Different species living together in an area"
+            },
+            {
+              "front": "What is an ecosystem?",
+              "back": "A community plus its nonliving environment"
+            },
+            {
+              "front": "Biotic factors are",
+              "back": "living parts of an ecosystem"
+            },
+            {
+              "front": "Abiotic factors are",
+              "back": "nonliving parts, such as water and temperature"
+            },
+            {
+              "front": "What is biodiversity?",
+              "back": "Variety of life in an area"
+            },
+            {
+              "front": "What is carrying capacity?",
+              "back": "The largest population an environment can support"
+            },
+            {
+              "front": "Parasitism is",
+              "back": "one organism benefits and the other is harmed"
+            },
+            {
+              "front": "Mutualism is",
+              "back": "both organisms benefit"
+            },
+            {
+              "front": "Commensalism is",
+              "back": "one benefits and the other is unaffected"
+            },
+            {
+              "front": "What gas do plants take in for photosynthesis?",
+              "back": "carbon dioxide"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

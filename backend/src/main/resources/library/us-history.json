@@ -1,0 +1,315 @@
+{
+  "groups": [
+    {
+      "slug": "us-history",
+      "name": "U.S. History",
+      "sourceUrl": "",
+      "sourceTitle": "U.S. History",
+      "attribution": "Original Flashcards catalog of commonly taught U.S. history facts for school study.",
+      "sourceLanguage": "en-US",
+      "targetLanguage": "en-US",
+      "decks": [
+        {
+          "slug": "presidents",
+          "name": "Presidents",
+          "description": "Numbered U.S. presidencies from Washington through today.",
+          "position": 0,
+          "cards": [
+            {
+              "front": "1st President",
+              "back": "George Washington"
+            },
+            {
+              "front": "2nd President",
+              "back": "John Adams"
+            },
+            {
+              "front": "3rd President",
+              "back": "Thomas Jefferson"
+            },
+            {
+              "front": "4th President",
+              "back": "James Madison"
+            },
+            {
+              "front": "5th President",
+              "back": "James Monroe"
+            },
+            {
+              "front": "6th President",
+              "back": "John Quincy Adams"
+            },
+            {
+              "front": "7th President",
+              "back": "Andrew Jackson"
+            },
+            {
+              "front": "16th President",
+              "back": "Abraham Lincoln"
+            },
+            {
+              "front": "26th President",
+              "back": "Theodore Roosevelt"
+            },
+            {
+              "front": "28th President",
+              "back": "Woodrow Wilson"
+            },
+            {
+              "front": "32nd President",
+              "back": "Franklin D. Roosevelt"
+            },
+            {
+              "front": "33rd President",
+              "back": "Harry S. Truman"
+            },
+            {
+              "front": "34th President",
+              "back": "Dwight D. Eisenhower"
+            },
+            {
+              "front": "35th President",
+              "back": "John F. Kennedy"
+            },
+            {
+              "front": "36th President",
+              "back": "Lyndon B. Johnson"
+            },
+            {
+              "front": "37th President",
+              "back": "Richard Nixon"
+            },
+            {
+              "front": "40th President",
+              "back": "Ronald Reagan"
+            },
+            {
+              "front": "41st President",
+              "back": "George H. W. Bush"
+            },
+            {
+              "front": "42nd President",
+              "back": "Bill Clinton"
+            },
+            {
+              "front": "43rd President",
+              "back": "George W. Bush"
+            },
+            {
+              "front": "44th President",
+              "back": "Barack Obama"
+            },
+            {
+              "front": "45th President",
+              "back": "Donald Trump"
+            },
+            {
+              "front": "46th President",
+              "back": "Joe Biden"
+            },
+            {
+              "front": "47th President",
+              "back": "Donald Trump"
+            },
+            {
+              "front": "Who was President during the Civil War?",
+              "back": "Abraham Lincoln"
+            },
+            {
+              "front": "Who was the first President?",
+              "back": "George Washington"
+            },
+            {
+              "front": "Which Founder was the third President?",
+              "back": "Thomas Jefferson"
+            },
+            {
+              "front": "Who was President during the Great Depression and most of WWII?",
+              "back": "Franklin D. Roosevelt"
+            }
+          ]
+        },
+        {
+          "slug": "amendments",
+          "name": "Constitutional Amendments",
+          "description": "What the Bill of Rights and later amendments did.",
+          "position": 1,
+          "cards": [
+            {
+              "front": "1st Amendment",
+              "back": "Religion, speech, press, assembly, and petition"
+            },
+            {
+              "front": "2nd Amendment",
+              "back": "Right to keep and bear arms"
+            },
+            {
+              "front": "3rd Amendment",
+              "back": "No quartering of soldiers in peacetime"
+            },
+            {
+              "front": "4th Amendment",
+              "back": "No unreasonable searches and seizures"
+            },
+            {
+              "front": "5th Amendment",
+              "back": "Due process; no self-incrimination or double jeopardy"
+            },
+            {
+              "front": "6th Amendment",
+              "back": "Speedy public trial and right to a lawyer"
+            },
+            {
+              "front": "7th Amendment",
+              "back": "Jury trial in many civil cases"
+            },
+            {
+              "front": "8th Amendment",
+              "back": "No cruel and unusual punishment"
+            },
+            {
+              "front": "9th Amendment",
+              "back": "People have rights not listed in the Constitution"
+            },
+            {
+              "front": "10th Amendment",
+              "back": "Powers not given to the federal government belong to the states or the people"
+            },
+            {
+              "front": "13th Amendment",
+              "back": "Abolished slavery"
+            },
+            {
+              "front": "14th Amendment",
+              "back": "Citizenship and equal protection"
+            },
+            {
+              "front": "15th Amendment",
+              "back": "Voting rights cannot be denied because of race"
+            },
+            {
+              "front": "19th Amendment",
+              "back": "Women’s suffrage (right to vote)"
+            },
+            {
+              "front": "22nd Amendment",
+              "back": "President limited to two elected terms"
+            },
+            {
+              "front": "24th Amendment",
+              "back": "Banned poll taxes in federal elections"
+            },
+            {
+              "front": "26th Amendment",
+              "back": "Voting age lowered to 18"
+            },
+            {
+              "front": "What are the first ten amendments called?",
+              "back": "the Bill of Rights"
+            },
+            {
+              "front": "How many amendments are there?",
+              "back": "27"
+            }
+          ]
+        },
+        {
+          "slug": "major-events",
+          "name": "Major Events",
+          "description": "Turning points from independence through the 20th century.",
+          "position": 2,
+          "cards": [
+            {
+              "front": "Year the Declaration of Independence was adopted",
+              "back": "1776"
+            },
+            {
+              "front": "Years of the American Revolutionary War (approx.)",
+              "back": "1775–1783"
+            },
+            {
+              "front": "Year the Constitution was written",
+              "back": "1787"
+            },
+            {
+              "front": "Louisiana Purchase year",
+              "back": "1803"
+            },
+            {
+              "front": "Years of the Civil War",
+              "back": "1861–1865"
+            },
+            {
+              "front": "Emancipation Proclamation year",
+              "back": "1863"
+            },
+            {
+              "front": "Year the U.S. entered World War I",
+              "back": "1917"
+            },
+            {
+              "front": "Year the stock market crash helped start the Great Depression",
+              "back": "1929"
+            },
+            {
+              "front": "Pearl Harbor date",
+              "back": "December 7, 1941"
+            },
+            {
+              "front": "Year World War II ended",
+              "back": "1945"
+            },
+            {
+              "front": "Brown v. Board of Education year",
+              "back": "1954"
+            },
+            {
+              "front": "March on Washington year",
+              "back": "1963"
+            },
+            {
+              "front": "Civil Rights Act year",
+              "back": "1964"
+            },
+            {
+              "front": "Moon landing year",
+              "back": "1969"
+            },
+            {
+              "front": "Year the Berlin Wall fell",
+              "back": "1989"
+            },
+            {
+              "front": "September 11 attacks year",
+              "back": "2001"
+            },
+            {
+              "front": "What war was fought between North and South?",
+              "back": "the Civil War"
+            },
+            {
+              "front": "What was the Cold War mainly about?",
+              "back": "U.S.–Soviet rivalry and containing communism"
+            },
+            {
+              "front": "What did the 19th Amendment accomplish in 1920?",
+              "back": "It guaranteed women the right to vote"
+            },
+            {
+              "front": "Who issued the Emancipation Proclamation?",
+              "back": "Abraham Lincoln"
+            },
+            {
+              "front": "What did Brown v. Board of Education decide?",
+              "back": "School segregation is unconstitutional"
+            },
+            {
+              "front": "What was the New Deal?",
+              "back": "FDR’s programs to fight the Great Depression"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

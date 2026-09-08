@@ -421,7 +421,7 @@ export default function DeckDetailPage() {
                       <SpeakButton text={card.back} lang={backLanguage} />
                     </p>
                     {card.hint ? (
-                      <p className="muted small">
+                      <p className="muted small card-hint">
                         {t('decks.hint')}: {card.hint}
                       </p>
                     ) : null}
