@@ -131,7 +131,7 @@ mitochondria,powerhouse of the cell
 
 ```
 backend/    Spring Boot REST API
-frontend/   React (Vite) app
+frontend/   React (Vite) app + Capacitor Android project
 docker-compose.yml          MySQL for local development
 docker-compose.prod.yml     Nginx + API + MySQL for a small VM
 ```
@@ -160,3 +160,17 @@ docker compose -f docker-compose.prod.yml up -d --build
 Open `http://YOUR_LIGHTSAIL_IP/`. Open Lightsail firewall for HTTP (80). Do not publish 3306. Google sign-in needs that `http://IP` origin added to the OAuth client; password sign-in works without it.
 
 The first API image build downloads Maven and can take several minutes. After that, `docker compose -f docker-compose.prod.yml up -d --build` picks up git pulls.
+
+## Android (Capacitor)
+
+The native app is the same Vite React UI in a WebView. Keep coding in Cursor; install **Android Studio** for the SDK and emulator.
+
+```bash
+cd frontend
+copy .env.android.example .env.android   # Windows; already points at the Lightsail test API
+npm run android
+```
+
+That builds with `VITE_API_BASE`, syncs Capacitor, and opens Android Studio. Pick an emulator (or a USB phone) and Run.
+
+The Lightsail API must allow Capacitor origins (included in `APP_CORS_ORIGINS`). After pulling CORS changes, rebuild the API container on the VM. Google sign-in in the WebView is not wired yet; use email/password first.

@@ -1,0 +1,9 @@
+{
+  "appId": "com.flashcards.app",
+  "appName": "Flashcards",
+  "webDir": "dist",
+  "server": {
+    "androidScheme": "http",
+    "cleartext": true
+  }
+}

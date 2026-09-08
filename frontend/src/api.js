@@ -1,6 +1,11 @@
 import { beginSaving, endSaving, isWriteRequest } from './saving'
 
 const TOKEN_KEY = 'flashcards.token'
+const API_BASE = String(import.meta.env.VITE_API_BASE || '').replace(/\/$/, '')
+
+function apiUrl(path) {
+  return `${API_BASE}${path}`
+}
 
 export function getToken() {
   return localStorage.getItem(TOKEN_KEY)
@@ -38,7 +43,7 @@ export async function api(path, options = {}) {
 }
 
 async function send(path, options) {
-  const response = await fetch(path, options)
+  const response = await fetch(apiUrl(path), options)
   if (response.status === 401) {
     setToken(null)
     if (!path.startsWith('/api/auth/')) {
