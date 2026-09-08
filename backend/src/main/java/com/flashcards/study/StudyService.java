@@ -1,6 +1,8 @@
 package com.flashcards.study;
 
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -65,10 +67,13 @@ public class StudyService {
         deckService.requireOwned(userId, deckId);
         User user = requireUser(userId);
         StudyOrder order = user.getStudyOrder() == null ? StudyOrder.POSITION : user.getStudyOrder();
-        List<Card> queue = new ArrayList<>(
-                "HARD".equals(normalizedFilter)
-                        ? cardRepository.findHardQueue(deckId, ReviewRating.HARD, PageRequest.of(0, SESSION_SIZE))
-                        : cardRepository.findStudyQueue(deckId, LocalDate.now(), PageRequest.of(0, SESSION_SIZE)));
+        List<Card> queue;
+        if ("HARD".equals(normalizedFilter) || "AGAIN".equals(normalizedFilter)) {
+            ReviewRating rating = "AGAIN".equals(normalizedFilter) ? ReviewRating.AGAIN : ReviewRating.HARD;
+            queue = new ArrayList<>(cardRepository.findHardQueue(deckId, rating, PageRequest.of(0, SESSION_SIZE)));
+        } else {
+            queue = new ArrayList<>(cardRepository.findStudyQueue(deckId, LocalDate.now(), PageRequest.of(0, SESSION_SIZE)));
+        }
         applyOrder(queue, order);
         List<Card> deckCards = "QUIZ".equals(normalized)
                 ? cardRepository.findByDeckIdOrderByPositionAscIdAsc(deckId)
@@ -76,11 +81,26 @@ public class StudyService {
         List<StudyCardResponse> cards = queue.stream()
                 .map(card -> toStudyCard(card, normalized, deckCards))
                 .toList();
-        LocalDate nextDue = cardReviewRepository.findNextDueAfter(deckId, LocalDate.now()).orElse(null);
+        LocalDate today = LocalDate.now();
+        Instant startOfToday = startOfDay(today);
+        LocalDate nextDue = cardReviewRepository.findNextDueAfter(deckId, today).orElse(null);
         int cardCount = cardRepository.countByDeckId(deckId);
+        int dueCount = cardRepository.countStudyQueue(deckId, today);
+        int waitingCount = cardReviewRepository.countWaitingAhead(deckId, today, startOfToday);
         int hardCount = cardReviewRepository.countByDeckIdAndLastRating(deckId, ReviewRating.HARD);
+        int againCount = cardReviewRepository.countByDeckIdAndLastRating(deckId, ReviewRating.AGAIN);
         return new StudySessionResponse(
-                normalized, cards, nextDue, StudyScope.DUE_ONLY, order, cardCount, hardCount, normalizedFilter);
+                normalized,
+                cards,
+                nextDue,
+                StudyScope.DUE_ONLY,
+                order,
+                cardCount,
+                dueCount,
+                waitingCount,
+                hardCount,
+                againCount,
+                normalizedFilter);
     }
 
     @Transactional
@@ -104,8 +124,31 @@ public class StudyService {
     public int resetDueDates(UUID userId, UUID deckId) {
         var deck = deckService.requireOwned(userId, deckId);
         int updated = cardReviewRepository.resetDueDatesForDeck(userId, deckId, LocalDate.now());
-        deck.setUpdatedAt(java.time.Instant.now());
+        deck.setUpdatedAt(Instant.now());
         return updated;
+    }
+
+    @Transactional
+    public int continueNextBatch(UUID userId, UUID deckId) {
+        var deck = deckService.requireOwned(userId, deckId);
+        LocalDate today = LocalDate.now();
+        if (cardRepository.countStudyQueue(deckId, today) > 0) {
+            return 0;
+        }
+        List<CardReview> waiting = cardReviewRepository.findWaitingAhead(
+                deckId, today, startOfDay(today), PageRequest.of(0, SESSION_SIZE));
+        for (CardReview review : waiting) {
+            review.setDueDate(today);
+        }
+        if (!waiting.isEmpty()) {
+            cardReviewRepository.saveAll(waiting);
+            deck.setUpdatedAt(Instant.now());
+        }
+        return waiting.size();
+    }
+
+    private static Instant startOfDay(LocalDate today) {
+        return today.atStartOfDay(ZoneId.systemDefault()).toInstant();
     }
 
     private User requireUser(UUID userId) {
@@ -144,6 +187,9 @@ public class StudyService {
         }
         if ("HARD".equals(value)) {
             return "HARD";
+        }
+        if ("AGAIN".equals(value)) {
+            return "AGAIN";
         }
         throw new ApiException(HttpStatus.BAD_REQUEST, "Unknown study filter");
     }

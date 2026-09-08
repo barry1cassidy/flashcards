@@ -19,6 +19,7 @@ export default function LibraryDeckPage() {
   const [studyOpen, setStudyOpen] = useState(false)
   const [copyConfirmOpen, setCopyConfirmOpen] = useState(false)
   const [hardCount, setHardCount] = useState(0)
+  const [againCount, setAgainCount] = useState(0)
 
   useEffect(() => {
     api(`/api/library/decks/${id}`)
@@ -26,13 +27,16 @@ export default function LibraryDeckPage() {
         setDeck(libraryDeck)
         if (!libraryDeck.copiedDeckId) {
           setHardCount(0)
+          setAgainCount(0)
           return
         }
         try {
           const copy = await api(`/api/decks/${libraryDeck.copiedDeckId}`)
           setHardCount(copy.hardCount || 0)
+          setAgainCount(copy.againCount || 0)
         } catch {
           setHardCount(0)
+          setAgainCount(0)
         }
       })
       .catch((err) => setError(err.message))
@@ -54,6 +58,7 @@ export default function LibraryDeckPage() {
       const copy = await api(`/api/library/decks/${id}/add`, { method: 'POST' })
       setDeck((current) => (current ? { ...current, copiedDeckId: copy.id } : current))
       setHardCount(copy.hardCount || 0)
+      setAgainCount(copy.againCount || 0)
       setStudyOpen(true)
     } catch (err) {
       setError(err.message)
@@ -72,7 +77,7 @@ export default function LibraryDeckPage() {
         deckId = copy.id
       }
       const path = `/decks/${deckId}/study/${mode}`
-      navigate(filter === 'hard' ? `${path}?filter=hard` : path)
+      navigate(filter === 'hard' || filter === 'again' ? `${path}?filter=${filter}` : path)
     } catch (err) {
       setError(err.message)
     } finally {
@@ -87,6 +92,7 @@ export default function LibraryDeckPage() {
       const copy = await api(`/api/library/decks/${id}/add`, { method: 'POST' })
       setDeck((current) => (current ? { ...current, copiedDeckId: copy.id } : current))
       setHardCount(copy.hardCount || 0)
+      setAgainCount(copy.againCount || 0)
     } catch (err) {
       setError(err.message)
     } finally {
@@ -172,6 +178,7 @@ export default function LibraryDeckPage() {
       {studyOpen ? (
         <StudyModeModal
           hardCount={hardCount}
+          againCount={againCount}
           onSelect={(mode, filter) => {
             setStudyOpen(false)
             addAndStudy(mode, filter)

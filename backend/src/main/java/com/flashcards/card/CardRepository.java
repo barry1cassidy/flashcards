@@ -21,6 +21,14 @@ public interface CardRepository extends JpaRepository<Card, UUID> {
     int countByDeckId(UUID deckId);
 
     @Query("""
+            SELECT COUNT(c) FROM Card c
+            LEFT JOIN CardReview r ON r.card = c
+            WHERE c.deck.id = :deckId
+              AND (r.card IS NULL OR r.dueDate <= :today)
+            """)
+    int countStudyQueue(@Param("deckId") UUID deckId, @Param("today") LocalDate today);
+
+    @Query("""
             SELECT c FROM Card c
             LEFT JOIN CardReview r ON r.card = c
             WHERE c.deck.id = :deckId

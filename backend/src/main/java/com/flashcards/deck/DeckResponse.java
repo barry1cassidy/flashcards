@@ -16,5 +16,6 @@ public record DeckResponse(
         long dueCount,
         long learnedCount,
         Instant lastStudiedAt,
-        long hardCount) {
+        long hardCount,
+        long againCount) {
 }

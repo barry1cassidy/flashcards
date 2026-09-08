@@ -13,6 +13,9 @@ public record StudySessionResponse(
         StudyScope studyScope,
         StudyOrder studyOrder,
         int cardCount,
+        int dueCount,
+        int waitingCount,
         int hardCount,
+        int againCount,
         String filter) {
 }

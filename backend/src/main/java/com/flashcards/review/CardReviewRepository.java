@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -41,6 +42,32 @@ public interface CardReviewRepository extends JpaRepository<CardReview, UUID> {
             WHERE c.deck.id = :deckId AND r.lastRating = :rating
             """)
     int countByDeckIdAndLastRating(@Param("deckId") UUID deckId, @Param("rating") ReviewRating rating);
+
+    @Query("""
+            SELECT COUNT(r) FROM CardReview r
+            JOIN r.card c
+            WHERE c.deck.id = :deckId
+              AND r.dueDate > :today
+              AND (r.lastReviewedAt IS NULL OR r.lastReviewedAt < :startOfToday)
+            """)
+    int countWaitingAhead(
+            @Param("deckId") UUID deckId,
+            @Param("today") LocalDate today,
+            @Param("startOfToday") Instant startOfToday);
+
+    @Query("""
+            SELECT r FROM CardReview r
+            JOIN r.card c
+            WHERE c.deck.id = :deckId
+              AND r.dueDate > :today
+              AND (r.lastReviewedAt IS NULL OR r.lastReviewedAt < :startOfToday)
+            ORDER BY r.dueDate ASC, c.position ASC, c.id ASC
+            """)
+    List<CardReview> findWaitingAhead(
+            @Param("deckId") UUID deckId,
+            @Param("today") LocalDate today,
+            @Param("startOfToday") Instant startOfToday,
+            Pageable pageable);
 
     @Modifying
     @Query("""

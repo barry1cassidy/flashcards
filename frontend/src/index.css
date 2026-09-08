@@ -671,6 +671,27 @@ textarea {
   font-weight: 600;
 }
 
+.done-actions {
+  display: grid;
+  gap: 18px;
+}
+
+.done-action {
+  display: grid;
+  gap: 6px;
+}
+
+.done-action .btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.done-action .muted {
+  margin: 0;
+}
+
 .flip-stage {
   width: min(640px, 100%);
   margin: 0 auto;
@@ -1402,17 +1423,26 @@ textarea {
   border-bottom: 0;
 }
 
-.study-hard-item {
+.study-extra-item {
   margin-top: 8px;
   border-top: 1px solid var(--line);
 }
 
-.study-mode-item:has(+ .study-hard-item) {
+.study-extra-item.is-follow-on {
+  margin-top: 0;
+  border-top: 0;
+}
+
+.study-mode-item:has(+ .study-extra-item) {
   border-bottom: 0;
 }
 
 .study-hard-item .study-mode-icon {
   color: var(--gold);
+}
+
+.study-again-item .study-mode-icon {
+  color: var(--coral);
 }
 
 .study-mode-icon {

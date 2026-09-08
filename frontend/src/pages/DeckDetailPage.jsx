@@ -526,10 +526,11 @@ export default function DeckDetailPage() {
       {studyOpen ? (
         <StudyModeModal
           hardCount={deck.hardCount || 0}
+          againCount={deck.againCount || 0}
           onSelect={(mode, filter) => {
             setStudyOpen(false)
             const path = `/decks/${id}/study/${mode}`
-            navigate(filter === 'hard' ? `${path}?filter=hard` : path)
+            navigate(filter === 'hard' || filter === 'again' ? `${path}?filter=${filter}` : path)
           }}
           onCancel={() => setStudyOpen(false)}
         />

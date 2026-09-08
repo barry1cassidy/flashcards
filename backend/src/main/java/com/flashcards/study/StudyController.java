@@ -46,4 +46,10 @@ public class StudyController {
     public void resetDue(Authentication authentication, @PathVariable UUID deckId) {
         studyService.resetDueDates(AuthSupport.requireUser(authentication).id(), deckId);
     }
+
+    @PostMapping("/api/decks/{deckId}/study/continue")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void continueDeck(Authentication authentication, @PathVariable UUID deckId) {
+        studyService.continueNextBatch(AuthSupport.requireUser(authentication).id(), deckId);
+    }
 }

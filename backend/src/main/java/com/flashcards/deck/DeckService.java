@@ -71,7 +71,7 @@ public class DeckService {
         deck.setFrontLanguage(CardLanguages.normalize(request.frontLanguage(), fallback));
         deck.setBackLanguage(CardLanguages.normalize(request.backLanguage(), fallback));
         deckRepository.save(deck);
-        return toResponse(deck, new DeckStats(0, 0, 0, null, 0));
+        return toResponse(deck, new DeckStats(0, 0, 0, null, 0, 0));
     }
 
     @Transactional
@@ -116,7 +116,7 @@ public class DeckService {
     public DeckStats statsFor(Deck deck) {
         List<Card> cards = cardRepository.findByDeckIdOrderByPositionAscIdAsc(deck.getId());
         if (cards.isEmpty()) {
-            return new DeckStats(0, 0, 0, null, 0);
+            return new DeckStats(0, 0, 0, null, 0, 0);
         }
         Map<UUID, CardReview> reviews = cardReviewRepository
                 .findByCardIdIn(cards.stream().map(Card::getId).toList())
@@ -126,6 +126,7 @@ public class DeckService {
         long due = 0;
         long learned = 0;
         long hard = 0;
+        long again = 0;
         Instant lastStudied = null;
         for (Card card : cards) {
             CardReview review = reviews.get(card.getId());
@@ -138,12 +139,15 @@ public class DeckService {
             if (review != null && review.getLastRating() == ReviewRating.HARD) {
                 hard++;
             }
+            if (review != null && review.getLastRating() == ReviewRating.AGAIN) {
+                again++;
+            }
             if (review != null && review.getLastReviewedAt() != null
                     && (lastStudied == null || review.getLastReviewedAt().isAfter(lastStudied))) {
                 lastStudied = review.getLastReviewedAt();
             }
         }
-        return new DeckStats(cards.size(), due, learned, lastStudied, hard);
+        return new DeckStats(cards.size(), due, learned, lastStudied, hard, again);
     }
 
     public DeckResponse toResponse(Deck deck, DeckStats stats) {
@@ -160,7 +164,8 @@ public class DeckService {
                 stats.dueCount(),
                 stats.learnedCount(),
                 stats.lastStudiedAt(),
-                stats.hardCount());
+                stats.hardCount(),
+                stats.againCount());
     }
 
     private DeckGroup resolveGroup(UUID userId, UUID groupId) {
@@ -186,6 +191,7 @@ public class DeckService {
         return trimmed.isEmpty() ? null : trimmed;
     }
 
-    public record DeckStats(long cardCount, long dueCount, long learnedCount, Instant lastStudiedAt, long hardCount) {
+    public record DeckStats(
+            long cardCount, long dueCount, long learnedCount, Instant lastStudiedAt, long hardCount, long againCount) {
     }
 }

@@ -27,14 +27,19 @@ export default function StudyPage() {
   const [hardSessionCount, setHardSessionCount] = useState(0)
   const [againCount, setAgainCount] = useState(0)
   const [cardCount, setCardCount] = useState(0)
+  const [dueCount, setDueCount] = useState(0)
+  const [waitingCount, setWaitingCount] = useState(0)
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
   const [exitKind, setExitKind] = useState('')
   const [nextDueDate, setNextDueDate] = useState(null)
   const [confirmReset, setConfirmReset] = useState(false)
   const [hardCount, setHardCount] = useState(0)
+  const [againDeckCount, setAgainDeckCount] = useState(0)
+  const [retryIds, setRetryIds] = useState(() => new Set())
 
   const current = cards[index]
+  const hideAgain = Boolean(current && retryIds.has(current.id))
   const normalizedMode = (mode || 'flip').toLowerCase()
   const total = cards.length
   const currentNumber =
@@ -43,8 +48,8 @@ export default function StudyPage() {
 
   async function loadSession(filter = 'due') {
     const params = new URLSearchParams({ mode: normalizedMode })
-    if (filter === 'hard') {
-      params.set('filter', 'hard')
+    if (filter === 'hard' || filter === 'again') {
+      params.set('filter', filter)
     }
     const session = await api(`/api/decks/${id}/study?${params}`)
     setCards(session.cards || [])
@@ -58,22 +63,31 @@ export default function StudyPage() {
     setCorrectCount(0)
     setHardSessionCount(0)
     setAgainCount(0)
+    setRetryIds(new Set())
+    applySessionStats(session)
+    setExitKind('')
+    setDone((session.cards || []).length === 0)
+  }
+
+  function applySessionStats(session) {
     setCardCount(session.cardCount || 0)
     setHardCount(session.hardCount || 0)
-    setExitKind('')
+    setAgainDeckCount(session.againCount || 0)
     setNextDueDate(session.nextDueDate || null)
-    setDone((session.cards || []).length === 0)
+    const remainingDue = typeof session.dueCount === 'number' ? session.dueCount : (session.cards || []).length
+    setDueCount(remainingDue)
+    setWaitingCount(typeof session.waitingCount === 'number' ? session.waitingCount : 0)
   }
 
   async function refreshStudyStats() {
     const session = await api(`/api/decks/${id}/study?mode=${normalizedMode}`)
-    setHardCount(session.hardCount || 0)
-    setNextDueDate(session.nextDueDate || null)
-    setCardCount(session.cardCount || 0)
+    applySessionStats(session)
   }
 
   useEffect(() => {
-    const filter = searchParams.get('filter') === 'hard' ? 'hard' : 'due'
+    const filter = searchParams.get('filter') === 'hard' || searchParams.get('filter') === 'again'
+      ? searchParams.get('filter')
+      : 'due'
     loadSession(filter).catch((err) => setError(err.message))
   }, [id, normalizedMode])
 
@@ -140,17 +154,25 @@ export default function StudyPage() {
       setExitKind(rating.toLowerCase())
     }
     try {
+      const deferAgain = rating === 'AGAIN' && !retryIds.has(current.id)
       await api(`/api/cards/${current.id}/review`, {
         method: 'POST',
         body: JSON.stringify({ rating }),
       })
+      if (deferAgain) {
+        setRetryIds((ids) => new Set(ids).add(current.id))
+        setCards((list) => [...list, current])
+      }
       const waitMs = usesExit && !reduceMotion ? 380 : pauseMs
       if (waitMs) {
         await new Promise((resolve) => setTimeout(resolve, waitMs))
       }
       const nextIndex = index + 1
-      tallyRating(rating)
-      if (nextIndex >= cards.length) {
+      if (!deferAgain) {
+        tallyRating(rating)
+      }
+      const queueLength = deferAgain ? cards.length + 1 : cards.length
+      if (nextIndex >= queueLength) {
         try {
           await refreshStudyStats()
         } catch (statsErr) {
@@ -220,15 +242,42 @@ export default function StudyPage() {
       if (cardCount === 0) {
         return t('study.emptyDeck')
       }
+      if (dueCount > 0) {
+        return t('study.moreDue', { count: dueCount })
+      }
+      if (waitingCount > 0) {
+        return t('study.moreWaiting')
+      }
       if (nextDueDate) {
         return t('study.nothingDueUntil', { date: formatDay(nextDueDate) })
       }
       return t('study.nothingDue')
     }
+    if (dueCount > 0) {
+      return t('study.moreDue', { count: dueCount })
+    }
+    if (waitingCount > 0) {
+      return t('study.moreWaiting')
+    }
     if (nextDueDate) {
       return t('study.nextDueOn', { date: formatDay(nextDueDate) })
     }
     return t('study.reviewedSoon', { count: reviewed })
+  }
+
+  async function continueThisDeck() {
+    setError('')
+    setBusy(true)
+    try {
+      if (dueCount === 0) {
+        await api(`/api/decks/${id}/study/continue`, { method: 'POST' })
+      }
+      await loadSession('due')
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setBusy(false)
+    }
   }
 
   async function studyThisDeckAgain() {
@@ -238,6 +287,18 @@ export default function StudyPage() {
     try {
       await api(`/api/decks/${id}/study/reset-due`, { method: 'POST' })
       await loadSession('due')
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  async function studyAgainCards() {
+    setError('')
+    setBusy(true)
+    try {
+      await loadSession('again')
     } catch (err) {
       setError(err.message)
     } finally {
@@ -308,24 +369,49 @@ export default function StudyPage() {
             </div>
           ) : null}
           <p>{doneMessage()}</p>
-          {cardCount > 0 ? (
-            <p className="muted">{reviewed > 0 ? t('study.restartDeckHint') : t('study.restartDeckHintWaiting')}</p>
-          ) : null}
-          {hardCount > 0 ? <p className="muted">{t('study.studyHardHint')}</p> : null}
-          <div className="header-actions">
+          <div className="done-actions">
+            {dueCount > 0 || waitingCount > 0 ? (
+              <div className="done-action">
+                <button className="btn primary" type="button" disabled={busy} onClick={continueThisDeck}>
+                  {t('study.continueDeck')}
+                </button>
+                <p className="muted">{t('study.continueDeckHint')}</p>
+              </div>
+            ) : null}
             {cardCount > 0 ? (
-              <button className="btn primary" type="button" disabled={busy} onClick={() => setConfirmReset(true)}>
-                {t('study.restartDeck')}
-              </button>
+              <div className="done-action">
+                <button
+                  className={dueCount > 0 || waitingCount > 0 ? 'btn' : 'btn primary'}
+                  type="button"
+                  disabled={busy}
+                  onClick={() => setConfirmReset(true)}
+                >
+                  {t('study.restartDeck')}
+                </button>
+                <p className="muted">{reviewed > 0 ? t('study.restartDeckHint') : t('study.restartDeckHintWaiting')}</p>
+              </div>
+            ) : null}
+            {againDeckCount > 0 ? (
+              <div className="done-action">
+                <button className="btn" type="button" disabled={busy} onClick={studyAgainCards}>
+                  {t('study.studyAgainCards')}
+                </button>
+                <p className="muted">{t('study.studyAgainHint')}</p>
+              </div>
             ) : null}
             {hardCount > 0 ? (
-              <button className="btn" type="button" disabled={busy} onClick={studyHardCards}>
-                {t('study.studyHard')}
-              </button>
+              <div className="done-action">
+                <button className="btn" type="button" disabled={busy} onClick={studyHardCards}>
+                  {t('study.studyHard')}
+                </button>
+                <p className="muted">{t('study.studyHardHint')}</p>
+              </div>
             ) : null}
-            <Link className={cardCount > 0 ? 'btn' : 'btn primary'} to={`/decks/${id}`}>
-              {t('nav.backToDeck')}
-            </Link>
+            <div className="done-action">
+              <Link className={cardCount > 0 ? 'btn ghost' : 'btn primary'} to={`/decks/${id}`}>
+                {t('nav.backToDeck')}
+              </Link>
+            </div>
           </div>
         </div>
       ) : current && normalizedMode === 'match' ? (
@@ -347,13 +433,14 @@ export default function StudyPage() {
           revealed={revealed}
           busy={busy}
           exitKind={exitKind}
+          hideAgain={hideAgain}
           onReveal={() => setRevealed(true)}
           onRate={(rating) => submitRating(rating)}
         />
       ) : current && normalizedMode === 'flip' ? (
         <>
           <div
-            key={current.id}
+            key={`${current.id}-${index}`}
             className={`flip-stage${exitKind ? ` is-leaving is-leaving-${exitKind}` : ''}`}
           >
             <div className="flip-toolbar">
@@ -395,9 +482,11 @@ export default function StudyPage() {
           </div>
           {revealed ? (
             <div className="rating-row flip-ratings">
-              <button className="btn rating again" type="button" disabled={busy} onClick={() => submitRating('AGAIN')}>
-                {t('study.again')}
-              </button>
+              {hideAgain ? null : (
+                <button className="btn rating again" type="button" disabled={busy} onClick={() => submitRating('AGAIN')}>
+                  {t('study.again')}
+                </button>
+              )}
               <button className="btn rating hard" type="button" disabled={busy} onClick={() => submitRating('HARD')}>
                 {t('study.hard')}
               </button>

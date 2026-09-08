@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { canSpeak, speak, stopSpeaking } from '../tts'
 
-export default function AudioReviewStudy({ card, revealed, busy, exitKind, onReveal, onRate }) {
+export default function AudioReviewStudy({ card, revealed, busy, exitKind, hideAgain = false, onReveal, onRate }) {
   const { t } = useTranslation()
   const speechOk = canSpeak()
 
@@ -62,9 +62,11 @@ export default function AudioReviewStudy({ card, revealed, busy, exitKind, onRev
       </div>
       {revealed ? (
         <div className="rating-row flip-ratings">
-          <button className="btn rating again" type="button" disabled={busy} onClick={() => onRate('AGAIN')}>
-            {t('study.again')}
-          </button>
+          {hideAgain ? null : (
+            <button className="btn rating again" type="button" disabled={busy} onClick={() => onRate('AGAIN')}>
+              {t('study.again')}
+            </button>
+          )}
           <button className="btn rating hard" type="button" disabled={busy} onClick={() => onRate('HARD')}>
             {t('study.hard')}
           </button>
