@@ -1,0 +1,419 @@
+{
+  "groups": [
+    {
+      "slug": "world-geography",
+      "name": "World Geography",
+      "sourceUrl": "",
+      "sourceTitle": "World Geography",
+      "attribution": "Country, state, and landmark names are public geographic facts, compiled as an original Flashcards catalog.",
+      "sourceLanguage": "en-US",
+      "targetLanguage": "en-US",
+      "decks": [
+        {
+          "slug": "us-state-capitals",
+          "name": "U.S. State Capitals",
+          "description": "Each U.S. state to its capital city.",
+          "position": 0,
+          "cards": [
+            {
+              "front": "Alabama",
+              "back": "Montgomery"
+            },
+            {
+              "front": "Alaska",
+              "back": "Juneau"
+            },
+            {
+              "front": "Arizona",
+              "back": "Phoenix"
+            },
+            {
+              "front": "Arkansas",
+              "back": "Little Rock"
+            },
+            {
+              "front": "California",
+              "back": "Sacramento"
+            },
+            {
+              "front": "Colorado",
+              "back": "Denver"
+            },
+            {
+              "front": "Connecticut",
+              "back": "Hartford"
+            },
+            {
+              "front": "Delaware",
+              "back": "Dover"
+            },
+            {
+              "front": "Florida",
+              "back": "Tallahassee"
+            },
+            {
+              "front": "Georgia",
+              "back": "Atlanta"
+            },
+            {
+              "front": "Hawaii",
+              "back": "Honolulu"
+            },
+            {
+              "front": "Idaho",
+              "back": "Boise"
+            },
+            {
+              "front": "Illinois",
+              "back": "Springfield"
+            },
+            {
+              "front": "Indiana",
+              "back": "Indianapolis"
+            },
+            {
+              "front": "Iowa",
+              "back": "Des Moines"
+            },
+            {
+              "front": "Kansas",
+              "back": "Topeka"
+            },
+            {
+              "front": "Kentucky",
+              "back": "Frankfort"
+            },
+            {
+              "front": "Louisiana",
+              "back": "Baton Rouge"
+            },
+            {
+              "front": "Maine",
+              "back": "Augusta"
+            },
+            {
+              "front": "Maryland",
+              "back": "Annapolis"
+            },
+            {
+              "front": "Massachusetts",
+              "back": "Boston"
+            },
+            {
+              "front": "Michigan",
+              "back": "Lansing"
+            },
+            {
+              "front": "Minnesota",
+              "back": "Saint Paul"
+            },
+            {
+              "front": "Mississippi",
+              "back": "Jackson"
+            },
+            {
+              "front": "Missouri",
+              "back": "Jefferson City"
+            },
+            {
+              "front": "Montana",
+              "back": "Helena"
+            },
+            {
+              "front": "Nebraska",
+              "back": "Lincoln"
+            },
+            {
+              "front": "Nevada",
+              "back": "Carson City"
+            },
+            {
+              "front": "New Hampshire",
+              "back": "Concord"
+            },
+            {
+              "front": "New Jersey",
+              "back": "Trenton"
+            },
+            {
+              "front": "New Mexico",
+              "back": "Santa Fe"
+            },
+            {
+              "front": "New York",
+              "back": "Albany"
+            },
+            {
+              "front": "North Carolina",
+              "back": "Raleigh"
+            },
+            {
+              "front": "North Dakota",
+              "back": "Bismarck"
+            },
+            {
+              "front": "Ohio",
+              "back": "Columbus"
+            },
+            {
+              "front": "Oklahoma",
+              "back": "Oklahoma City"
+            },
+            {
+              "front": "Oregon",
+              "back": "Salem"
+            },
+            {
+              "front": "Pennsylvania",
+              "back": "Harrisburg"
+            },
+            {
+              "front": "Rhode Island",
+              "back": "Providence"
+            },
+            {
+              "front": "South Carolina",
+              "back": "Columbia"
+            },
+            {
+              "front": "South Dakota",
+              "back": "Pierre"
+            },
+            {
+              "front": "Tennessee",
+              "back": "Nashville"
+            },
+            {
+              "front": "Texas",
+              "back": "Austin"
+            },
+            {
+              "front": "Utah",
+              "back": "Salt Lake City"
+            },
+            {
+              "front": "Vermont",
+              "back": "Montpelier"
+            },
+            {
+              "front": "Virginia",
+              "back": "Richmond"
+            },
+            {
+              "front": "Washington",
+              "back": "Olympia"
+            },
+            {
+              "front": "West Virginia",
+              "back": "Charleston"
+            },
+            {
+              "front": "Wisconsin",
+              "back": "Madison"
+            },
+            {
+              "front": "Wyoming",
+              "back": "Cheyenne"
+            }
+          ]
+        },
+        {
+          "slug": "uk-countries",
+          "name": "United Kingdom Places",
+          "description": "Countries of the UK, capitals, and nearby islands.",
+          "position": 1,
+          "cards": [
+            {
+              "front": "Four countries of the United Kingdom",
+              "back": "England, Scotland, Wales, and Northern Ireland"
+            },
+            {
+              "front": "Capital of England",
+              "back": "London"
+            },
+            {
+              "front": "Capital of Scotland",
+              "back": "Edinburgh"
+            },
+            {
+              "front": "Capital of Wales",
+              "back": "Cardiff"
+            },
+            {
+              "front": "Capital of Northern Ireland",
+              "back": "Belfast"
+            },
+            {
+              "front": "Capital of the United Kingdom",
+              "back": "London"
+            },
+            {
+              "front": "Largest country in the UK by area",
+              "back": "England"
+            },
+            {
+              "front": "Island shared by Northern Ireland and the Republic of Ireland",
+              "back": "Ireland"
+            },
+            {
+              "front": "Capital of the Republic of Ireland",
+              "back": "Dublin"
+            },
+            {
+              "front": "Sea between Great Britain and Ireland",
+              "back": "Irish Sea"
+            },
+            {
+              "front": "Channel between Britain and France",
+              "back": "English Channel"
+            },
+            {
+              "front": "Highest mountain in the UK",
+              "back": "Ben Nevis"
+            },
+            {
+              "front": "Longest river in the UK",
+              "back": "River Severn"
+            },
+            {
+              "front": "Largest lake in the UK by area",
+              "back": "Lough Neagh"
+            },
+            {
+              "front": "British Crown Dependency in the Irish Sea",
+              "back": "Isle of Man"
+            },
+            {
+              "front": "British Crown Dependencies off France",
+              "back": "Channel Islands (Jersey and Guernsey)"
+            },
+            {
+              "front": "Northernmost country of Great Britain",
+              "back": "Scotland"
+            },
+            {
+              "front": "Country of the UK on a peninsula west of England",
+              "back": "Wales"
+            },
+            {
+              "front": "Official name of Britain’s main island",
+              "back": "Great Britain"
+            },
+            {
+              "front": "What Great Britain plus Northern Ireland is called",
+              "back": "the United Kingdom"
+            }
+          ]
+        },
+        {
+          "slug": "world-landmarks",
+          "name": "World Landmarks",
+          "description": "Famous places and the country or city they belong to.",
+          "position": 2,
+          "cards": [
+            {
+              "front": "Eiffel Tower",
+              "back": "Paris, France"
+            },
+            {
+              "front": "Colosseum",
+              "back": "Rome, Italy"
+            },
+            {
+              "front": "Great Wall",
+              "back": "China"
+            },
+            {
+              "front": "Taj Mahal",
+              "back": "Agra, India"
+            },
+            {
+              "front": "Machu Picchu",
+              "back": "Peru"
+            },
+            {
+              "front": "Christ the Redeemer",
+              "back": "Rio de Janeiro, Brazil"
+            },
+            {
+              "front": "Statue of Liberty",
+              "back": "New York, United States"
+            },
+            {
+              "front": "Sydney Opera House",
+              "back": "Sydney, Australia"
+            },
+            {
+              "front": "Pyramids of Giza",
+              "back": "Egypt"
+            },
+            {
+              "front": "Angkor Wat",
+              "back": "Cambodia"
+            },
+            {
+              "front": "Acropolis / Parthenon",
+              "back": "Athens, Greece"
+            },
+            {
+              "front": "Stonehenge",
+              "back": "England, United Kingdom"
+            },
+            {
+              "front": "Mount Fuji",
+              "back": "Japan"
+            },
+            {
+              "front": "Petra",
+              "back": "Jordan"
+            },
+            {
+              "front": "Chichén Itzá",
+              "back": "Mexico"
+            },
+            {
+              "front": "Big Ben / Elizabeth Tower",
+              "back": "London, United Kingdom"
+            },
+            {
+              "front": "Sagrada Família",
+              "back": "Barcelona, Spain"
+            },
+            {
+              "front": "Table Mountain",
+              "back": "Cape Town, South Africa"
+            },
+            {
+              "front": "Niagara Falls",
+              "back": "Canada and the United States"
+            },
+            {
+              "front": "Grand Canyon",
+              "back": "Arizona, United States"
+            },
+            {
+              "front": "Uluru",
+              "back": "Australia"
+            },
+            {
+              "front": "Mount Kilimanjaro",
+              "back": "Tanzania"
+            },
+            {
+              "front": "Forbidden City",
+              "back": "Beijing, China"
+            },
+            {
+              "front": "Hagia Sophia",
+              "back": "Istanbul, Turkey"
+            },
+            {
+              "front": "Moai statues",
+              "back": "Easter Island, Chile"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

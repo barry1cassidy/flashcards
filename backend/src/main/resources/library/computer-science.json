@@ -1,0 +1,343 @@
+{
+  "groups": [
+    {
+      "slug": "computer-science",
+      "name": "Computer Science",
+      "sourceUrl": "",
+      "sourceTitle": "Computer Science",
+      "attribution": "Original Flashcards catalog of introductory computer-science vocabulary.",
+      "sourceLanguage": "en-US",
+      "targetLanguage": "en-US",
+      "decks": [
+        {
+          "slug": "cs-vocab",
+          "name": "CS Vocabulary",
+          "description": "Core terms used in introductory computer science.",
+          "position": 0,
+          "cards": [
+            {
+              "front": "An algorithm is",
+              "back": "a step-by-step process for solving a problem"
+            },
+            {
+              "front": "A program is",
+              "back": "instructions a computer can run"
+            },
+            {
+              "front": "Hardware is",
+              "back": "the physical parts of a computer"
+            },
+            {
+              "front": "Software is",
+              "back": "the programs and data a computer runs"
+            },
+            {
+              "front": "A bit is",
+              "back": "a binary digit: 0 or 1"
+            },
+            {
+              "front": "A byte is",
+              "back": "8 bits"
+            },
+            {
+              "front": "CPU stands for",
+              "back": "Central Processing Unit"
+            },
+            {
+              "front": "RAM is",
+              "back": "fast, temporary working memory"
+            },
+            {
+              "front": "A compiler translates",
+              "back": "source code into machine code before running"
+            },
+            {
+              "front": "An interpreter runs",
+              "back": "code more directly, often line by line"
+            },
+            {
+              "front": "A bug is",
+              "back": "an error in a program"
+            },
+            {
+              "front": "Debugging is",
+              "back": "finding and fixing errors"
+            },
+            {
+              "front": "Syntax is",
+              "back": "the rules for writing valid code"
+            },
+            {
+              "front": "A variable stores",
+              "back": "a value that can change"
+            },
+            {
+              "front": "A function (or method) is",
+              "back": "a reusable block of code that does a job"
+            },
+            {
+              "front": "Input is",
+              "back": "data given to a program"
+            },
+            {
+              "front": "Output is",
+              "back": "data a program produces"
+            },
+            {
+              "front": "An API is",
+              "back": "a defined way for programs to talk to each other"
+            },
+            {
+              "front": "Open source software is",
+              "back": "software whose source code can be viewed and often shared"
+            },
+            {
+              "front": "Abstraction hides",
+              "back": "details so you can work at a higher level"
+            }
+          ]
+        },
+        {
+          "slug": "data-structures",
+          "name": "Data Structures",
+          "description": "How programs organize information.",
+          "position": 1,
+          "cards": [
+            {
+              "front": "An array (or list) stores",
+              "back": "items in order, usually by index"
+            },
+            {
+              "front": "An index is",
+              "back": "a position number in a list"
+            },
+            {
+              "front": "A stack uses",
+              "back": "last in, first out (LIFO)"
+            },
+            {
+              "front": "A queue uses",
+              "back": "first in, first out (FIFO)"
+            },
+            {
+              "front": "A set stores",
+              "back": "unique items with no duplicates"
+            },
+            {
+              "front": "A map / dictionary stores",
+              "back": "key–value pairs"
+            },
+            {
+              "front": "A linked list stores",
+              "back": "nodes that point to the next node"
+            },
+            {
+              "front": "A tree is",
+              "back": "a hierarchy of nodes with a root"
+            },
+            {
+              "front": "A binary tree’s node has",
+              "back": "at most two children"
+            },
+            {
+              "front": "A graph is",
+              "back": "nodes (vertices) connected by edges"
+            },
+            {
+              "front": "A hash function turns",
+              "back": "a key into a slot or number"
+            },
+            {
+              "front": "Time complexity describes",
+              "back": "how runtime grows as input size grows"
+            },
+            {
+              "front": "Big-O of scanning a list once is often",
+              "back": "O(n)"
+            },
+            {
+              "front": "Big-O of a simple nested loop over n is often",
+              "back": "O(n²)"
+            },
+            {
+              "front": "A recursive function",
+              "back": "calls itself on a smaller case"
+            },
+            {
+              "front": "A base case is",
+              "back": "the stopping condition in recursion"
+            },
+            {
+              "front": "Sorting arranges items",
+              "back": "into an order (such as least to greatest)"
+            },
+            {
+              "front": "Searching looks for",
+              "back": "a target item in a collection"
+            }
+          ]
+        },
+        {
+          "slug": "programming-basics",
+          "name": "Programming Basics",
+          "description": "Control flow and everyday coding ideas.",
+          "position": 2,
+          "cards": [
+            {
+              "front": "An if statement is",
+              "back": "a choice that runs code only when a condition is true"
+            },
+            {
+              "front": "A loop repeats",
+              "back": "code while a condition holds, or for each item"
+            },
+            {
+              "front": "A Boolean value is",
+              "back": "true or false"
+            },
+            {
+              "front": "AND is true when",
+              "back": "both sides are true"
+            },
+            {
+              "front": "OR is true when",
+              "back": "at least one side is true"
+            },
+            {
+              "front": "NOT flips",
+              "back": "true to false and false to true"
+            },
+            {
+              "front": "A string is",
+              "back": "text data"
+            },
+            {
+              "front": "An integer is",
+              "back": "a whole number"
+            },
+            {
+              "front": "A float / decimal is",
+              "back": "a number with a fractional part"
+            },
+            {
+              "front": "Assignment sets",
+              "back": "a variable to a value"
+            },
+            {
+              "front": "Equality testing asks",
+              "back": "whether two values are the same"
+            },
+            {
+              "front": "A comment is",
+              "back": "a note in code that the computer ignores"
+            },
+            {
+              "front": "A parameter is",
+              "back": "an input name a function declares"
+            },
+            {
+              "front": "An argument is",
+              "back": "the actual value you pass in"
+            },
+            {
+              "front": "Return gives",
+              "back": "a value back from a function"
+            },
+            {
+              "front": "Scope is",
+              "back": "where a name can be used"
+            },
+            {
+              "front": "Pseudocode is",
+              "back": "plain-language steps that look a bit like code"
+            },
+            {
+              "front": "An IDE is",
+              "back": "a program used to write and run code"
+            }
+          ]
+        },
+        {
+          "slug": "networking-basics",
+          "name": "Networking Basics",
+          "description": "How computers talk on the internet.",
+          "position": 3,
+          "cards": [
+            {
+              "front": "The internet is",
+              "back": "a global network of networks"
+            },
+            {
+              "front": "A protocol is",
+              "back": "an agreed set of communication rules"
+            },
+            {
+              "front": "IP stands for",
+              "back": "Internet Protocol"
+            },
+            {
+              "front": "An IP address identifies",
+              "back": "a device (or interface) on a network"
+            },
+            {
+              "front": "DNS translates",
+              "back": "domain names into IP addresses"
+            },
+            {
+              "front": "HTTP is",
+              "back": "the protocol browsers use to request web pages"
+            },
+            {
+              "front": "HTTPS adds",
+              "back": "encryption (TLS) on top of HTTP"
+            },
+            {
+              "front": "A URL is",
+              "back": "the address of a resource on the web"
+            },
+            {
+              "front": "A server provides",
+              "back": "a service or data to clients"
+            },
+            {
+              "front": "A client requests",
+              "back": "a service from a server"
+            },
+            {
+              "front": "A router forwards",
+              "back": "packets between networks"
+            },
+            {
+              "front": "A packet is",
+              "back": "a chunk of data sent over a network"
+            },
+            {
+              "front": "Bandwidth is",
+              "back": "how much data can move in a given time"
+            },
+            {
+              "front": "Latency is",
+              "back": "the delay before data starts arriving"
+            },
+            {
+              "front": "A firewall can",
+              "back": "block or allow network traffic"
+            },
+            {
+              "front": "Wi-Fi is",
+              "back": "a common wireless local network technology"
+            },
+            {
+              "front": "The web (WWW) is",
+              "back": "linked pages and apps that run on the internet"
+            },
+            {
+              "front": "A cookie (in browsers) can",
+              "back": "store a small piece of site data on your device"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

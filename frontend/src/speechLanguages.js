@@ -1,6 +1,7 @@
 export const SPEECH_LANGUAGES = [
   { code: 'en-US', name: 'English' },
   { code: 'zh-CN', name: '中文（简体）' },
+  { code: 'zh-HK', name: '中文（香港）' },
   { code: 'hi-IN', name: 'हिन्दी' },
   { code: 'es-ES', name: 'Español' },
   { code: 'ar-SA', name: 'العربية' },
@@ -22,6 +23,16 @@ export const SPEECH_LANGUAGES = [
   { code: 'sv-SE', name: 'Svenska' },
   { code: 'el-GR', name: 'Ελληνικά' },
   { code: 'he-IL', name: 'עברית' },
+  { code: 'ga-IE', name: 'Gaeilge' },
+  { code: 'da-DK', name: 'Dansk' },
+  { code: 'fi-FI', name: 'Suomi' },
+  { code: 'cs-CZ', name: 'Čeština' },
+  { code: 'ro-RO', name: 'Română' },
+  { code: 'tl-PH', name: 'Tagalog' },
+  { code: 'sw-KE', name: 'Kiswahili' },
+  { code: 'cy-GB', name: 'Cymraeg' },
+  { code: 'nb-NO', name: 'Norsk' },
+  { code: 'hu-HU', name: 'Magyar' },
 ]
 
 const CODES = new Set(SPEECH_LANGUAGES.map((language) => language.code))

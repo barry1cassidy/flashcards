@@ -1,0 +1,191 @@
+{
+  "groups": [
+    {
+      "slug": "sat-reading-writing",
+      "name": "SAT Reading & Writing",
+      "sourceUrl": "",
+      "sourceTitle": "SAT Reading & Writing",
+      "attribution": "Original Flashcards catalog of grammar rules and academic vocabulary useful for Digital SAT Reading and Writing. Not College Board material and not official SAT questions.",
+      "sourceLanguage": "en-US",
+      "targetLanguage": "en-US",
+      "decks": [
+        {
+          "slug": "rhetorical-moves",
+          "name": "Rhetorical Moves",
+          "description": "What a sentence is doing in a passage.",
+          "position": 0,
+          "cards": [
+            {
+              "front": "A claim is",
+              "back": "the point the writer wants you to accept"
+            },
+            {
+              "front": "Evidence is",
+              "back": "facts, data, or examples that support a claim"
+            },
+            {
+              "front": "Reasoning is",
+              "back": "the explanation that links evidence to the claim"
+            },
+            {
+              "front": "A counterclaim is",
+              "back": "an opposing point the writer acknowledges"
+            },
+            {
+              "front": "A concession admits",
+              "back": "that the other side has a valid point"
+            },
+            {
+              "front": "A rebuttal answers",
+              "back": "the counterclaim"
+            },
+            {
+              "front": "To synthesize is to",
+              "back": "combine ideas from more than one place"
+            },
+            {
+              "front": "A topic sentence usually",
+              "back": "states the paragraph’s main idea"
+            },
+            {
+              "front": "A concluding sentence often",
+              "back": "wraps up or points forward"
+            },
+            {
+              "front": "Tone is",
+              "back": "the writer’s attitude toward the subject"
+            },
+            {
+              "front": "Purpose is",
+              "back": "why the text was written (inform, persuade, explain)"
+            },
+            {
+              "front": "Audience is",
+              "back": "who the writer expects to read the text"
+            },
+            {
+              "front": "A summary restates",
+              "back": "the main ideas in fewer words"
+            },
+            {
+              "front": "A paraphrase restates",
+              "back": "an idea in new words at a similar length"
+            },
+            {
+              "front": "To evaluate an argument, ask",
+              "back": "whether the evidence actually supports the claim"
+            },
+            {
+              "front": "A generalization may be weak if",
+              "back": "it is based on too few examples"
+            },
+            {
+              "front": "Word choice (diction) affects",
+              "back": "tone and precision"
+            },
+            {
+              "front": "A transition should match",
+              "back": "the logical link between two ideas"
+            }
+          ]
+        },
+        {
+          "slug": "academic-vocabulary-2",
+          "name": "More Academic Vocabulary",
+          "description": "Another set of high-utility words for passages and choices.",
+          "position": 1,
+          "cards": [
+            {
+              "front": "analyze",
+              "back": "to break into parts and examine"
+            },
+            {
+              "front": "contrast",
+              "back": "to show differences"
+            },
+            {
+              "front": "compare",
+              "back": "to show similarities (and often differences)"
+            },
+            {
+              "front": "justify",
+              "back": "to give reasons that support a decision"
+            },
+            {
+              "front": "interpret",
+              "back": "to explain the meaning of"
+            },
+            {
+              "front": "significant",
+              "back": "important; meaningful"
+            },
+            {
+              "front": "minimal",
+              "back": "very small; the least possible"
+            },
+            {
+              "front": "substantial",
+              "back": "large or important in amount"
+            },
+            {
+              "front": "indicate",
+              "back": "to show or point to"
+            },
+            {
+              "front": "establish",
+              "back": "to set up or prove"
+            },
+            {
+              "front": "maintain",
+              "back": "to keep; or to argue a position"
+            },
+            {
+              "front": "occur",
+              "back": "to happen"
+            },
+            {
+              "front": "factor",
+              "back": "something that contributes to a result"
+            },
+            {
+              "front": "variable",
+              "back": "something that can change"
+            },
+            {
+              "front": "consistent",
+              "back": "in agreement; not contradictory"
+            },
+            {
+              "front": "distinct",
+              "back": "clearly different or separate"
+            },
+            {
+              "front": "approximate",
+              "back": "close but not exact"
+            },
+            {
+              "front": "precise",
+              "back": "exact and careful"
+            },
+            {
+              "front": "constraint",
+              "back": "a limit"
+            },
+            {
+              "front": "implication",
+              "back": "a result that is suggested, not stated"
+            },
+            {
+              "front": "perspective",
+              "back": "a point of view"
+            },
+            {
+              "front": "context",
+              "back": "the surrounding situation or words"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

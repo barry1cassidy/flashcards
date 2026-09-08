@@ -1,0 +1,191 @@
+{
+  "groups": [
+    {
+      "slug": "sat-math",
+      "name": "SAT Math",
+      "sourceUrl": "",
+      "sourceTitle": "SAT Math",
+      "attribution": "Original Flashcards catalog of formulas and vocabulary useful for Digital SAT Math. Not College Board material and not official SAT questions.",
+      "sourceLanguage": "en-US",
+      "targetLanguage": "en-US",
+      "decks": [
+        {
+          "slug": "functions-and-graphs",
+          "name": "Functions and Graphs",
+          "description": "Function language, slopes, and common graph shapes.",
+          "position": 0,
+          "cards": [
+            {
+              "front": "What is a function?",
+              "back": "A rule that assigns each input exactly one output"
+            },
+            {
+              "front": "f(x) means",
+              "back": "the output of f when the input is x"
+            },
+            {
+              "front": "Domain is",
+              "back": "the set of allowed inputs"
+            },
+            {
+              "front": "Range is",
+              "back": "the set of outputs"
+            },
+            {
+              "front": "A linear function has a graph that is",
+              "back": "a straight line"
+            },
+            {
+              "front": "Slope of a horizontal line",
+              "back": "0"
+            },
+            {
+              "front": "Slope of a vertical line",
+              "back": "undefined"
+            },
+            {
+              "front": "Parallel lines have",
+              "back": "the same slope"
+            },
+            {
+              "front": "Perpendicular lines have slopes that are",
+              "back": "negative reciprocals"
+            },
+            {
+              "front": "If f(x) = 2x + 1, what is f(3)?",
+              "back": "7"
+            },
+            {
+              "front": "The y-intercept is where",
+              "back": "the graph crosses the y-axis (x = 0)"
+            },
+            {
+              "front": "The x-intercept is where",
+              "back": "the graph crosses the x-axis (y = 0)"
+            },
+            {
+              "front": "A parabola is the graph of",
+              "back": "a quadratic"
+            },
+            {
+              "front": "If a > 0 in y = ax² + bx + c, the parabola opens",
+              "back": "upward"
+            },
+            {
+              "front": "If a < 0, the parabola opens",
+              "back": "downward"
+            },
+            {
+              "front": "An exponential function has the form",
+              "back": "y = a · bˣ"
+            },
+            {
+              "front": "If |b| > 1 in y = bˣ, the graph",
+              "back": "grows quickly as x increases"
+            },
+            {
+              "front": "A system of two linear equations can have",
+              "back": "one solution, none, or infinitely many"
+            },
+            {
+              "front": "A solution to a system is",
+              "back": "a point that works in every equation"
+            },
+            {
+              "front": "f(x) + k shifts the graph",
+              "back": "up by k (if k is positive)"
+            }
+          ]
+        },
+        {
+          "slug": "ratio-and-units",
+          "name": "Ratios and Units",
+          "description": "Proportions, rates, and unit conversions.",
+          "position": 1,
+          "cards": [
+            {
+              "front": "A unit rate is",
+              "back": "an amount per 1 unit (such as miles per hour)"
+            },
+            {
+              "front": "To solve a proportion a/b = c/d, use",
+              "back": "cross-multiply: a·d = b·c"
+            },
+            {
+              "front": "Scale factor compares",
+              "back": "a model or map to the real size"
+            },
+            {
+              "front": "If a map scale is 1 in = 20 mi, 3 inches represent",
+              "back": "60 miles"
+            },
+            {
+              "front": "Percent means",
+              "back": "per hundred"
+            },
+            {
+              "front": "Increase 40 by 25%",
+              "back": "50"
+            },
+            {
+              "front": "Decrease 80 by 10%",
+              "back": "72"
+            },
+            {
+              "front": "What is 3/8 as a percent?",
+              "back": "37.5%"
+            },
+            {
+              "front": "Dimensional analysis means",
+              "back": "multiplying by conversion fractions that cancel units"
+            },
+            {
+              "front": "How many centimeters in a meter?",
+              "back": "100"
+            },
+            {
+              "front": "How many millimeters in a meter?",
+              "back": "1,000"
+            },
+            {
+              "front": "How many meters in a kilometer?",
+              "back": "1,000"
+            },
+            {
+              "front": "How many feet in a yard?",
+              "back": "3"
+            },
+            {
+              "front": "How many feet in a mile?",
+              "back": "5,280"
+            },
+            {
+              "front": "How many ounces in a pound?",
+              "back": "16"
+            },
+            {
+              "front": "How many pounds in a U.S. ton?",
+              "back": "2,000"
+            },
+            {
+              "front": "Distance = ",
+              "back": "rate × time"
+            },
+            {
+              "front": "If you travel 150 miles in 3 hours, the average speed is",
+              "back": "50 mph"
+            },
+            {
+              "front": "A ratio 5:2 means",
+              "back": "5 parts to 2 parts"
+            },
+            {
+              "front": "If a:b = 4:1 and a + b = 20, then a is",
+              "back": "16"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

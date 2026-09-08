@@ -1,0 +1,271 @@
+{
+  "groups": [
+    {
+      "slug": "human-body",
+      "name": "Human Body",
+      "sourceUrl": "",
+      "sourceTitle": "Human Body",
+      "attribution": "Original Flashcards catalog of introductory anatomy and physiology terms.",
+      "sourceLanguage": "en-US",
+      "targetLanguage": "en-US",
+      "decks": [
+        {
+          "slug": "endocrine-system",
+          "name": "Endocrine System",
+          "description": "Glands and hormones that send chemical messages.",
+          "position": 0,
+          "cards": [
+            {
+              "front": "What is the endocrine system?",
+              "back": "Glands that release hormones into the blood"
+            },
+            {
+              "front": "What is a hormone?",
+              "back": "A chemical messenger that travels in the blood"
+            },
+            {
+              "front": "What gland is often called the master gland?",
+              "back": "pituitary"
+            },
+            {
+              "front": "What gland in the neck controls metabolism?",
+              "back": "thyroid"
+            },
+            {
+              "front": "What hormone raises blood sugar?",
+              "back": "glucagon"
+            },
+            {
+              "front": "What hormone lowers blood sugar?",
+              "back": "insulin"
+            },
+            {
+              "front": "Which organ makes insulin?",
+              "back": "pancreas"
+            },
+            {
+              "front": "What glands sit on top of the kidneys?",
+              "back": "adrenal glands"
+            },
+            {
+              "front": "What hormone is linked to the “fight or flight” response?",
+              "back": "adrenaline (epinephrine)"
+            },
+            {
+              "front": "What hormone helps regulate sleep timing?",
+              "back": "melatonin"
+            },
+            {
+              "front": "Where is melatonin made?",
+              "back": "pineal gland"
+            },
+            {
+              "front": "What are the male gonads?",
+              "back": "testes"
+            },
+            {
+              "front": "What are the female gonads?",
+              "back": "ovaries"
+            },
+            {
+              "front": "What hormone is mainly made in the testes?",
+              "back": "testosterone"
+            },
+            {
+              "front": "What hormones are mainly made in the ovaries?",
+              "back": "estrogen and progesterone"
+            },
+            {
+              "front": "What does the hypothalamus do?",
+              "back": "Links the nervous system to the endocrine system"
+            },
+            {
+              "front": "What is homeostasis?",
+              "back": "Keeping the internal environment stable"
+            },
+            {
+              "front": "What is a feedback loop?",
+              "back": "A control system that turns a process up or down"
+            },
+            {
+              "front": "Too little insulin can lead to",
+              "back": "high blood sugar (diabetes)"
+            },
+            {
+              "front": "What mineral does thyroid hormone need?",
+              "back": "iodine"
+            }
+          ]
+        },
+        {
+          "slug": "immune-system",
+          "name": "Immune System",
+          "description": "How the body defends against infection.",
+          "position": 1,
+          "cards": [
+            {
+              "front": "What is the immune system’s job?",
+              "back": "Defend the body against pathogens"
+            },
+            {
+              "front": "What is a pathogen?",
+              "back": "A disease-causing organism or particle"
+            },
+            {
+              "front": "What is the body’s first line of defense?",
+              "back": "Skin and mucous membranes"
+            },
+            {
+              "front": "What blood cells fight infection?",
+              "back": "white blood cells"
+            },
+            {
+              "front": "What is an antigen?",
+              "back": "A marker the immune system can recognize"
+            },
+            {
+              "front": "What is an antibody?",
+              "back": "A protein that binds a specific antigen"
+            },
+            {
+              "front": "Which cells make antibodies?",
+              "back": "B cells (plasma cells)"
+            },
+            {
+              "front": "What do T cells do?",
+              "back": "Kill infected cells or help other immune cells"
+            },
+            {
+              "front": "What is a vaccine?",
+              "back": "A safe exposure that trains the immune system"
+            },
+            {
+              "front": "What is immunity?",
+              "back": "The ability to resist a particular infection"
+            },
+            {
+              "front": "What is inflammation?",
+              "back": "Redness, heat, swelling, and pain after injury or infection"
+            },
+            {
+              "front": "What do lymph nodes do?",
+              "back": "Filter lymph and house immune cells"
+            },
+            {
+              "front": "What organ filters blood and helps the immune system?",
+              "back": "spleen"
+            },
+            {
+              "front": "What is a virus?",
+              "back": "A particle that must infect a cell to reproduce"
+            },
+            {
+              "front": "What is a bacterium?",
+              "back": "A single-celled prokaryote; some cause disease"
+            },
+            {
+              "front": "What is an allergy?",
+              "back": "An immune response to a usually harmless substance"
+            },
+            {
+              "front": "What is a fever’s possible benefit?",
+              "back": "It can slow some pathogens and help immune cells"
+            },
+            {
+              "front": "What is memory in immunity?",
+              "back": "Faster response after a second exposure"
+            },
+            {
+              "front": "What is passive immunity?",
+              "back": "Ready-made antibodies from another source"
+            },
+            {
+              "front": "What is active immunity?",
+              "back": "Your own body makes the response, often after infection or a vaccine"
+            }
+          ]
+        },
+        {
+          "slug": "senses",
+          "name": "The Senses",
+          "description": "Eyes, ears, and the other senses.",
+          "position": 2,
+          "cards": [
+            {
+              "front": "Five traditional senses",
+              "back": "sight, hearing, smell, taste, and touch"
+            },
+            {
+              "front": "What part of the eye focuses light?",
+              "back": "lens"
+            },
+            {
+              "front": "What is the colored part of the eye?",
+              "back": "iris"
+            },
+            {
+              "front": "What opening lets light into the eye?",
+              "back": "pupil"
+            },
+            {
+              "front": "Where are rods and cones?",
+              "back": "the retina"
+            },
+            {
+              "front": "Rods are better for",
+              "back": "dim light and movement"
+            },
+            {
+              "front": "Cones are better for",
+              "back": "color and sharp detail"
+            },
+            {
+              "front": "What nerve carries vision to the brain?",
+              "back": "optic nerve"
+            },
+            {
+              "front": "What is the eardrum also called?",
+              "back": "tympanic membrane"
+            },
+            {
+              "front": "Three middle-ear bones",
+              "back": "malleus, incus, and stapes"
+            },
+            {
+              "front": "Where are hearing receptor cells?",
+              "back": "cochlea"
+            },
+            {
+              "front": "What do the semicircular canals help with?",
+              "back": "balance"
+            },
+            {
+              "front": "What are smell receptors called?",
+              "back": "olfactory receptors"
+            },
+            {
+              "front": "Five basic tastes often taught",
+              "back": "sweet, salty, sour, bitter, and umami"
+            },
+            {
+              "front": "Where are taste buds?",
+              "back": "mainly on the tongue"
+            },
+            {
+              "front": "What receptors in skin detect pressure and texture?",
+              "back": "touch receptors"
+            },
+            {
+              "front": "What is the blind spot?",
+              "back": "Where the optic nerve leaves the eye (no rods or cones)"
+            },
+            {
+              "front": "What fluid fills the inner ear?",
+              "back": "endolymph / inner-ear fluid"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

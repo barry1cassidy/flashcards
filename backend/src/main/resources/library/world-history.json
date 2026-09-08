@@ -1,0 +1,359 @@
+{
+  "groups": [
+    {
+      "slug": "world-history",
+      "name": "World History",
+      "sourceUrl": "",
+      "sourceTitle": "World History",
+      "attribution": "Original Flashcards catalog of commonly taught world-history facts for school study.",
+      "sourceLanguage": "en-US",
+      "targetLanguage": "en-US",
+      "decks": [
+        {
+          "slug": "ancient-world",
+          "name": "Ancient World",
+          "description": "Early civilizations and classical states.",
+          "position": 0,
+          "cards": [
+            {
+              "front": "Mesopotamia means",
+              "back": "the land between the Tigris and Euphrates"
+            },
+            {
+              "front": "An early writing system of Mesopotamia",
+              "back": "cuneiform"
+            },
+            {
+              "front": "Egyptian writing that used picture signs",
+              "back": "hieroglyphs"
+            },
+            {
+              "front": "The Nile’s yearly floods mattered because",
+              "back": "they left fertile soil for farming"
+            },
+            {
+              "front": "Hammurabi is known for",
+              "back": "an early written law code"
+            },
+            {
+              "front": "The Indus Valley cities include",
+              "back": "Harappa and Mohenjo-daro"
+            },
+            {
+              "front": "The Mandate of Heaven was used in",
+              "back": "ancient China to justify a dynasty’s rule"
+            },
+            {
+              "front": "Athens is remembered for early",
+              "back": "democracy (for free male citizens)"
+            },
+            {
+              "front": "Sparta is remembered for",
+              "back": "a militarized society"
+            },
+            {
+              "front": "Alexander the Great spread",
+              "back": "Greek culture across a large empire"
+            },
+            {
+              "front": "The Roman Republic was led by",
+              "back": "elected officials, including consuls and a senate"
+            },
+            {
+              "front": "Julius Caesar’s death year (commonly taught)",
+              "back": "44 BCE"
+            },
+            {
+              "front": "Augustus was",
+              "back": "the first Roman emperor"
+            },
+            {
+              "front": "The Pax Romana was",
+              "back": "a long period of relative Roman peace and stability"
+            },
+            {
+              "front": "Ashoka is tied to",
+              "back": "the Maurya Empire in India and the spread of Buddhism"
+            },
+            {
+              "front": "The Olmec are an early civilization of",
+              "back": "Mesoamerica"
+            },
+            {
+              "front": "Judaism’s central text includes",
+              "back": "the Torah / Hebrew Bible"
+            },
+            {
+              "front": "Buddhism began with",
+              "back": "Siddhartha Gautama (the Buddha)"
+            },
+            {
+              "front": "Confucius taught mainly about",
+              "back": "ethics, family, and good government"
+            },
+            {
+              "front": "The Silk Road linked",
+              "back": "East Asia with Central Asia, the Middle East, and beyond"
+            }
+          ]
+        },
+        {
+          "slug": "medieval-and-early-modern",
+          "name": "Medieval and Early Modern",
+          "description": "Empires, faiths, and the first global connections.",
+          "position": 1,
+          "cards": [
+            {
+              "front": "The Western Roman Empire traditionally “fell” in",
+              "back": "476 CE"
+            },
+            {
+              "front": "The Byzantine Empire’s capital was",
+              "back": "Constantinople"
+            },
+            {
+              "front": "Islam began in",
+              "back": "Arabia in the 7th century"
+            },
+            {
+              "front": "The Quran is",
+              "back": "the holy book of Islam"
+            },
+            {
+              "front": "Charlemagne was crowned emperor in",
+              "back": "800 CE"
+            },
+            {
+              "front": "Feudalism is often described as",
+              "back": "land for loyalty and service"
+            },
+            {
+              "front": "The Magna Carta (1215) limited",
+              "back": "the English king’s power"
+            },
+            {
+              "front": "The Crusades were",
+              "back": "religious-military campaigns over the eastern Mediterranean"
+            },
+            {
+              "front": "The Black Death was",
+              "back": "a 14th-century plague pandemic in Eurasia and North Africa"
+            },
+            {
+              "front": "The Mali Empire is tied to",
+              "back": "West African gold, trade, and Mansa Musa"
+            },
+            {
+              "front": "The Aztec capital was",
+              "back": "Tenochtitlan"
+            },
+            {
+              "front": "The Inca capital was",
+              "back": "Cusco"
+            },
+            {
+              "front": "Genghis Khan founded",
+              "back": "the Mongol Empire"
+            },
+            {
+              "front": "The Renaissance began in",
+              "back": "Italy"
+            },
+            {
+              "front": "The printing press in Europe is tied to",
+              "back": "Johannes Gutenberg"
+            },
+            {
+              "front": "Martin Luther’s 1517 theses helped start",
+              "back": "the Protestant Reformation"
+            },
+            {
+              "front": "The Ottoman Empire captured Constantinople in",
+              "back": "1453"
+            },
+            {
+              "front": "Columbus reached the Americas in",
+              "back": "1492"
+            },
+            {
+              "front": "The Columbian Exchange was",
+              "back": "the transfer of plants, animals, people, and diseases across the Atlantic"
+            },
+            {
+              "front": "The Scientific Revolution emphasized",
+              "back": "observation, experiment, and new models of nature"
+            }
+          ]
+        },
+        {
+          "slug": "revolutions-and-empires",
+          "name": "Revolutions and Empires",
+          "description": "Political upheaval and industrial change.",
+          "position": 2,
+          "cards": [
+            {
+              "front": "The American Revolution began in",
+              "back": "1775"
+            },
+            {
+              "front": "The French Revolution began in",
+              "back": "1789"
+            },
+            {
+              "front": "The Haitian Revolution is notable as",
+              "back": "a successful revolt that created an independent Haiti"
+            },
+            {
+              "front": "Simón Bolívar is tied to",
+              "back": "independence movements in northern South America"
+            },
+            {
+              "front": "The Industrial Revolution began in",
+              "back": "Britain"
+            },
+            {
+              "front": "Industrialization shifted work toward",
+              "back": "factories and machines"
+            },
+            {
+              "front": "The Meiji Restoration (1868) modernized",
+              "back": "Japan"
+            },
+            {
+              "front": "Otto von Bismarck is tied to",
+              "back": "the unification of Germany"
+            },
+            {
+              "front": "The Opium Wars involved",
+              "back": "Britain and Qing China"
+            },
+            {
+              "front": "The Berlin Conference (1884–85) is tied to",
+              "back": "European partition of Africa"
+            },
+            {
+              "front": "Imperialism is",
+              "back": "extending a country’s power over other lands"
+            },
+            {
+              "front": "Nationalism is",
+              "back": "strong identification with a nation, often seeking its own state"
+            },
+            {
+              "front": "The abolition of the slave trade and slavery was",
+              "back": "a long 18th–19th century struggle in several countries"
+            },
+            {
+              "front": "Karl Marx is associated with",
+              "back": "critiques of capitalism and communist theory"
+            },
+            {
+              "front": "Queen Victoria’s reign is often used to name",
+              "back": "the Victorian era in Britain"
+            },
+            {
+              "front": "The Suez Canal links",
+              "back": "the Mediterranean and the Red Sea"
+            },
+            {
+              "front": "The American Civil War ended",
+              "back": "slavery in the United States (13th Amendment)"
+            },
+            {
+              "front": "What is a revolution in political history?",
+              "back": "A rapid, often violent change in who holds power"
+            }
+          ]
+        },
+        {
+          "slug": "twentieth-century",
+          "name": "Twentieth Century",
+          "description": "World wars, decolonization, and the Cold War.",
+          "position": 3,
+          "cards": [
+            {
+              "front": "World War I years",
+              "back": "1914–1918"
+            },
+            {
+              "front": "A spark of World War I was",
+              "back": "the assassination of Archduke Franz Ferdinand"
+            },
+            {
+              "front": "The Treaty of Versailles (1919) punished",
+              "back": "Germany after World War I"
+            },
+            {
+              "front": "The Russian Revolution (1917) led to",
+              "back": "Bolshevik / communist rule"
+            },
+            {
+              "front": "The Great Depression began around",
+              "back": "1929"
+            },
+            {
+              "front": "World War II years",
+              "back": "1939–1945"
+            },
+            {
+              "front": "The Holocaust was",
+              "back": "the Nazi genocide of Jews and persecution of other groups"
+            },
+            {
+              "front": "The United Nations was founded in",
+              "back": "1945"
+            },
+            {
+              "front": "Independence of India and Pakistan",
+              "back": "1947"
+            },
+            {
+              "front": "The People’s Republic of China was founded in",
+              "back": "1949"
+            },
+            {
+              "front": "The Cold War was mainly between",
+              "back": "the United States and the Soviet Union"
+            },
+            {
+              "front": "NATO vs. the Warsaw Pact represented",
+              "back": "Western and Soviet-led alliances"
+            },
+            {
+              "front": "The Cuban Missile Crisis year",
+              "back": "1962"
+            },
+            {
+              "front": "Many African countries gained independence in",
+              "back": "the 1950s–1960s"
+            },
+            {
+              "front": "The fall of the Berlin Wall year",
+              "back": "1989"
+            },
+            {
+              "front": "The Soviet Union dissolved in",
+              "back": "1991"
+            },
+            {
+              "front": "Apartheid was",
+              "back": "South Africa’s system of racial segregation"
+            },
+            {
+              "front": "Nelson Mandela became South Africa’s president in",
+              "back": "1994"
+            },
+            {
+              "front": "The European Union grew from",
+              "back": "postwar economic and political cooperation in Europe"
+            },
+            {
+              "front": "Decolonization means",
+              "back": "colonies becoming independent states"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

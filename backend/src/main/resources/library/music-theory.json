@@ -1,0 +1,367 @@
+{
+  "groups": [
+    {
+      "slug": "music-theory",
+      "name": "Music Theory",
+      "sourceUrl": "",
+      "sourceTitle": "Music Theory",
+      "attribution": "Original Flashcards catalog of introductory music theory facts for school study.",
+      "sourceLanguage": "en-US",
+      "targetLanguage": "en-US",
+      "decks": [
+        {
+          "slug": "notes-and-staff",
+          "name": "Notes and Staff",
+          "description": "Pitch names, clefs, and the staff.",
+          "position": 0,
+          "cards": [
+            {
+              "front": "How many lines are on a standard staff?",
+              "back": "5"
+            },
+            {
+              "front": "How many spaces are on a standard staff?",
+              "back": "4"
+            },
+            {
+              "front": "Treble clef is also called",
+              "back": "the G clef"
+            },
+            {
+              "front": "Bass clef is also called",
+              "back": "the F clef"
+            },
+            {
+              "front": "Lines of the treble clef (bottom to top)",
+              "back": "E G B D F"
+            },
+            {
+              "front": "Spaces of the treble clef (bottom to top)",
+              "back": "F A C E"
+            },
+            {
+              "front": "Lines of the bass clef (bottom to top)",
+              "back": "G B D F A"
+            },
+            {
+              "front": "Spaces of the bass clef (bottom to top)",
+              "back": "A C E G"
+            },
+            {
+              "front": "A sharp (♯) does what to a note?",
+              "back": "Raises it by a half step"
+            },
+            {
+              "front": "A flat (♭) does what to a note?",
+              "back": "Lowers it by a half step"
+            },
+            {
+              "front": "A natural (♮) does what?",
+              "back": "Cancels a sharp or flat"
+            },
+            {
+              "front": "A half step is",
+              "back": "the smallest standard step in Western music (adjacent keys)"
+            },
+            {
+              "front": "A whole step is",
+              "back": "two half steps"
+            },
+            {
+              "front": "The musical alphabet is",
+              "back": "A B C D E F G"
+            },
+            {
+              "front": "After G, the next letter name is",
+              "back": "A"
+            },
+            {
+              "front": "Middle C sits",
+              "back": "on a ledger line between the treble and bass staves"
+            },
+            {
+              "front": "An octave is",
+              "back": "the interval of eight letter names (same letter, higher or lower)"
+            },
+            {
+              "front": "Enharmonic notes are",
+              "back": "the same pitch with different names (F♯ and G♭)"
+            },
+            {
+              "front": "A ledger line is",
+              "back": "a short line used for notes above or below the staff"
+            },
+            {
+              "front": "The note on the treble clef’s second line is",
+              "back": "G"
+            }
+          ]
+        },
+        {
+          "slug": "intervals",
+          "name": "Intervals",
+          "description": "Distance between two pitches.",
+          "position": 1,
+          "cards": [
+            {
+              "front": "An interval is",
+              "back": "the distance between two notes"
+            },
+            {
+              "front": "A unison is",
+              "back": "the same pitch"
+            },
+            {
+              "front": "A 2nd spans",
+              "back": "two letter names (C to D)"
+            },
+            {
+              "front": "A 3rd spans",
+              "back": "three letter names (C to E)"
+            },
+            {
+              "front": "A 4th spans",
+              "back": "four letter names (C to F)"
+            },
+            {
+              "front": "A 5th spans",
+              "back": "five letter names (C to G)"
+            },
+            {
+              "front": "A 6th spans",
+              "back": "six letter names (C to A)"
+            },
+            {
+              "front": "A 7th spans",
+              "back": "seven letter names (C to B)"
+            },
+            {
+              "front": "An octave (8th) spans",
+              "back": "eight letter names (C to C)"
+            },
+            {
+              "front": "A major 2nd is",
+              "back": "a whole step"
+            },
+            {
+              "front": "A minor 2nd is",
+              "back": "a half step"
+            },
+            {
+              "front": "A perfect 5th above C is",
+              "back": "G"
+            },
+            {
+              "front": "A perfect 4th above C is",
+              "back": "F"
+            },
+            {
+              "front": "A major 3rd above C is",
+              "back": "E"
+            },
+            {
+              "front": "A minor 3rd above C is",
+              "back": "E♭"
+            },
+            {
+              "front": "A tritone is",
+              "back": "an augmented 4th or diminished 5th (three whole steps)"
+            },
+            {
+              "front": "Inversion of a 3rd is a",
+              "back": "6th"
+            },
+            {
+              "front": "Inversion of a 5th is a",
+              "back": "4th"
+            },
+            {
+              "front": "A harmonic interval is",
+              "back": "two notes played at the same time"
+            },
+            {
+              "front": "A melodic interval is",
+              "back": "two notes played one after the other"
+            }
+          ]
+        },
+        {
+          "slug": "key-signatures",
+          "name": "Key Signatures",
+          "description": "Sharps, flats, and major keys.",
+          "position": 2,
+          "cards": [
+            {
+              "front": "A key signature shows",
+              "back": "which notes are sharp or flat for a piece"
+            },
+            {
+              "front": "Order of sharps",
+              "back": "F C G D A E B"
+            },
+            {
+              "front": "Order of flats",
+              "back": "B E A D G C F"
+            },
+            {
+              "front": "C major has how many sharps or flats?",
+              "back": "none"
+            },
+            {
+              "front": "G major has",
+              "back": "1 sharp (F♯)"
+            },
+            {
+              "front": "D major has",
+              "back": "2 sharps (F♯ C♯)"
+            },
+            {
+              "front": "A major has",
+              "back": "3 sharps"
+            },
+            {
+              "front": "E major has",
+              "back": "4 sharps"
+            },
+            {
+              "front": "F major has",
+              "back": "1 flat (B♭)"
+            },
+            {
+              "front": "B♭ major has",
+              "back": "2 flats (B♭ E♭)"
+            },
+            {
+              "front": "E♭ major has",
+              "back": "3 flats"
+            },
+            {
+              "front": "A♭ major has",
+              "back": "4 flats"
+            },
+            {
+              "front": "To name a sharp major key, look at",
+              "back": "a half step above the last sharp"
+            },
+            {
+              "front": "To name a flat major key (not F), look at",
+              "back": "the second-to-last flat"
+            },
+            {
+              "front": "The relative minor of C major is",
+              "back": "A minor"
+            },
+            {
+              "front": "The relative minor of G major is",
+              "back": "E minor"
+            },
+            {
+              "front": "The relative minor of F major is",
+              "back": "D minor"
+            },
+            {
+              "front": "Relative major and minor share",
+              "back": "the same key signature"
+            },
+            {
+              "front": "A minor scale’s natural form from A is",
+              "back": "A B C D E F G A"
+            },
+            {
+              "front": "The circle of fifths organizes keys by",
+              "back": "adding one sharp (or dropping one flat) each step"
+            }
+          ]
+        },
+        {
+          "slug": "rhythm-and-tempo",
+          "name": "Rhythm and Tempo",
+          "description": "Note values, meter, and speed.",
+          "position": 3,
+          "cards": [
+            {
+              "front": "A whole note lasts",
+              "back": "4 beats in 4/4"
+            },
+            {
+              "front": "A half note lasts",
+              "back": "2 beats in 4/4"
+            },
+            {
+              "front": "A quarter note lasts",
+              "back": "1 beat in 4/4"
+            },
+            {
+              "front": "An eighth note lasts",
+              "back": "1/2 beat in 4/4"
+            },
+            {
+              "front": "A sixteenth note lasts",
+              "back": "1/4 beat in 4/4"
+            },
+            {
+              "front": "A dot after a note adds",
+              "back": "half the note’s value"
+            },
+            {
+              "front": "A dotted half note in 4/4 lasts",
+              "back": "3 beats"
+            },
+            {
+              "front": "The top number of a time signature shows",
+              "back": "how many beats are in a measure"
+            },
+            {
+              "front": "The bottom number of a time signature shows",
+              "back": "what note value gets one beat"
+            },
+            {
+              "front": "4/4 is also called",
+              "back": "common time"
+            },
+            {
+              "front": "3/4 feels like",
+              "back": "three beats per measure (waltz-like)"
+            },
+            {
+              "front": "6/8 often feels like",
+              "back": "two groups of three eighth notes"
+            },
+            {
+              "front": "A rest is",
+              "back": "a measured silence"
+            },
+            {
+              "front": "Tempo is",
+              "back": "how fast the music is"
+            },
+            {
+              "front": "Allegro means",
+              "back": "fast"
+            },
+            {
+              "front": "Adagio means",
+              "back": "slow"
+            },
+            {
+              "front": "Andante means",
+              "back": "a walking pace"
+            },
+            {
+              "front": "A measure (bar) is",
+              "back": "a group of beats set off by bar lines"
+            },
+            {
+              "front": "A tie connects",
+              "back": "two notes of the same pitch so their values add"
+            },
+            {
+              "front": "A slur connects",
+              "back": "different pitches in one phrase (usually not adding values)"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

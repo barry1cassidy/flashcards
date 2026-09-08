@@ -16,6 +16,7 @@ public final class CardLanguages {
     public static final List<String> CODES = List.of(
             "en-US",
             "zh-CN",
+            "zh-HK",
             "hi-IN",
             "es-ES",
             "ar-SA",
@@ -36,7 +37,17 @@ public final class CardLanguages {
             "uk-UA",
             "sv-SE",
             "el-GR",
-            "he-IL");
+            "he-IL",
+            "ga-IE",
+            "da-DK",
+            "fi-FI",
+            "cs-CZ",
+            "ro-RO",
+            "tl-PH",
+            "sw-KE",
+            "cy-GB",
+            "nb-NO",
+            "hu-HU");
 
     private static final Set<String> ALLOWED = Set.copyOf(CODES);
 

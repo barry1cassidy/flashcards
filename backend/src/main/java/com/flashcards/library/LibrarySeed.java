@@ -26,15 +26,28 @@ public class LibrarySeed implements ApplicationRunner {
             "#1D4ED8", "#B45309", "#047857", "#6D28D9", "#334155"
     };
     private static final String PHRASEBOOKS = "library/phrasebooks.json";
+    private static final String PHRASEBOOKS_MORE = "library/phrasebooks-more.json";
     private static final String[] SUBJECT_CATALOGS = {
             "library/geography.json",
+            "library/geography-more.json",
             "library/arithmetic.json",
+            "library/arithmetic-more.json",
             "library/civics.json",
             "library/human-body.json",
+            "library/human-body-more.json",
             "library/sat-math.json",
+            "library/sat-math-more.json",
             "library/sat-reading-writing.json",
+            "library/sat-reading-writing-more.json",
             "library/biology.json",
-            "library/us-history.json"
+            "library/biology-more.json",
+            "library/us-history.json",
+            "library/us-history-more.json",
+            "library/music-theory.json",
+            "library/personal-finance.json",
+            "library/chemistry.json",
+            "library/world-history.json",
+            "library/computer-science.json"
     };
 
     private final LibraryGroupRepository groupRepository;
@@ -59,6 +72,7 @@ public class LibrarySeed implements ApplicationRunner {
         if (groupRepository.findBySlug("spanish").isEmpty()) {
             loadCatalog(PHRASEBOOKS);
         }
+        loadCatalog(PHRASEBOOKS_MORE);
         for (String catalog : SUBJECT_CATALOGS) {
             loadCatalog(catalog);
         }

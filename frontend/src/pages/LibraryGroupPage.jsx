@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { api } from '../api'
 import { translateError } from '../i18n/errors'
+import { isLanguageLibraryGroup } from '../libraryGroup'
 import { GroupBadge } from './ColorPicker'
 
 export default function LibraryGroupPage() {
@@ -56,12 +57,16 @@ export default function LibraryGroupPage() {
             <div className="deck-hero">
               <GroupBadge group={group} />
               <h1>{group.name}</h1>
-              <p className="muted">{t('library.groupSubtitle', { language: group.name })}</p>
+              <p className="muted">
+                {isLanguageLibraryGroup(group)
+                  ? t('library.groupSubtitle', { language: group.name })
+                  : t('library.groupSubjectSubtitle')}
+              </p>
             </div>
           </div>
-          <div className="deck-grid">
+          <div className="library-grid">
             {group.decks.map((deck) => (
-              <article key={deck.id} className="deck-card">
+              <article key={deck.id} className="deck-card library-card">
                 <Link to={`/library/decks/${deck.id}`} className="deck-card-main">
                   <h2>{deck.name}</h2>
                   {deck.description ? <p>{deck.description}</p> : null}

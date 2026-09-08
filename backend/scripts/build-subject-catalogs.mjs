@@ -1,6 +1,7 @@
 /**
  * Writes the eight non-language library catalogs under src/main/resources/library/.
  * Run: node scripts/build-subject-catalogs.mjs
+ * Extra decks and new subject sets: node scripts/build-library-expansions.mjs
  */
 import { writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'

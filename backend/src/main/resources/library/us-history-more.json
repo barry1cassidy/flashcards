@@ -1,0 +1,279 @@
+{
+  "groups": [
+    {
+      "slug": "us-history",
+      "name": "U.S. History",
+      "sourceUrl": "",
+      "sourceTitle": "U.S. History",
+      "attribution": "Original Flashcards catalog of commonly taught U.S. history facts for school study.",
+      "sourceLanguage": "en-US",
+      "targetLanguage": "en-US",
+      "decks": [
+        {
+          "slug": "westward-expansion",
+          "name": "Westward Expansion",
+          "description": "Territory, trails, and the push across the continent.",
+          "position": 0,
+          "cards": [
+            {
+              "front": "What was Manifest Destiny?",
+              "back": "The idea that the U.S. was meant to expand across North America"
+            },
+            {
+              "front": "Louisiana Purchase year",
+              "back": "1803"
+            },
+            {
+              "front": "Who sold the Louisiana Territory to the U.S.?",
+              "back": "France (Napoleon)"
+            },
+            {
+              "front": "Who explored the Louisiana Territory for Jefferson?",
+              "back": "Lewis and Clark"
+            },
+            {
+              "front": "What Native guide helped Lewis and Clark?",
+              "back": "Sacagawea"
+            },
+            {
+              "front": "Oregon Trail started mainly from",
+              "back": "Independence, Missouri (and nearby towns)"
+            },
+            {
+              "front": "What trail led many to Utah?",
+              "back": "Mormon Trail"
+            },
+            {
+              "front": "Gold rush that drew people to California",
+              "back": "1849 Gold Rush"
+            },
+            {
+              "front": "Mexican-American War years",
+              "back": "1846–1848"
+            },
+            {
+              "front": "What did the Treaty of Guadalupe Hidalgo do?",
+              "back": "Ended the Mexican-American War and ceded the Southwest"
+            },
+            {
+              "front": "What was the Homestead Act (1862)?",
+              "back": "It offered land to settlers who would farm it"
+            },
+            {
+              "front": "What was the transcontinental railroad’s completion year?",
+              "back": "1869"
+            },
+            {
+              "front": "Where did the Union Pacific and Central Pacific meet?",
+              "back": "Promontory, Utah"
+            },
+            {
+              "front": "What was the Trail of Tears?",
+              "back": "Forced removal of the Cherokee and other nations from the Southeast"
+            },
+            {
+              "front": "Indian Removal Act year",
+              "back": "1830"
+            },
+            {
+              "front": "President most tied to Indian Removal",
+              "back": "Andrew Jackson"
+            },
+            {
+              "front": "What was the Missouri Compromise (1820)?",
+              "back": "Missouri slave, Maine free; a line for future territories"
+            },
+            {
+              "front": "What was the Kansas-Nebraska Act known for?",
+              "back": "Letting settlers vote on slavery (popular sovereignty)"
+            },
+            {
+              "front": "What purchase added southern Arizona and New Mexico?",
+              "back": "Gadsden Purchase"
+            },
+            {
+              "front": "Alaska was purchased from",
+              "back": "Russia (1867)"
+            }
+          ]
+        },
+        {
+          "slug": "civil-rights-movement",
+          "name": "Civil Rights Movement",
+          "description": "Key people, laws, and turning points of the mid-1900s.",
+          "position": 1,
+          "cards": [
+            {
+              "front": "What did Brown v. Board of Education (1954) decide?",
+              "back": "School segregation is unconstitutional"
+            },
+            {
+              "front": "Who refused to give up her bus seat in Montgomery in 1955?",
+              "back": "Rosa Parks"
+            },
+            {
+              "front": "What boycott followed Rosa Parks’s arrest?",
+              "back": "Montgomery Bus Boycott"
+            },
+            {
+              "front": "Who led the Montgomery Bus Boycott?",
+              "back": "Martin Luther King, Jr."
+            },
+            {
+              "front": "What was the 1963 March on Washington known for?",
+              "back": "The “I Have a Dream” speech"
+            },
+            {
+              "front": "Civil Rights Act year",
+              "back": "1964"
+            },
+            {
+              "front": "What did the Civil Rights Act of 1964 ban in public places?",
+              "back": "Segregation and discrimination based on race, color, religion, sex, or national origin"
+            },
+            {
+              "front": "Voting Rights Act year",
+              "back": "1965"
+            },
+            {
+              "front": "What did the Voting Rights Act target?",
+              "back": "Barriers that kept Black Americans from voting"
+            },
+            {
+              "front": "Little Rock Nine",
+              "back": "Black students who integrated Central High School in 1957"
+            },
+            {
+              "front": "What were Freedom Rides?",
+              "back": "Integrated bus rides to challenge segregated interstate travel"
+            },
+            {
+              "front": "Sit-ins often targeted",
+              "back": "segregated lunch counters"
+            },
+            {
+              "front": "Who was Malcolm X?",
+              "back": "A civil rights leader who argued for Black self-determination"
+            },
+            {
+              "front": "NAACP stands for",
+              "back": "National Association for the Advancement of Colored People"
+            },
+            {
+              "front": "What was Jim Crow?",
+              "back": "State and local laws that enforced racial segregation"
+            },
+            {
+              "front": "Emmett Till’s murder (1955) became",
+              "back": "a national turning point against racial violence"
+            },
+            {
+              "front": "Who was Thurgood Marshall before the Supreme Court?",
+              "back": "The NAACP lawyer who argued Brown"
+            },
+            {
+              "front": "Fair Housing Act year",
+              "back": "1968"
+            },
+            {
+              "front": "Selma marches are tied to",
+              "back": "voting rights in Alabama"
+            },
+            {
+              "front": "What is civil disobedience?",
+              "back": "Peacefully refusing unjust laws to protest them"
+            }
+          ]
+        },
+        {
+          "slug": "american-wars",
+          "name": "American Wars",
+          "description": "Who fought, when, and why these wars are taught.",
+          "position": 2,
+          "cards": [
+            {
+              "front": "American Revolutionary War years",
+              "back": "1775–1783"
+            },
+            {
+              "front": "Who did the colonies fight in the Revolution?",
+              "back": "Great Britain"
+            },
+            {
+              "front": "War of 1812 opponent",
+              "back": "Great Britain"
+            },
+            {
+              "front": "Mexican-American War years",
+              "back": "1846–1848"
+            },
+            {
+              "front": "U.S. Civil War years",
+              "back": "1861–1865"
+            },
+            {
+              "front": "Civil War sides",
+              "back": "Union (North) and Confederacy (South)"
+            },
+            {
+              "front": "Spanish-American War year",
+              "back": "1898"
+            },
+            {
+              "front": "What territories did the U.S. gain after 1898?",
+              "back": "Puerto Rico, Guam, and the Philippines (among others)"
+            },
+            {
+              "front": "U.S. entered World War I in",
+              "back": "1917"
+            },
+            {
+              "front": "World War I ended in",
+              "back": "1918"
+            },
+            {
+              "front": "Pearl Harbor date",
+              "back": "December 7, 1941"
+            },
+            {
+              "front": "U.S. opponents in World War II",
+              "back": "Japan, Germany, and Italy"
+            },
+            {
+              "front": "D-Day year",
+              "back": "1944"
+            },
+            {
+              "front": "World War II ended in",
+              "back": "1945"
+            },
+            {
+              "front": "Korean War years",
+              "back": "1950–1953"
+            },
+            {
+              "front": "Vietnam War (U.S. combat peak) era",
+              "back": "1960s–1973"
+            },
+            {
+              "front": "Persian Gulf War year",
+              "back": "1991"
+            },
+            {
+              "front": "What was the Cold War?",
+              "back": "U.S.–Soviet rivalry without a direct full war between them"
+            },
+            {
+              "front": "NATO was formed to",
+              "back": "allied defense of Western countries after WWII"
+            },
+            {
+              "front": "What war is sometimes called “Mr. Madison’s War”?",
+              "back": "the War of 1812"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

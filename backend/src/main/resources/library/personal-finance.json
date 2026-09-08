@@ -1,0 +1,343 @@
+{
+  "groups": [
+    {
+      "slug": "personal-finance",
+      "name": "Personal Finance",
+      "sourceUrl": "",
+      "sourceTitle": "Personal Finance",
+      "attribution": "Original Flashcards catalog of everyday personal-finance vocabulary. Not financial advice.",
+      "sourceLanguage": "en-US",
+      "targetLanguage": "en-US",
+      "decks": [
+        {
+          "slug": "money-vocab",
+          "name": "Money Vocabulary",
+          "description": "Income, budgets, and everyday cash-flow words.",
+          "position": 0,
+          "cards": [
+            {
+              "front": "A budget is",
+              "back": "a plan for income and spending"
+            },
+            {
+              "front": "Income is",
+              "back": "money you receive"
+            },
+            {
+              "front": "An expense is",
+              "back": "money you spend"
+            },
+            {
+              "front": "A need is",
+              "back": "something you must have (housing, food, basic utilities)"
+            },
+            {
+              "front": "A want is",
+              "back": "something you would like but can live without"
+            },
+            {
+              "front": "Net income is",
+              "back": "pay after taxes and deductions"
+            },
+            {
+              "front": "Gross income is",
+              "back": "pay before taxes and deductions"
+            },
+            {
+              "front": "A paycheck withholding is",
+              "back": "money taken out for taxes or benefits"
+            },
+            {
+              "front": "An emergency fund is",
+              "back": "cash set aside for unexpected costs"
+            },
+            {
+              "front": "Liquidity means",
+              "back": "how quickly an asset can become cash"
+            },
+            {
+              "front": "An asset is",
+              "back": "something you own that has value"
+            },
+            {
+              "front": "A liability is",
+              "back": "money you owe"
+            },
+            {
+              "front": "Net worth is",
+              "back": "assets minus liabilities"
+            },
+            {
+              "front": "Inflation is",
+              "back": "a general rise in prices over time"
+            },
+            {
+              "front": "Purchasing power is",
+              "back": "how much your money can buy"
+            },
+            {
+              "front": "Opportunity cost is",
+              "back": "the next-best option you give up"
+            },
+            {
+              "front": "A debit card spends",
+              "back": "money already in your account"
+            },
+            {
+              "front": "A credit card borrows",
+              "back": "the issuer’s money, which you repay later"
+            },
+            {
+              "front": "Overdraft is",
+              "back": "spending more than you have in the account"
+            },
+            {
+              "front": "A checking account is mainly for",
+              "back": "everyday deposits and payments"
+            }
+          ]
+        },
+        {
+          "slug": "credit-and-debt",
+          "name": "Credit and Debt",
+          "description": "APR, interest, and borrowing terms.",
+          "position": 1,
+          "cards": [
+            {
+              "front": "APR stands for",
+              "back": "Annual Percentage Rate"
+            },
+            {
+              "front": "APR is",
+              "back": "the yearly cost of borrowing, including some fees"
+            },
+            {
+              "front": "Interest is",
+              "back": "the cost of borrowing money (or the earning on savings)"
+            },
+            {
+              "front": "Principal is",
+              "back": "the amount borrowed or still owed, not counting interest"
+            },
+            {
+              "front": "Simple interest is",
+              "back": "interest on the principal only"
+            },
+            {
+              "front": "Compound interest is",
+              "back": "interest on principal plus earlier interest"
+            },
+            {
+              "front": "A credit score estimates",
+              "back": "how reliably you may repay borrowed money"
+            },
+            {
+              "front": "A credit report lists",
+              "back": "your borrowing history and accounts"
+            },
+            {
+              "front": "A minimum payment is",
+              "back": "the smallest amount a lender requires this period"
+            },
+            {
+              "front": "Why can paying only the minimum take years?",
+              "back": "Most of the payment may go to interest"
+            },
+            {
+              "front": "A secured loan is backed by",
+              "back": "collateral"
+            },
+            {
+              "front": "An unsecured loan has",
+              "back": "no collateral (often a higher rate)"
+            },
+            {
+              "front": "Collateral is",
+              "back": "property a lender can take if you do not repay"
+            },
+            {
+              "front": "A mortgage is",
+              "back": "a loan used to buy real estate"
+            },
+            {
+              "front": "A default is",
+              "back": "failing to meet the loan’s required payments"
+            },
+            {
+              "front": "A collection account means",
+              "back": "unpaid debt sent to a collection agency"
+            },
+            {
+              "front": "A grace period is",
+              "back": "time to pay before interest or a penalty starts"
+            },
+            {
+              "front": "A late fee is",
+              "back": "an extra charge for missing a due date"
+            },
+            {
+              "front": "Debt-to-income ratio compares",
+              "back": "monthly debt payments to monthly income"
+            },
+            {
+              "front": "A cosigner promises",
+              "back": "to repay if the main borrower does not"
+            }
+          ]
+        },
+        {
+          "slug": "investing-basics",
+          "name": "Investing Basics",
+          "description": "Stocks, bonds, and risk words.",
+          "position": 2,
+          "cards": [
+            {
+              "front": "A stock is",
+              "back": "a share of ownership in a company"
+            },
+            {
+              "front": "A bond is",
+              "back": "a loan you make to a government or company"
+            },
+            {
+              "front": "A dividend is",
+              "back": "a share of profits paid to stockholders"
+            },
+            {
+              "front": "Diversification means",
+              "back": "spreading money across different investments"
+            },
+            {
+              "front": "Risk and return are often",
+              "back": "linked: higher potential return usually means higher risk"
+            },
+            {
+              "front": "Volatility is",
+              "back": "how much a price swings up and down"
+            },
+            {
+              "front": "A mutual fund pools",
+              "back": "money from many investors to buy a mix of assets"
+            },
+            {
+              "front": "An ETF is",
+              "back": "an exchange-traded fund that trades like a stock"
+            },
+            {
+              "front": "An index fund aims to",
+              "back": "match a market index rather than beat it"
+            },
+            {
+              "front": "The S&P 500 tracks",
+              "back": "about 500 large U.S. companies"
+            },
+            {
+              "front": "A broker is",
+              "back": "a firm or person that buys and sells investments for you"
+            },
+            {
+              "front": "A capital gain is",
+              "back": "profit from selling an investment for more than you paid"
+            },
+            {
+              "front": "A capital loss is",
+              "back": "selling for less than you paid"
+            },
+            {
+              "front": "Asset allocation is",
+              "back": "how you split money among stocks, bonds, and cash"
+            },
+            {
+              "front": "Time horizon is",
+              "back": "how long you plan to keep the money invested"
+            },
+            {
+              "front": "Inflation risk is",
+              "back": "the chance that prices rise faster than your return"
+            },
+            {
+              "front": "A ticker symbol is",
+              "back": "the short code for a stock or ETF"
+            },
+            {
+              "front": "Past performance does not",
+              "back": "guarantee future results"
+            }
+          ]
+        },
+        {
+          "slug": "retirement-accounts",
+          "name": "Retirement Accounts",
+          "description": "401(k), IRA, and related U.S. terms.",
+          "position": 3,
+          "cards": [
+            {
+              "front": "A 401(k) is",
+              "back": "an employer-sponsored retirement savings plan"
+            },
+            {
+              "front": "An IRA is",
+              "back": "an Individual Retirement Account"
+            },
+            {
+              "front": "A traditional 401(k) or IRA is often",
+              "back": "tax-deferred: you may pay tax when you withdraw"
+            },
+            {
+              "front": "A Roth account is often",
+              "back": "funded with after-tax money; qualified withdrawals can be tax-free"
+            },
+            {
+              "front": "An employer match is",
+              "back": "company money added when you contribute"
+            },
+            {
+              "front": "Vesting is",
+              "back": "how long you must stay to keep employer contributions"
+            },
+            {
+              "front": "A contribution is",
+              "back": "money you put into the account"
+            },
+            {
+              "front": "A withdrawal is",
+              "back": "money you take out"
+            },
+            {
+              "front": "An early withdrawal may",
+              "back": "trigger taxes and a penalty"
+            },
+            {
+              "front": "Required minimum distributions (RMDs) are",
+              "back": "amounts you must take from some accounts at older ages"
+            },
+            {
+              "front": "A beneficiary is",
+              "back": "the person who receives the account if you die"
+            },
+            {
+              "front": "Compound interest matters in retirement because",
+              "back": "earnings can earn more earnings over decades"
+            },
+            {
+              "front": "A target-date fund shifts",
+              "back": "toward a more conservative mix as the date nears"
+            },
+            {
+              "front": "Social Security is",
+              "back": "a U.S. federal program that can pay retirement or disability benefits"
+            },
+            {
+              "front": "A pension is",
+              "back": "a plan that pays a set benefit, often based on years of work"
+            },
+            {
+              "front": "Why start saving early?",
+              "back": "More years for compounding to work"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

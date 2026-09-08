@@ -1,0 +1,515 @@
+{
+  "groups": [
+    {
+      "slug": "arithmetic-facts",
+      "name": "Arithmetic Facts",
+      "sourceUrl": "",
+      "sourceTitle": "Arithmetic Facts",
+      "attribution": "Original Flashcards catalog of common arithmetic facts for grade-school practice.",
+      "sourceLanguage": "en-US",
+      "targetLanguage": "en-US",
+      "decks": [
+        {
+          "slug": "division-facts-2-6",
+          "name": "Division Facts 2–6",
+          "description": "Basic quotients with divisors from 2 through 6.",
+          "position": 0,
+          "cards": [
+            {
+              "front": "4 ÷ 2",
+              "back": "2"
+            },
+            {
+              "front": "6 ÷ 2",
+              "back": "3"
+            },
+            {
+              "front": "8 ÷ 2",
+              "back": "4"
+            },
+            {
+              "front": "10 ÷ 2",
+              "back": "5"
+            },
+            {
+              "front": "12 ÷ 2",
+              "back": "6"
+            },
+            {
+              "front": "14 ÷ 2",
+              "back": "7"
+            },
+            {
+              "front": "16 ÷ 2",
+              "back": "8"
+            },
+            {
+              "front": "18 ÷ 2",
+              "back": "9"
+            },
+            {
+              "front": "20 ÷ 2",
+              "back": "10"
+            },
+            {
+              "front": "22 ÷ 2",
+              "back": "11"
+            },
+            {
+              "front": "24 ÷ 2",
+              "back": "12"
+            },
+            {
+              "front": "6 ÷ 3",
+              "back": "2"
+            },
+            {
+              "front": "9 ÷ 3",
+              "back": "3"
+            },
+            {
+              "front": "12 ÷ 3",
+              "back": "4"
+            },
+            {
+              "front": "15 ÷ 3",
+              "back": "5"
+            },
+            {
+              "front": "18 ÷ 3",
+              "back": "6"
+            },
+            {
+              "front": "21 ÷ 3",
+              "back": "7"
+            },
+            {
+              "front": "24 ÷ 3",
+              "back": "8"
+            },
+            {
+              "front": "27 ÷ 3",
+              "back": "9"
+            },
+            {
+              "front": "30 ÷ 3",
+              "back": "10"
+            },
+            {
+              "front": "33 ÷ 3",
+              "back": "11"
+            },
+            {
+              "front": "36 ÷ 3",
+              "back": "12"
+            },
+            {
+              "front": "8 ÷ 4",
+              "back": "2"
+            },
+            {
+              "front": "12 ÷ 4",
+              "back": "3"
+            },
+            {
+              "front": "16 ÷ 4",
+              "back": "4"
+            },
+            {
+              "front": "20 ÷ 4",
+              "back": "5"
+            },
+            {
+              "front": "24 ÷ 4",
+              "back": "6"
+            },
+            {
+              "front": "28 ÷ 4",
+              "back": "7"
+            },
+            {
+              "front": "32 ÷ 4",
+              "back": "8"
+            },
+            {
+              "front": "36 ÷ 4",
+              "back": "9"
+            },
+            {
+              "front": "40 ÷ 4",
+              "back": "10"
+            },
+            {
+              "front": "44 ÷ 4",
+              "back": "11"
+            },
+            {
+              "front": "48 ÷ 4",
+              "back": "12"
+            },
+            {
+              "front": "10 ÷ 5",
+              "back": "2"
+            },
+            {
+              "front": "15 ÷ 5",
+              "back": "3"
+            },
+            {
+              "front": "20 ÷ 5",
+              "back": "4"
+            },
+            {
+              "front": "25 ÷ 5",
+              "back": "5"
+            },
+            {
+              "front": "30 ÷ 5",
+              "back": "6"
+            },
+            {
+              "front": "35 ÷ 5",
+              "back": "7"
+            },
+            {
+              "front": "40 ÷ 5",
+              "back": "8"
+            },
+            {
+              "front": "45 ÷ 5",
+              "back": "9"
+            },
+            {
+              "front": "50 ÷ 5",
+              "back": "10"
+            },
+            {
+              "front": "55 ÷ 5",
+              "back": "11"
+            },
+            {
+              "front": "60 ÷ 5",
+              "back": "12"
+            },
+            {
+              "front": "12 ÷ 6",
+              "back": "2"
+            },
+            {
+              "front": "18 ÷ 6",
+              "back": "3"
+            },
+            {
+              "front": "24 ÷ 6",
+              "back": "4"
+            },
+            {
+              "front": "30 ÷ 6",
+              "back": "5"
+            },
+            {
+              "front": "36 ÷ 6",
+              "back": "6"
+            },
+            {
+              "front": "42 ÷ 6",
+              "back": "7"
+            },
+            {
+              "front": "48 ÷ 6",
+              "back": "8"
+            },
+            {
+              "front": "54 ÷ 6",
+              "back": "9"
+            },
+            {
+              "front": "60 ÷ 6",
+              "back": "10"
+            },
+            {
+              "front": "66 ÷ 6",
+              "back": "11"
+            },
+            {
+              "front": "72 ÷ 6",
+              "back": "12"
+            }
+          ]
+        },
+        {
+          "slug": "division-facts-7-12",
+          "name": "Division Facts 7–12",
+          "description": "Basic quotients with divisors from 7 through 12.",
+          "position": 1,
+          "cards": [
+            {
+              "front": "14 ÷ 7",
+              "back": "2"
+            },
+            {
+              "front": "21 ÷ 7",
+              "back": "3"
+            },
+            {
+              "front": "28 ÷ 7",
+              "back": "4"
+            },
+            {
+              "front": "35 ÷ 7",
+              "back": "5"
+            },
+            {
+              "front": "42 ÷ 7",
+              "back": "6"
+            },
+            {
+              "front": "49 ÷ 7",
+              "back": "7"
+            },
+            {
+              "front": "56 ÷ 7",
+              "back": "8"
+            },
+            {
+              "front": "63 ÷ 7",
+              "back": "9"
+            },
+            {
+              "front": "70 ÷ 7",
+              "back": "10"
+            },
+            {
+              "front": "77 ÷ 7",
+              "back": "11"
+            },
+            {
+              "front": "84 ÷ 7",
+              "back": "12"
+            },
+            {
+              "front": "16 ÷ 8",
+              "back": "2"
+            },
+            {
+              "front": "24 ÷ 8",
+              "back": "3"
+            },
+            {
+              "front": "32 ÷ 8",
+              "back": "4"
+            },
+            {
+              "front": "40 ÷ 8",
+              "back": "5"
+            },
+            {
+              "front": "48 ÷ 8",
+              "back": "6"
+            },
+            {
+              "front": "56 ÷ 8",
+              "back": "7"
+            },
+            {
+              "front": "64 ÷ 8",
+              "back": "8"
+            },
+            {
+              "front": "72 ÷ 8",
+              "back": "9"
+            },
+            {
+              "front": "80 ÷ 8",
+              "back": "10"
+            },
+            {
+              "front": "88 ÷ 8",
+              "back": "11"
+            },
+            {
+              "front": "96 ÷ 8",
+              "back": "12"
+            },
+            {
+              "front": "18 ÷ 9",
+              "back": "2"
+            },
+            {
+              "front": "27 ÷ 9",
+              "back": "3"
+            },
+            {
+              "front": "36 ÷ 9",
+              "back": "4"
+            },
+            {
+              "front": "45 ÷ 9",
+              "back": "5"
+            },
+            {
+              "front": "54 ÷ 9",
+              "back": "6"
+            },
+            {
+              "front": "63 ÷ 9",
+              "back": "7"
+            },
+            {
+              "front": "72 ÷ 9",
+              "back": "8"
+            },
+            {
+              "front": "81 ÷ 9",
+              "back": "9"
+            },
+            {
+              "front": "90 ÷ 9",
+              "back": "10"
+            },
+            {
+              "front": "99 ÷ 9",
+              "back": "11"
+            },
+            {
+              "front": "108 ÷ 9",
+              "back": "12"
+            },
+            {
+              "front": "20 ÷ 10",
+              "back": "2"
+            },
+            {
+              "front": "30 ÷ 10",
+              "back": "3"
+            },
+            {
+              "front": "40 ÷ 10",
+              "back": "4"
+            },
+            {
+              "front": "50 ÷ 10",
+              "back": "5"
+            },
+            {
+              "front": "60 ÷ 10",
+              "back": "6"
+            },
+            {
+              "front": "70 ÷ 10",
+              "back": "7"
+            },
+            {
+              "front": "80 ÷ 10",
+              "back": "8"
+            },
+            {
+              "front": "90 ÷ 10",
+              "back": "9"
+            },
+            {
+              "front": "100 ÷ 10",
+              "back": "10"
+            },
+            {
+              "front": "110 ÷ 10",
+              "back": "11"
+            },
+            {
+              "front": "120 ÷ 10",
+              "back": "12"
+            },
+            {
+              "front": "22 ÷ 11",
+              "back": "2"
+            },
+            {
+              "front": "33 ÷ 11",
+              "back": "3"
+            },
+            {
+              "front": "44 ÷ 11",
+              "back": "4"
+            },
+            {
+              "front": "55 ÷ 11",
+              "back": "5"
+            },
+            {
+              "front": "66 ÷ 11",
+              "back": "6"
+            },
+            {
+              "front": "77 ÷ 11",
+              "back": "7"
+            },
+            {
+              "front": "88 ÷ 11",
+              "back": "8"
+            },
+            {
+              "front": "99 ÷ 11",
+              "back": "9"
+            },
+            {
+              "front": "110 ÷ 11",
+              "back": "10"
+            },
+            {
+              "front": "121 ÷ 11",
+              "back": "11"
+            },
+            {
+              "front": "132 ÷ 11",
+              "back": "12"
+            },
+            {
+              "front": "24 ÷ 12",
+              "back": "2"
+            },
+            {
+              "front": "36 ÷ 12",
+              "back": "3"
+            },
+            {
+              "front": "48 ÷ 12",
+              "back": "4"
+            },
+            {
+              "front": "60 ÷ 12",
+              "back": "5"
+            },
+            {
+              "front": "72 ÷ 12",
+              "back": "6"
+            },
+            {
+              "front": "84 ÷ 12",
+              "back": "7"
+            },
+            {
+              "front": "96 ÷ 12",
+              "back": "8"
+            },
+            {
+              "front": "108 ÷ 12",
+              "back": "9"
+            },
+            {
+              "front": "120 ÷ 12",
+              "back": "10"
+            },
+            {
+              "front": "132 ÷ 12",
+              "back": "11"
+            },
+            {
+              "front": "144 ÷ 12",
+              "back": "12"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

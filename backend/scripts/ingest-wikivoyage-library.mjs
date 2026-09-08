@@ -30,6 +30,21 @@ const LANGUAGES = [
   { slug: 'hebrew', name: 'Hebrew', page: 'Hebrew_phrasebook', targetLanguage: 'he-IL' },
 ]
 
+const MORE_LANGUAGES = [
+  { slug: 'irish', name: 'Irish', page: 'Irish_phrasebook', targetLanguage: 'ga-IE' },
+  { slug: 'cantonese', name: 'Cantonese', page: 'Cantonese_phrasebook', targetLanguage: 'zh-HK' },
+  { slug: 'ukrainian', name: 'Ukrainian', page: 'Ukrainian_phrasebook', targetLanguage: 'uk-UA' },
+  { slug: 'danish', name: 'Danish', page: 'Danish_phrasebook', targetLanguage: 'da-DK' },
+  { slug: 'finnish', name: 'Finnish', page: 'Finnish_phrasebook', targetLanguage: 'fi-FI' },
+  { slug: 'czech', name: 'Czech', page: 'Czech_phrasebook', targetLanguage: 'cs-CZ' },
+  { slug: 'romanian', name: 'Romanian', page: 'Romanian_phrasebook', targetLanguage: 'ro-RO' },
+  { slug: 'tagalog', name: 'Tagalog', page: 'Tagalog_phrasebook', targetLanguage: 'tl-PH' },
+  { slug: 'swahili', name: 'Swahili', page: 'Swahili_phrasebook', targetLanguage: 'sw-KE' },
+  { slug: 'welsh', name: 'Welsh', page: 'Welsh_phrasebook', targetLanguage: 'cy-GB' },
+  { slug: 'norwegian', name: 'Norwegian', page: 'Norwegian_phrasebook', targetLanguage: 'nb-NO' },
+  { slug: 'hungarian', name: 'Hungarian', page: 'Hungarian_phrasebook', targetLanguage: 'hu-HU' },
+]
+
 const DECKS = [
   { slug: 'greetings-courtesy', name: 'Greetings & courtesy', description: 'Hello, names, please, and thanks.' },
   { slug: 'survival-phrases', name: 'Survival phrases', description: 'When you do not understand, need the toilet, or need help.' },
@@ -109,7 +124,7 @@ function parsePhrase(line, targetLanguage) {
 
   const spoken = italics(rawBack).find((part) => PINYIN.test(part) && part.length < 80)
 
-  if (targetLanguage === 'zh-CN') {
+  if (targetLanguage === 'zh-CN' || targetLanguage === 'zh-HK') {
     const hint = spoken ? spoken.replace(/[.’']+$/g, '').trim() : null
     let simplified = rawBack.replace(/''[^']+''/g, ' ').trim()
     const splitTrad = simplified.match(/^(.*?)\s*[\(（]([\u3400-\u9FFF].*)$/)
@@ -266,47 +281,99 @@ async function fetchPage(page) {
   throw lastError
 }
 
-async function ingest(onlySlug) {
+async function ingest(languages, { skipFailures = false } = {}) {
   const groups = []
-  const selected = onlySlug ? LANGUAGES.filter((language) => language.slug === onlySlug) : LANGUAGES
-  if (onlySlug && selected.length === 0) {
-    throw new Error(`Unknown language slug: ${onlySlug}`)
-  }
-  for (const language of selected) {
+  for (const language of languages) {
     process.stderr.write(`Fetching ${language.page}…\n`)
-    const { title, wikitext } = await fetchPage(language.page)
-    const decks = buildDecks(phrasesBySection(wikitext), language.targetLanguage)
-    const cardCount = decks.reduce((sum, deck) => sum + deck.cards.length, 0)
-    process.stderr.write(`  ${title}: ${decks.length} decks, ${cardCount} cards\n`)
-    if (decks.length === 0) {
-      throw new Error(`${language.page} produced no decks`)
+    try {
+      const { title, wikitext } = await fetchPage(language.page)
+      const decks = buildDecks(phrasesBySection(wikitext), language.targetLanguage)
+      const cardCount = decks.reduce((sum, deck) => sum + deck.cards.length, 0)
+      process.stderr.write(`  ${title}: ${decks.length} decks, ${cardCount} cards\n`)
+      if (decks.length === 0) {
+        throw new Error(`${language.page} produced no decks`)
+      }
+      groups.push({
+        slug: language.slug,
+        name: language.name,
+        sourceLanguage: 'en-US',
+        targetLanguage: language.targetLanguage,
+        sourceUrl: `https://en.wikivoyage.org/wiki/${encodeURIComponent(title.replaceAll(' ', '_'))}`,
+        sourceTitle: title,
+        attribution: `Text from English Wikivoyage article “${title}”, licensed under CC BY-SA 4.0.`,
+        decks,
+      })
+    } catch (error) {
+      if (!skipFailures) {
+        throw error
+      }
+      process.stderr.write(`  skipping ${language.page}: ${error.message}\n`)
     }
-    groups.push({
-      slug: language.slug,
-      name: language.name,
-      sourceLanguage: 'en-US',
-      targetLanguage: language.targetLanguage,
-      sourceUrl: `https://en.wikivoyage.org/wiki/${encodeURIComponent(title.replaceAll(' ', '_'))}`,
-      sourceTitle: title,
-      attribution: `Text from English Wikivoyage article “${title}”, licensed under CC BY-SA 4.0.`,
-      decks,
-    })
     await new Promise((resolve) => setTimeout(resolve, 2500))
   }
   return { source: 'Wikivoyage', license: 'CC BY-SA 4.0', groups }
 }
 
-const root = dirname(fileURLToPath(import.meta.url))
-const out = join(root, '..', 'src', 'main', 'resources', 'library', 'phrasebooks.json')
-const onlySlug = process.argv[2]
-const catalog = await ingest(onlySlug)
-if (onlySlug) {
-  const existing = JSON.parse(readFileSync(out, 'utf8'))
-  existing.groups = existing.groups.map((group) => (group.slug === onlySlug ? catalog.groups[0] : group))
-  if (!existing.groups.some((group) => group.slug === onlySlug)) {
-    existing.groups.push(catalog.groups[0])
+function parseArgs(argv) {
+  const args = argv.slice(2)
+  let more = false
+  let morePath = null
+  let onlySlug = null
+  for (let i = 0; i < args.length; i += 1) {
+    const arg = args[i]
+    if (arg === '--more') {
+      more = true
+      const next = args[i + 1]
+      if (next && (next.endsWith('.json') || next.includes('/') || next.includes('\\'))) {
+        morePath = next
+        i += 1
+      }
+      continue
+    }
+    if (!arg.startsWith('-')) {
+      onlySlug = arg
+    }
   }
-  writeFileSync(out, `${JSON.stringify(existing, null, 2)}\n`)
+  return { more, morePath, onlySlug }
+}
+
+function mergeGroups(existing, incoming) {
+  const groups = [...(existing.groups || [])]
+  for (const group of incoming) {
+    const index = groups.findIndex((item) => item.slug === group.slug)
+    if (index >= 0) {
+      groups[index] = group
+    } else {
+      groups.push(group)
+    }
+  }
+  return {
+    source: existing.source || 'Wikivoyage',
+    license: existing.license || 'CC BY-SA 4.0',
+    groups,
+  }
+}
+
+const root = dirname(fileURLToPath(import.meta.url))
+const defaultOut = join(root, '..', 'src', 'main', 'resources', 'library', 'phrasebooks.json')
+const defaultMoreOut = join(root, '..', 'src', 'main', 'resources', 'library', 'phrasebooks-more.json')
+const { more, morePath, onlySlug } = parseArgs(process.argv)
+const pool = more ? MORE_LANGUAGES : LANGUAGES
+const selected = onlySlug ? pool.filter((language) => language.slug === onlySlug) : pool
+if (onlySlug && selected.length === 0) {
+  throw new Error(`Unknown language slug: ${onlySlug}`)
+}
+const out = more ? morePath || defaultMoreOut : defaultOut
+const catalog = await ingest(selected, { skipFailures: more && !onlySlug })
+if (onlySlug || more) {
+  let existing = { source: 'Wikivoyage', license: 'CC BY-SA 4.0', groups: [] }
+  try {
+    existing = JSON.parse(readFileSync(out, 'utf8'))
+  } catch {
+    // New extra catalog or first merge into an empty file.
+  }
+  const merged = mergeGroups(existing, catalog.groups)
+  writeFileSync(out, `${JSON.stringify(merged, null, 2)}\n`)
 } else {
   writeFileSync(out, `${JSON.stringify(catalog, null, 2)}\n`)
 }

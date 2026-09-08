@@ -1,0 +1,403 @@
+{
+  "groups": [
+    {
+      "slug": "chemistry-basics",
+      "name": "Chemistry Basics",
+      "sourceUrl": "",
+      "sourceTitle": "Chemistry Basics",
+      "attribution": "Element names and symbols are public scientific facts, compiled as an original Flashcards catalog.",
+      "sourceLanguage": "en-US",
+      "targetLanguage": "en-US",
+      "decks": [
+        {
+          "slug": "element-symbols-1",
+          "name": "Element Symbols H–Ca",
+          "description": "Atomic symbol to element name for the first twenty elements.",
+          "position": 0,
+          "cards": [
+            {
+              "front": "H",
+              "back": "Hydrogen"
+            },
+            {
+              "front": "He",
+              "back": "Helium"
+            },
+            {
+              "front": "Li",
+              "back": "Lithium"
+            },
+            {
+              "front": "Be",
+              "back": "Beryllium"
+            },
+            {
+              "front": "B",
+              "back": "Boron"
+            },
+            {
+              "front": "C",
+              "back": "Carbon"
+            },
+            {
+              "front": "N",
+              "back": "Nitrogen"
+            },
+            {
+              "front": "O",
+              "back": "Oxygen"
+            },
+            {
+              "front": "F",
+              "back": "Fluorine"
+            },
+            {
+              "front": "Ne",
+              "back": "Neon"
+            },
+            {
+              "front": "Na",
+              "back": "Sodium"
+            },
+            {
+              "front": "Mg",
+              "back": "Magnesium"
+            },
+            {
+              "front": "Al",
+              "back": "Aluminum"
+            },
+            {
+              "front": "Si",
+              "back": "Silicon"
+            },
+            {
+              "front": "P",
+              "back": "Phosphorus"
+            },
+            {
+              "front": "S",
+              "back": "Sulfur"
+            },
+            {
+              "front": "Cl",
+              "back": "Chlorine"
+            },
+            {
+              "front": "Ar",
+              "back": "Argon"
+            },
+            {
+              "front": "K",
+              "back": "Potassium"
+            },
+            {
+              "front": "Ca",
+              "back": "Calcium"
+            },
+            {
+              "front": "Sodium’s symbol is not S because",
+              "back": "S is sulfur; sodium is Na (from natrium)"
+            },
+            {
+              "front": "Potassium’s symbol is K because",
+              "back": "it comes from kalium"
+            }
+          ]
+        },
+        {
+          "slug": "element-symbols-2",
+          "name": "Common Element Symbols",
+          "description": "Everyday metals and other frequently taught elements.",
+          "position": 1,
+          "cards": [
+            {
+              "front": "Fe",
+              "back": "Iron"
+            },
+            {
+              "front": "Cu",
+              "back": "Copper"
+            },
+            {
+              "front": "Zn",
+              "back": "Zinc"
+            },
+            {
+              "front": "Ag",
+              "back": "Silver"
+            },
+            {
+              "front": "Au",
+              "back": "Gold"
+            },
+            {
+              "front": "Hg",
+              "back": "Mercury"
+            },
+            {
+              "front": "Pb",
+              "back": "Lead"
+            },
+            {
+              "front": "Sn",
+              "back": "Tin"
+            },
+            {
+              "front": "I",
+              "back": "Iodine"
+            },
+            {
+              "front": "Br",
+              "back": "Bromine"
+            },
+            {
+              "front": "Ni",
+              "back": "Nickel"
+            },
+            {
+              "front": "Co",
+              "back": "Cobalt"
+            },
+            {
+              "front": "Mn",
+              "back": "Manganese"
+            },
+            {
+              "front": "Cr",
+              "back": "Chromium"
+            },
+            {
+              "front": "Ti",
+              "back": "Titanium"
+            },
+            {
+              "front": "Pt",
+              "back": "Platinum"
+            },
+            {
+              "front": "U",
+              "back": "Uranium"
+            },
+            {
+              "front": "Pu",
+              "back": "Plutonium"
+            },
+            {
+              "front": "W",
+              "back": "Tungsten"
+            },
+            {
+              "front": "Sb",
+              "back": "Antimony"
+            },
+            {
+              "front": "Iron’s symbol Fe comes from",
+              "back": "ferrum"
+            },
+            {
+              "front": "Gold’s symbol Au comes from",
+              "back": "aurum"
+            },
+            {
+              "front": "Silver’s symbol Ag comes from",
+              "back": "argentum"
+            },
+            {
+              "front": "Lead’s symbol Pb comes from",
+              "back": "plumbum"
+            },
+            {
+              "front": "Mercury’s symbol Hg comes from",
+              "back": "hydrargyrum"
+            },
+            {
+              "front": "Tungsten’s symbol W comes from",
+              "back": "wolfram"
+            }
+          ]
+        },
+        {
+          "slug": "periodic-table-groups",
+          "name": "Periodic Table Groups",
+          "description": "Families, periods, and what the table is organized by.",
+          "position": 2,
+          "cards": [
+            {
+              "front": "Rows of the periodic table are called",
+              "back": "periods"
+            },
+            {
+              "front": "Columns of the periodic table are called",
+              "back": "groups (or families)"
+            },
+            {
+              "front": "Elements are arranged by",
+              "back": "increasing atomic number"
+            },
+            {
+              "front": "Atomic number is",
+              "back": "the number of protons"
+            },
+            {
+              "front": "Mass number is",
+              "back": "protons plus neutrons"
+            },
+            {
+              "front": "Group 1 elements are",
+              "back": "alkali metals"
+            },
+            {
+              "front": "Group 2 elements are",
+              "back": "alkaline earth metals"
+            },
+            {
+              "front": "Group 17 elements are",
+              "back": "halogens"
+            },
+            {
+              "front": "Group 18 elements are",
+              "back": "noble gases"
+            },
+            {
+              "front": "Metals are mostly found",
+              "back": "on the left and in the center"
+            },
+            {
+              "front": "Nonmetals are mostly found",
+              "back": "on the right"
+            },
+            {
+              "front": "Metalloids sit",
+              "back": "along the stair-step line"
+            },
+            {
+              "front": "Noble gases are known for being",
+              "back": "mostly unreactive"
+            },
+            {
+              "front": "Alkali metals are known for being",
+              "back": "very reactive (especially with water)"
+            },
+            {
+              "front": "Halogens are known for being",
+              "back": "reactive nonmetals that form salts"
+            },
+            {
+              "front": "The lanthanides and actinides are",
+              "back": "the two rows shown below the main table"
+            },
+            {
+              "front": "A valence electron is",
+              "back": "an electron in the outer shell"
+            },
+            {
+              "front": "Elements in the same group often have",
+              "back": "similar chemical properties"
+            },
+            {
+              "front": "Hydrogen is unusual because",
+              "back": "it is a nonmetal placed above the alkali metals"
+            },
+            {
+              "front": "What is an isotope?",
+              "back": "Atoms of the same element with different neutron counts"
+            }
+          ]
+        },
+        {
+          "slug": "chemistry-vocab",
+          "name": "Chemistry Vocabulary",
+          "description": "Atoms, bonds, and everyday lab words.",
+          "position": 3,
+          "cards": [
+            {
+              "front": "An atom is",
+              "back": "the smallest unit of an element that still is that element"
+            },
+            {
+              "front": "A molecule is",
+              "back": "two or more atoms bonded together"
+            },
+            {
+              "front": "A compound is",
+              "back": "a substance made of two or more elements bonded in a fixed ratio"
+            },
+            {
+              "front": "A mixture keeps",
+              "back": "the identities of its parts (not a fixed formula)"
+            },
+            {
+              "front": "A proton has charge",
+              "back": "positive"
+            },
+            {
+              "front": "An electron has charge",
+              "back": "negative"
+            },
+            {
+              "front": "A neutron has charge",
+              "back": "none (neutral)"
+            },
+            {
+              "front": "Where are protons and neutrons?",
+              "back": "in the nucleus"
+            },
+            {
+              "front": "Where are electrons?",
+              "back": "outside the nucleus (electron cloud)"
+            },
+            {
+              "front": "An ion is",
+              "back": "an atom or group with a charge"
+            },
+            {
+              "front": "A cation is",
+              "back": "a positive ion"
+            },
+            {
+              "front": "An anion is",
+              "back": "a negative ion"
+            },
+            {
+              "front": "An ionic bond forms when",
+              "back": "electrons are transferred (metal + nonmetal, typically)"
+            },
+            {
+              "front": "A covalent bond forms when",
+              "back": "electrons are shared (often two nonmetals)"
+            },
+            {
+              "front": "pH below 7 is",
+              "back": "acidic"
+            },
+            {
+              "front": "pH of 7 is",
+              "back": "neutral"
+            },
+            {
+              "front": "pH above 7 is",
+              "back": "basic (alkaline)"
+            },
+            {
+              "front": "A physical change",
+              "back": "does not make a new substance"
+            },
+            {
+              "front": "A chemical change",
+              "back": "makes a new substance"
+            },
+            {
+              "front": "A catalyst",
+              "back": "speeds a reaction without being used up"
+            },
+            {
+              "front": "The law of conservation of mass says",
+              "back": "mass is not created or destroyed in a chemical change"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
