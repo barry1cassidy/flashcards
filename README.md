@@ -153,7 +153,7 @@ sudo usermod -aG docker $USER
 git clone https://github.com/barry1cassidy/flashcards.git
 cd flashcards
 cp .env.example .env
-# edit .env: set MYSQL_PASSWORD, MYSQL_ROOT_PASSWORD, and APP_JWT_SECRET
+# edit .env: set MYSQL_PASSWORD, MYSQL_ROOT_PASSWORD, APP_JWT_SECRET, and AGENT_API_KEY
 docker compose -f docker-compose.prod.yml up -d --build
 ```
 
