@@ -1,8 +1,18 @@
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { canSpeak, speak, stopSpeaking } from '../tts'
+import RatingRow from './RatingRow'
 
-export default function AudioReviewStudy({ card, revealed, busy, exitKind, hideAgain = false, onReveal, onRate }) {
+export default function AudioReviewStudy({
+  card,
+  revealed,
+  busy,
+  exitKind,
+  hideMissed = false,
+  dueToday = false,
+  onReveal,
+  onRate,
+}) {
   const { t } = useTranslation()
   const speechOk = canSpeak()
 
@@ -61,22 +71,7 @@ export default function AudioReviewStudy({ card, revealed, busy, exitKind, hideA
         </div>
       </div>
       {revealed ? (
-        <div className="rating-row flip-ratings">
-          {hideAgain ? null : (
-            <button className="btn rating again" type="button" disabled={busy} onClick={() => onRate('AGAIN')}>
-              {t('study.again')}
-            </button>
-          )}
-          <button className="btn rating hard" type="button" disabled={busy} onClick={() => onRate('HARD')}>
-            {t('study.hard')}
-          </button>
-          <button className="btn rating good" type="button" disabled={busy} onClick={() => onRate('GOOD')}>
-            {t('study.good')}
-          </button>
-          <button className="btn rating easy" type="button" disabled={busy} onClick={() => onRate('EASY')}>
-            {t('study.easy')}
-          </button>
-        </div>
+        <RatingRow card={card} hideMissed={hideMissed} busy={busy} dueToday={dueToday} onRate={onRate} />
       ) : null}
     </>
   )

@@ -17,5 +17,6 @@ public record UserResponse(
         DeckSort deckSort,
         StudyOrder studyOrder,
         StudyScope studyScope,
-        RestudyWait restudyWait) {
+        RestudyWait restudyWait,
+        boolean proLicensed) {
 }

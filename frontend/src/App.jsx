@@ -12,6 +12,7 @@ import StudyPage from './pages/StudyPage'
 import AppLayout from './pages/AppLayout'
 import GroupsPage from './pages/GroupsPage'
 import SettingsPage from './pages/SettingsPage'
+import AgentPage from './pages/AgentPage'
 import LibraryPage from './pages/LibraryPage'
 import LibraryGroupPage from './pages/LibraryGroupPage'
 import LibraryDeckPage from './pages/LibraryDeckPage'
@@ -90,6 +91,7 @@ export default function App() {
           <Route path="/groups/:id" element={<SetsIdRedirect />} />
           <Route path="/decks/:id" element={<DeckDetailPage />} />
           <Route path="/decks/:id/study/:mode" element={<StudyPage />} />
+          <Route path="/create-with-ai" element={<AgentPage />} />
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="/library" element={<LibraryPage />} />
           <Route path="/library/groups/:id" element={<LibraryGroupPage />} />

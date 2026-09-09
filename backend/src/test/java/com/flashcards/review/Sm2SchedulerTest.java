@@ -25,6 +25,21 @@ class Sm2SchedulerTest {
     }
 
     @Test
+    void previewMatchesApplyWithoutMutating() {
+        CardReview review = CardReview.newFor(new Card(), LocalDate.of(2026, 9, 3));
+        review.setRepetitions(1);
+        review.setIntervalDays(1);
+        int goodDays = scheduler.previewIntervalDays(review, ReviewRating.GOOD);
+        int hardDays = scheduler.previewIntervalDays(review, ReviewRating.HARD);
+        int easyDays = scheduler.previewIntervalDays(review, ReviewRating.EASY);
+        assertEquals(1, hardDays);
+        assertEquals(6, goodDays);
+        assertEquals(8, easyDays);
+        assertEquals(1, review.getRepetitions());
+        assertEquals(1, review.getIntervalDays());
+    }
+
+    @Test
     void firstGoodReviewIsDueTomorrow() {
         CardReview review = CardReview.newFor(new Card(), LocalDate.of(2026, 9, 3));
         scheduler.apply(review, ReviewRating.GOOD, LocalDate.of(2026, 9, 3));
@@ -50,5 +65,19 @@ class Sm2SchedulerTest {
         scheduler.apply(review, ReviewRating.EASY, LocalDate.of(2026, 9, 4));
         assertTrue(review.getIntervalDays() >= 6);
         assertTrue(review.getEaseFactor() >= 2.5);
+    }
+
+    @Test
+    void hardIsShorterThanGoodOnAMatureCard() {
+        CardReview review = CardReview.newFor(new Card(), LocalDate.of(2026, 9, 3));
+        review.setRepetitions(4);
+        review.setIntervalDays(15);
+        review.setEaseFactor(2.5);
+        int hardDays = scheduler.previewIntervalDays(review, ReviewRating.HARD);
+        int goodDays = scheduler.previewIntervalDays(review, ReviewRating.GOOD);
+        int easyDays = scheduler.previewIntervalDays(review, ReviewRating.EASY);
+        assertEquals(18, hardDays);
+        assertEquals(38, goodDays);
+        assertEquals(49, easyDays);
     }
 }

@@ -9,10 +9,14 @@ import SpeakButton from './SpeakButton'
 import MatchListStudy from './MatchListStudy'
 import AudioReviewStudy from './AudioReviewStudy'
 import ConfirmModal from './ConfirmModal'
+import RatingRow from './RatingRow'
+import { useAuth } from '../AuthContext'
 
 export default function StudyPage() {
   const { t } = useTranslation()
   const { id, mode } = useParams()
+  const { user } = useAuth()
+  const dueToday = user?.restudyWait === 'IMMEDIATE'
   const [searchParams] = useSearchParams()
   const [cards, setCards] = useState([])
   const [index, setIndex] = useState(0)
@@ -433,7 +437,8 @@ export default function StudyPage() {
           revealed={revealed}
           busy={busy}
           exitKind={exitKind}
-          hideAgain={hideAgain}
+          hideMissed={hideAgain}
+          dueToday={dueToday}
           onReveal={() => setRevealed(true)}
           onRate={(rating) => submitRating(rating)}
         />
@@ -481,22 +486,13 @@ export default function StudyPage() {
             </div>
           </div>
           {revealed ? (
-            <div className="rating-row flip-ratings">
-              {hideAgain ? null : (
-                <button className="btn rating again" type="button" disabled={busy} onClick={() => submitRating('AGAIN')}>
-                  {t('study.again')}
-                </button>
-              )}
-              <button className="btn rating hard" type="button" disabled={busy} onClick={() => submitRating('HARD')}>
-                {t('study.hard')}
-              </button>
-              <button className="btn rating good" type="button" disabled={busy} onClick={() => submitRating('GOOD')}>
-                {t('study.good')}
-              </button>
-              <button className="btn rating easy" type="button" disabled={busy} onClick={() => submitRating('EASY')}>
-                {t('study.easy')}
-              </button>
-            </div>
+            <RatingRow
+              card={current}
+              hideMissed={hideAgain}
+              busy={busy}
+              dueToday={dueToday}
+              onRate={(rating) => submitRating(rating)}
+            />
           ) : null}
         </>
       ) : current ? (

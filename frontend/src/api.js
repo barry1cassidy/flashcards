@@ -20,21 +20,22 @@ export function setToken(token) {
 }
 
 export async function api(path, options = {}) {
-  const headers = { ...(options.headers || {}) }
+  const { skipSaving, ...request } = options
+  const headers = { ...(request.headers || {}) }
   const token = getToken()
   if (token) {
     headers.Authorization = `Bearer ${token}`
   }
-  if (options.body && !(options.body instanceof FormData) && !headers['Content-Type']) {
+  if (request.body && !(request.body instanceof FormData) && !headers['Content-Type']) {
     headers['Content-Type'] = 'application/json'
   }
 
-  const track = isWriteRequest(options.method)
+  const track = isWriteRequest(request.method) && !skipSaving
   if (track) {
     beginSaving()
   }
   try {
-    return await send(path, { ...options, headers })
+    return await send(path, { ...request, headers })
   } finally {
     if (track) {
       endSaving()

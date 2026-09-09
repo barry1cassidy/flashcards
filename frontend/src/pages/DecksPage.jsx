@@ -73,16 +73,25 @@ export default function DecksPage() {
           <h1>{t('decks.title')}</h1>
           <p className="muted">{t('decks.subtitle')}</p>
         </div>
-        <button
-          className="btn primary"
-          type="button"
-          onClick={() => {
-            setError('')
-            setCreating(true)
-          }}
-        >
-          {t('decks.createDeck')}
-        </button>
+        <div className="page-title-actions">
+          <button
+            className="btn"
+            type="button"
+            onClick={() => navigate('/create-with-ai')}
+          >
+            {t('agent.menu')}
+          </button>
+          <button
+            className="btn primary"
+            type="button"
+            onClick={() => {
+              setError('')
+              setCreating(true)
+            }}
+          >
+            {t('decks.createDeck')}
+          </button>
+        </div>
       </div>
       {error && !creating ? <div className="error">{translateError(t, error)}</div> : null}
       {decks.length === 0 ? (

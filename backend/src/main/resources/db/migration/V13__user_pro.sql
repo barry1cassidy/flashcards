@@ -1,0 +1,2 @@
+ALTER TABLE users
+    ADD COLUMN pro_licensed TINYINT(1) NOT NULL DEFAULT 0;

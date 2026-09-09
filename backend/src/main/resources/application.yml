@@ -1,10 +1,21 @@
 spring:
   application:
     name: flashcards
+  ai:
+    model:
+      chat: none
+      embedding: none
+      image: none
+      moderation: none
+      audio:
+        speech: none
+        transcription: none
   config:
     import:
       - optional:file:./google-sso.yml
       - optional:file:./backend/google-sso.yml
+      - optional:file:./agent.yml
+      - optional:file:./backend/agent.yml
   datasource:
     url: jdbc:mysql://localhost:3306/flashcards?characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
     username: flashcards
@@ -20,6 +31,10 @@ spring:
   flyway:
     enabled: true
 
+logging:
+  level:
+    com.flashcards.agent: INFO
+
 server:
   port: 8080
 
@@ -27,6 +42,15 @@ app:
   jwt:
     secret: local-dev-only-change-me-to-a-long-random-string-32b
     expiration-ms: 86400000
+  billing:
+    stub-enabled: true
+  agent:
+    api-key: ${AGENT_API_KEY:}
+    base-url: ${AGENT_BASE_URL:https://generativelanguage.googleapis.com/v1beta/openai}
+    model: ${AGENT_MODEL:gemini-3.6-flash}
+    daily-limit: 10
+    max-cards: 40
+    timeout-seconds: 90
   google:
     client-id: ${GOOGLE_CLIENT_ID:}
   cors:

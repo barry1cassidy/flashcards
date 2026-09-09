@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -75,13 +76,21 @@ public class StudyService {
             queue = new ArrayList<>(cardRepository.findStudyQueue(deckId, LocalDate.now(), PageRequest.of(0, SESSION_SIZE)));
         }
         applyOrder(queue, order);
+        LocalDate today = LocalDate.now();
+        Map<UUID, CardReview> reviews = queue.isEmpty()
+                ? Map.of()
+                : cardReviewRepository.findByCardIdIn(queue.stream().map(Card::getId).toList()).stream()
+                        .collect(Collectors.toMap(CardReview::getCardId, review -> review));
         List<Card> deckCards = "QUIZ".equals(normalized)
                 ? cardRepository.findByDeckIdOrderByPositionAscIdAsc(deckId)
                 : List.of();
         List<StudyCardResponse> cards = queue.stream()
-                .map(card -> toStudyCard(card, normalized, deckCards))
+                .map(card -> toStudyCard(
+                        card,
+                        normalized,
+                        deckCards,
+                        reviews.getOrDefault(card.getId(), CardReview.newFor(card, today))))
                 .toList();
-        LocalDate today = LocalDate.now();
         Instant startOfToday = startOfDay(today);
         LocalDate nextDue = cardReviewRepository.findNextDueAfter(deckId, today).orElse(null);
         int cardCount = cardRepository.countByDeckId(deckId);
@@ -194,7 +203,10 @@ public class StudyService {
         throw new ApiException(HttpStatus.BAD_REQUEST, "Unknown study filter");
     }
 
-    private static StudyCardResponse toStudyCard(Card card, String mode, List<Card> deckCards) {
+    private StudyCardResponse toStudyCard(Card card, String mode, List<Card> deckCards, CardReview review) {
+        int hardDays = sm2Scheduler.previewIntervalDays(review, ReviewRating.HARD);
+        int goodDays = sm2Scheduler.previewIntervalDays(review, ReviewRating.GOOD);
+        int easyDays = sm2Scheduler.previewIntervalDays(review, ReviewRating.EASY);
         if (!"QUIZ".equals(mode)) {
             return StudyCardResponse.of(
                     card.getId(),
@@ -202,7 +214,10 @@ public class StudyService {
                     card.getBack(),
                     card.getHint(),
                     card.getDeck().getFrontLanguage(),
-                    card.getDeck().getBackLanguage());
+                    card.getDeck().getBackLanguage(),
+                    hardDays,
+                    goodDays,
+                    easyDays);
         }
         List<String> choices = new ArrayList<>();
         choices.add(card.getBack());
@@ -228,6 +243,9 @@ public class StudyService {
                 card.getHint(),
                 card.getDeck().getFrontLanguage(),
                 card.getDeck().getBackLanguage(),
-                choices);
+                choices,
+                hardDays,
+                goodDays,
+                easyDays);
     }
 }

@@ -146,7 +146,8 @@ public class AuthService {
                 deckSort,
                 studyOrder,
                 studyScope,
-                restudyWait);
+                restudyWait,
+                user.isProLicensed());
     }
 
     private static String displayNameFrom(GoogleTokenService.GoogleProfile profile, String email) {

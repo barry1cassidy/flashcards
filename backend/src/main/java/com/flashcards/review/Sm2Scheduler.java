@@ -20,14 +20,14 @@ public class Sm2Scheduler {
         } else {
             if (repetitions == 0) {
                 interval = 1;
+            } else if (rating == ReviewRating.HARD) {
+                interval = Math.max(1, (int) Math.round(interval * 1.2));
             } else if (repetitions == 1) {
                 interval = 6;
             } else {
                 interval = (int) Math.round(interval * ease);
             }
-            if (rating == ReviewRating.HARD) {
-                interval = Math.max(1, (int) Math.round(interval * 1.2));
-            } else if (rating == ReviewRating.EASY) {
+            if (rating == ReviewRating.EASY) {
                 interval = Math.max(1, (int) Math.round(interval * 1.3));
             }
             repetitions += 1;
@@ -43,5 +43,14 @@ public class Sm2Scheduler {
         review.setIntervalDays(Math.max(1, interval));
         review.setDueDate(today.plusDays(review.getIntervalDays()));
         review.setLastReviewedAt(Instant.now());
+    }
+
+    public int previewIntervalDays(CardReview review, ReviewRating rating) {
+        CardReview copy = new CardReview();
+        copy.setRepetitions(review.getRepetitions());
+        copy.setEaseFactor(review.getEaseFactor());
+        copy.setIntervalDays(review.getIntervalDays());
+        apply(copy, rating, LocalDate.now());
+        return copy.getIntervalDays();
     }
 }

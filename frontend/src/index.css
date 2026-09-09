@@ -465,6 +465,12 @@ textarea {
   margin: 8px 0 20px;
 }
 
+.page-title-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
 .deck-filter {
   max-width: 320px;
 }
@@ -692,7 +698,7 @@ textarea {
 
 .flip-inner {
   position: relative;
-  min-height: 280px;
+  min-height: 320px;
   transform-style: preserve-3d;
   transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -759,6 +765,9 @@ textarea {
 .flip-ratings {
   width: min(640px, 100%);
   margin: 16px auto 0;
+  align-items: stretch;
+  flex-wrap: nowrap;
+  gap: 8px;
   animation: study-card-enter 0.3s ease 0.12s both;
 }
 
@@ -1015,7 +1024,28 @@ textarea {
 
 .rating-row .rating {
   flex: 1;
-  min-width: 90px;
+  min-width: 0;
+  min-height: 64px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 8px 6px;
+  line-height: 1.15;
+}
+
+.rating-label {
+  font-weight: 700;
+}
+
+.rating-hint {
+  font-size: 0.68rem;
+  font-weight: 500;
+  opacity: 0.82;
+  text-align: center;
+  text-wrap: balance;
+  max-width: 100%;
 }
 
 .rating.again {
@@ -1087,6 +1117,16 @@ textarea {
 .user-menu-caret {
   font-size: 0.75rem;
   color: var(--muted);
+}
+
+.pro-badge {
+  background: var(--due-bg);
+  color: var(--cobalt);
+  border-radius: 999px;
+  padding: 2px 8px;
+  font-weight: 700;
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
 }
 
 .user-menu-dropdown {
@@ -1548,9 +1588,40 @@ textarea {
 
 .side-menu-divider {
   border: 0;
-  height: 1px;
-  margin: 8px 10px;
-  background: var(--line);
+  height: 2px;
+  margin: 8px 12px;
+  background: color-mix(in srgb, var(--text) 40%, transparent);
+  border-radius: 1px;
+}
+
+.agent-progress {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 12px 14px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.agent-progress-meta {
+  display: flex;
+  align-items: center;
+}
+
+.agent-progress ol {
+  margin: 0;
+  padding-left: 1.25rem;
+  display: grid;
+  gap: 6px;
+}
+
+.agent-progress li {
+  min-height: 28px;
+}
+
+.agent-progress li[aria-current='true'] {
+  font-weight: 700;
 }
 
 .menu-icon {
@@ -1709,6 +1780,14 @@ textarea {
   .card-row {
     flex-direction: column;
     align-items: stretch;
+  }
+
+  .page-title-actions {
+    width: 100%;
+  }
+
+  .page-title-actions .btn {
+    flex: 1;
   }
 
   .user-menu {
@@ -2183,5 +2262,20 @@ textarea {
 
   .marketing-wrap {
     padding: 0 20px;
+  }
+}
+
+@media (max-width: 420px) {
+  .flip-ratings {
+    gap: 6px;
+  }
+
+  .rating-row .rating {
+    padding: 8px 4px;
+    font-size: 0.86rem;
+  }
+
+  .rating-hint {
+    font-size: 0.64rem;
   }
 }

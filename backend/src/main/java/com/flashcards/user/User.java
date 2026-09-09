@@ -66,6 +66,9 @@ public class User {
     @Column(name = "restudy_wait", nullable = false, length = 16)
     private RestudyWait restudyWait = RestudyWait.ONE_DAY;
 
+    @Column(name = "pro_licensed", nullable = false)
+    private boolean proLicensed;
+
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 

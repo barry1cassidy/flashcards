@@ -31,6 +31,31 @@ public class CardService {
     }
 
     @Transactional
+    public int createMany(UUID userId, UUID deckId, List<CardDraft> drafts) {
+        Deck deck = deckService.requireOwned(userId, deckId);
+        int position = cardRepository.countByDeckId(deckId);
+        int added = 0;
+        for (CardDraft draft : drafts) {
+            if (draft == null || draft.front() == null || draft.front().isBlank()
+                    || draft.back() == null || draft.back().isBlank()) {
+                continue;
+            }
+            Card card = new Card();
+            card.setDeck(deck);
+            card.setFront(draft.front().trim());
+            card.setBack(draft.back().trim());
+            card.setHint(trimToNull(draft.hint()));
+            card.setPosition(position++);
+            cardRepository.save(card);
+            added++;
+        }
+        if (added > 0) {
+            deck.setUpdatedAt(java.time.Instant.now());
+        }
+        return added;
+    }
+
+    @Transactional
     public CardResponse create(UUID userId, UUID deckId, CardRequest request) {
         Deck deck = deckService.requireOwned(userId, deckId);
         Card card = new Card();

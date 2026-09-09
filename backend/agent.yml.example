@@ -1,0 +1,8 @@
+# Copy this file to agent.yml in this same folder (backend/).
+# agent.yml is gitignored. Paste a Gemini (or other OpenAI-compatible) API key.
+app:
+  agent:
+    api-key: YOUR_AGENT_API_KEY
+    # Optional. Defaults match Gemini Flash's OpenAI-compatible endpoint.
+    # base-url: https://generativelanguage.googleapis.com/v1beta/openai
+    # model: gemini-3.6-flash

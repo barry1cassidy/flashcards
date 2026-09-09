@@ -28,6 +28,14 @@ const ERROR_KEYS = {
   'Google email is not verified': 'errors.googleEmailUnverified',
   'This account uses Google sign-in': 'errors.useGoogleSignIn',
   'Google sign-in failed to load': 'errors.googleFailedToLoad',
+  'Billing stub is disabled': 'errors.billingStubDisabled',
+  'Pro license required': 'errors.proRequired',
+  'AI is not configured': 'errors.aiNotConfigured',
+  'Daily AI limit reached': 'errors.dailyAiLimit',
+  'AI request failed': 'errors.aiRequestFailed',
+  'The AI did not create a deck': 'errors.aiDidNotCreateDeck',
+  'Agent job not found': 'errors.agentJobNotFound',
+  'Timed out waiting for AI': 'errors.aiTimedOut',
 }
 
 export function translateError(t, message) {

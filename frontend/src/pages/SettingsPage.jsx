@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '../AuthContext'
+import { isProLicensed } from '../pro'
 import { DECK_SORTS, normalizeDeckSort } from '../deckSort'
 import { RESTUDY_WAITS, STUDY_ORDERS, normalizeRestudyWait, normalizeStudyOrder } from '../studySettings'
 import { LOCALES, currentLocale } from '../i18n'
@@ -10,7 +11,7 @@ import { translateError } from '../i18n/errors'
 export default function SettingsPage() {
   const { t } = useTranslation()
   const location = useLocation()
-  const { user, setTheme, setLocale, setDeckSort, setStudyOrder, setRestudyWait } = useAuth()
+  const { user, setTheme, setLocale, setDeckSort, setStudyOrder, setRestudyWait, setProLicensed } = useAuth()
   const [error, setError] = useState('')
 
   useEffect(() => {
@@ -44,6 +45,18 @@ export default function SettingsPage() {
         </div>
       </div>
       {error ? <div className="error">{translateError(t, error)}</div> : null}
+
+      <section className="card-form">
+        <h2 className="section-heading">{t('settings.pro')}</h2>
+        <p className="muted">{isProLicensed(user) ? t('settings.proOnHint') : t('settings.proOffHint')}</p>
+        <button
+          className={`btn ${isProLicensed(user) ? '' : 'primary'}`}
+          type="button"
+          onClick={() => run(() => setProLicensed(!isProLicensed(user)))}
+        >
+          {isProLicensed(user) ? t('settings.proTurnOff') : t('settings.proTurnOn')}
+        </button>
+      </section>
 
       <section className="card-form">
         <h2 className="section-heading">{t('settings.appearance')}</h2>

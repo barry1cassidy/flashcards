@@ -85,6 +85,21 @@ export function AuthProvider({ children }) {
       async setRestudyWait(restudyWait) {
         return patchUser(setUser, user, { restudyWait })
       },
+      async setProLicensed(proLicensed) {
+        const previous = user
+        setUser((current) => (current ? { ...current, proLicensed } : current))
+        try {
+          const updated = await api('/api/billing/stub-pro', {
+            method: 'POST',
+            body: JSON.stringify({ proLicensed }),
+          })
+          setUser(updated)
+          return updated
+        } catch (error) {
+          setUser(previous)
+          throw error
+        }
+      },
       async setLocale(locale) {
         await applyLocale(locale)
         if (!user) {

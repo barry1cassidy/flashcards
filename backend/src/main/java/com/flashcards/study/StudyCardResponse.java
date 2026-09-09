@@ -10,11 +10,23 @@ public record StudyCardResponse(
         String hint,
         String frontLanguage,
         String backLanguage,
-        List<String> choices) {
+        List<String> choices,
+        int hardDays,
+        int goodDays,
+        int easyDays) {
 
     public static StudyCardResponse of(
-            UUID id, String front, String back, String hint, String frontLanguage, String backLanguage) {
-        return new StudyCardResponse(id, front, back, hint, frontLanguage, backLanguage, List.of());
+            UUID id,
+            String front,
+            String back,
+            String hint,
+            String frontLanguage,
+            String backLanguage,
+            int hardDays,
+            int goodDays,
+            int easyDays) {
+        return new StudyCardResponse(
+                id, front, back, hint, frontLanguage, backLanguage, List.of(), hardDays, goodDays, easyDays);
     }
 
     public static StudyCardResponse quiz(
@@ -24,7 +36,20 @@ public record StudyCardResponse(
             String hint,
             String frontLanguage,
             String backLanguage,
-            List<String> choices) {
-        return new StudyCardResponse(id, front, back, hint, frontLanguage, backLanguage, List.copyOf(choices));
+            List<String> choices,
+            int hardDays,
+            int goodDays,
+            int easyDays) {
+        return new StudyCardResponse(
+                id,
+                front,
+                back,
+                hint,
+                frontLanguage,
+                backLanguage,
+                List.copyOf(choices),
+                hardDays,
+                goodDays,
+                easyDays);
     }
 }
