@@ -63,41 +63,56 @@ public class StudyService {
 
     @Transactional(readOnly = true)
     public StudySessionResponse startSession(UUID userId, UUID deckId, String mode, String filter) {
+        deckService.requireOwned(userId, deckId);
+        return startSession(userId, List.of(deckId), mode, filter);
+    }
+
+    @Transactional(readOnly = true)
+    public StudySessionResponse startSession(UUID userId, List<UUID> deckIds, String mode, String filter) {
         String normalized = normalizeMode(mode);
         String normalizedFilter = normalizeFilter(filter);
-        deckService.requireOwned(userId, deckId);
         User user = requireUser(userId);
         StudyOrder order = user.getStudyOrder() == null ? StudyOrder.POSITION : user.getStudyOrder();
-        List<Card> queue;
-        if ("HARD".equals(normalizedFilter) || "AGAIN".equals(normalizedFilter)) {
-            ReviewRating rating = "AGAIN".equals(normalizedFilter) ? ReviewRating.AGAIN : ReviewRating.HARD;
-            queue = new ArrayList<>(cardRepository.findHardQueue(deckId, rating, PageRequest.of(0, SESSION_SIZE)));
-        } else {
-            queue = new ArrayList<>(cardRepository.findStudyQueue(deckId, LocalDate.now(), PageRequest.of(0, SESSION_SIZE)));
+        LocalDate today = LocalDate.now();
+        List<Card> queue = new ArrayList<>();
+        if (!deckIds.isEmpty()) {
+            if ("HARD".equals(normalizedFilter) || "AGAIN".equals(normalizedFilter)) {
+                ReviewRating rating = "AGAIN".equals(normalizedFilter) ? ReviewRating.AGAIN : ReviewRating.HARD;
+                queue.addAll(cardRepository.findHardQueueIn(deckIds, rating, PageRequest.of(0, SESSION_SIZE)));
+            } else {
+                queue.addAll(cardRepository.findStudyQueueIn(deckIds, today, PageRequest.of(0, SESSION_SIZE)));
+            }
         }
         applyOrder(queue, order);
-        LocalDate today = LocalDate.now();
         Map<UUID, CardReview> reviews = queue.isEmpty()
                 ? Map.of()
                 : cardReviewRepository.findByCardIdIn(queue.stream().map(Card::getId).toList()).stream()
                         .collect(Collectors.toMap(CardReview::getCardId, review -> review));
-        List<Card> deckCards = "QUIZ".equals(normalized)
-                ? cardRepository.findByDeckIdOrderByPositionAscIdAsc(deckId)
+        List<Card> quizPool = "QUIZ".equals(normalized) && !deckIds.isEmpty()
+                ? cardRepository.findByDeck_IdIn(deckIds)
                 : List.of();
         List<StudyCardResponse> cards = queue.stream()
                 .map(card -> toStudyCard(
                         card,
                         normalized,
-                        deckCards,
+                        quizPool,
                         reviews.getOrDefault(card.getId(), CardReview.newFor(card, today))))
                 .toList();
         Instant startOfToday = startOfDay(today);
-        LocalDate nextDue = cardReviewRepository.findNextDueAfter(deckId, today).orElse(null);
-        int cardCount = cardRepository.countByDeckId(deckId);
-        int dueCount = cardRepository.countStudyQueue(deckId, today);
-        int waitingCount = cardReviewRepository.countWaitingAhead(deckId, today, startOfToday);
-        int hardCount = cardReviewRepository.countByDeckIdAndLastRating(deckId, ReviewRating.HARD);
-        int againCount = cardReviewRepository.countByDeckIdAndLastRating(deckId, ReviewRating.AGAIN);
+        LocalDate nextDue = deckIds.isEmpty()
+                ? null
+                : cardReviewRepository.findNextDueAfterIn(deckIds, today).orElse(null);
+        int cardCount = deckIds.isEmpty() ? 0 : cardRepository.countByDeck_IdIn(deckIds);
+        int dueCount = deckIds.isEmpty() ? 0 : cardRepository.countStudyQueueIn(deckIds, today);
+        int waitingCount = deckIds.isEmpty()
+                ? 0
+                : cardReviewRepository.countWaitingAheadIn(deckIds, today, startOfToday);
+        int hardCount = deckIds.isEmpty()
+                ? 0
+                : cardReviewRepository.countByDeckIdInAndLastRating(deckIds, ReviewRating.HARD);
+        int againCount = deckIds.isEmpty()
+                ? 0
+                : cardReviewRepository.countByDeckIdInAndLastRating(deckIds, ReviewRating.AGAIN);
         return new StudySessionResponse(
                 normalized,
                 cards,
@@ -131,27 +146,50 @@ public class StudyService {
 
     @Transactional
     public int resetDueDates(UUID userId, UUID deckId) {
-        var deck = deckService.requireOwned(userId, deckId);
-        int updated = cardReviewRepository.resetDueDatesForDeck(userId, deckId, LocalDate.now());
-        deck.setUpdatedAt(Instant.now());
+        return resetDueDates(userId, List.of(deckService.requireOwned(userId, deckId).getId()));
+    }
+
+    @Transactional
+    public int resetDueDates(UUID userId, List<UUID> deckIds) {
+        requireUser(userId);
+        if (deckIds.isEmpty()) {
+            return 0;
+        }
+        int updated = cardReviewRepository.resetDueDatesForDecks(userId, deckIds, LocalDate.now());
+        Instant now = Instant.now();
+        for (UUID deckId : deckIds) {
+            deckService.requireOwned(userId, deckId).setUpdatedAt(now);
+        }
         return updated;
     }
 
     @Transactional
     public int continueNextBatch(UUID userId, UUID deckId) {
-        var deck = deckService.requireOwned(userId, deckId);
-        LocalDate today = LocalDate.now();
-        if (cardRepository.countStudyQueue(deckId, today) > 0) {
+        return continueNextBatch(userId, List.of(deckService.requireOwned(userId, deckId).getId()));
+    }
+
+    @Transactional
+    public int continueNextBatch(UUID userId, List<UUID> deckIds) {
+        requireUser(userId);
+        if (deckIds.isEmpty()) {
             return 0;
         }
-        List<CardReview> waiting = cardReviewRepository.findWaitingAhead(
-                deckId, today, startOfDay(today), PageRequest.of(0, SESSION_SIZE));
+        LocalDate today = LocalDate.now();
+        if (cardRepository.countStudyQueueIn(deckIds, today) > 0) {
+            return 0;
+        }
+        List<CardReview> waiting = cardReviewRepository.findWaitingAheadIn(
+                deckIds, today, startOfDay(today), PageRequest.of(0, SESSION_SIZE));
         for (CardReview review : waiting) {
             review.setDueDate(today);
         }
         if (!waiting.isEmpty()) {
             cardReviewRepository.saveAll(waiting);
-            deck.setUpdatedAt(Instant.now());
+            Instant now = Instant.now();
+            waiting.stream()
+                    .map(review -> review.getCard().getDeck().getId())
+                    .distinct()
+                    .forEach(deckId -> deckService.requireOwned(userId, deckId).setUpdatedAt(now));
         }
         return waiting.size();
     }
@@ -223,6 +261,9 @@ public class StudyService {
         choices.add(card.getBack());
         List<String> distractors = deckCards.stream()
                 .filter(other -> !other.getId().equals(card.getId()))
+                .filter(other -> other.getDeck() != null
+                        && card.getDeck() != null
+                        && other.getDeck().getBackLanguage().equals(card.getDeck().getBackLanguage()))
                 .map(Card::getBack)
                 .distinct()
                 .collect(Collectors.toCollection(ArrayList::new));

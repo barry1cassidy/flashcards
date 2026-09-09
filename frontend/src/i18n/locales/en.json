@@ -26,7 +26,7 @@
   "nav": {
     "allDecks": "All Decks",
     "logOut": "Log Out",
-    "backToDeck": "Back to Deck",
+    "backToMix": "Back to Study Mix",
     "backToGroups": "Manage Sets",
     "menu": "Navigation",
     "openMenu": "Open Menu",
@@ -221,6 +221,39 @@
       "tooManyTools": "Stopped after too many steps."
     }
   },
+  "mix": {
+    "menu": "Study Mix",
+    "subtitle": "Combine decks and sets into a named mix, then study them together.",
+    "new": "New Study Mix",
+    "edit": "Edit Study Mix",
+    "empty": "No study mixes yet. Create one to study across more than one deck.",
+    "proRequired": "Study Mix is a Pro feature. Turn on Pro in Settings to try the stub.",
+    "name": "Name",
+    "editorHint": "Give it a name, then choose all decks, whole sets, or individual decks.",
+    "includeAll": "All my decks and sets",
+    "includeAllHint": "Includes decks you add later.",
+    "sets": "Sets",
+    "ungrouped": "Decks with no set",
+    "noSets": "You have no sets yet.",
+    "noUngrouped": "Every deck is in a set.",
+    "showDecks": "Show decks",
+    "hideDecks": "Hide decks",
+    "summaryAll": "All decks and sets",
+    "summaryCounts": "{{sets}} sets · {{decks}} extra decks",
+    "dueCount_one": "{{count}} due",
+    "dueCount_other": "{{count}} due",
+    "continue": "Continue Mix",
+    "continueHint": "Study the next batch of due cards in this mix.",
+    "restart": "Restart Mix",
+    "restartHint": "Make every card in this mix due again.",
+    "restartHintWaiting": "Make waiting cards in this mix due now.",
+    "restartTitle": "Restart This Mix?",
+    "restartMessage": "Every card in the mix will be due again.",
+    "restartMessageWaiting": "Waiting cards in this mix will become due now.",
+    "restartConfirm": "Restart Mix",
+    "deleteTitle": "Delete Study Mix?",
+    "deleteMessage": "The mix will be removed. Your decks and cards stay."
+  },
   "groups": {
     "title": "Manage Sets",
     "pageSubtitle": "Create a set, pick a color, then add decks to it.",
@@ -389,6 +422,8 @@
     "aiRequestFailed": "AI request failed",
     "aiDidNotCreateDeck": "The AI did not create a deck",
     "agentJobNotFound": "That AI job was not found",
-    "aiTimedOut": "The AI is still running after several minutes. Check the API logs to see if it is stuck."
+    "aiTimedOut": "The AI is still running after several minutes. Check the API logs to see if it is stuck.",
+    "mixNotFound": "Study mix not found",
+    "mixEmpty": "Select at least one set or deck"
   }
 }

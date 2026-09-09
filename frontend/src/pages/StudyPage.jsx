@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Link, useParams, useSearchParams } from 'react-router-dom'
+import { Link, useLocation, useParams, useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { api } from '../api'
 import { translateError } from '../i18n/errors'
@@ -15,6 +15,10 @@ import { useAuth } from '../AuthContext'
 export default function StudyPage() {
   const { t } = useTranslation()
   const { id, mode } = useParams()
+  const location = useLocation()
+  const isMix = location.pathname.startsWith('/mixes/')
+  const studyRoot = isMix ? `/api/mixes/${id}` : `/api/decks/${id}`
+  const backTo = isMix ? `/mixes/${id}` : `/decks/${id}`
   const { user } = useAuth()
   const dueToday = user?.restudyWait === 'IMMEDIATE'
   const [searchParams] = useSearchParams()
@@ -55,7 +59,7 @@ export default function StudyPage() {
     if (filter === 'hard' || filter === 'again') {
       params.set('filter', filter)
     }
-    const session = await api(`/api/decks/${id}/study?${params}`)
+    const session = await api(`${studyRoot}/study?${params}`)
     setCards(session.cards || [])
     setIndex(0)
     setRevealed(false)
@@ -84,7 +88,7 @@ export default function StudyPage() {
   }
 
   async function refreshStudyStats() {
-    const session = await api(`/api/decks/${id}/study?mode=${normalizedMode}`)
+    const session = await api(`${studyRoot}/study?mode=${normalizedMode}`)
     applySessionStats(session)
   }
 
@@ -274,7 +278,7 @@ export default function StudyPage() {
     setBusy(true)
     try {
       if (dueCount === 0) {
-        await api(`/api/decks/${id}/study/continue`, { method: 'POST' })
+        await api(`${studyRoot}/study/continue`, { method: 'POST' })
       }
       await loadSession('due')
     } catch (err) {
@@ -289,7 +293,7 @@ export default function StudyPage() {
     setError('')
     setBusy(true)
     try {
-      await api(`/api/decks/${id}/study/reset-due`, { method: 'POST' })
+      await api(`${studyRoot}/study/reset-due`, { method: 'POST' })
       await loadSession('due')
     } catch (err) {
       setError(err.message)
@@ -326,8 +330,8 @@ export default function StudyPage() {
     <div className="page study-content">
       <div className="page-title">
         <div>
-          <Link className="page-back" to={`/decks/${id}`}>
-            {t('nav.backToDeck')}
+          <Link className="page-back" to={backTo}>
+            {isMix ? t('nav.backToMix') : t('nav.backToDeck')}
           </Link>
           <h1>{modeLabel()}</h1>
         </div>
@@ -377,9 +381,9 @@ export default function StudyPage() {
             {dueCount > 0 || waitingCount > 0 ? (
               <div className="done-action">
                 <button className="btn primary" type="button" disabled={busy} onClick={continueThisDeck}>
-                  {t('study.continueDeck')}
+                  {isMix ? t('mix.continue') : t('study.continueDeck')}
                 </button>
-                <p className="muted">{t('study.continueDeckHint')}</p>
+                <p className="muted">{isMix ? t('mix.continueHint') : t('study.continueDeckHint')}</p>
               </div>
             ) : null}
             {cardCount > 0 ? (
@@ -390,9 +394,17 @@ export default function StudyPage() {
                   disabled={busy}
                   onClick={() => setConfirmReset(true)}
                 >
-                  {t('study.restartDeck')}
+                  {isMix ? t('mix.restart') : t('study.restartDeck')}
                 </button>
-                <p className="muted">{reviewed > 0 ? t('study.restartDeckHint') : t('study.restartDeckHintWaiting')}</p>
+                <p className="muted">
+                  {reviewed > 0
+                    ? isMix
+                      ? t('mix.restartHint')
+                      : t('study.restartDeckHint')
+                    : isMix
+                      ? t('mix.restartHintWaiting')
+                      : t('study.restartDeckHintWaiting')}
+                </p>
               </div>
             ) : null}
             {againDeckCount > 0 ? (
@@ -412,8 +424,8 @@ export default function StudyPage() {
               </div>
             ) : null}
             <div className="done-action">
-              <Link className={cardCount > 0 ? 'btn ghost' : 'btn primary'} to={`/decks/${id}`}>
-                {t('nav.backToDeck')}
+              <Link className={cardCount > 0 ? 'btn ghost' : 'btn primary'} to={backTo}>
+                {isMix ? t('nav.backToMix') : t('nav.backToDeck')}
               </Link>
             </div>
           </div>
@@ -554,9 +566,17 @@ export default function StudyPage() {
       )}
       {confirmReset ? (
         <ConfirmModal
-          title={t('study.restartDeckTitle')}
-          message={reviewed > 0 ? t('study.restartDeckMessage') : t('study.restartDeckMessageWaiting')}
-          confirmLabel={t('study.restartDeckConfirm')}
+          title={isMix ? t('mix.restartTitle') : t('study.restartDeckTitle')}
+          message={
+            reviewed > 0
+              ? isMix
+                ? t('mix.restartMessage')
+                : t('study.restartDeckMessage')
+              : isMix
+                ? t('mix.restartMessageWaiting')
+                : t('study.restartDeckMessageWaiting')
+          }
+          confirmLabel={isMix ? t('mix.restartConfirm') : t('study.restartDeckConfirm')}
           onConfirm={studyThisDeckAgain}
           onCancel={() => setConfirmReset(false)}
         />

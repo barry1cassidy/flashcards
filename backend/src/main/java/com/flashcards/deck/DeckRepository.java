@@ -34,6 +34,10 @@ public interface DeckRepository extends JpaRepository<Deck, UUID> {
             """)
     List<Deck> findByGroupIdAndUserId(@Param("groupId") UUID groupId, @Param("userId") UUID userId);
 
+    List<Deck> findByUser_IdAndGroup_IdIn(UUID userId, Collection<UUID> groupIds);
+
+    List<Deck> findByIdInAndUser_Id(Collection<UUID> ids, UUID userId);
+
     Optional<Deck> findByUser_IdAndLibraryDeckId(UUID userId, UUID libraryDeckId);
 
     List<Deck> findByUser_IdAndLibraryDeckIdIn(UUID userId, Collection<UUID> libraryDeckIds);

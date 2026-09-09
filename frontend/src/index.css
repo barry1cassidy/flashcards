@@ -1588,10 +1588,9 @@ textarea {
 
 .side-menu-divider {
   border: 0;
-  height: 2px;
-  margin: 8px 12px;
-  background: color-mix(in srgb, var(--text) 40%, transparent);
-  border-radius: 1px;
+  height: 1px;
+  margin: 8px 10px;
+  background: color-mix(in srgb, var(--text) 16%, transparent);
 }
 
 .agent-progress {
@@ -1622,6 +1621,68 @@ textarea {
 
 .agent-progress li[aria-current='true'] {
   font-weight: 700;
+}
+
+.mix-sources {
+  display: grid;
+  gap: 10px;
+}
+
+.mix-sources.is-disabled {
+  opacity: 0.55;
+}
+
+.mix-sources h2 {
+  margin: 8px 0 0;
+  font-size: 1rem;
+}
+
+.mix-set {
+  display: grid;
+  gap: 4px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line);
+}
+
+.mix-set-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.mix-set-toggle {
+  margin-left: auto;
+}
+
+.mix-decks {
+  display: grid;
+  gap: 2px;
+  padding-left: 12px;
+}
+
+.mix-pick {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  min-height: 44px;
+  margin: 0;
+  font-weight: 500;
+}
+
+.mix-pick input {
+  width: 20px;
+  height: 20px;
+  margin-top: 12px;
+  flex-shrink: 0;
+}
+
+.mix-pick-nested {
+  padding-left: 8px;
+}
+
+.mix-card {
+  align-content: start;
 }
 
 .menu-icon {

@@ -13,6 +13,8 @@ import AppLayout from './pages/AppLayout'
 import GroupsPage from './pages/GroupsPage'
 import SettingsPage from './pages/SettingsPage'
 import AgentPage from './pages/AgentPage'
+import MixesPage from './pages/MixesPage'
+import MixEditorPage from './pages/MixEditorPage'
 import LibraryPage from './pages/LibraryPage'
 import LibraryGroupPage from './pages/LibraryGroupPage'
 import LibraryDeckPage from './pages/LibraryDeckPage'
@@ -92,6 +94,10 @@ export default function App() {
           <Route path="/decks/:id" element={<DeckDetailPage />} />
           <Route path="/decks/:id/study/:mode" element={<StudyPage />} />
           <Route path="/create-with-ai" element={<AgentPage />} />
+          <Route path="/mixes/new" element={<MixEditorPage />} />
+          <Route path="/mixes/:id/study/:mode" element={<StudyPage />} />
+          <Route path="/mixes/:id" element={<MixEditorPage />} />
+          <Route path="/mixes" element={<MixesPage />} />
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="/library" element={<LibraryPage />} />
           <Route path="/library/groups/:id" element={<LibraryGroupPage />} />

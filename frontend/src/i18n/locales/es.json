@@ -26,7 +26,7 @@
   "nav": {
     "allDecks": "Todos los Mazos",
     "logOut": "Cerrar Sesión",
-    "backToDeck": "Volver al Mazo",
+    "backToMix": "Volver al Mix de Estudio",
     "backToGroups": "Gestionar Conjuntos",
     "menu": "Navegación",
     "openMenu": "Abrir Menú",
@@ -221,6 +221,39 @@
       "tooManyTools": "Se detuvo después de demasiados pasos."
     }
   },
+  "mix": {
+    "menu": "Mix de Estudio",
+    "subtitle": "Junta mazos y conjuntos en un mix con nombre y estúdialos juntos.",
+    "new": "Nuevo Mix de Estudio",
+    "edit": "Editar Mix de Estudio",
+    "empty": "Aún no hay mixes. Crea uno para estudiar más de un mazo a la vez.",
+    "proRequired": "Mix de Estudio es una función Pro. Activa Pro en Ajustes para probar el prototipo.",
+    "name": "Nombre",
+    "editorHint": "Ponle un nombre y elige todos los mazos, conjuntos enteros o mazos sueltos.",
+    "includeAll": "Todos mis mazos y conjuntos",
+    "includeAllHint": "Incluye mazos que añadas después.",
+    "sets": "Conjuntos",
+    "ungrouped": "Mazos sin conjunto",
+    "noSets": "Aún no tienes conjuntos.",
+    "noUngrouped": "Todos los mazos están en un conjunto.",
+    "showDecks": "Mostrar mazos",
+    "hideDecks": "Ocultar mazos",
+    "summaryAll": "Todos los mazos y conjuntos",
+    "summaryCounts": "{{sets}} conjuntos · {{decks}} mazos extra",
+    "dueCount_one": "{{count}} pendiente",
+    "dueCount_other": "{{count}} pendientes",
+    "continue": "Continuar Mix",
+    "continueHint": "Estudia el siguiente lote de tarjetas pendientes de este mix.",
+    "restart": "Reiniciar Mix",
+    "restartHint": "Vuelve a poner en pendiente todas las tarjetas de este mix.",
+    "restartHintWaiting": "Haz que las tarjetas en espera de este mix pasen a pendientes ahora.",
+    "restartTitle": "¿Reiniciar este mix?",
+    "restartMessage": "Todas las tarjetas del mix volverán a estar pendientes.",
+    "restartMessageWaiting": "Las tarjetas en espera de este mix pasarán a pendientes ahora.",
+    "restartConfirm": "Reiniciar Mix",
+    "deleteTitle": "¿Borrar mix de estudio?",
+    "deleteMessage": "Se quitará el mix. Tus mazos y tarjetas se quedan."
+  },
   "groups": {
     "title": "Gestionar Conjuntos",
     "pageSubtitle": "Crea un conjunto, elige un color y luego añade mazos.",
@@ -389,6 +422,8 @@
     "aiRequestFailed": "Falló la solicitud de IA",
     "aiDidNotCreateDeck": "La IA no creó un mazo",
     "agentJobNotFound": "No se encontró ese trabajo de IA",
-    "aiTimedOut": "La IA sigue en marcha después de varios minutos. Revisa los registros de la API para ver si está bloqueada."
+    "aiTimedOut": "La IA sigue en marcha después de varios minutos. Revisa los registros de la API para ver si está bloqueada.",
+    "mixNotFound": "No se encontró el mix de estudio",
+    "mixEmpty": "Elige al menos un conjunto o un mazo"
   }
 }

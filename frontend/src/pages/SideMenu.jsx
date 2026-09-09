@@ -10,6 +10,7 @@ export default function SideMenu() {
   const { close } = useMenu()
   const decksActive = location.pathname === '/' || location.pathname.startsWith('/decks')
   const agentActive = location.pathname.startsWith('/create-with-ai')
+  const mixActive = location.pathname.startsWith('/mixes')
   const libraryActive = location.pathname.startsWith('/library')
   const setsActive = location.pathname.startsWith('/sets') || location.pathname.startsWith('/groups')
   const settingsActive = location.pathname.startsWith('/settings')
@@ -31,6 +32,10 @@ export default function SideMenu() {
       <NavLink to="/create-with-ai" className={() => menuLinkClass(agentActive)} onClick={close}>
         <MenuIcon name="agent" />
         <span>{t('agent.menu')}</span>
+      </NavLink>
+      <NavLink to="/mixes" className={() => menuLinkClass(mixActive)} onClick={close}>
+        <MenuIcon name="mix" />
+        <span>{t('mix.menu')}</span>
       </NavLink>
       <hr className="side-menu-divider" />
       <NavLink to="/library" className={() => menuLinkClass(libraryActive)} onClick={close}>

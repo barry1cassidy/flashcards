@@ -35,7 +35,8 @@ const ERROR_KEYS = {
   'AI request failed': 'errors.aiRequestFailed',
   'The AI did not create a deck': 'errors.aiDidNotCreateDeck',
   'Agent job not found': 'errors.agentJobNotFound',
-  'Timed out waiting for AI': 'errors.aiTimedOut',
+  'Study mix not found': 'errors.mixNotFound',
+  'Select at least one set or deck': 'errors.mixEmpty',
 }
 
 export function translateError(t, message) {
