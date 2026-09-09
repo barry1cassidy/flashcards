@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import { api, getToken, setToken } from './api'
-import { applyLocale } from './i18n'
+import { applyLocale, deviceLocale } from './i18n'
 import { applyTheme } from './theme'
 
 const AuthContext = createContext(null)
@@ -23,6 +23,7 @@ export function AuthProvider({ children }) {
     async function load() {
       if (!getToken()) {
         applyTheme('DARK')
+        applyLocale(deviceLocale())
         setReady(true)
         return
       }
@@ -33,6 +34,7 @@ export function AuthProvider({ children }) {
         setToken(null)
         setUser(null)
         applyTheme('DARK')
+        applyLocale(deviceLocale())
       } finally {
         setReady(true)
       }
@@ -108,6 +110,7 @@ export function AuthProvider({ children }) {
         setToken(null)
         setUser(null)
         applyTheme('DARK')
+        applyLocale(deviceLocale())
       },
     }),
     [user, ready],

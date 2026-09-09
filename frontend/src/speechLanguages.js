@@ -38,7 +38,7 @@ export const SPEECH_LANGUAGES = [
 const CODES = new Set(SPEECH_LANGUAGES.map((language) => language.code))
 
 export function defaultSpeechLanguage(uiLocale) {
-  return uiLocale === 'es' ? 'es-ES' : 'en-US'
+  return normalizeSpeechLanguage(uiLocale, 'en-US')
 }
 
 export function languageName(code) {

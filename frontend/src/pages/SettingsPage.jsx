@@ -4,11 +4,11 @@ import { useTranslation } from 'react-i18next'
 import { useAuth } from '../AuthContext'
 import { DECK_SORTS, normalizeDeckSort } from '../deckSort'
 import { RESTUDY_WAITS, STUDY_ORDERS, normalizeRestudyWait, normalizeStudyOrder } from '../studySettings'
-import { LOCALES } from '../i18n'
+import { LOCALES, currentLocale } from '../i18n'
 import { translateError } from '../i18n/errors'
 
 export default function SettingsPage() {
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
   const location = useLocation()
   const { user, setTheme, setLocale, setDeckSort, setStudyOrder, setRestudyWait } = useAuth()
   const [error, setError] = useState('')
@@ -21,7 +21,7 @@ export default function SettingsPage() {
   }, [location.hash])
 
   const theme = user?.theme === 'DARK' ? 'DARK' : 'LIGHT'
-  const locale = i18n.resolvedLanguage === 'es' ? 'es' : 'en'
+  const locale = currentLocale()
   const deckSort = normalizeDeckSort(user?.deckSort)
   const studyOrder = normalizeStudyOrder(user?.studyOrder)
   const restudyWait = normalizeRestudyWait(user?.restudyWait)
@@ -63,20 +63,19 @@ export default function SettingsPage() {
       <section className="card-form">
         <h2 className="section-heading">{t('language.label')}</h2>
         <p className="muted">{t('settings.languageHint')}</p>
-        <div className="radio-list" role="radiogroup" aria-label={t('language.label')}>
-          {LOCALES.map((option) => (
-            <label key={option.code} className={`radio-row ${locale === option.code ? 'selected' : ''}`}>
-              <input
-                type="radio"
-                name="locale"
-                value={option.code}
-                checked={locale === option.code}
-                onChange={() => run(() => setLocale(option.code))}
-              />
-              {t(option.nameKey)}
-            </label>
-          ))}
-        </div>
+        <label className="locale-select">
+          <select
+            value={locale}
+            aria-label={t('language.label')}
+            onChange={(event) => run(() => setLocale(event.target.value))}
+          >
+            {LOCALES.map((option) => (
+              <option key={option.code} value={option.code}>
+                {option.nativeName}
+              </option>
+            ))}
+          </select>
+        </label>
       </section>
 
       <section className="card-form">

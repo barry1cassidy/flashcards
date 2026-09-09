@@ -3,8 +3,8 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '../AuthContext'
 import { translateError } from '../i18n/errors'
+import { currentLocale } from '../i18n'
 import GoogleSignInButton, { getGoogleClientId } from './GoogleSignInButton'
-import LanguageSwitcher from './LanguageSwitcher'
 import Brand from './Brand'
 
 export default function MarketingHeader({ showLoginForm = false }) {
@@ -48,7 +48,6 @@ export default function MarketingHeader({ showLoginForm = false }) {
           <a href={whyHref}>{t('marketing.whyItWorks')}</a>
         </div>
         <div className="marketing-auth" ref={authRef}>
-          <LanguageSwitcher variant="pills" />
           {showLoginForm ? (
             <>
               <button
@@ -78,7 +77,7 @@ export default function MarketingHeader({ showLoginForm = false }) {
 }
 
 function LoginFields() {
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
   const { login, loginWithGoogle } = useAuth()
   const navigate = useNavigate()
   const [email, setEmail] = useState('')
@@ -113,7 +112,7 @@ function LoginFields() {
           <GoogleSignInButton
             disabled={busy}
             onCredential={(idToken) =>
-              finishLogin(() => loginWithGoogle(idToken, i18n.resolvedLanguage === 'es' ? 'es' : 'en'))
+              finishLogin(() => loginWithGoogle(idToken, currentLocale()))
             }
           />
           <p className="auth-divider">

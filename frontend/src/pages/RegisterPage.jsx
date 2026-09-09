@@ -2,11 +2,12 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '../AuthContext'
+import { currentLocale } from '../i18n'
 import { translateError } from '../i18n/errors'
 import MarketingHeader, { MarketingFooter } from './MarketingHeader'
 
 export default function RegisterPage() {
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
   const { register } = useAuth()
   const navigate = useNavigate()
   const [displayName, setDisplayName] = useState('')
@@ -20,7 +21,7 @@ export default function RegisterPage() {
     setError('')
     setBusy(true)
     try {
-      await register(displayName, email, password, i18n.resolvedLanguage === 'es' ? 'es' : 'en')
+      await register(displayName, email, password, currentLocale())
       navigate('/', { replace: true })
     } catch (err) {
       setError(err.message)

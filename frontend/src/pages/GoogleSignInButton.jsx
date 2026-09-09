@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { currentLocale, localeBcp47 } from '../i18n'
 
 const GIS_SRC = 'https://accounts.google.com/gsi/client'
 
@@ -34,12 +35,12 @@ function loadGoogleIdentity() {
 }
 
 export default function GoogleSignInButton({ onCredential, disabled }) {
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
   const hostRef = useRef(null)
   const onCredentialRef = useRef(onCredential)
   const [loadError, setLoadError] = useState('')
   const clientId = getGoogleClientId()
-  const locale = i18n.resolvedLanguage === 'es' ? 'es' : 'en'
+  const locale = localeBcp47(currentLocale())
 
   onCredentialRef.current = onCredential
 

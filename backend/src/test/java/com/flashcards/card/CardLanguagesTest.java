@@ -14,6 +14,8 @@ class CardLanguagesTest {
     void mapsUserLocaleAndPrefixes() {
         assertEquals("es-ES", CardLanguages.fromUserLocale(UserLocale.ES));
         assertEquals("en-US", CardLanguages.fromUserLocale(UserLocale.EN));
+        assertEquals("zh-CN", CardLanguages.fromUserLocale(UserLocale.ZH));
+        assertEquals("uk-UA", CardLanguages.fromUserLocale(UserLocale.UK));
         assertEquals("es-ES", CardLanguages.normalize("es", CardLanguages.DEFAULT));
         assertEquals("ja-JP", CardLanguages.normalize("ja-JP", CardLanguages.DEFAULT));
         assertEquals("sv-SE", CardLanguages.normalize("sv", CardLanguages.DEFAULT));

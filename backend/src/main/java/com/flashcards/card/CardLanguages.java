@@ -55,7 +55,7 @@ public final class CardLanguages {
     }
 
     public static String fromUserLocale(UserLocale locale) {
-        return locale == UserLocale.ES ? "es-ES" : DEFAULT;
+        return locale == null ? DEFAULT : locale.speechCode();
     }
 
     public static String normalize(String value, String fallback) {

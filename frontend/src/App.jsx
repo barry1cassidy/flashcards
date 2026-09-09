@@ -2,6 +2,7 @@ import { Navigate, Route, Routes, useLocation, useParams } from 'react-router-do
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AuthProvider, useAuth } from './AuthContext'
+import { currentLocale } from './i18n'
 import DeckDetailPage from './pages/DeckDetailPage'
 import DecksPage from './pages/DecksPage'
 import GroupDetailPage from './pages/GroupDetailPage'
@@ -20,7 +21,8 @@ function DocumentLang() {
   const { t, i18n } = useTranslation()
   useEffect(() => {
     document.title = t('app.name')
-    document.documentElement.lang = i18n.resolvedLanguage === 'es' ? 'es' : 'en'
+    document.documentElement.lang = currentLocale()
+    document.documentElement.dir = currentLocale() === 'ar' ? 'rtl' : 'ltr'
   }, [t, i18n.resolvedLanguage])
   return null
 }
