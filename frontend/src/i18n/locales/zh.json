@@ -213,7 +213,6 @@
     "addADeck": "添加卡组",
     "chooseADeck": "选择卡组",
     "addToGroup": "加入集合",
-    "allDecksInGroup": "所有卡组都已在此集合中，或者你还没有其他卡组。",
     "emptyList": "还没有集合。创建一个来整理卡组。",
     "empty": "此集合中还没有卡组。",
     "inGroup": "（在 {{name}}）",

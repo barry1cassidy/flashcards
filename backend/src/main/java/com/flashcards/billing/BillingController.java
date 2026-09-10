@@ -37,6 +37,7 @@ public class BillingController {
         User user = userRepository
                 .findById(AuthSupport.requireUser(authentication).id())
                 .orElseThrow(() -> new ApiException(HttpStatus.UNAUTHORIZED, "Not authenticated"));
+        AdminAccess.require(user);
         user.setProLicensed(request.proLicensed());
         userRepository.save(user);
         return AuthService.toUserResponse(user);

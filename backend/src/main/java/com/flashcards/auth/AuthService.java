@@ -147,7 +147,8 @@ public class AuthService {
                 studyOrder,
                 studyScope,
                 restudyWait,
-                user.isProLicensed());
+                user.isProLicensed(),
+                user.isAdmin());
     }
 
     private static String displayNameFrom(GoogleTokenService.GoogleProfile profile, String email) {

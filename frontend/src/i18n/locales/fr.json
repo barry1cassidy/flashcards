@@ -213,7 +213,6 @@
     "addADeck": "Ajouter un Paquet",
     "chooseADeck": "Choisir un Paquet",
     "addToGroup": "Ajouter à l’Ensemble",
-    "allDecksInGroup": "Tous les paquets sont déjà dans cet ensemble, ou vous n’avez pas encore d’autres paquets.",
     "emptyList": "Pas encore d’ensembles. Créez-en un pour organiser vos paquets.",
     "empty": "Pas encore de paquets dans cet ensemble.",
     "inGroup": "(dans {{name}})",

@@ -10,8 +10,12 @@ public final class ProAccess {
     private ProAccess() {
     }
 
+    public static boolean allowed(User user) {
+        return user != null && user.isAdmin() && user.isProLicensed();
+    }
+
     public static void require(User user) {
-        if (user == null || !user.isProLicensed()) {
+        if (!allowed(user)) {
             throw new ApiException(HttpStatus.FORBIDDEN, "Pro license required");
         }
     }

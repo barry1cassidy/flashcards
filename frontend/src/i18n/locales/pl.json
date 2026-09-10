@@ -221,7 +221,6 @@
     "addADeck": "Dodaj Talię",
     "chooseADeck": "Wybierz Talię",
     "addToGroup": "Dodaj do Zestawu",
-    "allDecksInGroup": "Każda talia jest już w tym zestawie albo nie masz jeszcze innych talii.",
     "emptyList": "Nie ma jeszcze zestawów. Utwórz jeden, żeby uporządkować talie.",
     "empty": "W tym zestawie nie ma jeszcze talii.",
     "inGroup": "(w {{name}})",

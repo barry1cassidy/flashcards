@@ -213,7 +213,6 @@
     "addADeck": "Deste Ekle",
     "chooseADeck": "Deste Seç",
     "addToGroup": "Sete Ekle",
-    "allDecksInGroup": "Her deste zaten bu sette veya henüz başka desteniz yok.",
     "emptyList": "Henüz set yok. Destelerinizi düzenlemek için bir tane oluşturun.",
     "empty": "Bu sette henüz deste yok.",
     "inGroup": "({{name}} içinde)",

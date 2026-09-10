@@ -2,6 +2,7 @@ import { Navigate, Route, Routes, useLocation, useParams } from 'react-router-do
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AuthProvider, useAuth } from './AuthContext'
+import { isAdmin } from './admin'
 import { currentLocale } from './i18n'
 import DeckDetailPage from './pages/DeckDetailPage'
 import DecksPage from './pages/DecksPage'
@@ -69,6 +70,14 @@ function GuestOnly({ children }) {
   return children
 }
 
+function AdminOnly({ children }) {
+  const { user } = useAuth()
+  if (!isAdmin(user)) {
+    return <Navigate to="/" replace />
+  }
+  return children
+}
+
 export default function App() {
   return (
     <AuthProvider>
@@ -99,11 +108,11 @@ export default function App() {
           <Route path="/groups/:id" element={<SetsIdRedirect />} />
           <Route path="/decks/:id" element={<DeckDetailPage />} />
           <Route path="/decks/:id/study/:mode" element={<StudyPage />} />
-          <Route path="/create-with-ai" element={<AgentPage />} />
-          <Route path="/mixes/new" element={<MixEditorPage />} />
-          <Route path="/mixes/:id/study/:mode" element={<StudyPage />} />
-          <Route path="/mixes/:id" element={<MixEditorPage />} />
-          <Route path="/mixes" element={<MixesPage />} />
+          <Route path="/create-with-ai" element={<AdminOnly><AgentPage /></AdminOnly>} />
+          <Route path="/mixes/new" element={<AdminOnly><MixEditorPage /></AdminOnly>} />
+          <Route path="/mixes/:id/study/:mode" element={<AdminOnly><StudyPage /></AdminOnly>} />
+          <Route path="/mixes/:id" element={<AdminOnly><MixEditorPage /></AdminOnly>} />
+          <Route path="/mixes" element={<AdminOnly><MixesPage /></AdminOnly>} />
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="/library" element={<LibraryPage />} />
           <Route path="/library/groups/:id" element={<LibraryGroupPage />} />

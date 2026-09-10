@@ -213,7 +213,6 @@
     "addADeck": "Tambah Dek",
     "chooseADeck": "Pilih Dek",
     "addToGroup": "Tambah ke Set",
-    "allDecksInGroup": "Semua dek sudah ada di set ini, atau kamu belum punya dek lain.",
     "emptyList": "Belum ada set. Buat satu untuk merapikan dekmu.",
     "empty": "Belum ada dek di set ini.",
     "inGroup": "(di {{name}})",

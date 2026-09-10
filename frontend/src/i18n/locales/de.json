@@ -213,7 +213,6 @@
     "addADeck": "Einen Stapel Hinzufügen",
     "chooseADeck": "Einen Stapel Wählen",
     "addToGroup": "Zur Sammlung Hinzufügen",
-    "allDecksInGroup": "Jeder Stapel ist schon in dieser Sammlung, oder du hast noch keine anderen Stapel.",
     "emptyList": "Noch keine Sammlungen. Erstelle eine, um deine Stapel zu ordnen.",
     "empty": "In dieser Sammlung gibt es noch keine Stapel.",
     "inGroup": "(in {{name}})",

@@ -213,7 +213,6 @@
     "addADeck": "Aggiungi un Mazzo",
     "chooseADeck": "Scegli un Mazzo",
     "addToGroup": "Aggiungi alla Raccolta",
-    "allDecksInGroup": "Ogni mazzo è già in questa raccolta, oppure non hai ancora altri mazzi.",
     "emptyList": "Nessuna raccolta ancora. Creane una per organizzare i mazzi.",
     "empty": "Nessun mazzo in questa raccolta ancora.",
     "inGroup": "(in {{name}})",

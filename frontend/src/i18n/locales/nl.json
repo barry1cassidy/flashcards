@@ -213,7 +213,6 @@
     "addADeck": "Een Stapel Toevoegen",
     "chooseADeck": "Kies een Stapel",
     "addToGroup": "Aan Set Toevoegen",
-    "allDecksInGroup": "Elke stapel zit al in deze set, of je hebt nog geen andere stapels.",
     "emptyList": "Nog geen sets. Maak er een om je stapels te ordenen.",
     "empty": "Nog geen stapels in deze set.",
     "inGroup": "(in {{name}})",

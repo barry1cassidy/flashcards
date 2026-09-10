@@ -295,6 +295,16 @@ h1 {
   flex-shrink: 0;
 }
 
+.group-add-empty {
+  display: grid;
+  gap: 12px;
+  justify-items: start;
+}
+
+.group-add-empty .btn {
+  text-decoration: none;
+}
+
 .auth-shell {
   position: relative;
   min-height: 100vh;

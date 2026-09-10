@@ -108,8 +108,15 @@ export default function GroupDetailPage() {
         </section>
         <section className="card-form">
           <h2 className="section-heading">{t('groups.addADeck')}</h2>
-          {availableDecks.length === 0 ? (
-            <p className="muted">{t('groups.allDecksInGroup')}</p>
+          {allDecks.length === 0 ? (
+            <div className="group-add-empty">
+              <p className="muted">{t('groups.noDecksYet')}</p>
+              <Link className="btn primary" to="/?create=1">
+                {t('groups.createADeck')}
+              </Link>
+            </div>
+          ) : availableDecks.length === 0 ? (
+            <p className="muted">{t('groups.allDecksInSet')}</p>
           ) : (
             <form className="create-row" onSubmit={addDeck}>
               <select value={addDeckId} onChange={(e) => setAddDeckId(e.target.value)} required>
@@ -128,7 +135,7 @@ export default function GroupDetailPage() {
           )}
         </section>
         {decks.length === 0 ? (
-          <div className="empty">{t('groups.empty')}</div>
+          allDecks.length === 0 ? null : <div className="empty">{t('groups.empty')}</div>
         ) : (
           <ul className="card-list">
             {sortDecks(decks, user?.deckSort).map((deck) => (

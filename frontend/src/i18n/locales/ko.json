@@ -213,7 +213,6 @@
     "addADeck": "덱 추가",
     "chooseADeck": "덱 선택",
     "addToGroup": "세트에 추가",
-    "allDecksInGroup": "모든 덱이 이미 이 세트에 있거나, 아직 다른 덱이 없습니다.",
     "emptyList": "아직 세트가 없습니다. 덱을 정리하려면 하나 만드세요.",
     "empty": "이 세트에는 아직 덱이 없습니다.",
     "inGroup": "({{name}}에)",

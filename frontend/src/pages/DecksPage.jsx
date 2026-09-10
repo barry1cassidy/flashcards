@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { api } from '../api'
 import { formatDate } from '../i18n/format'
 import { translateError } from '../i18n/errors'
 import { GroupBadge } from './ColorPicker'
 import { useAuth } from '../AuthContext'
+import { isAdmin } from '../admin'
 import { sortDecks } from '../deckSort'
 
 const GROUP_FILTER_KEY = 'flashcards.deckGroupFilter'
@@ -34,6 +35,7 @@ export default function DecksPage() {
   const { t } = useTranslation()
   const { user } = useAuth()
   const navigate = useNavigate()
+  const [searchParams, setSearchParams] = useSearchParams()
   const [decks, setDecks] = useState([])
   const [groups, setGroups] = useState([])
   const [groupFilter, setGroupFilter] = useState(readGroupFilter)
@@ -59,6 +61,17 @@ export default function DecksPage() {
   useEffect(() => {
     load().catch((err) => setError(err.message))
   }, [])
+
+  useEffect(() => {
+    if (searchParams.get('create') !== '1') {
+      return
+    }
+    setError('')
+    setCreating(true)
+    const next = new URLSearchParams(searchParams)
+    next.delete('create')
+    setSearchParams(next, { replace: true })
+  }, [searchParams, setSearchParams])
 
   function onGroupFilterChange(value) {
     setGroupFilter(value)
@@ -108,13 +121,15 @@ export default function DecksPage() {
           <p className="muted">{t('decks.subtitle')}</p>
         </div>
         <div className="page-title-actions">
-          <button
-            className="btn"
-            type="button"
-            onClick={() => navigate('/create-with-ai')}
-          >
-            {t('agent.menu')}
-          </button>
+          {isAdmin(user) ? (
+            <button
+              className="btn"
+              type="button"
+              onClick={() => navigate('/create-with-ai')}
+            >
+              {t('agent.menu')}
+            </button>
+          ) : null}
           <button
             className="btn primary"
             type="button"

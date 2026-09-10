@@ -213,7 +213,6 @@
     "addADeck": "Thêm Một Bộ Thẻ",
     "chooseADeck": "Chọn Một Bộ Thẻ",
     "addToGroup": "Thêm Vào Bộ",
-    "allDecksInGroup": "Mọi bộ thẻ đã ở trong bộ này, hoặc bạn chưa có bộ thẻ khác.",
     "emptyList": "Chưa có bộ sưu tập. Tạo một cái để sắp xếp bộ thẻ.",
     "empty": "Bộ này chưa có bộ thẻ.",
     "inGroup": "(trong {{name}})",

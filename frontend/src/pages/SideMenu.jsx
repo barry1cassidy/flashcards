@@ -1,11 +1,14 @@
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useMenu } from '../menu'
+import { useAuth } from '../AuthContext'
+import { isAdmin } from '../admin'
 import Brand from './Brand'
 import MenuIcon from './MenuIcon'
 
 export default function SideMenu() {
   const { t } = useTranslation()
+  const { user } = useAuth()
   const location = useLocation()
   const { close } = useMenu()
   const decksActive = location.pathname === '/' || location.pathname.startsWith('/decks')
@@ -14,6 +17,7 @@ export default function SideMenu() {
   const libraryActive = location.pathname.startsWith('/library')
   const setsActive = location.pathname.startsWith('/sets') || location.pathname.startsWith('/groups')
   const settingsActive = location.pathname.startsWith('/settings')
+  const admin = isAdmin(user)
 
   return (
     <nav className="side-menu">
@@ -28,15 +32,19 @@ export default function SideMenu() {
         <MenuIcon name="groups" />
         <span>{t('groups.manage')}</span>
       </NavLink>
-      <hr className="side-menu-divider" />
-      <NavLink to="/create-with-ai" className={() => menuLinkClass(agentActive)} onClick={close}>
-        <MenuIcon name="agent" />
-        <span>{t('agent.menu')}</span>
-      </NavLink>
-      <NavLink to="/mixes" className={() => menuLinkClass(mixActive)} onClick={close}>
-        <MenuIcon name="mix" />
-        <span>{t('mix.menu')}</span>
-      </NavLink>
+      {admin ? (
+        <>
+          <hr className="side-menu-divider" />
+          <NavLink to="/create-with-ai" className={() => menuLinkClass(agentActive)} onClick={close}>
+            <MenuIcon name="agent" />
+            <span>{t('agent.menu')}</span>
+          </NavLink>
+          <NavLink to="/mixes" className={() => menuLinkClass(mixActive)} onClick={close}>
+            <MenuIcon name="mix" />
+            <span>{t('mix.menu')}</span>
+          </NavLink>
+        </>
+      ) : null}
       <hr className="side-menu-divider" />
       <NavLink to="/library" className={() => menuLinkClass(libraryActive)} onClick={close}>
         <MenuIcon name="library" />

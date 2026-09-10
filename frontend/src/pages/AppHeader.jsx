@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '../AuthContext'
+import { isAdmin } from '../admin'
 import { isProLicensed } from '../pro'
 import { useMenu } from '../menu'
 import Brand from './Brand'
@@ -69,7 +70,7 @@ function UserMenu() {
         onClick={() => setOpen((value) => !value)}
       >
         <span>{user?.displayName}</span>
-        {isProLicensed(user) ? (
+        {isAdmin(user) && isProLicensed(user) ? (
           <span className="pro-badge" aria-label={t('settings.proBadge')}>
             {t('settings.proBadge')}
           </span>

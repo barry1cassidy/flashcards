@@ -69,6 +69,9 @@ public class User {
     @Column(name = "pro_licensed", nullable = false)
     private boolean proLicensed;
 
+    @Column(nullable = false)
+    private boolean admin;
+
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 

@@ -70,7 +70,7 @@ public class AgentService {
 
     public AgentStatusResponse status(UUID userId) {
         User user = requireUser(userId);
-        boolean pro = user.isProLicensed();
+        boolean pro = ProAccess.allowed(user);
         int remaining = pro ? usageService.remainingToday(userId) : 0;
         return new AgentStatusResponse(!pro, properties.configured(), remaining, properties.dailyLimit());
     }

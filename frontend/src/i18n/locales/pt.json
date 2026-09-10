@@ -213,7 +213,6 @@
     "addADeck": "Adicionar um Baralho",
     "chooseADeck": "Escolher um Baralho",
     "addToGroup": "Adicionar ao Conjunto",
-    "allDecksInGroup": "Todos os baralhos já estão neste conjunto, ou você ainda não tem outros baralhos.",
     "emptyList": "Ainda não há conjuntos. Crie um para organizar seus baralhos.",
     "empty": "Ainda não há baralhos neste conjunto.",
     "inGroup": "(em {{name}})",

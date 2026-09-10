@@ -18,5 +18,6 @@ public record UserResponse(
         StudyOrder studyOrder,
         StudyScope studyScope,
         RestudyWait restudyWait,
-        boolean proLicensed) {
+        boolean proLicensed,
+        boolean admin) {
 }
