@@ -19,6 +19,7 @@ import MixEditorPage from './pages/MixEditorPage'
 import LibraryPage from './pages/LibraryPage'
 import LibraryGroupPage from './pages/LibraryGroupPage'
 import LibraryDeckPage from './pages/LibraryDeckPage'
+import PrivacyPage from './pages/PrivacyPage'
 import SavingIndicator from './pages/SavingIndicator'
 
 function DocumentLang() {
@@ -27,7 +28,12 @@ function DocumentLang() {
   const { user } = useAuth()
   useEffect(() => {
     const splash = !user && (pathname === '/' || pathname === '/login' || pathname === '/register')
-    document.title = splash ? t('app.title') : t('app.name')
+    const privacy = pathname === '/privacy'
+    document.title = privacy
+      ? `${t('privacy.title')} — ${t('app.name')}`
+      : splash
+        ? t('app.title')
+        : t('app.name')
     document.documentElement.lang = currentLocale()
     document.documentElement.dir = currentLocale() === 'ar' ? 'rtl' : 'ltr'
   }, [t, i18n.resolvedLanguage, pathname, user])
@@ -100,6 +106,7 @@ export default function App() {
             </GuestOnly>
           }
         />
+        <Route path="/privacy" element={<PrivacyPage />} />
         <Route element={<ProtectedLayout />}>
           <Route path="/" element={<DecksPage />} />
           <Route path="/sets" element={<GroupsPage />} />

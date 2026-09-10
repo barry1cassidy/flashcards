@@ -1971,6 +1971,34 @@ textarea {
   padding: 0 32px;
 }
 
+.legal-doc {
+  max-width: 40rem;
+  padding-top: 48px;
+  padding-bottom: calc(64px + var(--safe-bottom));
+}
+
+.legal-doc h1 {
+  margin: 0 0 8px;
+  font-size: 2rem;
+  line-height: 1.2;
+}
+
+.legal-doc h2 {
+  margin: 32px 0 10px;
+  font-size: 1.2rem;
+  line-height: 1.3;
+}
+
+.legal-doc p,
+.legal-doc li {
+  line-height: 1.55;
+}
+
+.legal-doc ul {
+  margin: 0 0 16px;
+  padding-inline-start: 1.25rem;
+}
+
 .hero {
   padding: 100px 0 60px;
 }
@@ -2276,8 +2304,31 @@ textarea {
   color: var(--muted);
   display: flex;
   justify-content: space-between;
+  align-items: center;
   gap: 16px;
   flex-wrap: wrap;
+}
+
+.site-end-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.site-end-link:hover {
+  color: var(--text);
+}
+
+.settings-legal-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--text);
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .register-panel {

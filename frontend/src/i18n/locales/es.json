@@ -121,6 +121,38 @@
       }
     }
   },
+  "privacy": {
+    "title": "Política de Privacidad",
+    "updated": "Última actualización: 10 de septiembre de 2026.",
+    "intro": "Esta política describe cómo Zipdeck recopila, usa y almacena información cuando usas https://zipdeck.app y las apps de Zipdeck. Está escrita tanto para quien inicia sesión con Google como con correo y contraseña.",
+    "whoHeading": "Quiénes somos",
+    "whoBody": "Zipdeck es un servicio de tarjetas de estudio en https://zipdeck.app. Sirve para crear mazos, estudiarlos (voltear, quiz, escribir, emparejar y audio) y guardar los repasos. Esta política se aplica a ese servicio.",
+    "googleHeading": "Datos de usuario de Google",
+    "googleBody": "Si eliges Continuar con Google, Zipdeck usa Google Identity Services solo con los alcances básicos de inicio de sesión (openid, email y profile). Google nos comparte entonces:",
+    "googleItemName": "El nombre de tu cuenta de Google, usado como nombre visible en Zipdeck.",
+    "googleItemEmail": "El correo de tu cuenta de Google, usado como correo de inicio de sesión en Zipdeck.",
+    "googleItemId": "Un identificador estable de usuario de Google (la afirmación “sub”), guardado para reconocer la misma cuenta de Google en visitas posteriores.",
+    "googleUse": "Usamos esos datos de Google solo para crear una cuenta de Zipdeck, iniciar tu sesión y mantener el correo al día si cambia en Google. No pedimos acceso a Gmail, Drive, Calendar, Contactos ni a ningún otro producto de Google.",
+    "googleNot": "No vendemos datos de usuario de Google. No los usamos para publicidad. No los compartimos con otras empresas para su marketing. No los usamos para ningún fin que no sea operar tu cuenta de Zipdeck.",
+    "accountHeading": "Información de la cuenta",
+    "accountBody": "Si te registras con correo y contraseña, guardamos tu nombre, correo y una contraseña cifrada (no la contraseña en sí). Toda cuenta también guarda preferencias de estudio como idioma, tema y cómo se programan las tarjetas. Las sesiones usan un token en el almacenamiento local del navegador para que sigas conectado en ese dispositivo.",
+    "studyHeading": "Mazos y datos de estudio",
+    "studyBody": "El contenido que añades — mazos, tarjetas, conjuntos, valoraciones y fechas de repaso — se guarda para mostrártelo y programar repasos. Los catálogos de la biblioteca compartida son iguales para todos; las copias que añades a Mis Mazos pertenecen a tu cuenta.",
+    "aiHeading": "Creación de mazos con IA",
+    "aiBody": "Si usas Crear con IA, el texto que escribes y las tarjetas generadas se envían a la API Gemini de Google para crear un mazo. No incluyas en el texto información que no quieras que procese ese servicio.",
+    "hostingHeading": "Dónde se guarda",
+    "hostingBody": "Zipdeck funciona en Amazon Web Services (Lightsail). Los datos de cuenta y mazos están en nuestra base de datos en ese servidor. Puede haber copias de seguridad para restaurar el servicio si falla.",
+    "shareHeading": "Cuándo compartimos datos",
+    "shareBody": "Compartimos datos con los procesadores necesarios para operar Zipdeck: Amazon Web Services para el alojamiento, y Google para el inicio de sesión opcional y la generación opcional de mazos con IA. También podemos revelar información si la ley lo exige. No vendemos tu información personal.",
+    "rightsHeading": "Tus opciones",
+    "rightsBody": "Puedes editar tu perfil y las opciones de estudio en la app. Puedes dejar de usar Google no conectando ese método en una cuenta nueva. Para acceder, corregir o eliminar tu cuenta y los mazos guardados, escríbenos con los datos de contacto de abajo desde el correo de la cuenta. Eliminaremos la cuenta y sus datos de estudio cuando podamos identificarla.",
+    "childrenHeading": "Menores",
+    "childrenBody": "Zipdeck no está dirigido a menores de 13 años y no recopilamos a sabiendas su información personal.",
+    "changesHeading": "Cambios",
+    "changesBody": "Podemos actualizar esta política. La fecha de “Última actualización” cambiará cuando lo hagamos. La versión vigente estará siempre en https://zipdeck.app/privacy.",
+    "contactHeading": "Contacto",
+    "contactBody": "Para preguntas de privacidad o solicitudes de eliminación, escribe al correo de soporte de usuario que aparece en la pantalla de consentimiento de Google de Zipdeck. Incluye el correo de la cuenta de Zipdeck para que podamos encontrarla."
+  },
   "auth": {
     "welcomeBack": "Hola de Nuevo",
     "signInSubtitle": "Inicia sesión para seguir estudiando.",
@@ -387,7 +419,8 @@
     "proOffHint": "Por ahora es un prototipo: esto activa Pro en esta cuenta en la web y en ambas apps. Los pagos reales vendrán después.",
     "proOnHint": "Esta cuenta está en modo Pro. El mismo indicador se guarda en el servidor, así que te sigue en cada dispositivo. Pro desbloquea la creación de mazos con IA.",
     "proTurnOn": "Activar Pro",
-    "proTurnOff": "Desactivar Pro"
+    "proTurnOff": "Desactivar Pro",
+    "about": "Acerca de"
   },
   "errors": {
     "unsupportedLanguage": "Idioma no compatible",

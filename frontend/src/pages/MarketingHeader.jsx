@@ -9,6 +9,7 @@ import Brand from './Brand'
 
 export default function MarketingHeader({ showLoginForm = false }) {
   const { t } = useTranslation()
+  const { user } = useAuth()
   const location = useLocation()
   const [open, setOpen] = useState(false)
   const authRef = useRef(null)
@@ -48,7 +49,11 @@ export default function MarketingHeader({ showLoginForm = false }) {
           <a href={whyHref}>{t('marketing.whyItWorks')}</a>
         </div>
         <div className="marketing-auth" ref={authRef}>
-          {showLoginForm ? (
+          {user ? (
+            <Link className="btn login-btn" to="/">
+              {t('nav.allDecks')}
+            </Link>
+          ) : showLoginForm ? (
             <>
               <button
                 className="btn login-btn"
@@ -159,6 +164,9 @@ export function MarketingFooter() {
   return (
     <footer className="site-end">
       <span>{t('marketing.copyright', { year: 2026 })}</span>
+      <Link className="site-end-link" to="/privacy">
+        {t('privacy.title')}
+      </Link>
       <span>{t('marketing.builtFor')}</span>
     </footer>
   )

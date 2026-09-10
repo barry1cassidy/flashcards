@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '../AuthContext'
 import { isAdmin } from '../admin'
@@ -150,6 +150,13 @@ export default function SettingsPage() {
             </label>
           ))}
         </div>
+      </section>
+
+      <section className="card-form">
+        <h2 className="section-heading">{t('settings.about')}</h2>
+        <Link className="settings-legal-link" to="/privacy">
+          {t('privacy.title')}
+        </Link>
       </section>
     </div>
   )

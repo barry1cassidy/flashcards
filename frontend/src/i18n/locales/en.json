@@ -121,6 +121,38 @@
       }
     }
   },
+  "privacy": {
+    "title": "Privacy Policy",
+    "updated": "Last updated 10 September 2026.",
+    "intro": "This policy describes how Zipdeck collects, uses, and stores information when you use https://zipdeck.app and the Zipdeck apps. It is written for people signing in with Google as well as with email and password.",
+    "whoHeading": "Who we are",
+    "whoBody": "Zipdeck is a flashcard study service at https://zipdeck.app. It helps you create decks, study them (flip, quiz, write, match, and audio), and keep review schedules. This policy applies to that service.",
+    "googleHeading": "Google user data",
+    "googleBody": "If you choose Continue with Google, Zipdeck uses Google Identity Services with only the basic sign-in scopes (openid, email, and profile). Google then shares with us:",
+    "googleItemName": "Your Google account name, used as your Zipdeck display name.",
+    "googleItemEmail": "Your Google account email, used as your Zipdeck login email.",
+    "googleItemId": "A stable Google user id (the “sub” claim), stored so we can recognize the same Google account on later visits.",
+    "googleUse": "We use that Google user data only to create a Zipdeck account, sign you in, and keep your email up to date if it changes at Google. We do not request access to Gmail, Drive, Calendar, Contacts, or any other Google product.",
+    "googleNot": "We do not sell Google user data. We do not use it for advertising. We do not share it with other companies for their marketing. We do not use it for any purpose other than operating your Zipdeck account.",
+    "accountHeading": "Account information",
+    "accountBody": "If you register with email and password, we store your name, email, and a hashed password (not the password itself). Every account also stores study preferences such as language, theme, and how cards are scheduled. Signed-in sessions use a token we keep in your browser’s local storage so you stay logged in on that device.",
+    "studyHeading": "Decks and study data",
+    "studyBody": "Content you add — decks, cards, sets, ratings, and review dates — is stored so the app can show it back to you and schedule reviews. Shared library catalogs are the same for everyone; copies you add to My Decks belong to your account.",
+    "aiHeading": "AI deck creation",
+    "aiBody": "If you use Create With AI, the prompt you type and the generated cards are sent to Google’s Gemini API so a deck can be created. Do not include information in a prompt that you would not want processed by that service.",
+    "hostingHeading": "Where data is stored",
+    "hostingBody": "Zipdeck runs on Amazon Web Services (Lightsail). Account and deck data are stored in our database on that host. Backups of that database may be kept so we can restore the service if something fails.",
+    "shareHeading": "When we share data",
+    "shareBody": "We share data with the processors needed to run Zipdeck: Amazon Web Services for hosting, and Google for optional Google sign-in and optional AI deck generation. We may also disclose information if required by law. We do not sell your personal information.",
+    "rightsHeading": "Your choices",
+    "rightsBody": "You can edit your profile and study settings in the app. You can stop using Google sign-in by not connecting that method on a new account. To access, correct, or delete your account and the decks stored with it, contact us using the details below and write from the email on the account. We will delete the account and its study data when we can identify it.",
+    "childrenHeading": "Children",
+    "childrenBody": "Zipdeck is not directed at children under 13, and we do not knowingly collect personal information from them.",
+    "changesHeading": "Changes",
+    "changesBody": "We may update this policy. The “Last updated” date at the top will change when we do. The current version will always be at https://zipdeck.app/privacy.",
+    "contactHeading": "Contact",
+    "contactBody": "For privacy questions or deletion requests, email the user support address shown on Zipdeck’s Google sign-in consent screen. Include the email on the Zipdeck account so we can find it."
+  },
   "auth": {
     "welcomeBack": "Welcome Back",
     "signInSubtitle": "Sign in to continue studying.",
@@ -387,7 +419,8 @@
     "proOffHint": "Stub for now: this turns Pro on for this account on the website and both mobile apps. Real payments come later.",
     "proOnHint": "This account is in Pro mode. The same flag is stored on the server, so it follows you on every device. Pro unlocks AI deck creation.",
     "proTurnOn": "Turn On Pro",
-    "proTurnOff": "Turn Off Pro"
+    "proTurnOff": "Turn Off Pro",
+    "about": "About"
   },
   "errors": {
     "unsupportedLanguage": "Unsupported language",
