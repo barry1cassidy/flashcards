@@ -138,7 +138,7 @@ docker-compose.prod.yml     Nginx + API + MySQL for a small VM
 
 ## Deploy (cheap VM)
 
-The production compose file runs Nginx (the React build + `/api` proxy), Spring Boot, and MySQL on one host. The frontend already calls `/api` with relative URLs, so you do not need a domain or a separate static host yet. HTTP on a Lightsail IP is enough to start.
+The production compose file runs Nginx (the React build + `/api` proxy), Spring Boot, and MySQL on one host. The frontend already calls `/api` with relative URLs. Production Nginx listens on 80 and 443 and redirects HTTP to `https://zipdeck.app`.
 
 Recommended box: **AWS Lightsail $10/month (2 GB RAM)**. Java 21 + MySQL is uncomfortable on 1 GB. Skip GCP e2-micro until the app is tiny and tuned.
 
@@ -157,9 +157,41 @@ cp .env.example .env
 docker compose -f docker-compose.prod.yml up -d --build
 ```
 
-Open `http://YOUR_LIGHTSAIL_IP/`. Open Lightsail firewall for HTTP (80). Do not publish 3306. Google sign-in needs that `http://IP` origin added to the OAuth client; password sign-in works without it.
+Open Lightsail firewall for **HTTP (80)** and **HTTPS (443)**. Do not publish 3306. Google sign-in needs `https://zipdeck.app` (and `https://www.zipdeck.app` if you use it) as authorized JavaScript origins; password sign-in works without that.
 
 The first API image build downloads Maven and can take several minutes. After that, `docker compose -f docker-compose.prod.yml up -d --build` picks up git pulls.
+
+### HTTPS (Let’s Encrypt)
+
+Issue the certificate on the host **before** the web container starts on 443, or stop `web` briefly so Certbot can bind port 80:
+
+```bash
+sudo apt-get install -y certbot
+sudo mkdir -p /var/www/certbot
+docker compose -f docker-compose.prod.yml stop web
+sudo certbot certonly --standalone -d zipdeck.app -d www.zipdeck.app
+docker compose -f docker-compose.prod.yml up -d --build
+```
+
+Certs are read from `/etc/letsencrypt/live/zipdeck.app/`. After Nginx is serving HTTPS, switch Certbot renewals from standalone to webroot so the timer does not fight Nginx for port 80. In `/etc/letsencrypt/renewal/zipdeck.app.conf` set:
+
+```
+authenticator = webroot
+webroot_path = /var/www/certbot
+```
+
+Add a deploy hook so Nginx reloads after each renew:
+
+```bash
+sudo tee /etc/letsencrypt/renewal-hooks/deploy/reload-nginx.sh >/dev/null <<'EOF'
+#!/bin/sh
+cd /home/ubuntu/flashcards
+docker compose -f docker-compose.prod.yml exec -T web nginx -s reload
+EOF
+sudo chmod +x /etc/letsencrypt/renewal-hooks/deploy/reload-nginx.sh
+```
+
+Adjust the `cd` path if the repo lives somewhere else on the instance.
 
 ## Android (Capacitor)
 
