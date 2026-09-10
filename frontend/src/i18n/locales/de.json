@@ -1,6 +1,7 @@
 {
   "app": {
-    "name": "Flashcards",
+    "name": "Zipdeck",
+    "title": "Zipdeck — flashcards for anything you're learning",
     "loading": "Laden…"
   },
   "common": {
@@ -70,9 +71,9 @@
     "libraryTitle": "Eine Bibliothek, jedes Fach",
     "librarySub": "Ordne Stapel in Sammlungen nach Kurs, Sprache oder Prüfung — farblich, damit Chinesisch nicht mit der Anwaltsprüfung verschwimmt.",
     "statLead": "schnellerer Abruf",
-    "statBody": "Eine Karte kurz vor dem Vergessen zu wiederholen lohnt mehr, als sie doppelt so oft nach festem Plan zu wiederholen. Flashcards legt jede Wiederholung genau auf diesen Moment, damit die Minuten, die du lernst, weiter reichen.",
+    "statBody": "Eine Karte kurz vor dem Vergessen zu wiederholen lohnt mehr, als sie doppelt so oft nach festem Plan zu wiederholen. Zipdeck legt jede Wiederholung genau auf diesen Moment, damit die Minuten, die du lernst, weiter reichen.",
     "footerCta": "Starte heute deinen ersten Stapel.",
-    "copyright": "© {{year}} Flashcards",
+    "copyright": "© {{year}} Zipdeck",
     "builtFor": "Für alle, die etwas lernen — irgendetwas.",
     "cardChinese": "Chinesischunterricht",
     "cardSpanish": "Spanisch Basics",
@@ -279,7 +280,7 @@
     "hideHint": "Hinweis Ausblenden",
     "again": "Verfehlt",
     "hard": "Schwer",
-    "good": "Gut",
+    "good": "Sitzt",
     "easy": "Leicht",
     "typeAnswer": "Antwort eingeben",
     "check": "Prüfen",

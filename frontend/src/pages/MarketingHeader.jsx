@@ -12,10 +12,10 @@ export default function MarketingHeader({ showLoginForm = false }) {
   const location = useLocation()
   const [open, setOpen] = useState(false)
   const authRef = useRef(null)
-  const onLogin = location.pathname === '/login'
-  const modesHref = onLogin ? '#modes' : '/login#modes'
-  const libraryHref = onLogin ? '#library' : '/login#library'
-  const whyHref = onLogin ? '#stat' : '/login#stat'
+  const onSplash = location.pathname === '/login' || location.pathname === '/'
+  const modesHref = onSplash ? '#modes' : '/login#modes'
+  const libraryHref = onSplash ? '#library' : '/login#library'
+  const whyHref = onSplash ? '#stat' : '/login#stat'
 
   useEffect(() => {
     function onPointerDown(event) {
@@ -39,7 +39,7 @@ export default function MarketingHeader({ showLoginForm = false }) {
   return (
     <header className="marketing-header">
       <nav className="marketing-nav">
-        <Link to="/login" className="marketing-logo">
+        <Link to="/" className="marketing-logo">
           <Brand />
         </Link>
         <div className="marketing-links">

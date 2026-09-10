@@ -1,6 +1,7 @@
 {
   "app": {
-    "name": "Flashcards",
+    "name": "Zipdeck",
+    "title": "Zipdeck — flashcards for anything you're learning",
     "loading": "Cargando…"
   },
   "common": {
@@ -27,6 +28,7 @@
     "allDecks": "Todos los Mazos",
     "logOut": "Cerrar Sesión",
     "backToMix": "Volver al Mix de Estudio",
+    "backToDeck": "Volver al Mazo",
     "backToGroups": "Gestionar Conjuntos",
     "menu": "Navegación",
     "openMenu": "Abrir Menú",
@@ -70,9 +72,9 @@
     "libraryTitle": "Una biblioteca, cada materia",
     "librarySub": "Organiza mazos en conjuntos por clase, idioma o examen — con color para que el chino no se mezcle con el examen de abogacía.",
     "statLead": "más rápido de recordar",
-    "statBody": "Repasar una tarjeta justo antes de olvidarla rinde más que repasarla el doble de veces en un horario fijo. Flashcards programa cada repaso en ese momento exacto, para que los minutos que estudias cundan más.",
+    "statBody": "Repasar una tarjeta justo antes de olvidarla rinde más que repasarla el doble de veces en un horario fijo. Zipdeck programa cada repaso en ese momento exacto, para que los minutos que estudias cundan más.",
     "footerCta": "Empieza tu primer mazo hoy.",
-    "copyright": "© {{year}} Flashcards",
+    "copyright": "© {{year}} Zipdeck",
     "builtFor": "Hecho para quien está aprendiendo algo, lo que sea.",
     "cardChinese": "Lecciones de Chino",
     "cardSpanish": "Español Básico",
@@ -342,7 +344,7 @@
     "hideHint": "Ocultar Pista",
     "again": "Fallada",
     "hard": "Difícil",
-    "good": "Bien",
+    "good": "La sé",
     "easy": "Fácil",
     "reviewThisSession": "Ver otra vez esta sesión",
     "reviewToday": "Ver otra vez hoy",

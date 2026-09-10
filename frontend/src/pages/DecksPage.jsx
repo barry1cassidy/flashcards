@@ -8,13 +8,35 @@ import { GroupBadge } from './ColorPicker'
 import { useAuth } from '../AuthContext'
 import { sortDecks } from '../deckSort'
 
+const GROUP_FILTER_KEY = 'flashcards.deckGroupFilter'
+
+function readGroupFilter() {
+  try {
+    return localStorage.getItem(GROUP_FILTER_KEY) || ''
+  } catch {
+    return ''
+  }
+}
+
+function writeGroupFilter(value) {
+  try {
+    if (value) {
+      localStorage.setItem(GROUP_FILTER_KEY, value)
+    } else {
+      localStorage.removeItem(GROUP_FILTER_KEY)
+    }
+  } catch {
+    // localStorage can be unavailable in some WebViews
+  }
+}
+
 export default function DecksPage() {
   const { t } = useTranslation()
   const { user } = useAuth()
   const navigate = useNavigate()
   const [decks, setDecks] = useState([])
   const [groups, setGroups] = useState([])
-  const [groupFilter, setGroupFilter] = useState('')
+  const [groupFilter, setGroupFilter] = useState(readGroupFilter)
   const [creating, setCreating] = useState(false)
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
@@ -25,11 +47,23 @@ export default function DecksPage() {
     const [deckData, groupData] = await Promise.all([api('/api/decks'), api('/api/groups')])
     setDecks(deckData)
     setGroups(groupData)
+    setGroupFilter((current) => {
+      if (!current || groupData.some((group) => String(group.id) === current)) {
+        return current
+      }
+      writeGroupFilter('')
+      return ''
+    })
   }
 
   useEffect(() => {
     load().catch((err) => setError(err.message))
   }, [])
+
+  function onGroupFilterChange(value) {
+    setGroupFilter(value)
+    writeGroupFilter(value)
+  }
 
   function closeCreate() {
     if (busy) {
@@ -101,7 +135,10 @@ export default function DecksPage() {
           {groups.length > 0 ? (
             <label className="deck-filter">
               {t('decks.filterGroup')}
-              <select value={groupFilter} onChange={(event) => setGroupFilter(event.target.value)}>
+              <select
+                value={groupFilter}
+                onChange={(event) => onGroupFilterChange(event.target.value)}
+              >
                 <option value="">{t('decks.allGroups')}</option>
                 {groups.map((group) => (
                   <option key={group.id} value={String(group.id)}>

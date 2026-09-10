@@ -1,6 +1,7 @@
 {
   "app": {
-    "name": "Flashcards",
+    "name": "Zipdeck",
+    "title": "Zipdeck — flashcards for anything you're learning",
     "loading": "Laden…"
   },
   "common": {
@@ -70,9 +71,9 @@
     "libraryTitle": "Eén bibliotheek, elk vak",
     "librarySub": "Orden stapels in sets per les, taal of examen — met kleur, zodat Chinees niet door je advocatenexamen heenloopt.",
     "statLead": "sneller herinneren",
-    "statBody": "Een kaart herhalen vlak voordat je hem vergeet, werkt beter dan hem twee keer zo vaak herhalen volgens een vast schema. Flashcards plant elke herhaling op dat moment, zodat de minuten die je studeert verder reiken.",
+    "statBody": "Een kaart herhalen vlak voordat je hem vergeet, werkt beter dan hem twee keer zo vaak herhalen volgens een vast schema. Zipdeck plant elke herhaling op dat moment, zodat de minuten die je studeert verder reiken.",
     "footerCta": "Begin vandaag je eerste stapel.",
-    "copyright": "© {{year}} Flashcards",
+    "copyright": "© {{year}} Zipdeck",
     "builtFor": "Gemaakt voor mensen die iets leren, wat dan ook.",
     "cardChinese": "Chinese Lessen",
     "cardSpanish": "Spaans Basis",
@@ -279,7 +280,7 @@
     "hideHint": "Hint Verbergen",
     "again": "Gemist",
     "hard": "Moeilijk",
-    "good": "Goed",
+    "good": "Gelukt",
     "easy": "Makkelijk",
     "typeAnswer": "Typ het antwoord",
     "check": "Controleren",

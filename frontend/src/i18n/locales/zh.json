@@ -1,6 +1,7 @@
 {
   "app": {
-    "name": "Flashcards",
+    "name": "Zipdeck",
+    "title": "Zipdeck — flashcards for anything you're learning",
     "loading": "加载中…"
   },
   "common": {
@@ -70,9 +71,9 @@
     "libraryTitle": "一个题库，涵盖各科",
     "librarySub": "按课程、语言或考试把卡组放进集合，并用颜色区分，中文课就不会和律考混在一起。",
     "statLead": "更快回忆",
-    "statBody": "在快要忘记时复习一张卡片，比按固定节奏复习两遍更有效。Flashcards 会把每次复习安排在那个时刻，让你花的每一分钟都更值。",
+    "statBody": "在快要忘记时复习一张卡片，比按固定节奏复习两遍更有效。Zipdeck 会把每次复习安排在那个时刻，让你花的每一分钟都更值。",
     "footerCta": "今天就创建第一个卡组。",
-    "copyright": "© {{year}} Flashcards",
+    "copyright": "© {{year}} Zipdeck",
     "builtFor": "为正在学习任何东西的人而做。",
     "cardChinese": "中文课程",
     "cardSpanish": "西班牙语入门",
@@ -279,7 +280,7 @@
     "hideHint": "隐藏提示",
     "again": "没记住",
     "hard": "较难",
-    "good": "良好",
+    "good": "会了",
     "easy": "简单",
     "typeAnswer": "输入答案",
     "check": "核对",

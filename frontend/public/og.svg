@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#0b0e17"/>
+  <defs>
+    <linearGradient id="zipdeck-og" x1="6%" y1="94%" x2="94%" y2="6%">
+      <stop offset="0%" stop-color="#6E4BFF"/>
+      <stop offset="48%" stop-color="#E040C8"/>
+      <stop offset="100%" stop-color="#FF6B42"/>
+    </linearGradient>
+  </defs>
+  <g transform="translate(80 255)">
+    <rect width="120" height="120" rx="32" fill="url(#zipdeck-og)"/>
+    <g transform="scale(3.75)">
+      <path
+        fill="none"
+        stroke="#fff"
+        stroke-width="3.1"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="M10 10.6h12L10 21.4h12"
+      />
+    </g>
+  </g>
+  <text x="232" y="328" fill="#edeff5" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="72" font-weight="600">Zipdeck</text>
+  <text x="232" y="388" fill="#8b93a7" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="28">flashcards for anything you're learning</text>
+</svg>

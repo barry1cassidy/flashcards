@@ -1,6 +1,7 @@
 {
   "app": {
-    "name": "Flashcards",
+    "name": "Zipdeck",
+    "title": "Zipdeck — flashcards for anything you're learning",
     "loading": "読み込み中…"
   },
   "common": {
@@ -70,9 +71,9 @@
     "libraryTitle": "1つのライブラリ、あらゆる科目",
     "librarySub": "授業・言語・試験ごとにデッキをセットにまとめ、色分けすれば、中国語の授業が司法試験対策と混ざりません。",
     "statLead": "より速い想起",
-    "statBody": "忘れそうな直前にカードを復習する方が、決まったペースで倍の回数復習するより効きます。Flashcards はその瞬間に合わせて復習を組むので、勉強に使う分がより生きます。",
+    "statBody": "忘れそうな直前にカードを復習する方が、決まったペースで倍の回数復習するより効きます。Zipdeck はその瞬間に合わせて復習を組むので、勉強に使う分がより生きます。",
     "footerCta": "今日、最初のデッキを始めましょう。",
-    "copyright": "© {{year}} Flashcards",
+    "copyright": "© {{year}} Zipdeck",
     "builtFor": "何かを学んでいる人のために。何でも。",
     "cardChinese": "中国語レッスン",
     "cardSpanish": "スペイン語入門",
@@ -279,7 +280,7 @@
     "hideHint": "ヒントを隠す",
     "again": "覚えてない",
     "hard": "難しい",
-    "good": "良い",
+    "good": "できた",
     "easy": "簡単",
     "typeAnswer": "答えを入力",
     "check": "確認",

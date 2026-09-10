@@ -1,6 +1,7 @@
 {
   "app": {
-    "name": "Flashcards",
+    "name": "Zipdeck",
+    "title": "Zipdeck — flashcards for anything you're learning",
     "loading": "Đang tải…"
   },
   "common": {
@@ -70,9 +71,9 @@
     "libraryTitle": "Một thư viện, mọi môn",
     "librarySub": "Sắp xếp bộ thẻ thành bộ sưu tập theo lớp, ngôn ngữ hoặc kỳ thi — tô màu để bài Trung không lẫn với ôn luật sư.",
     "statLead": "nhớ lại nhanh hơn",
-    "statBody": "Ôn một thẻ ngay trước khi bạn quên còn hơn ôn gấp đôi theo lịch cố định. Flashcards hẹn mỗi lần ôn đúng khoảnh khắc đó, để những phút bạn học đi xa hơn.",
+    "statBody": "Ôn một thẻ ngay trước khi bạn quên còn hơn ôn gấp đôi theo lịch cố định. Zipdeck hẹn mỗi lần ôn đúng khoảnh khắc đó, để những phút bạn học đi xa hơn.",
     "footerCta": "Bắt đầu bộ thẻ đầu tiên hôm nay.",
-    "copyright": "© {{year}} Flashcards",
+    "copyright": "© {{year}} Zipdeck",
     "builtFor": "Làm cho người đang học một điều gì đó, bất cứ điều gì.",
     "cardChinese": "Bài Học Tiếng Trung",
     "cardSpanish": "Tiếng Tây Ban Nha Cơ Bản",
@@ -279,7 +280,7 @@
     "hideHint": "Ẩn Gợi Ý",
     "again": "Chưa nhớ",
     "hard": "Khó",
-    "good": "Tốt",
+    "good": "Nhớ rồi",
     "easy": "Dễ",
     "typeAnswer": "Gõ đáp án",
     "check": "Kiểm tra",

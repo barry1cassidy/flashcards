@@ -1,6 +1,7 @@
 {
   "app": {
-    "name": "Flashcards",
+    "name": "Zipdeck",
+    "title": "Zipdeck — flashcards for anything you're learning",
     "loading": "Loading…"
   },
   "common": {
@@ -27,6 +28,7 @@
     "allDecks": "All Decks",
     "logOut": "Log Out",
     "backToMix": "Back to Study Mix",
+    "backToDeck": "Back to Deck",
     "backToGroups": "Manage Sets",
     "menu": "Navigation",
     "openMenu": "Open Menu",
@@ -58,7 +60,7 @@
     "decks_other": "{{count}} decks"
   },
   "marketing": {
-    "kicker": "// flashcards for anything you're learning",
+    "kicker": "// zipdeck for anything you're learning",
     "headline": "Learn it loud enough to remember.",
     "lede": "Turn any pair of things — a word and its translation, a term and its definition — into a deck you can flip, quiz, write, match, and listen through until it sticks.",
     "createFirstDeck": "Create Your First Deck",
@@ -70,9 +72,9 @@
     "libraryTitle": "One library, every subject",
     "librarySub": "Organize decks into sets by class, language, or exam — color-coded so your Chinese lessons never blur into your bar prep.",
     "statLead": "faster recall",
-    "statBody": "Reviewing a card right before you'd forget it beats reviewing it twice as often on a fixed schedule. Flashcards times every review around that exact moment, so the minutes you do spend studying go further.",
+    "statBody": "Reviewing a card right before you'd forget it beats reviewing it twice as often on a fixed schedule. Zipdeck times every review around that exact moment, so the minutes you do spend studying go further.",
     "footerCta": "Start your first deck today.",
-    "copyright": "© {{year}} Flashcards",
+    "copyright": "© {{year}} Zipdeck",
     "builtFor": "Built for people learning something, anything.",
     "cardChinese": "Chinese Lessons",
     "cardSpanish": "Spanish Basics",
@@ -342,7 +344,7 @@
     "hideHint": "Hide Hint",
     "again": "Missed",
     "hard": "Hard",
-    "good": "Good",
+    "good": "Got it",
     "easy": "Easy",
     "reviewThisSession": "See again this session",
     "reviewToday": "See again today",

@@ -1,6 +1,7 @@
 {
   "app": {
-    "name": "Flashcards",
+    "name": "Zipdeck",
+    "title": "Zipdeck — flashcards for anything you're learning",
     "loading": "Carregando…"
   },
   "common": {
@@ -70,9 +71,9 @@
     "libraryTitle": "Uma biblioteca, todas as matérias",
     "librarySub": "Organize baralhos em conjuntos por aula, idioma ou prova — com cores para o chinês não se misturar com o exame da OAB.",
     "statLead": "lembrança mais rápida",
-    "statBody": "Revisar um cartão bem antes de esquecer rende mais do que revisar o dobro das vezes num ritmo fixo. O Flashcards marca cada revisão nesse momento exato, para os minutos que você estuda renderem mais.",
+    "statBody": "Revisar um cartão bem antes de esquecer rende mais do que revisar o dobro das vezes num ritmo fixo. O Zipdeck marca cada revisão nesse momento exato, para os minutos que você estuda renderem mais.",
     "footerCta": "Comece seu primeiro baralho hoje.",
-    "copyright": "© {{year}} Flashcards",
+    "copyright": "© {{year}} Zipdeck",
     "builtFor": "Feito para quem está aprendendo alguma coisa, qualquer coisa.",
     "cardChinese": "Aulas de Chinês",
     "cardSpanish": "Espanhol Básico",
@@ -279,7 +280,7 @@
     "hideHint": "Ocultar Dica",
     "again": "Errei",
     "hard": "Difícil",
-    "good": "Bom",
+    "good": "Acertei",
     "easy": "Fácil",
     "typeAnswer": "Digite a resposta",
     "check": "Conferir",

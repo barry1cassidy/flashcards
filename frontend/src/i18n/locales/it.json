@@ -1,6 +1,7 @@
 {
   "app": {
-    "name": "Flashcards",
+    "name": "Zipdeck",
+    "title": "Zipdeck — flashcards for anything you're learning",
     "loading": "Caricamento…"
   },
   "common": {
@@ -70,9 +71,9 @@
     "libraryTitle": "Una biblioteca, ogni materia",
     "librarySub": "Organizza i mazzi in raccolte per corso, lingua o esame — a colori, così il cinese non si confonde con l’esame di avvocatura.",
     "statLead": "richiamo più veloce",
-    "statBody": "Rivedere una carta proprio prima di dimenticarla rende più che rivederla il doppio delle volte con un ritmo fisso. Flashcards programma ogni ripasso in quel momento esatto, così i minuti di studio rendono di più.",
+    "statBody": "Rivedere una carta proprio prima di dimenticarla rende più che rivederla il doppio delle volte con un ritmo fisso. Zipdeck programma ogni ripasso in quel momento esatto, così i minuti di studio rendono di più.",
     "footerCta": "Inizia oggi il tuo primo mazzo.",
-    "copyright": "© {{year}} Flashcards",
+    "copyright": "© {{year}} Zipdeck",
     "builtFor": "Fatto per chi sta imparando qualcosa, qualsiasi cosa.",
     "cardChinese": "Lezioni di Cinese",
     "cardSpanish": "Spagnolo Base",
@@ -279,7 +280,7 @@
     "hideHint": "Nascondi Suggerimento",
     "again": "Sbagliata",
     "hard": "Difficile",
-    "good": "Bene",
+    "good": "La so",
     "easy": "Facile",
     "typeAnswer": "Digita la risposta",
     "check": "Controlla",

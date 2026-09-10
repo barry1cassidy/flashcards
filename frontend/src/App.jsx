@@ -22,11 +22,14 @@ import SavingIndicator from './pages/SavingIndicator'
 
 function DocumentLang() {
   const { t, i18n } = useTranslation()
+  const { pathname } = useLocation()
+  const { user } = useAuth()
   useEffect(() => {
-    document.title = t('app.name')
+    const splash = !user && (pathname === '/' || pathname === '/login' || pathname === '/register')
+    document.title = splash ? t('app.title') : t('app.name')
     document.documentElement.lang = currentLocale()
     document.documentElement.dir = currentLocale() === 'ar' ? 'rtl' : 'ltr'
-  }, [t, i18n.resolvedLanguage])
+  }, [t, i18n.resolvedLanguage, pathname, user])
   return null
 }
 
@@ -42,6 +45,9 @@ function ProtectedLayout() {
     return <LoadingScreen />
   }
   if (!user) {
+    if (location.pathname === '/') {
+      return <LoginPage />
+    }
     return <Navigate to="/login" replace state={{ from: location }} />
   }
   return <AppLayout />

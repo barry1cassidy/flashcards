@@ -278,24 +278,21 @@ h1 {
   align-items: center;
   gap: 10px;
   font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 1.3rem;
+  font-weight: 600;
+  font-size: 1.2rem;
+  letter-spacing: -0.02em;
   color: var(--text);
 }
 
+.brand-word {
+  line-height: 1;
+}
+
 .brand-mark {
-  width: 28px;
-  height: 28px;
-  border-radius: 8px;
-  background: linear-gradient(135deg, var(--cobalt), var(--coral));
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.9rem;
-  font-weight: 700;
-  transform: rotate(-6deg);
-  box-shadow: none;
+  width: 32px;
+  height: 32px;
+  display: block;
+  flex-shrink: 0;
 }
 
 .auth-shell {
@@ -1916,14 +1913,16 @@ textarea {
 
 .login-btn {
   background: transparent;
-  border: 1px solid var(--line);
+  border: 1px solid color-mix(in srgb, var(--text) 28%, transparent);
   color: var(--text);
-  border-radius: 10px;
+  border-radius: 999px;
+  padding: 8px 18px;
+  font-weight: 500;
 }
 
 .login-btn:hover {
-  border-color: var(--cobalt);
-  background: rgba(76, 111, 255, 0.1);
+  border-color: color-mix(in srgb, var(--text) 48%, transparent);
+  background: color-mix(in srgb, var(--text) 6%, transparent);
 }
 
 .login-drop {

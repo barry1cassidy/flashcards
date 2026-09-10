@@ -1,6 +1,7 @@
 {
   "app": {
-    "name": "Flashcards",
+    "name": "Zipdeck",
+    "title": "Zipdeck — flashcards for anything you're learning",
     "loading": "불러오는 중…"
   },
   "common": {
@@ -70,9 +71,9 @@
     "libraryTitle": "하나의 라이브러리, 모든 과목",
     "librarySub": "수업, 언어, 시험별로 덱을 세트에 넣고 색으로 구분하면 중국어 수업이 변호사 시험 준비와 섞이지 않습니다.",
     "statLead": "더 빠른 회상",
-    "statBody": "잊기 직전에 카드를 복습하는 편이 정해진 일정으로 두 배 자주 복습하는 것보다 낫습니다. Flashcards는 그 순간에 맞춰 복습을 잡아서, 공부하는 분이 더 멀리 갑니다.",
+    "statBody": "잊기 직전에 카드를 복습하는 편이 정해진 일정으로 두 배 자주 복습하는 것보다 낫습니다. Zipdeck는 그 순간에 맞춰 복습을 잡아서, 공부하는 분이 더 멀리 갑니다.",
     "footerCta": "오늘 첫 덱을 시작하세요.",
-    "copyright": "© {{year}} Flashcards",
+    "copyright": "© {{year}} Zipdeck",
     "builtFor": "무엇을 배우든, 배우고 있는 사람을 위해.",
     "cardChinese": "중국어 수업",
     "cardSpanish": "스페인어 기초",
@@ -279,7 +280,7 @@
     "hideHint": "힌트 숨기기",
     "again": "틀림",
     "hard": "어려움",
-    "good": "좋음",
+    "good": "알겠어",
     "easy": "쉬움",
     "typeAnswer": "답을 입력하세요",
     "check": "확인",

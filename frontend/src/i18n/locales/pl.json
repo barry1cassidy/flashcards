@@ -1,6 +1,7 @@
 {
   "app": {
-    "name": "Flashcards",
+    "name": "Zipdeck",
+    "title": "Zipdeck — flashcards for anything you're learning",
     "loading": "Ładowanie…"
   },
   "common": {
@@ -72,9 +73,9 @@
     "libraryTitle": "Jedna biblioteka, każdy przedmiot",
     "librarySub": "Grupuj talie w zestawy według zajęć, języka lub egzaminu — z kolorami, żeby chiński nie zlewał się z egzaminem adwokackim.",
     "statLead": "szybsze przypominanie",
-    "statBody": "Powtórzenie karty tuż przed zapomnieniem daje więcej niż dwa razy częstsze powtórki według sztywnego grafiku. Flashcards ustawia każdą powtórkę dokładnie na ten moment, żeby minuty nauki szły dalej.",
+    "statBody": "Powtórzenie karty tuż przed zapomnieniem daje więcej niż dwa razy częstsze powtórki według sztywnego grafiku. Zipdeck ustawia każdą powtórkę dokładnie na ten moment, żeby minuty nauki szły dalej.",
     "footerCta": "Zacznij dziś swoją pierwszą talię.",
-    "copyright": "© {{year}} Flashcards",
+    "copyright": "© {{year}} Zipdeck",
     "builtFor": "Dla ludzi, którzy uczą się czegoś — czegokolwiek.",
     "cardChinese": "Lekcje Chińskiego",
     "cardSpanish": "Hiszpański Podstawy",
@@ -295,7 +296,7 @@
     "hideHint": "Ukryj Podpowiedź",
     "again": "Źle",
     "hard": "Trudne",
-    "good": "Dobrze",
+    "good": "Wiem",
     "easy": "Łatwe",
     "typeAnswer": "Wpisz odpowiedź",
     "check": "Sprawdź",

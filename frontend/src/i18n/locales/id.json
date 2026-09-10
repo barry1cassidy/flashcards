@@ -1,6 +1,7 @@
 {
   "app": {
-    "name": "Flashcards",
+    "name": "Zipdeck",
+    "title": "Zipdeck — flashcards for anything you're learning",
     "loading": "Memuat…"
   },
   "common": {
@@ -70,9 +71,9 @@
     "libraryTitle": "Satu perpustakaan, setiap mata pelajaran",
     "librarySub": "Susun dek ke dalam set menurut kelas, bahasa, atau ujian — diberi warna agar pelajaran Mandarin tidak tercampur dengan persiapan ujian pengacara.",
     "statLead": "ingat lebih cepat",
-    "statBody": "Mengulang kartu tepat sebelum kamu lupa lebih baik daripada mengulang dua kali lebih sering menurut jadwal tetap. Flashcards menempatkan setiap pengulangan di momen itu, agar menit yang kamu pakai belajar lebih berguna.",
+    "statBody": "Mengulang kartu tepat sebelum kamu lupa lebih baik daripada mengulang dua kali lebih sering menurut jadwal tetap. Zipdeck menempatkan setiap pengulangan di momen itu, agar menit yang kamu pakai belajar lebih berguna.",
     "footerCta": "Mulai dek pertamamu hari ini.",
-    "copyright": "© {{year}} Flashcards",
+    "copyright": "© {{year}} Zipdeck",
     "builtFor": "Dibuat untuk orang yang sedang belajar sesuatu, apa pun itu.",
     "cardChinese": "Pelajaran Mandarin",
     "cardSpanish": "Dasar Spanyol",
@@ -279,7 +280,7 @@
     "hideHint": "Sembunyikan Petunjuk",
     "again": "Belum hafal",
     "hard": "Sulit",
-    "good": "Baik",
+    "good": "Ingat",
     "easy": "Mudah",
     "typeAnswer": "Ketik jawabannya",
     "check": "Periksa",

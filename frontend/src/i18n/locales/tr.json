@@ -1,6 +1,7 @@
 {
   "app": {
-    "name": "Flashcards",
+    "name": "Zipdeck",
+    "title": "Zipdeck — flashcards for anything you're learning",
     "loading": "Yükleniyor…"
   },
   "common": {
@@ -70,9 +71,9 @@
     "libraryTitle": "Tek kitaplık, her konu",
     "librarySub": "Desteleri ders, dil veya sınava göre setlerde toplayın — renklerle, Çince dersleriniz avukatlık sınavına karışmasın.",
     "statLead": "daha hızlı hatırlama",
-    "statBody": "Bir kartı unutmak üzereyken tekrar etmek, sabit bir takvimde iki kat sık tekrar etmekten daha iyidir. Flashcards her tekrarını tam o ana koyar, böylece çalıştığınız dakikalar daha ileri gider.",
+    "statBody": "Bir kartı unutmak üzereyken tekrar etmek, sabit bir takvimde iki kat sık tekrar etmekten daha iyidir. Zipdeck her tekrarını tam o ana koyar, böylece çalıştığınız dakikalar daha ileri gider.",
     "footerCta": "İlk destenize bugün başlayın.",
-    "copyright": "© {{year}} Flashcards",
+    "copyright": "© {{year}} Zipdeck",
     "builtFor": "Bir şey öğrenenler için yapıldı, her ne olursa.",
     "cardChinese": "Çince Dersleri",
     "cardSpanish": "İspanyolca Temeller",
@@ -279,7 +280,7 @@
     "hideHint": "İpucunu Gizle",
     "again": "Bilmiyorum",
     "hard": "Zor",
-    "good": "İyi",
+    "good": "Bildim",
     "easy": "Kolay",
     "typeAnswer": "Yanıtı yazın",
     "check": "Kontrol Et",
