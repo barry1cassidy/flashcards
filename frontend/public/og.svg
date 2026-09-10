@@ -1,25 +1,30 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
   <rect width="1200" height="630" fill="#0b0e17"/>
-  <defs>
-    <linearGradient id="zipdeck-og" x1="6%" y1="94%" x2="94%" y2="6%">
-      <stop offset="0%" stop-color="#6E4BFF"/>
-      <stop offset="48%" stop-color="#E040C8"/>
-      <stop offset="100%" stop-color="#FF6B42"/>
-    </linearGradient>
-  </defs>
-  <g transform="translate(80 255)">
-    <rect width="120" height="120" rx="32" fill="url(#zipdeck-og)"/>
-    <g transform="scale(3.75)">
-      <path
-        fill="none"
-        stroke="#fff"
-        stroke-width="3.1"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        d="M10 10.6h12L10 21.4h12"
-      />
+  <g transform="translate(72 231) scale(2.625)">
+    <defs>
+      <linearGradient id="zipdeck-og-face" x1="6%" y1="90%" x2="94%" y2="10%">
+        <stop offset="0%" stop-color="#6B63FF"/>
+        <stop offset="42%" stop-color="#E24BCC"/>
+        <stop offset="100%" stop-color="#FF6B4A"/>
+      </linearGradient>
+    </defs>
+    <rect width="64" height="64" rx="16" fill="#161B2E"/>
+    <g transform="translate(11 15) rotate(-20 16 12)">
+      <rect width="32" height="24" rx="6.5" fill="#3A445C"/>
     </g>
+    <g transform="translate(21 15) rotate(16 16 12)">
+      <rect width="32" height="24" rx="6.5" fill="#454F68"/>
+    </g>
+    <rect x="11" y="21" width="42" height="24" rx="8" fill="url(#zipdeck-og-face)"/>
+    <path
+      fill="none"
+      stroke="#fff"
+      stroke-width="3.7"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      d="M21.5 26.8h21L21.5 39.2h21"
+    />
   </g>
-  <text x="232" y="328" fill="#edeff5" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="72" font-weight="600">Zipdeck</text>
-  <text x="232" y="388" fill="#8b93a7" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="28">flashcards for anything you're learning</text>
+  <text x="272" y="328" fill="#edeff5" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="72" font-weight="600">Zipdeck</text>
+  <text x="272" y="388" fill="#8b93a7" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="28">flashcards for anything you're learning</text>
 </svg>

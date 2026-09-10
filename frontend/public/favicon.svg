@@ -1,18 +1,25 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
   <defs>
-    <linearGradient id="zipdeck-mark" x1="6%" y1="94%" x2="94%" y2="6%">
-      <stop offset="0%" stop-color="#6E4BFF"/>
-      <stop offset="48%" stop-color="#E040C8"/>
-      <stop offset="100%" stop-color="#FF6B42"/>
+    <linearGradient id="zipdeck-face" x1="6%" y1="90%" x2="94%" y2="10%">
+      <stop offset="0%" stop-color="#6B63FF"/>
+      <stop offset="42%" stop-color="#E24BCC"/>
+      <stop offset="100%" stop-color="#FF6B4A"/>
     </linearGradient>
   </defs>
-  <rect width="32" height="32" rx="8.5" fill="url(#zipdeck-mark)"/>
+  <rect width="64" height="64" rx="16" fill="#161B2E"/>
+  <g transform="translate(11 15) rotate(-20 16 12)">
+    <rect width="32" height="24" rx="6.5" fill="#3A445C"/>
+  </g>
+  <g transform="translate(21 15) rotate(16 16 12)">
+    <rect width="32" height="24" rx="6.5" fill="#454F68"/>
+  </g>
+  <rect x="11" y="21" width="42" height="24" rx="8" fill="url(#zipdeck-face)"/>
   <path
     fill="none"
     stroke="#fff"
-    stroke-width="3.1"
+    stroke-width="3.7"
     stroke-linecap="round"
     stroke-linejoin="round"
-    d="M10 10.6h12L10 21.4h12"
+    d="M21.5 26.8h21L21.5 39.2h21"
   />
 </svg>
