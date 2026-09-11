@@ -170,7 +170,8 @@
     "creating": "Creating…",
     "createAccountButton": "Create Account",
     "alreadyHaveAccount": "Already have an account?",
-    "orEmail": "or sign in with email"
+    "orEmail": "or sign in with email",
+    "continueWithGoogle": "Continue with Google"
   },
   "decks": {
     "title": "My Decks",

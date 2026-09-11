@@ -170,7 +170,8 @@
     "creating": "Creando…",
     "createAccountButton": "Crear Cuenta",
     "alreadyHaveAccount": "¿Ya tienes una cuenta?",
-    "orEmail": "o entra con correo"
+    "orEmail": "o entra con correo",
+    "continueWithGoogle": "Continuar con Google"
   },
   "decks": {
     "title": "Mis Mazos",
