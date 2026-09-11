@@ -411,43 +411,45 @@ export default function DeckDetailPage() {
                       ↓
                     </button>
                   </div>
-                  <div className="card-row-body">
-                    <div className="card-side-line">
-                      <strong>{card.front}</strong>
-                      <SpeakButton text={card.front} lang={frontLanguage} />
-                    </div>
-                    <p className="muted card-side-line">
-                      <span>{card.back}</span>
-                      <SpeakButton text={card.back} lang={backLanguage} />
-                    </p>
-                    {card.hint ? (
-                      <p className="muted small card-hint">
-                        {t('decks.hint')}: {card.hint}
+                  <div className="card-row-main">
+                    <div className="card-row-body">
+                      <div className="card-side-line">
+                        <strong className="card-side-text">{card.front}</strong>
+                        <SpeakButton text={card.front} lang={frontLanguage} />
+                      </div>
+                      <p className="muted card-side-line">
+                        <span className="card-side-text">{card.back}</span>
+                        <SpeakButton text={card.back} lang={backLanguage} />
                       </p>
-                    ) : null}
-                  </div>
-                  <div className="header-actions">
-                    <button
-                      className="btn ghost"
-                      type="button"
-                      onClick={() => openEditCard(card)}
-                    >
-                      {t('common.edit')}
-                    </button>
-                    <button
-                      className="btn ghost"
-                      type="button"
-                      onClick={() =>
-                        setConfirm({
-                          title: t('decks.deleteCardTitle'),
-                          message: t('decks.deleteCardMessage'),
-                          confirmLabel: t('decks.deleteCardConfirm'),
-                          onConfirm: () => deleteCard(card.id),
-                        })
-                      }
-                    >
-                      {t('common.delete')}
-                    </button>
+                      {card.hint ? (
+                        <p className="muted small card-hint">
+                          {t('decks.hint')}: {card.hint}
+                        </p>
+                      ) : null}
+                    </div>
+                    <div className="card-row-actions">
+                      <button
+                        className="btn ghost"
+                        type="button"
+                        onClick={() => openEditCard(card)}
+                      >
+                        {t('common.edit')}
+                      </button>
+                      <button
+                        className="btn ghost"
+                        type="button"
+                        onClick={() =>
+                          setConfirm({
+                            title: t('decks.deleteCardTitle'),
+                            message: t('decks.deleteCardMessage'),
+                            confirmLabel: t('decks.deleteCardConfirm'),
+                            onConfirm: () => deleteCard(card.id),
+                          })
+                        }
+                      >
+                        {t('common.delete')}
+                      </button>
+                    </div>
                   </div>
                 </li>
               ))}

@@ -22,6 +22,7 @@ import com.flashcards.card.Card;
 import com.flashcards.card.CardRepository;
 import com.flashcards.card.CardService;
 import com.flashcards.common.ApiException;
+import com.flashcards.deck.Deck;
 import com.flashcards.deck.DeckService;
 import com.flashcards.review.CardReview;
 import com.flashcards.review.CardReviewRepository;
@@ -76,6 +77,7 @@ public class StudyService {
         LocalDate today = LocalDate.now();
         List<Card> queue = new ArrayList<>();
         if (!deckIds.isEmpty()) {
+            deckService.requireOwned(userId, deckIds);
             if ("HARD".equals(normalizedFilter) || "AGAIN".equals(normalizedFilter)) {
                 ReviewRating rating = "AGAIN".equals(normalizedFilter) ? ReviewRating.AGAIN : ReviewRating.HARD;
                 queue.addAll(cardRepository.findHardQueueIn(deckIds, rating, PageRequest.of(0, SESSION_SIZE)));
@@ -155,10 +157,11 @@ public class StudyService {
         if (deckIds.isEmpty()) {
             return 0;
         }
+        List<Deck> decks = deckService.requireOwned(userId, deckIds);
         int updated = cardReviewRepository.resetDueDatesForDecks(userId, deckIds, LocalDate.now());
         Instant now = Instant.now();
-        for (UUID deckId : deckIds) {
-            deckService.requireOwned(userId, deckId).setUpdatedAt(now);
+        for (var deck : decks) {
+            deck.setUpdatedAt(now);
         }
         return updated;
     }
@@ -174,6 +177,7 @@ public class StudyService {
         if (deckIds.isEmpty()) {
             return 0;
         }
+        deckService.requireOwned(userId, deckIds);
         LocalDate today = LocalDate.now();
         if (cardRepository.countStudyQueueIn(deckIds, today) > 0) {
             return 0;

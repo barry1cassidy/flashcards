@@ -151,12 +151,14 @@ export default function LibraryDeckPage() {
             <div className="card-list">
               {deck.cards.map((card) => (
                 <div key={card.id} className="card-row">
-                  <div>
-                    <p>
-                      <SpeakButton text={card.front} lang={frontLanguage} /> {card.front}
-                    </p>
-                    <p>
-                      <SpeakButton text={card.back} lang={backLanguage} /> {card.back}
+                  <div className="card-row-body">
+                    <div className="card-side-line">
+                      <span className="card-side-text">{card.front}</span>
+                      <SpeakButton text={card.front} lang={frontLanguage} />
+                    </div>
+                    <p className="muted card-side-line">
+                      <span className="card-side-text">{card.back}</span>
+                      <SpeakButton text={card.back} lang={backLanguage} />
                     </p>
                     {card.hint ? <p className="muted card-hint">{t('decks.hint')}: {card.hint}</p> : null}
                   </div>

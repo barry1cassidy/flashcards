@@ -1,15 +1,17 @@
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '../AuthContext'
 import { currentLocale } from '../i18n'
 import { translateError } from '../i18n/errors'
+import { pathAfterAuth } from '../authRedirect'
 import MarketingHeader, { MarketingFooter } from './MarketingHeader'
 
 export default function RegisterPage() {
   const { t } = useTranslation()
   const { register } = useAuth()
   const navigate = useNavigate()
+  const location = useLocation()
   const [displayName, setDisplayName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -22,7 +24,7 @@ export default function RegisterPage() {
     setBusy(true)
     try {
       await register(displayName, email, password, currentLocale())
-      navigate('/', { replace: true })
+      navigate(pathAfterAuth(location), { replace: true })
     } catch (err) {
       setError(err.message)
     } finally {
@@ -64,7 +66,7 @@ export default function RegisterPage() {
             </button>
           </form>
           <p className="muted">
-            {t('auth.alreadyHaveAccount')} <Link to="/login">{t('auth.signIn')}</Link>
+            {t('auth.alreadyHaveAccount')} <Link to="/login" state={location.state}>{t('auth.signIn')}</Link>
           </p>
         </div>
       </section>

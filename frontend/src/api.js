@@ -47,7 +47,8 @@ async function send(path, options) {
   const response = await fetch(apiUrl(path), options)
   if (response.status === 401) {
     setToken(null)
-    if (!path.startsWith('/api/auth/')) {
+    const publicApi = path.startsWith('/api/auth/') || /^\/api\/join\/[^/?]+/.test(path)
+    if (!publicApi) {
       window.location.assign('/login')
     }
     const error = await readError(response)

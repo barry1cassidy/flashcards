@@ -72,6 +72,9 @@ public class User {
     @Column(nullable = false)
     private boolean admin;
 
+    @Column(name = "teacher_mode", nullable = false)
+    private boolean teacherMode;
+
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 

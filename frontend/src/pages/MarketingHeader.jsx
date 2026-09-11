@@ -6,6 +6,7 @@ import { translateError } from '../i18n/errors'
 import { currentLocale } from '../i18n'
 import GoogleSignInButton, { getGoogleClientId } from './GoogleSignInButton'
 import Brand from './Brand'
+import { pathAfterAuth } from '../authRedirect'
 
 export default function MarketingHeader({ showLoginForm = false }) {
   const { t } = useTranslation()
@@ -71,7 +72,7 @@ export default function MarketingHeader({ showLoginForm = false }) {
               ) : null}
             </>
           ) : (
-            <Link className="btn login-btn" to="/login">
+            <Link className="btn login-btn" to="/login" state={{ from: location }}>
               {t('auth.signIn')}
             </Link>
           )}
@@ -85,6 +86,7 @@ function LoginFields() {
   const { t } = useTranslation()
   const { login, loginWithGoogle } = useAuth()
   const navigate = useNavigate()
+  const location = useLocation()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -96,7 +98,7 @@ function LoginFields() {
     setBusy(true)
     try {
       await work()
-      navigate('/', { replace: true })
+      navigate(pathAfterAuth(location), { replace: true })
     } catch (err) {
       setError(err.message)
     } finally {
@@ -152,7 +154,7 @@ function LoginFields() {
           {busy ? t('auth.signingIn') : t('auth.continue')}
         </button>
       </form>
-      <Link className="login-alt" to="/register">
+      <Link className="login-alt" to="/register" state={location.state}>
         {t('auth.newHere')} {t('auth.createFreeAccount')}
       </Link>
     </>

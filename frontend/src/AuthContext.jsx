@@ -85,6 +85,9 @@ export function AuthProvider({ children }) {
       async setRestudyWait(restudyWait) {
         return patchUser(setUser, user, { restudyWait })
       },
+      async setTeacherMode(teacherMode) {
+        return patchUser(setUser, user, { teacherMode })
+      },
       async setProLicensed(proLicensed) {
         const previous = user
         setUser((current) => (current ? { ...current, proLicensed } : current))

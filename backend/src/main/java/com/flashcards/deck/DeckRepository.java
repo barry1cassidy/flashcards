@@ -42,5 +42,9 @@ public interface DeckRepository extends JpaRepository<Deck, UUID> {
 
     List<Deck> findByUser_IdAndLibraryDeckIdIn(UUID userId, Collection<UUID> libraryDeckIds);
 
+    Optional<Deck> findByUser_IdAndClassSourceDeckId(UUID userId, UUID classSourceDeckId);
+
+    List<Deck> findByUser_IdAndClassSourceDeckIdIn(UUID userId, Collection<UUID> classSourceDeckIds);
+
     long countByGroupId(UUID groupId);
 }

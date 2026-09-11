@@ -1,4 +1,4 @@
-package com.flashcards.card;
+package com.flashcards.classroom;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -24,8 +24,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "cards")
-public class Card {
+@Table(name = "class_decks")
+public class ClassDeck {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -34,32 +34,20 @@ public class Card {
     private UUID id;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "class_id")
+    private StudyClass studyClass;
+
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "deck_id")
     private Deck deck;
 
-    @Column(nullable = false, columnDefinition = "TEXT")
-    private String front;
-
-    @Column(nullable = false, columnDefinition = "TEXT")
-    private String back;
-
-    @Column(columnDefinition = "TEXT")
-    private String hint;
-
-    @Column(nullable = false)
-    private int position;
-
-    @JdbcTypeCode(SqlTypes.CHAR)
-    @Column(name = "source_card_id", length = 36, columnDefinition = "CHAR(36)")
-    private UUID sourceCardId;
-
-    @Column(name = "created_at", nullable = false)
-    private Instant createdAt;
+    @Column(name = "assigned_at", nullable = false)
+    private Instant assignedAt;
 
     @PrePersist
     void onCreate() {
-        if (createdAt == null) {
-            createdAt = Instant.now();
+        if (assignedAt == null) {
+            assignedAt = Instant.now();
         }
     }
 }

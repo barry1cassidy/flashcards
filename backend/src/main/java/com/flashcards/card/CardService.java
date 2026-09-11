@@ -10,16 +10,19 @@ import org.springframework.transaction.annotation.Transactional;
 import com.flashcards.common.ApiException;
 import com.flashcards.deck.Deck;
 import com.flashcards.deck.DeckService;
+import com.flashcards.security.OwnedAccess;
 
 @Service
 public class CardService {
 
     private final CardRepository cardRepository;
     private final DeckService deckService;
+    private final OwnedAccess ownedAccess;
 
-    public CardService(CardRepository cardRepository, DeckService deckService) {
+    public CardService(CardRepository cardRepository, DeckService deckService, OwnedAccess ownedAccess) {
         this.cardRepository = cardRepository;
         this.deckService = deckService;
+        this.ownedAccess = ownedAccess;
     }
 
     @Transactional(readOnly = true)
@@ -115,8 +118,7 @@ public class CardService {
     }
 
     public Card requireOwnedCard(UUID userId, UUID cardId) {
-        return cardRepository.findByIdAndDeckUserId(cardId, userId)
-                .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Card not found"));
+        return ownedAccess.requireCard(userId, cardId);
     }
 
     public static CardResponse toResponse(Card card) {

@@ -5,10 +5,9 @@ import java.time.Instant;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
-import com.flashcards.common.ApiException;
+import com.flashcards.security.OwnedAccess;
 
 @Component
 public class AgentJobStore {
@@ -28,7 +27,7 @@ public class AgentJobStore {
         prune();
         AgentJob job = jobs.get(jobId);
         if (job == null || !job.userId().equals(userId)) {
-            throw new ApiException(HttpStatus.NOT_FOUND, "Agent job not found");
+            throw OwnedAccess.hidden("Agent job not found");
         }
         return job;
     }

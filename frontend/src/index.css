@@ -595,10 +595,38 @@ textarea {
 .card-row-body {
   flex: 1;
   min-width: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.card-row-main {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.card-row-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.card-row-actions .btn {
+  border: 1px solid var(--line);
+  background: transparent;
+  padding: 8px 14px;
+  border-radius: 10px;
+}
+
+.card-row-actions .btn:hover,
+.card-row-actions .btn:focus-visible {
+  background: var(--menu-hover);
 }
 
 .card-hint {
-  margin-top: 10px;
+  margin-top: 0;
 }
 
 .reorder-controls {
@@ -1855,15 +1883,30 @@ textarea {
   max-width: 420px;
 }
 
-.card-heading,
-.card-side-line {
+.card-heading {
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
+.card-side-line {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: 10px;
+  align-items: start;
+}
+
+.card-side-text {
+  min-width: 0;
+  padding-block: 10px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
 .card-side-line .speak-btn {
-  flex-shrink: 0;
+  grid-column: 2;
+  grid-row: 1;
+  align-self: start;
 }
 
 .speak-btn {
@@ -1896,6 +1939,12 @@ textarea {
   .card-row {
     flex-direction: column;
     align-items: stretch;
+  }
+
+  .card-row-body,
+  .card-row-main,
+  .card-row-actions {
+    width: 100%;
   }
 
   .page-title-actions {
@@ -2447,4 +2496,54 @@ textarea {
   .rating-hint {
     font-size: 0.64rem;
   }
+}
+
+.class-join-code {
+  font-family: var(--font-mono);
+  font-size: 2rem;
+  letter-spacing: 0.18em;
+  margin: 8px 0 4px;
+}
+
+.class-join-url {
+  word-break: break-all;
+}
+
+.class-deck-row {
+  align-items: flex-start;
+}
+
+.class-roster {
+  display: grid;
+  gap: 12px;
+}
+
+.class-roster-card {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 14px;
+  background: var(--surface-2);
+}
+
+.class-roster-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.class-progress-list {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.class-progress-list li {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-height: 44px;
 }

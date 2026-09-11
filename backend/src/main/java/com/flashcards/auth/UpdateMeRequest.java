@@ -15,5 +15,6 @@ public record UpdateMeRequest(
         DeckSort deckSort,
         StudyOrder studyOrder,
         StudyScope studyScope,
-        RestudyWait restudyWait) {
+        RestudyWait restudyWait,
+        Boolean teacherMode) {
 }

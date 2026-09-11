@@ -19,5 +19,6 @@ public record UserResponse(
         StudyScope studyScope,
         RestudyWait restudyWait,
         boolean proLicensed,
-        boolean admin) {
+        boolean admin,
+        boolean teacherMode) {
 }

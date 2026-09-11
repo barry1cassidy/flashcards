@@ -1,4 +1,4 @@
-package com.flashcards.deck;
+package com.flashcards.classroom;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -6,8 +6,6 @@ import java.util.UUID;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
-import com.flashcards.card.CardLanguages;
-import com.flashcards.group.DeckGroup;
 import com.flashcards.user.User;
 
 import jakarta.persistence.Column;
@@ -27,8 +25,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "decks")
-public class Deck {
+@Table(name = "classes")
+public class StudyClass {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -37,35 +35,14 @@ public class Deck {
     private UUID id;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "teacher_id")
+    private User teacher;
 
-    @Column(nullable = false, length = 200)
+    @Column(nullable = false, length = 120)
     private String name;
 
-    @Column(columnDefinition = "TEXT")
-    private String description;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "group_id")
-    private DeckGroup group;
-
-    @Column(name = "front_language", nullable = false, length = 16)
-    private String frontLanguage = CardLanguages.DEFAULT;
-
-    @Column(name = "back_language", nullable = false, length = 16)
-    private String backLanguage = CardLanguages.DEFAULT;
-
-    @JdbcTypeCode(SqlTypes.CHAR)
-    @Column(name = "library_deck_id", length = 36, columnDefinition = "CHAR(36)")
-    private UUID libraryDeckId;
-
-    @JdbcTypeCode(SqlTypes.CHAR)
-    @Column(name = "class_source_deck_id", length = 36, columnDefinition = "CHAR(36)")
-    private UUID classSourceDeckId;
-
-    @Column(name = "class_synced_at")
-    private Instant classSyncedAt;
+    @Column(name = "join_code", nullable = false, unique = true, length = 6)
+    private String joinCode;
 
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
@@ -80,12 +57,6 @@ public class Deck {
         }
         if (updatedAt == null) {
             updatedAt = createdAt;
-        }
-        if (frontLanguage == null) {
-            frontLanguage = CardLanguages.DEFAULT;
-        }
-        if (backLanguage == null) {
-            backLanguage = CardLanguages.DEFAULT;
         }
     }
 

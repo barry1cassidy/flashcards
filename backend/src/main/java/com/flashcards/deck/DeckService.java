@@ -16,10 +16,10 @@ import com.flashcards.card.CardLanguages;
 import com.flashcards.card.CardRepository;
 import com.flashcards.common.ApiException;
 import com.flashcards.group.DeckGroup;
-import com.flashcards.group.DeckGroupRepository;
 import com.flashcards.review.CardReview;
 import com.flashcards.review.CardReviewRepository;
 import com.flashcards.review.ReviewRating;
+import com.flashcards.security.OwnedAccess;
 import com.flashcards.user.User;
 import com.flashcards.user.UserRepository;
 
@@ -30,19 +30,19 @@ public class DeckService {
     private final CardRepository cardRepository;
     private final CardReviewRepository cardReviewRepository;
     private final UserRepository userRepository;
-    private final DeckGroupRepository deckGroupRepository;
+    private final OwnedAccess ownedAccess;
 
     public DeckService(
             DeckRepository deckRepository,
             CardRepository cardRepository,
             CardReviewRepository cardReviewRepository,
             UserRepository userRepository,
-            DeckGroupRepository deckGroupRepository) {
+            OwnedAccess ownedAccess) {
         this.deckRepository = deckRepository;
         this.cardRepository = cardRepository;
         this.cardReviewRepository = cardReviewRepository;
         this.userRepository = userRepository;
-        this.deckGroupRepository = deckGroupRepository;
+        this.ownedAccess = ownedAccess;
     }
 
     @Transactional(readOnly = true)
@@ -109,8 +109,11 @@ public class DeckService {
     }
 
     public Deck requireOwned(UUID userId, UUID deckId) {
-        return deckRepository.findByIdAndUserId(deckId, userId)
-                .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Deck not found"));
+        return ownedAccess.requireDeck(userId, deckId);
+    }
+
+    public List<Deck> requireOwned(UUID userId, List<UUID> deckIds) {
+        return ownedAccess.requireDecks(userId, deckIds);
     }
 
     public DeckStats statsFor(Deck deck) {
@@ -172,8 +175,7 @@ public class DeckService {
         if (groupId == null) {
             return null;
         }
-        return deckGroupRepository.findByIdAndUserId(groupId, userId)
-                .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Set not found"));
+        return ownedAccess.requireSet(userId, groupId);
     }
 
     private static GroupSummary toGroupSummary(DeckGroup group) {

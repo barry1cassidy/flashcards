@@ -12,7 +12,7 @@ import { translateError } from '../i18n/errors'
 export default function SettingsPage() {
   const { t } = useTranslation()
   const location = useLocation()
-  const { user, setTheme, setLocale, setDeckSort, setStudyOrder, setRestudyWait, setProLicensed } = useAuth()
+  const { user, setTheme, setLocale, setDeckSort, setStudyOrder, setRestudyWait, setProLicensed, setTeacherMode } = useAuth()
   const [error, setError] = useState('')
 
   useEffect(() => {
@@ -58,6 +58,35 @@ export default function SettingsPage() {
           >
             {isProLicensed(user) ? t('settings.proTurnOff') : t('settings.proTurnOn')}
           </button>
+        </section>
+      ) : null}
+
+      {isAdmin(user) ? (
+        <section className="card-form">
+          <h2 className="section-heading">{t('settings.teacherMode')}</h2>
+          <p className="muted">{t('settings.teacherModeHint')}</p>
+          <div className="radio-list" role="radiogroup" aria-label={t('settings.teacherMode')}>
+            <label className={`radio-row ${user?.teacherMode ? 'selected' : ''}`}>
+              <input
+                type="radio"
+                name="teacherMode"
+                value="on"
+                checked={Boolean(user?.teacherMode)}
+                onChange={() => run(() => setTeacherMode(true))}
+              />
+              {t('settings.teacherModeOn')}
+            </label>
+            <label className={`radio-row ${user?.teacherMode ? '' : 'selected'}`}>
+              <input
+                type="radio"
+                name="teacherMode"
+                value="off"
+                checked={!user?.teacherMode}
+                onChange={() => run(() => setTeacherMode(false))}
+              />
+              {t('settings.teacherModeOff')}
+            </label>
+          </div>
         </section>
       ) : null}
 

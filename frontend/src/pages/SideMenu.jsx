@@ -15,6 +15,7 @@ export default function SideMenu() {
   const agentActive = location.pathname.startsWith('/create-with-ai')
   const mixActive = location.pathname.startsWith('/mixes')
   const libraryActive = location.pathname.startsWith('/library')
+  const classesActive = location.pathname.startsWith('/classes')
   const setsActive = location.pathname.startsWith('/sets') || location.pathname.startsWith('/groups')
   const settingsActive = location.pathname.startsWith('/settings')
   const admin = isAdmin(user)
@@ -50,6 +51,12 @@ export default function SideMenu() {
         <MenuIcon name="library" />
         <span>{t('library.title')}</span>
       </NavLink>
+      {admin ? (
+        <NavLink to="/classes" className={() => menuLinkClass(classesActive)} onClick={close}>
+          <MenuIcon name="classes" />
+          <span>{t('classes.title')}</span>
+        </NavLink>
+      ) : null}
       <div className="side-menu-spacer" />
       <NavLink to="/settings" className={() => menuLinkClass(settingsActive)} onClick={close}>
         <MenuIcon name="settings" />

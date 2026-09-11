@@ -17,9 +17,9 @@ import com.flashcards.card.CardRepository;
 import com.flashcards.common.ApiException;
 import com.flashcards.deck.Deck;
 import com.flashcards.deck.DeckRepository;
-import com.flashcards.group.DeckGroupRepository;
 import com.flashcards.review.CardReviewRepository;
 import com.flashcards.review.ReviewRating;
+import com.flashcards.security.OwnedAccess;
 import com.flashcards.study.StudyService;
 import com.flashcards.study.StudySessionResponse;
 import com.flashcards.user.User;
@@ -31,26 +31,26 @@ public class StudyMixService {
     private final StudyMixRepository mixRepository;
     private final UserRepository userRepository;
     private final DeckRepository deckRepository;
-    private final DeckGroupRepository groupRepository;
     private final CardRepository cardRepository;
     private final CardReviewRepository cardReviewRepository;
     private final StudyService studyService;
+    private final OwnedAccess ownedAccess;
 
     public StudyMixService(
             StudyMixRepository mixRepository,
             UserRepository userRepository,
             DeckRepository deckRepository,
-            DeckGroupRepository groupRepository,
             CardRepository cardRepository,
             CardReviewRepository cardReviewRepository,
-            StudyService studyService) {
+            StudyService studyService,
+            OwnedAccess ownedAccess) {
         this.mixRepository = mixRepository;
         this.userRepository = userRepository;
         this.deckRepository = deckRepository;
-        this.groupRepository = groupRepository;
         this.cardRepository = cardRepository;
         this.cardReviewRepository = cardReviewRepository;
         this.studyService = studyService;
+        this.ownedAccess = ownedAccess;
     }
 
     @Transactional(readOnly = true)
@@ -142,17 +142,10 @@ public class StudyMixService {
             throw new ApiException(HttpStatus.BAD_REQUEST, "Select at least one set or deck");
         }
         if (!setIds.isEmpty()) {
-            for (UUID setId : setIds) {
-                groupRepository
-                        .findByIdAndUserId(setId, userId)
-                        .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Set not found"));
-            }
+            ownedAccess.requireSets(userId, setIds);
         }
         if (!deckIds.isEmpty()) {
-            List<Deck> owned = deckRepository.findByIdInAndUser_Id(deckIds, userId);
-            if (owned.size() != deckIds.size()) {
-                throw new ApiException(HttpStatus.NOT_FOUND, "Deck not found");
-            }
+            ownedAccess.requireDecks(userId, deckIds);
         }
         mix.setName(name);
         mix.setIncludeAll(includeAll);
@@ -192,9 +185,7 @@ public class StudyMixService {
     }
 
     private StudyMix requireOwned(UUID userId, UUID mixId) {
-        return mixRepository
-                .findByIdAndUserId(mixId, userId)
-                .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Study mix not found"));
+        return ownedAccess.requireMix(userId, mixId);
     }
 
     private User requireProUser(UUID userId) {

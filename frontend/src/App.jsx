@@ -20,7 +20,11 @@ import LibraryPage from './pages/LibraryPage'
 import LibraryGroupPage from './pages/LibraryGroupPage'
 import LibraryDeckPage from './pages/LibraryDeckPage'
 import PrivacyPage from './pages/PrivacyPage'
+import ClassesPage from './pages/ClassesPage'
+import ClassDetailPage from './pages/ClassDetailPage'
+import JoinClassPage from './pages/JoinClassPage'
 import SavingIndicator from './pages/SavingIndicator'
+import { pathAfterAuth } from './authRedirect'
 
 function DocumentLang() {
   const { t, i18n } = useTranslation()
@@ -29,11 +33,14 @@ function DocumentLang() {
   useEffect(() => {
     const splash = !user && (pathname === '/' || pathname === '/login' || pathname === '/register')
     const privacy = pathname === '/privacy'
+    const join = pathname.startsWith('/join/')
     document.title = privacy
       ? `${t('privacy.title')} — ${t('app.name')}`
-      : splash
-        ? t('app.title')
-        : t('app.name')
+      : join
+        ? `${t('classes.joinTitle')} — ${t('app.name')}`
+        : splash
+          ? t('app.title')
+          : t('app.name')
     document.documentElement.lang = currentLocale()
     document.documentElement.dir = currentLocale() === 'ar' ? 'rtl' : 'ltr'
   }, [t, i18n.resolvedLanguage, pathname, user])
@@ -67,11 +74,12 @@ function SetsIdRedirect() {
 
 function GuestOnly({ children }) {
   const { user, ready } = useAuth()
+  const location = useLocation()
   if (!ready) {
     return <LoadingScreen />
   }
   if (user) {
-    return <Navigate to="/" replace />
+    return <Navigate to={pathAfterAuth(location)} replace />
   }
   return children
 }
@@ -107,6 +115,7 @@ export default function App() {
           }
         />
         <Route path="/privacy" element={<PrivacyPage />} />
+        <Route path="/join/:code" element={<JoinClassPage />} />
         <Route element={<ProtectedLayout />}>
           <Route path="/" element={<DecksPage />} />
           <Route path="/sets" element={<GroupsPage />} />
@@ -124,6 +133,8 @@ export default function App() {
           <Route path="/library" element={<LibraryPage />} />
           <Route path="/library/groups/:id" element={<LibraryGroupPage />} />
           <Route path="/library/decks/:id" element={<LibraryDeckPage />} />
+          <Route path="/classes" element={<AdminOnly><ClassesPage /></AdminOnly>} />
+          <Route path="/classes/:id" element={<AdminOnly><ClassDetailPage /></AdminOnly>} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

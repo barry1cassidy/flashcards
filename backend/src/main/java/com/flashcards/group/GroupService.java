@@ -11,6 +11,7 @@ import com.flashcards.common.ApiException;
 import com.flashcards.deck.DeckResponse;
 import com.flashcards.deck.DeckRepository;
 import com.flashcards.deck.DeckService;
+import com.flashcards.security.OwnedAccess;
 import com.flashcards.user.User;
 import com.flashcards.user.UserRepository;
 
@@ -21,16 +22,19 @@ public class GroupService {
     private final DeckRepository deckRepository;
     private final DeckService deckService;
     private final UserRepository userRepository;
+    private final OwnedAccess ownedAccess;
 
     public GroupService(
             DeckGroupRepository deckGroupRepository,
             DeckRepository deckRepository,
             DeckService deckService,
-            UserRepository userRepository) {
+            UserRepository userRepository,
+            OwnedAccess ownedAccess) {
         this.deckGroupRepository = deckGroupRepository;
         this.deckRepository = deckRepository;
         this.deckService = deckService;
         this.userRepository = userRepository;
+        this.ownedAccess = ownedAccess;
     }
 
     @Transactional(readOnly = true)
@@ -90,8 +94,7 @@ public class GroupService {
     }
 
     public DeckGroup requireOwned(UUID userId, UUID groupId) {
-        return deckGroupRepository.findByIdAndUserId(groupId, userId)
-                .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Set not found"));
+        return ownedAccess.requireSet(userId, groupId);
     }
 
     private GroupResponse toResponse(DeckGroup group) {

@@ -37,6 +37,11 @@ const ERROR_KEYS = {
   'Agent job not found': 'errors.agentJobNotFound',
   'Study mix not found': 'errors.mixNotFound',
   'Select at least one set or deck': 'errors.mixEmpty',
+  'Class not found': 'errors.classNotFound',
+  'Teacher mode required': 'errors.teacherModeRequired',
+  'Deck already assigned': 'errors.deckAlreadyAssigned',
+  'Add this deck to My Decks first': 'errors.addDeckFirst',
+  'Teachers cannot leave their class': 'errors.teacherCannotLeave',
 }
 
 export function translateError(t, message) {

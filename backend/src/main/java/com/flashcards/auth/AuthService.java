@@ -122,6 +122,9 @@ public class AuthService {
         if (request.restudyWait() != null) {
             user.setRestudyWait(request.restudyWait());
         }
+        if (request.teacherMode() != null && user.isAdmin()) {
+            user.setTeacherMode(request.teacherMode());
+        }
         return toUserResponse(user);
     }
 
@@ -148,7 +151,8 @@ public class AuthService {
                 studyScope,
                 restudyWait,
                 user.isProLicensed(),
-                user.isAdmin());
+                user.isAdmin(),
+                user.isTeacherMode());
     }
 
     private static String displayNameFrom(GoogleTokenService.GoogleProfile profile, String email) {
