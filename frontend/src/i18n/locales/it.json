@@ -222,7 +222,7 @@
   "study": {
     "flip": "Gira",
     "quiz": "Quiz",
-    "write": "Scrivi",
+    "write": "Scrivi la Risposta",
     "selectMode": "Come Vuoi Studiare?",
     "flipHint": "Guarda il suggerimento, gira la carta e valuta quanto la sapevi.",
     "quizHint": "Quattro opzioni da questo mazzo. Una è giusta; le altre sono abbastanza vicine da confonderti.",
@@ -236,7 +236,7 @@
     "matchAnswer": "Risposta",
     "matchLeft_one": "{{count}} coppia rimasta.",
     "matchLeft_other": "{{count}} coppie rimaste.",
-    "listening": "Ascolto…",
+    "listening": "Ascolta",
     "audioCue": "Riproduci di nuovo se ti serve un altro passaggio, poi rivela quando l’hai.",
     "audioUnavailable": "Questo browser non può riprodurre la voce, quindi viene mostrato il suggerimento.",
     "replay": "Riproduci di Nuovo",

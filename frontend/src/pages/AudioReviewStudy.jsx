@@ -59,7 +59,10 @@ export default function AudioReviewStudy({
             </>
           ) : (
             <>
-              <h2 className="audio-hidden">{t('study.listening')}</h2>
+              <h2 className="audio-hidden">
+                <HeadphonesIcon />
+                <span>{t('study.listening')}</span>
+              </h2>
               <p className="muted">{t('study.audioCue')}</p>
             </>
           )}
@@ -81,6 +84,24 @@ function PlayIcon() {
   return (
     <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
       <path d="M8 5.14v13.72L19 12 8 5.14z" />
+    </svg>
+  )
+}
+
+function HeadphonesIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M5 13a7 7 0 0 1 14 0" />
+      <rect x="3.5" y="13" width="4" height="7" rx="1.5" />
+      <rect x="16.5" y="13" width="4" height="7" rx="1.5" />
     </svg>
   )
 }

@@ -222,7 +222,7 @@
   "study": {
     "flip": "Lật",
     "quiz": "Quiz",
-    "write": "Viết",
+    "write": "Viết Câu Trả Lời",
     "selectMode": "Bạn Muốn Học Thế Nào?",
     "flipHint": "Nhìn gợi ý, lật thẻ, rồi đánh giá bạn biết tốt đến đâu.",
     "quizHint": "Bốn lựa chọn từ bộ thẻ này. Một đúng; những cái còn lại đủ gần để đánh lừa bạn.",
@@ -236,7 +236,7 @@
     "matchAnswer": "Đáp án",
     "matchLeft_one": "Còn {{count}} cặp.",
     "matchLeft_other": "Còn {{count}} cặp.",
-    "listening": "Đang nghe…",
+    "listening": "Nghe",
     "audioCue": "Phát lại nếu cần thêm một lượt, rồi hiện khi bạn đã nhớ.",
     "audioUnavailable": "Trình duyệt này không phát được giọng nói, nên gợi ý được hiện thay thế.",
     "replay": "Phát Lại",

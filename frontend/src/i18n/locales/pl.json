@@ -232,7 +232,7 @@
   "study": {
     "flip": "Odwróć",
     "quiz": "Quiz",
-    "write": "Pisz",
+    "write": "Napisz Odpowiedź",
     "selectMode": "Jak Chcesz Się Uczyć?",
     "flipHint": "Spójrz na podpowiedź, odwróć kartę i oceń, jak dobrze ją znałeś.",
     "quizHint": "Cztery opcje z tej talii. Jedna jest dobra; reszta jest wystarczająco blisko, żeby Cię zmylić.",
@@ -248,7 +248,7 @@
     "matchLeft_few": "Zostały {{count}} pary.",
     "matchLeft_many": "Zostało {{count}} par.",
     "matchLeft_other": "Zostało {{count}} pary.",
-    "listening": "Odtwarzanie…",
+    "listening": "Słuchaj",
     "audioCue": "Odtwórz jeszcze raz, jeśli potrzebujesz kolejnego przejścia, potem odkryj, gdy już masz.",
     "audioUnavailable": "Ta przeglądarka nie odtwarza mowy, więc pokazywana jest podpowiedź.",
     "replay": "Odtwórz Ponownie",

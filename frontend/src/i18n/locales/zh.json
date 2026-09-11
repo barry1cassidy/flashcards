@@ -222,7 +222,7 @@
   "study": {
     "flip": "翻卡",
     "quiz": "测验",
-    "write": "默写",
+    "write": "默写答案",
     "selectMode": "你想怎么学？",
     "flipHint": "看提示，翻开卡片，再评价自己记得有多好。",
     "quizHint": "从此卡组抽出四个选项。一个正确，其余足够接近，容易让你搞混。",
@@ -236,7 +236,7 @@
     "matchAnswer": "答案",
     "matchLeft_one": "还剩 {{count}} 对。",
     "matchLeft_other": "还剩 {{count}} 对。",
-    "listening": "正在播放…",
+    "listening": "听",
     "audioCue": "需要的话再听一遍，想好后再揭晓。",
     "audioUnavailable": "此浏览器无法播放语音，因此改为显示提示。",
     "replay": "再播一次",

@@ -222,7 +222,7 @@
   "study": {
     "flip": "Virar",
     "quiz": "Quiz",
-    "write": "Escrever",
+    "write": "Escrever Resposta",
     "selectMode": "Como Você Quer Estudar?",
     "flipHint": "Olhe a dica, vire o cartão e avalie o quanto você sabia.",
     "quizHint": "Quatro opções deste baralho. Uma está certa; as outras são próximas o bastante para te pegar.",
@@ -236,7 +236,7 @@
     "matchAnswer": "Resposta",
     "matchLeft_one": "{{count}} par restante.",
     "matchLeft_other": "{{count}} pares restantes.",
-    "listening": "Ouvindo…",
+    "listening": "Ouça",
     "audioCue": "Toque de novo se precisar de outra passagem e revele quando lembrar.",
     "audioUnavailable": "Este navegador não consegue reproduzir fala, então a dica é mostrada no lugar.",
     "replay": "Tocar de Novo",

@@ -676,6 +676,62 @@ textarea {
   gap: 16px;
 }
 
+.write-compare {
+  display: grid;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface-2);
+}
+
+.write-compare-block {
+  display: grid;
+  gap: 6px;
+}
+
+.write-compare-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 44px;
+}
+
+.write-compare-label .speak-btn {
+  width: 44px;
+  height: 44px;
+}
+
+.write-compare-line {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: var(--card);
+  font-size: 1.15rem;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.write-diff-missing {
+  background: rgba(63, 207, 142, 0.28);
+  border-radius: 4px;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+.write-diff-extra {
+  background: rgba(255, 107, 87, 0.28);
+  border-radius: 4px;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+.write-diff-empty {
+  color: var(--muted);
+}
+
 .study-progress {
   width: min(640px, 100%);
   margin: 0 auto 20px;
@@ -969,6 +1025,16 @@ textarea {
 .audio-hidden {
   color: var(--muted);
   font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4em;
+}
+
+.audio-hidden svg {
+  width: 1.05em;
+  height: 1.05em;
+  flex-shrink: 0;
 }
 
 @keyframes match-shake {

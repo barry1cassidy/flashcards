@@ -222,7 +222,7 @@
   "study": {
     "flip": "Umdrehen",
     "quiz": "Quiz",
-    "write": "Schreiben",
+    "write": "Antwort Schreiben",
     "selectMode": "Wie Möchtest Du Lernen?",
     "flipHint": "Sieh dir den Impuls an, drehe die Karte um und bewerte, wie gut du sie kanntest.",
     "quizHint": "Vier Optionen aus diesem Stapel. Eine ist richtig; die anderen sind nah genug, um dich zu verwirren.",
@@ -236,7 +236,7 @@
     "matchAnswer": "Antwort",
     "matchLeft_one": "Noch {{count}} Paar übrig.",
     "matchLeft_other": "Noch {{count}} Paare übrig.",
-    "listening": "Hören…",
+    "listening": "Hör zu",
     "audioCue": "Nochmal abspielen, wenn du einen weiteren Durchgang brauchst, dann aufdecken, wenn du sie hast.",
     "audioUnavailable": "Dieser Browser kann Sprache nicht abspielen, daher wird der Impuls angezeigt.",
     "replay": "Nochmal Abspielen",

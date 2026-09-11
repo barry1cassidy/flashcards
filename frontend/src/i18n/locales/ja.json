@@ -222,7 +222,7 @@
   "study": {
     "flip": "めくる",
     "quiz": "クイズ",
-    "write": "書く",
+    "write": "答えを書く",
     "selectMode": "どう学びますか？",
     "flipHint": "ヒントを見てカードをめくり、どれだけ分かっていたかを評価します。",
     "quizHint": "このデッキから4つの選択肢。1つが正しく、残りは引っかかりやすい近さです。",
@@ -236,7 +236,7 @@
     "matchAnswer": "答え",
     "matchLeft_one": "残り {{count}} 組。",
     "matchLeft_other": "残り {{count}} 組。",
-    "listening": "再生中…",
+    "listening": "聞いて",
     "audioCue": "もう一度必要なら再生し、思い浮かんだら表示します。",
     "audioUnavailable": "このブラウザは音声を再生できないため、ヒントを表示します。",
     "replay": "もう一度再生",

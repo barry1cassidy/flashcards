@@ -222,7 +222,7 @@
   "study": {
     "flip": "Retourner",
     "quiz": "Quiz",
-    "write": "Écrire",
+    "write": "Écrire la Réponse",
     "selectMode": "Comment Voulez-Vous Étudier ?",
     "flipHint": "Regardez la consigne, retournez la carte, puis notez à quel point vous la connaissiez.",
     "quizHint": "Quatre options de ce paquet. Une est juste ; les autres sont assez proches pour vous piéger.",
@@ -236,7 +236,7 @@
     "matchAnswer": "Réponse",
     "matchLeft_one": "{{count}} paire restante.",
     "matchLeft_other": "{{count}} paires restantes.",
-    "listening": "Écoute…",
+    "listening": "Écoute",
     "audioCue": "Relancez si vous avez besoin d’un autre passage, puis révélez quand vous l’avez.",
     "audioUnavailable": "Ce navigateur ne peut pas lire la parole, la consigne s’affiche donc à la place.",
     "replay": "Relire",

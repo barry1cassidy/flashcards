@@ -382,7 +382,7 @@
   "study": {
     "flip": "Flip",
     "quiz": "Quiz",
-    "write": "Write",
+    "write": "Write Answer",
     "selectMode": "How Do You Want to Study?",
     "flipHint": "Look at the prompt, flip the card, then rate how well you knew it.",
     "quizHint": "Four options from this deck. One is right; the others are close enough to trip you up.",
@@ -396,7 +396,7 @@
     "matchAnswer": "Answer",
     "matchLeft_one": "{{count}} pair left.",
     "matchLeft_other": "{{count}} pairs left.",
-    "listening": "Listening…",
+    "listening": "Listen",
     "audioCue": "Replay if you need another pass, then reveal when you have it.",
     "audioUnavailable": "This browser can't play speech, so the prompt is shown instead.",
     "replay": "Play Again",
@@ -449,6 +449,8 @@
     "typeAnswer": "Type the answer",
     "check": "Check",
     "correct": "Correct",
+    "yourAnswer": "Yours",
+    "continue": "Continue",
     "answerWas": "Answer: {{answer}}",
     "loadingCards": "Loading cards…"
   },

@@ -222,7 +222,7 @@
   "study": {
     "flip": "뒤집기",
     "quiz": "퀴즈",
-    "write": "쓰기",
+    "write": "답 쓰기",
     "selectMode": "어떻게 학습할까요?",
     "flipHint": "힌트를 보고 카드를 뒤집은 다음, 얼마나 잘 알았는지 평가하세요.",
     "quizHint": "이 덱에서 고른 네 가지 선택. 하나는 맞고, 나머지는 헷갈릴 만큼 가깝습니다.",
@@ -236,7 +236,7 @@
     "matchAnswer": "답",
     "matchLeft_one": "{{count}}쌍 남음.",
     "matchLeft_other": "{{count}}쌍 남음.",
-    "listening": "듣는 중…",
+    "listening": "들어보세요",
     "audioCue": "한 번 더 필요하면 다시 재생하고, 떠오르면 공개하세요.",
     "audioUnavailable": "이 브라우저는 음성을 재생할 수 없어 힌트를 대신 표시합니다.",
     "replay": "다시 재생",

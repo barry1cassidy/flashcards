@@ -11,6 +11,7 @@ import AudioReviewStudy from './AudioReviewStudy'
 import ConfirmModal from './ConfirmModal'
 import RatingRow from './RatingRow'
 import { useAuth } from '../AuthContext'
+import { answersMatch, diffAnswers } from '../answerCompare'
 
 export default function StudyPage() {
   const { t } = useTranslation()
@@ -45,6 +46,7 @@ export default function StudyPage() {
   const [hardCount, setHardCount] = useState(0)
   const [againDeckCount, setAgainDeckCount] = useState(0)
   const [retryIds, setRetryIds] = useState(() => new Set())
+  const [pendingAdvance, setPendingAdvance] = useState(null)
 
   const current = cards[index]
   const hideAgain = Boolean(current && retryIds.has(current.id))
@@ -137,6 +139,7 @@ export default function StudyPage() {
     setWritten('')
     setFeedback(null)
     setExitKind('')
+    setPendingAdvance(null)
   }
 
   function tallyRating(rating) {
@@ -150,7 +153,7 @@ export default function StudyPage() {
     setReviewed((count) => count + 1)
   }
 
-  async function submitRating(rating, pauseMs = 0) {
+  async function submitRating(rating, pauseMs = 0, { waitForContinue = false } = {}) {
     if (!current || busy) {
       return
     }
@@ -171,27 +174,21 @@ export default function StudyPage() {
         setRetryIds((ids) => new Set(ids).add(current.id))
         setCards((list) => [...list, current])
       }
+      const step = {
+        deferAgain,
+        rating,
+        nextIndex: index + 1,
+        queueLength: deferAgain ? cards.length + 1 : cards.length,
+      }
+      if (waitForContinue) {
+        setPendingAdvance(step)
+        return
+      }
       const waitMs = usesExit && !reduceMotion ? 380 : pauseMs
       if (waitMs) {
         await new Promise((resolve) => setTimeout(resolve, waitMs))
       }
-      const nextIndex = index + 1
-      if (!deferAgain) {
-        tallyRating(rating)
-      }
-      const queueLength = deferAgain ? cards.length + 1 : cards.length
-      if (nextIndex >= queueLength) {
-        try {
-          await refreshStudyStats()
-        } catch (statsErr) {
-          setError(statsErr.message)
-        }
-        setDone(true)
-        setExitKind('')
-      } else {
-        setIndex(nextIndex)
-        resetCardState()
-      }
+      await finishAdvance(step)
     } catch (err) {
       setExitKind('')
       setError(err.message)
@@ -200,8 +197,38 @@ export default function StudyPage() {
     }
   }
 
-  function answersMatch(expected, actual) {
-    return expected.trim().toLowerCase() === actual.trim().toLowerCase()
+  async function finishAdvance({ deferAgain, rating, nextIndex, queueLength }) {
+    if (!deferAgain) {
+      tallyRating(rating)
+    }
+    if (nextIndex >= queueLength) {
+      try {
+        await refreshStudyStats()
+      } catch (statsErr) {
+        setError(statsErr.message)
+      }
+      setPendingAdvance(null)
+      setDone(true)
+      setExitKind('')
+    } else {
+      setIndex(nextIndex)
+      resetCardState()
+    }
+  }
+
+  async function continueWrite() {
+    if (!pendingAdvance || busy) {
+      return
+    }
+    setBusy(true)
+    setError('')
+    try {
+      await finishAdvance(pendingAdvance)
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setBusy(false)
+    }
   }
 
   async function gradeQuiz(selected) {
@@ -213,9 +240,16 @@ export default function StudyPage() {
 
   async function gradeWrite(event) {
     event.preventDefault()
+    if (busy || feedback) {
+      return
+    }
     const correct = answersMatch(current.back, written)
     setFeedback(correct ? 'correct' : 'wrong')
-    await submitRating(correct ? 'GOOD' : 'AGAIN', 900)
+    if (correct) {
+      await submitRating('GOOD', 900)
+      return
+    }
+    await submitRating('AGAIN', 0, { waitForContinue: true })
   }
 
   async function gradeMatch(card, rating) {
@@ -545,19 +579,21 @@ export default function StudyPage() {
                 placeholder={t('study.typeAnswer')}
                 autoFocus
                 required
-                disabled={busy}
+                disabled={busy || Boolean(feedback)}
               />
-              <button className="btn primary" type="submit" disabled={busy}>
-                {t('study.check')}
-              </button>
-              {feedback ? (
-                <p className={feedback === 'correct' ? 'ok' : 'error'}>
-                  {feedback === 'correct' ? t('study.correct') : t('study.answerWas', { answer: current.back })}
-                  {feedback === 'wrong' ? (
-                    <SpeakButton text={current.back} lang={current.backLanguage} />
-                  ) : null}
-                </p>
+              {feedback === 'correct' ? <p className="ok">{t('study.correct')}</p> : null}
+              {feedback === 'wrong' ? (
+                <WriteAnswerCompare expected={current.back} actual={written} lang={current.backLanguage} />
               ) : null}
+              {feedback === 'wrong' ? (
+                <button className="btn primary" type="button" disabled={busy} onClick={continueWrite}>
+                  {t('study.continue')}
+                </button>
+              ) : (
+                <button className="btn primary" type="submit" disabled={busy || Boolean(feedback)}>
+                  {t('study.check')}
+                </button>
+              )}
             </form>
           ) : null}
         </div>
@@ -583,4 +619,41 @@ export default function StudyPage() {
       ) : null}
     </div>
   )
+}
+
+function WriteAnswerCompare({ expected, actual, lang }) {
+  const { t } = useTranslation()
+  const diff = diffAnswers(expected, actual)
+  return (
+    <div className="write-compare">
+      <div className="write-compare-block">
+        <div className="write-compare-label">
+          <span className="eyebrow">{t('study.answer')}</span>
+          <SpeakButton text={expected} lang={lang} />
+        </div>
+        <p className="write-compare-line">
+          <DiffText parts={diff.expected} />
+        </p>
+      </div>
+      <div className="write-compare-block">
+        <div className="write-compare-label">
+          <span className="eyebrow">{t('study.yourAnswer')}</span>
+        </div>
+        <p className="write-compare-line">
+          <DiffText parts={diff.actual} />
+        </p>
+      </div>
+    </div>
+  )
+}
+
+function DiffText({ parts }) {
+  if (!parts.length) {
+    return <span className="write-diff-empty">·</span>
+  }
+  return parts.map((part, index) => (
+    <span key={`${part.kind}-${index}`} className={part.kind === 'same' ? undefined : `write-diff-${part.kind}`}>
+      {part.text}
+    </span>
+  ))
 }

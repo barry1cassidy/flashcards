@@ -382,7 +382,7 @@
   "study": {
     "flip": "Voltear",
     "quiz": "Quiz",
-    "write": "Escribir",
+    "write": "Escribir Respuesta",
     "selectMode": "¿Cómo Quieres Estudiar?",
     "flipHint": "Mira la pista, voltea la tarjeta y valora qué tan bien la sabías.",
     "quizHint": "Cuatro opciones de este mazo. Una es correcta; las otras están lo bastante cerca para confundirte.",
@@ -396,7 +396,7 @@
     "matchAnswer": "Respuesta",
     "matchLeft_one": "Queda {{count}} par.",
     "matchLeft_other": "Quedan {{count}} pares.",
-    "listening": "Escuchando…",
+    "listening": "Escucha",
     "audioCue": "Vuelve a escuchar si lo necesitas y revela cuando la tengas.",
     "audioUnavailable": "Este navegador no puede leer en voz alta, así que se muestra la pista.",
     "replay": "Escuchar de Nuevo",
@@ -449,6 +449,8 @@
     "typeAnswer": "Escribe la respuesta",
     "check": "Comprobar",
     "correct": "Correcto",
+    "yourAnswer": "Tu Respuesta",
+    "continue": "Continuar",
     "answerWas": "Respuesta: {{answer}}",
     "loadingCards": "Cargando tarjetas…"
   },

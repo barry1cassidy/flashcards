@@ -222,7 +222,7 @@
   "study": {
     "flip": "Omdraaien",
     "quiz": "Quiz",
-    "write": "Schrijven",
+    "write": "Antwoord Schrijven",
     "selectMode": "Hoe Wil Je Studeren?",
     "flipHint": "Kijk naar de hint, draai de kaart om en beoordeel hoe goed je hem kende.",
     "quizHint": "Vier opties uit deze stapel. Eén is goed; de andere zijn dichtbij genoeg om je te misleiden.",
@@ -236,7 +236,7 @@
     "matchAnswer": "Antwoord",
     "matchLeft_one": "Nog {{count}} paar over.",
     "matchLeft_other": "Nog {{count}} paren over.",
-    "listening": "Luisteren…",
+    "listening": "Luister",
     "audioCue": "Speel opnieuw af als je nog een ronde nodig hebt, toon als je hem hebt.",
     "audioUnavailable": "Deze browser kan geen spraak afspelen, dus de hint wordt getoond.",
     "replay": "Opnieuw Afspelen",

@@ -222,7 +222,7 @@
   "study": {
     "flip": "Çevir",
     "quiz": "Quiz",
-    "write": "Yaz",
+    "write": "Yanıtı Yaz",
     "selectMode": "Nasıl Çalışmak İstersiniz?",
     "flipHint": "İpucuna bakın, kartı çevirin, sonra ne kadar bildiğinizi puanlayın.",
     "quizHint": "Bu desteden dört seçenek. Biri doğru; diğerleri sizi yanıltacak kadar yakın.",
@@ -236,7 +236,7 @@
     "matchAnswer": "Yanıt",
     "matchLeft_one": "{{count}} çift kaldı.",
     "matchLeft_other": "{{count}} çift kaldı.",
-    "listening": "Dinleniyor…",
+    "listening": "Dinle",
     "audioCue": "Bir geçiş daha gerekirse yeniden çalın, aklınıza gelince gösterin.",
     "audioUnavailable": "Bu tarayıcı konuşma çalamıyor, bu yüzden ipucu gösteriliyor.",
     "replay": "Yeniden Çal",

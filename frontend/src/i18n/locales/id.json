@@ -222,7 +222,7 @@
   "study": {
     "flip": "Balik",
     "quiz": "Kuis",
-    "write": "Tulis",
+    "write": "Tulis Jawaban",
     "selectMode": "Bagaimana Kamu Ingin Belajar?",
     "flipHint": "Lihat petunjuk, balik kartu, lalu nilai seberapa baik kamu mengetahuinya.",
     "quizHint": "Empat opsi dari dek ini. Satu benar; yang lain cukup dekat untuk menjebak.",
@@ -236,7 +236,7 @@
     "matchAnswer": "Jawaban",
     "matchLeft_one": "{{count}} pasangan tersisa.",
     "matchLeft_other": "{{count}} pasangan tersisa.",
-    "listening": "Mendengarkan…",
+    "listening": "Dengarkan",
     "audioCue": "Putar lagi jika perlu sekali lagi, lalu tampilkan saat sudah ingat.",
     "audioUnavailable": "Peramban ini tidak bisa memutar ucapan, jadi petunjuk ditampilkan sebagai gantinya.",
     "replay": "Putar Lagi",
