@@ -19,8 +19,10 @@ const ICONS = {
   ),
   library: (
     <>
-      <path d="M4 5h6a3 3 0 0 1 3 3v12a3 3 0 0 0-3-3H4z" />
-      <path d="M20 5h-6a3 3 0 0 0-3 3v12a3 3 0 0 1 3-3h6z" />
+      <rect x="8" y="3.5" width="12" height="9" rx="2" strokeDasharray="2.4 2" />
+      <rect x="4" y="9.5" width="12" height="11" rx="2" />
+      <path d="M7 13.5h6" />
+      <path d="M7 16.5h4" />
     </>
   ),
   mix: (
