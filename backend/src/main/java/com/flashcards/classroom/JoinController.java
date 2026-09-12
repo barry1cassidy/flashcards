@@ -1,5 +1,6 @@
 package com.flashcards.classroom;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,6 +27,11 @@ public class JoinController {
 
     @PostMapping("/{code}")
     public ClassDetailResponse join(Authentication authentication, @PathVariable String code) {
-        return classService.join(AuthSupport.requireUser(authentication).id(), code);
+        var userId = AuthSupport.requireUser(authentication).id();
+        try {
+            return classService.join(userId, code);
+        } catch (DataIntegrityViolationException ex) {
+            return classService.joinedByCode(userId, code);
+        }
     }
 }

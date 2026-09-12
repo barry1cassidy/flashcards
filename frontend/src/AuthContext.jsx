@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import { api, getToken, setToken } from './api'
 import { applyLocale, deviceLocale } from './i18n'
 import { applyTheme } from './theme'
+import { clearJoinInvite } from './authRedirect'
 
 const AuthContext = createContext(null)
 
@@ -127,6 +128,7 @@ export function AuthProvider({ children }) {
       logout() {
         setToken(null)
         setUser(null)
+        clearJoinInvite()
         applyTheme('DARK')
         applyLocale(deviceLocale())
       },

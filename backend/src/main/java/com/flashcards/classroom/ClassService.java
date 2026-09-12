@@ -173,6 +173,16 @@ public class ClassService {
         return toDetail(studyClass, userId);
     }
 
+    @Transactional(readOnly = true)
+    public ClassDetailResponse joinedByCode(UUID userId, String rawCode) {
+        StudyClass studyClass = requireClassByCode(rawCode);
+        if (ownedAccess.isClassOwner(studyClass, userId)
+                || memberRepository.existsByStudyClass_IdAndUser_Id(studyClass.getId(), userId)) {
+            return toDetail(studyClass, userId);
+        }
+        throw OwnedAccess.hidden("Class not found");
+    }
+
     @Transactional
     public ClassDetailResponse assignDeck(UUID userId, UUID classId, UUID deckId) {
         StudyClass studyClass = ownedAccess.requireClassOwner(userId, classId);

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '../AuthContext'
 import { isAdmin } from '../admin'
@@ -38,6 +38,7 @@ export default function AppHeader() {
 function UserMenu() {
   const { t } = useTranslation()
   const { user, logout } = useAuth()
+  const navigate = useNavigate()
   const [open, setOpen] = useState(false)
   const menuRef = useRef(null)
 
@@ -81,7 +82,15 @@ function UserMenu() {
       </button>
       {open ? (
         <div className="user-menu-dropdown" role="menu">
-          <button className="user-menu-item" type="button" role="menuitem" onClick={logout}>
+          <button
+            className="user-menu-item"
+            type="button"
+            role="menuitem"
+            onClick={() => {
+              logout()
+              navigate('/', { replace: true })
+            }}
+          >
             {t('nav.logOut')}
           </button>
         </div>

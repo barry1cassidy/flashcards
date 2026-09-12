@@ -161,6 +161,32 @@ class ClassServiceTest {
     }
 
     @Test
+    void joinWhenAlreadyAMemberReturnsTheClass() {
+        when(classRepository.findByJoinCode("K7M2QX")).thenReturn(Optional.of(studyClass));
+        when(userRepository.findById(studentId)).thenReturn(Optional.of(student));
+        when(memberRepository.existsByStudyClass_IdAndUser_Id(classId, studentId)).thenReturn(true);
+        stubEmptyDetail();
+
+        ClassDetailResponse response = classService.join(studentId, "K7M2QX");
+
+        verify(memberRepository, never()).save(any());
+        assertEquals("STUDENT", response.role());
+        assertEquals(classId, response.id());
+    }
+
+    @Test
+    void joinedByCodeReturnsDetailForAMember() {
+        when(classRepository.findByJoinCode("K7M2QX")).thenReturn(Optional.of(studyClass));
+        when(memberRepository.existsByStudyClass_IdAndUser_Id(classId, studentId)).thenReturn(true);
+        stubEmptyDetail();
+
+        ClassDetailResponse response = classService.joinedByCode(studentId, "k7m2qx");
+
+        assertEquals("STUDENT", response.role());
+        assertEquals(classId, response.id());
+    }
+
+    @Test
     void joinWithBadCodeIsHidden() {
         ApiException malformed = assertThrows(ApiException.class, () -> classService.join(studentId, "nope"));
         assertEquals(HttpStatus.NOT_FOUND, malformed.getStatus());

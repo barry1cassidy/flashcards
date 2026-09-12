@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useAuth } from '../AuthContext'
 import { currentLocale } from '../i18n'
 import { translateError } from '../i18n/errors'
-import { pathAfterAuth } from '../authRedirect'
+import { goAfterAuth, inviteAuthState } from '../authRedirect'
 import MarketingHeader, { MarketingFooter } from './MarketingHeader'
 
 export default function RegisterPage() {
@@ -24,7 +24,7 @@ export default function RegisterPage() {
     setBusy(true)
     try {
       await register(displayName, email, password, currentLocale())
-      navigate(pathAfterAuth(location), { replace: true })
+      goAfterAuth(navigate, location)
     } catch (err) {
       setError(err.message)
     } finally {
@@ -66,7 +66,7 @@ export default function RegisterPage() {
             </button>
           </form>
           <p className="muted">
-            {t('auth.alreadyHaveAccount')} <Link to="/login" state={location.state}>{t('auth.signIn')}</Link>
+            {t('auth.alreadyHaveAccount')} <Link to="/login" state={inviteAuthState(location)}>{t('auth.signIn')}</Link>
           </p>
         </div>
       </section>

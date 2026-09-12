@@ -6,13 +6,16 @@ import { translateError } from '../i18n/errors'
 import { currentLocale } from '../i18n'
 import GoogleSignInButton, { getGoogleClientId } from './GoogleSignInButton'
 import Brand from './Brand'
-import { pathAfterAuth } from '../authRedirect'
+import { goAfterAuth, inviteAuthState, clearJoinInvite } from '../authRedirect'
 
-export default function MarketingHeader({ showLoginForm = false }) {
+export default function MarketingHeader({ showLoginForm = false, loginOpen, onLoginOpenChange }) {
   const { t } = useTranslation()
   const { user } = useAuth()
   const location = useLocation()
-  const [open, setOpen] = useState(false)
+  const [internalOpen, setInternalOpen] = useState(() => location.pathname === '/login')
+  const controlled = typeof onLoginOpenChange === 'function'
+  const open = controlled ? Boolean(loginOpen) : internalOpen
+  const setOpen = controlled ? onLoginOpenChange : setInternalOpen
   const authRef = useRef(null)
   const onSplash = location.pathname === '/login' || location.pathname === '/'
   const modesHref = onSplash ? '#modes' : '/login#modes'
@@ -36,7 +39,7 @@ export default function MarketingHeader({ showLoginForm = false }) {
       document.removeEventListener('pointerdown', onPointerDown)
       document.removeEventListener('keydown', onKeyDown)
     }
-  }, [])
+  }, [setOpen])
 
   return (
     <header className="marketing-header">
@@ -51,7 +54,7 @@ export default function MarketingHeader({ showLoginForm = false }) {
         </div>
         <div className="marketing-auth" ref={authRef}>
           {user ? (
-            <Link className="btn login-btn" to="/">
+            <Link className="btn login-btn" to="/" onClick={clearJoinInvite}>
               {t('nav.allDecks')}
             </Link>
           ) : showLoginForm ? (
@@ -72,7 +75,7 @@ export default function MarketingHeader({ showLoginForm = false }) {
               ) : null}
             </>
           ) : (
-            <Link className="btn login-btn" to="/login" state={{ from: location }}>
+            <Link className="btn login-btn" to="/login" state={inviteAuthState(location)}>
               {t('auth.signIn')}
             </Link>
           )}
@@ -98,7 +101,7 @@ function LoginFields() {
     setBusy(true)
     try {
       await work()
-      navigate(pathAfterAuth(location), { replace: true })
+      goAfterAuth(navigate, location)
     } catch (err) {
       setError(err.message)
     } finally {
@@ -154,7 +157,7 @@ function LoginFields() {
           {busy ? t('auth.signingIn') : t('auth.continue')}
         </button>
       </form>
-      <Link className="login-alt" to="/register" state={location.state}>
+      <Link className="login-alt" to="/register" state={inviteAuthState(location)}>
         {t('auth.newHere')} {t('auth.createFreeAccount')}
       </Link>
     </>

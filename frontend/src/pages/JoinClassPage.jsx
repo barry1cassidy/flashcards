@@ -1,10 +1,13 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { api } from '../api'
 import { useAuth } from '../AuthContext'
+import { inviteAuthState, peekJoinInvite, rememberJoinInvite, takeJoinInvite } from '../authRedirect'
 import { translateError } from '../i18n/errors'
 import MarketingHeader, { MarketingFooter } from './MarketingHeader'
+
+const joiningCodes = new Set()
 
 export default function JoinClassPage() {
   const { t } = useTranslation()
@@ -15,6 +18,9 @@ export default function JoinClassPage() {
   const [preview, setPreview] = useState(null)
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
+  const [loginOpen, setLoginOpen] = useState(false)
+  const joinPath = `/join/${code}`
+  const skipAutoJoin = useRef(null)
 
   useEffect(() => {
     api(`/api/join/${encodeURIComponent(code)}`)
@@ -22,15 +28,52 @@ export default function JoinClassPage() {
       .catch((err) => setError(err.message))
   }, [code])
 
+  useEffect(() => {
+    if (!ready || user) {
+      return
+    }
+    rememberJoinInvite(joinPath)
+  }, [ready, user, joinPath])
+
+  useEffect(() => {
+    if (!ready) {
+      return
+    }
+    if (skipAutoJoin.current === null) {
+      skipAutoJoin.current = Boolean(user) && peekJoinInvite() !== joinPath
+    }
+    if (skipAutoJoin.current || !user || !preview || joiningCodes.has(code)) {
+      return
+    }
+    joiningCodes.add(code)
+    setError('')
+    setBusy(true)
+    api(`/api/join/${encodeURIComponent(code)}`, { method: 'POST' })
+      .then((detail) => {
+        takeJoinInvite()
+        navigate(`/classes/${detail.id}`, { replace: true })
+      })
+      .catch((err) => {
+        joiningCodes.delete(code)
+        setError(err.message)
+        setBusy(false)
+      })
+  }, [ready, user, preview, code, joinPath, navigate])
+
   async function join() {
+    if (joiningCodes.has(code)) {
+      return
+    }
+    joiningCodes.add(code)
     setError('')
     setBusy(true)
     try {
       const detail = await api(`/api/join/${encodeURIComponent(code)}`, { method: 'POST' })
+      takeJoinInvite()
       navigate(`/classes/${detail.id}`, { replace: true })
     } catch (err) {
+      joiningCodes.delete(code)
       setError(err.message)
-    } finally {
       setBusy(false)
     }
   }
@@ -41,7 +84,7 @@ export default function JoinClassPage() {
 
   return (
     <div className="marketing">
-      <MarketingHeader />
+      <MarketingHeader showLoginForm loginOpen={loginOpen} onLoginOpenChange={setLoginOpen} />
       <section className="register-panel">
         <div className="auth-card">
           <p className="kicker">{t('classes.joinKicker')}</p>
@@ -68,10 +111,23 @@ export default function JoinClassPage() {
           ) : null}
           {preview && !user ? (
             <div className="header-actions">
-              <Link className="btn primary" to="/login" state={{ from: location }}>
+              <button
+                className="btn primary"
+                type="button"
+                onPointerDown={(event) => event.stopPropagation()}
+                onClick={() => {
+                  rememberJoinInvite(joinPath)
+                  setLoginOpen(true)
+                }}
+              >
                 {t('auth.signIn')}
-              </Link>
-              <Link className="btn" to="/register" state={{ from: location }}>
+              </button>
+              <Link
+                className="btn"
+                to="/register"
+                state={inviteAuthState(location)}
+                onClick={() => rememberJoinInvite(joinPath)}
+              >
                 {t('auth.createAccountButton')}
               </Link>
             </div>

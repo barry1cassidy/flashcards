@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes, useLocation, useParams } from 'react-router-dom'
+import { Navigate, Route, Routes, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AuthProvider, useAuth } from './AuthContext'
@@ -24,7 +24,7 @@ import ClassesPage from './pages/ClassesPage'
 import ClassDetailPage from './pages/ClassDetailPage'
 import JoinClassPage from './pages/JoinClassPage'
 import SavingIndicator from './pages/SavingIndicator'
-import { pathAfterAuth } from './authRedirect'
+import { pathAfterAuth, peekJoinInvite, shouldResumeJoinInvite } from './authRedirect'
 
 function DocumentLang() {
   const { t, i18n } = useTranslation()
@@ -52,6 +52,25 @@ function LoadingScreen() {
   return <div className="page-loading">{t('app.loading')}</div>
 }
 
+function InviteResume() {
+  const { user, ready } = useAuth()
+  const location = useLocation()
+  const navigate = useNavigate()
+  useEffect(() => {
+    if (!ready || !user || location.pathname.startsWith('/join/')) {
+      return
+    }
+    if (!shouldResumeJoinInvite()) {
+      return
+    }
+    const invite = peekJoinInvite()
+    if (invite) {
+      navigate(invite, { replace: true })
+    }
+  }, [ready, user, location.pathname, navigate])
+  return null
+}
+
 function ProtectedLayout() {
   const { user, ready } = useAuth()
   const location = useLocation()
@@ -62,7 +81,7 @@ function ProtectedLayout() {
     if (location.pathname === '/') {
       return <LoginPage />
     }
-    return <Navigate to="/login" replace state={{ from: location }} />
+    return <Navigate to="/login" replace />
   }
   return <AppLayout />
 }
@@ -79,7 +98,8 @@ function GuestOnly({ children }) {
     return <LoadingScreen />
   }
   if (user) {
-    return <Navigate to={pathAfterAuth(location)} replace />
+    const next = pathAfterAuth(location)
+    return <Navigate to={next} replace />
   }
   return children
 }
@@ -97,6 +117,7 @@ export default function App() {
     <AuthProvider>
       <DocumentLang />
       <SavingIndicator />
+      <InviteResume />
       <Routes>
         <Route
           path="/login"
@@ -134,7 +155,7 @@ export default function App() {
           <Route path="/library/groups/:id" element={<LibraryGroupPage />} />
           <Route path="/library/decks/:id" element={<LibraryDeckPage />} />
           <Route path="/classes" element={<AdminOnly><ClassesPage /></AdminOnly>} />
-          <Route path="/classes/:id" element={<AdminOnly><ClassDetailPage /></AdminOnly>} />
+          <Route path="/classes/:id" element={<ClassDetailPage />} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
