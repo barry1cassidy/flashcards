@@ -6,6 +6,7 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -14,6 +15,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -70,22 +72,34 @@ public class StudyService {
 
     @Transactional(readOnly = true)
     public StudySessionResponse startSession(UUID userId, List<UUID> deckIds, String mode, String filter) {
+        return startSession(userId, deckIds, mode, filter, null, false);
+    }
+
+    @Transactional(readOnly = true)
+    public StudySessionResponse startSession(
+            UUID userId, List<UUID> deckIds, String mode, String filter, StudyOrder orderOverride, boolean mixSession) {
         String normalized = normalizeMode(mode);
         String normalizedFilter = normalizeFilter(filter);
         User user = requireUser(userId);
-        StudyOrder order = user.getStudyOrder() == null ? StudyOrder.POSITION : user.getStudyOrder();
+        StudyOrder order = orderOverride != null
+                ? orderOverride
+                : (user.getStudyOrder() == null ? StudyOrder.POSITION : user.getStudyOrder());
         LocalDate today = LocalDate.now();
         List<Card> queue = new ArrayList<>();
         if (!deckIds.isEmpty()) {
             deckService.requireOwned(userId, deckIds);
+            Pageable page = mixSession ? Pageable.unpaged() : PageRequest.of(0, SESSION_SIZE);
             if ("HARD".equals(normalizedFilter) || "AGAIN".equals(normalizedFilter)) {
                 ReviewRating rating = "AGAIN".equals(normalizedFilter) ? ReviewRating.AGAIN : ReviewRating.HARD;
-                queue.addAll(cardRepository.findHardQueueIn(deckIds, rating, PageRequest.of(0, SESSION_SIZE)));
+                queue.addAll(cardRepository.findHardQueueIn(deckIds, rating, page));
             } else {
-                queue.addAll(cardRepository.findStudyQueueIn(deckIds, today, PageRequest.of(0, SESSION_SIZE)));
+                queue.addAll(cardRepository.findStudyQueueIn(deckIds, today, page));
             }
         }
-        applyOrder(queue, order);
+        applyOrder(queue, order, deckIds);
+        if (queue.size() > SESSION_SIZE) {
+            queue.subList(SESSION_SIZE, queue.size()).clear();
+        }
         Map<UUID, CardReview> reviews = queue.isEmpty()
                 ? Map.of()
                 : cardReviewRepository.findByCardIdIn(queue.stream().map(Card::getId).toList()).stream()
@@ -207,14 +221,28 @@ public class StudyService {
                 .orElseThrow(() -> new ApiException(HttpStatus.UNAUTHORIZED, "Not authenticated"));
     }
 
-    private static void applyOrder(List<Card> cards, StudyOrder order) {
-        if (order == StudyOrder.REVERSE) {
-            cards.sort(Comparator.comparingInt(Card::getPosition).reversed().thenComparing(Card::getId));
-        } else if (order == StudyOrder.RANDOM) {
+    private static void applyOrder(List<Card> cards, StudyOrder order, List<UUID> deckIds) {
+        if (order == StudyOrder.RANDOM) {
             Collections.shuffle(cards);
-        } else {
-            cards.sort(Comparator.comparingInt(Card::getPosition).thenComparing(Card::getId));
+            return;
         }
+        Map<UUID, Integer> deckIndex = new HashMap<>();
+        for (int i = 0; i < deckIds.size(); i++) {
+            deckIndex.put(deckIds.get(i), i);
+        }
+        Comparator<Card> byDeckThenPosition = Comparator
+                .comparingInt((Card card) -> deckIndex.getOrDefault(deckId(card), Integer.MAX_VALUE))
+                .thenComparingInt(Card::getPosition)
+                .thenComparing(Card::getId);
+        if (order == StudyOrder.REVERSE) {
+            cards.sort(byDeckThenPosition.reversed());
+        } else {
+            cards.sort(byDeckThenPosition);
+        }
+    }
+
+    private static UUID deckId(Card card) {
+        return card.getDeck() == null ? null : card.getDeck().getId();
     }
 
     private static String normalizeMode(String mode) {

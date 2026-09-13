@@ -93,8 +93,9 @@ public class StudyMixService {
     @Transactional(readOnly = true)
     public StudySessionResponse startSession(UUID userId, UUID mixId, String mode, String filter) {
         User user = requireProUser(userId);
-        List<UUID> deckIds = resolveDeckIds(requireOwned(user.getId(), mixId));
-        return studyService.startSession(user.getId(), deckIds, mode, filter);
+        StudyMix mix = requireOwned(user.getId(), mixId);
+        List<UUID> deckIds = resolveDeckIds(mix);
+        return studyService.startSession(user.getId(), deckIds, mode, filter, mix.getStudyOrder(), true);
     }
 
     @Transactional
@@ -149,6 +150,7 @@ public class StudyMixService {
         }
         mix.setName(name);
         mix.setIncludeAll(includeAll);
+        mix.setStudyOrder(request.studyOrder());
         mix.getSetIds().clear();
         mix.getSetIds().addAll(setIds);
         mix.getDeckIds().clear();
@@ -173,6 +175,7 @@ public class StudyMixService {
                 mix.getId(),
                 mix.getName(),
                 mix.isIncludeAll(),
+                mix.getStudyOrder(),
                 List.copyOf(mix.getSetIds()),
                 List.copyOf(mix.getDeckIds()),
                 deckIds.size(),

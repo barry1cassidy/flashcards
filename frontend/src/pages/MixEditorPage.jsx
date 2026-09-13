@@ -5,6 +5,7 @@ import { api } from '../api'
 import { useAuth } from '../AuthContext'
 import { isProLicensed } from '../pro'
 import { translateError } from '../i18n/errors'
+import { MIX_STUDY_ORDERS, normalizeMixStudyOrder } from '../studySettings'
 import ConfirmModal from './ConfirmModal'
 import { GroupBadge } from './ColorPicker'
 
@@ -16,6 +17,7 @@ export default function MixEditorPage() {
   const navigate = useNavigate()
   const [name, setName] = useState('')
   const [includeAll, setIncludeAll] = useState(false)
+  const [studyOrder, setStudyOrder] = useState('')
   const [setIds, setSetIds] = useState(() => new Set())
   const [deckIds, setDeckIds] = useState(() => new Set())
   const [openSets, setOpenSets] = useState(() => new Set())
@@ -38,6 +40,7 @@ export default function MixEditorPage() {
         const mix = await api(`/api/mixes/${id}`)
         setName(mix.name || '')
         setIncludeAll(Boolean(mix.includeAll))
+        setStudyOrder(normalizeMixStudyOrder(mix.studyOrder))
         setSetIds(new Set((mix.setIds || []).map(String)))
         setDeckIds(new Set((mix.deckIds || []).map(String)))
       }
@@ -110,6 +113,7 @@ export default function MixEditorPage() {
       const body = {
         name,
         includeAll,
+        studyOrder: studyOrder || null,
         setIds: includeAll ? [] : [...setIds],
         deckIds: includeAll ? [] : [...deckIds],
       }
@@ -263,6 +267,24 @@ export default function MixEditorPage() {
                 disabled={busy || includeAll}
               />
               <span>{deck.name}</span>
+            </label>
+          ))}
+        </div>
+
+        <h2 className="settings-subhead">{t('mix.studyOrder')}</h2>
+        <p className="muted">{t('mix.studyOrderHint')}</p>
+        <div className="radio-list" role="radiogroup" aria-label={t('mix.studyOrder')}>
+          {MIX_STUDY_ORDERS.map((option) => (
+            <label key={option.value} className={`radio-row ${studyOrder === option.value ? 'selected' : ''}`}>
+              <input
+                type="radio"
+                name="mixStudyOrder"
+                value={option.value}
+                checked={studyOrder === option.value}
+                onChange={() => setStudyOrder(option.value)}
+                disabled={busy}
+              />
+              {t(option.labelKey)}
             </label>
           ))}
         </div>

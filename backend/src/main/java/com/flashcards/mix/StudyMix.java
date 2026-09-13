@@ -8,12 +8,15 @@ import java.util.UUID;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
+import com.flashcards.user.StudyOrder;
 import com.flashcards.user.User;
 
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -47,6 +50,10 @@ public class StudyMix {
 
     @Column(name = "include_all", nullable = false)
     private boolean includeAll;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "study_order", length = 16)
+    private StudyOrder studyOrder;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "study_mix_sets", joinColumns = @JoinColumn(name = "mix_id"))

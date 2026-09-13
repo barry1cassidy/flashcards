@@ -57,7 +57,7 @@ export default function SideMenu() {
           <span>{t('classes.title')}</span>
         </NavLink>
       ) : null}
-      <div className="side-menu-spacer" />
+      <hr className="side-menu-divider" />
       <NavLink to="/settings" className={() => menuLinkClass(settingsActive)} onClick={close}>
         <MenuIcon name="settings" />
         <span>{t('nav.settings')}</span>

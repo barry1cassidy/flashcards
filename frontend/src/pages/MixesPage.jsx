@@ -5,6 +5,7 @@ import { api } from '../api'
 import { useAuth } from '../AuthContext'
 import { isProLicensed } from '../pro'
 import { translateError } from '../i18n/errors'
+import { MIX_STUDY_ORDERS, normalizeMixStudyOrder } from '../studySettings'
 import StudyModeModal from './StudyModeModal'
 
 export default function MixesPage() {
@@ -90,8 +91,12 @@ export default function MixesPage() {
 }
 
 function summary(t, mix) {
+  const orderKey =
+    MIX_STUDY_ORDERS.find((item) => item.value === normalizeMixStudyOrder(mix.studyOrder))?.labelKey ||
+    'mix.studyOrderDefault'
+  const order = t(orderKey)
   if (mix.includeAll) {
-    return t('mix.summaryAll')
+    return `${t('mix.summaryAll')} · ${order}`
   }
-  return t('mix.summaryCounts', { sets: mix.setIds?.length || 0, decks: mix.deckIds?.length || 0 })
+  return `${t('mix.summaryCounts', { sets: mix.setIds?.length || 0, decks: mix.deckIds?.length || 0 })} · ${order}`
 }
