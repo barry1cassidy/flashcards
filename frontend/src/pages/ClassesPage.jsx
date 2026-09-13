@@ -72,12 +72,16 @@ export default function ClassesPage() {
           <p className="muted">{t('classes.subtitle')}</p>
         </div>
         {teacher ? (
-          <button className="btn primary" type="button" onClick={() => setSearchParams({ new: '1' })}>
+          <button className="btn primary" type="button" onClick={() => {
+            setError('')
+            setName('')
+            setSearchParams({ new: '1' })
+          }}>
             {t('classes.newClass')}
           </button>
         ) : null}
       </div>
-      {error ? <div className="error">{translateError(t, error)}</div> : null}
+      {error && !creating ? <div className="error">{translateError(t, error)}</div> : null}
 
       <section className="card-form">
         <h2 className="section-heading">{t('classes.joinHeading')}</h2>
@@ -131,6 +135,7 @@ export default function ClassesPage() {
             <h2>{t('classes.newTitle')}</h2>
             <p className="muted">{t('classes.newSubtitle')}</p>
             <form className="stack" onSubmit={createClass}>
+              {error ? <div className="error">{translateError(t, error)}</div> : null}
               <label>
                 {t('classes.className')}
                 <input

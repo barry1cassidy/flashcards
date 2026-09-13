@@ -512,6 +512,17 @@ textarea {
   font-weight: 700;
 }
 
+.billing-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.billing-actions .btn {
+  min-height: 44px;
+}
+
 .page-title {
   display: flex;
   justify-content: space-between;

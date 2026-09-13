@@ -15,6 +15,7 @@ frontend/dist/
 .env.local
 backend/google-sso.yml
 backend/agent.yml
+backend/stripe.yml
 backend/src/main/resources/application-local.yml
 *.pem
 *client_secret*.json

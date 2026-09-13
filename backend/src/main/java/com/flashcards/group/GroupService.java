@@ -55,9 +55,11 @@ public class GroupService {
     public GroupResponse create(UUID userId, GroupRequest request) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ApiException(HttpStatus.UNAUTHORIZED, "Not authenticated"));
+        String name = request.name().trim();
+        requireUniqueName(userId, name, null);
         DeckGroup group = new DeckGroup();
         group.setUser(user);
-        group.setName(request.name().trim());
+        group.setName(name);
         group.setColor(normalizeColor(request.color()));
         deckGroupRepository.save(group);
         return toResponse(group);
@@ -66,7 +68,9 @@ public class GroupService {
     @Transactional
     public GroupResponse update(UUID userId, UUID groupId, GroupRequest request) {
         DeckGroup group = requireOwned(userId, groupId);
-        group.setName(request.name().trim());
+        String name = request.name().trim();
+        requireUniqueName(userId, name, groupId);
+        group.setName(name);
         group.setColor(normalizeColor(request.color()));
         return toResponse(group);
     }
@@ -95,6 +99,15 @@ public class GroupService {
 
     public DeckGroup requireOwned(UUID userId, UUID groupId) {
         return ownedAccess.requireSet(userId, groupId);
+    }
+
+    private void requireUniqueName(UUID userId, String name, UUID exceptGroupId) {
+        boolean taken = exceptGroupId == null
+                ? deckGroupRepository.existsByUser_IdAndNameIgnoreCase(userId, name)
+                : deckGroupRepository.existsByUser_IdAndNameIgnoreCaseAndIdNot(userId, name, exceptGroupId);
+        if (taken) {
+            throw new ApiException(HttpStatus.CONFLICT, "You already have a set with that name");
+        }
     }
 
     private GroupResponse toResponse(DeckGroup group) {

@@ -23,18 +23,18 @@ public class AgentJob implements AgentProgress {
     private final UUID id;
     private final UUID userId;
     private final Instant createdAt;
-    private final int remainingToday;
+    private final int remainingCredits;
     private final List<AgentStepView> steps = new CopyOnWriteArrayList<>();
 
     private volatile State state = State.RUNNING;
     private volatile AgentCreateResponse result;
     private volatile String error;
 
-    AgentJob(UUID userId, int remainingToday) {
+    AgentJob(UUID userId, int remainingCredits) {
         this.id = UUID.randomUUID();
         this.userId = userId;
         this.createdAt = Instant.now();
-        this.remainingToday = remainingToday;
+        this.remainingCredits = remainingCredits;
     }
 
     public UUID id() {
@@ -95,6 +95,6 @@ public class AgentJob implements AgentProgress {
                 List.copyOf(steps),
                 error,
                 result,
-                result == null ? remainingToday : result.remainingToday());
+                result == null ? remainingCredits : result.remainingCredits());
     }
 }

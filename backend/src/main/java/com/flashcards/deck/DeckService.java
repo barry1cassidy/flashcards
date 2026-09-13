@@ -62,9 +62,11 @@ public class DeckService {
     public DeckResponse create(UUID userId, DeckRequest request) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ApiException(HttpStatus.UNAUTHORIZED, "Not authenticated"));
+        String name = request.name().trim();
+        requireUniqueName(userId, name, null);
         Deck deck = new Deck();
         deck.setUser(user);
-        deck.setName(request.name().trim());
+        deck.setName(name);
         deck.setDescription(trimToNull(request.description()));
         deck.setGroup(resolveGroup(userId, request.groupId()));
         String fallback = CardLanguages.fromUserLocale(user.getLocale());
@@ -77,7 +79,9 @@ public class DeckService {
     @Transactional
     public DeckResponse update(UUID userId, UUID deckId, DeckRequest request) {
         Deck deck = requireOwned(userId, deckId);
-        deck.setName(request.name().trim());
+        String name = request.name().trim();
+        requireUniqueName(userId, name, deckId);
+        deck.setName(name);
         deck.setDescription(trimToNull(request.description()));
         deck.setGroup(resolveGroup(userId, request.groupId()));
         String fallback = CardLanguages.fromUserLocale(deck.getUser().getLocale());
@@ -169,6 +173,15 @@ public class DeckService {
                 stats.lastStudiedAt(),
                 stats.hardCount(),
                 stats.againCount());
+    }
+
+    private void requireUniqueName(UUID userId, String name, UUID exceptDeckId) {
+        boolean taken = exceptDeckId == null
+                ? deckRepository.existsByUser_IdAndNameIgnoreCase(userId, name)
+                : deckRepository.existsByUser_IdAndNameIgnoreCaseAndIdNot(userId, name, exceptDeckId);
+        if (taken) {
+            throw new ApiException(HttpStatus.CONFLICT, "You already have a deck with that name");
+        }
     }
 
     private DeckGroup resolveGroup(UUID userId, UUID groupId) {

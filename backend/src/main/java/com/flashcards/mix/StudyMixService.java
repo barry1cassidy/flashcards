@@ -134,6 +134,7 @@ public class StudyMixService {
         if (name.isEmpty()) {
             throw new ApiException(HttpStatus.BAD_REQUEST, "Validation failed");
         }
+        requireUniqueName(userId, name, mix.getId());
         boolean includeAll = request.includeAll();
         Set<UUID> setIds = new LinkedHashSet<>(request.setIds() == null ? List.of() : request.setIds());
         Set<UUID> deckIds = new LinkedHashSet<>(request.deckIds() == null ? List.of() : request.deckIds());
@@ -189,6 +190,15 @@ public class StudyMixService {
 
     private StudyMix requireOwned(UUID userId, UUID mixId) {
         return ownedAccess.requireMix(userId, mixId);
+    }
+
+    private void requireUniqueName(UUID userId, String name, UUID exceptMixId) {
+        boolean taken = exceptMixId == null
+                ? mixRepository.existsByUser_IdAndNameIgnoreCase(userId, name)
+                : mixRepository.existsByUser_IdAndNameIgnoreCaseAndIdNot(userId, name, exceptMixId);
+        if (taken) {
+            throw new ApiException(HttpStatus.CONFLICT, "You already have a study mix with that name");
+        }
     }
 
     private User requireProUser(UUID userId) {

@@ -1,0 +1,12 @@
+# Copy this file to stripe.yml in this same folder (backend/).
+# stripe.yml is gitignored. Use Stripe test keys (sk_test_ / whsec_) until you switch to live.
+app:
+  billing:
+    public-app-url: http://localhost:5173
+    stripe:
+      secret-key: sk_test_REPLACE_ME
+      webhook-secret: whsec_REPLACE_ME
+      price-monthly: price_REPLACE_MONTHLY
+      price-yearly: price_REPLACE_YEARLY
+      # One-time price (not a subscription) for a pack of extra AI credits.
+      price-addon: price_REPLACE_ADDON

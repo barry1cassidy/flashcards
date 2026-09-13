@@ -38,6 +38,10 @@ public interface DeckRepository extends JpaRepository<Deck, UUID> {
 
     List<Deck> findByIdInAndUser_Id(Collection<UUID> ids, UUID userId);
 
+    boolean existsByUser_IdAndNameIgnoreCase(UUID userId, String name);
+
+    boolean existsByUser_IdAndNameIgnoreCaseAndIdNot(UUID userId, String name, UUID id);
+
     Optional<Deck> findByUser_IdAndLibraryDeckId(UUID userId, UUID libraryDeckId);
 
     List<Deck> findByUser_IdAndLibraryDeckIdIn(UUID userId, Collection<UUID> libraryDeckIds);

@@ -1,5 +1,6 @@
 package com.flashcards.auth;
 
+import java.time.Instant;
 import java.util.UUID;
 
 import com.flashcards.user.DeckSort;
@@ -19,6 +20,7 @@ public record UserResponse(
         StudyScope studyScope,
         RestudyWait restudyWait,
         boolean proLicensed,
+        Instant proExpiresAt,
         boolean admin,
         boolean teacherMode) {
 }

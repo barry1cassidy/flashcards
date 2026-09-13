@@ -37,6 +37,13 @@ services:
       AGENT_API_KEY: ${AGENT_API_KEY:-}
       AGENT_BASE_URL: ${AGENT_BASE_URL:-https://generativelanguage.googleapis.com/v1beta/openai}
       AGENT_MODEL: ${AGENT_MODEL:-gemini-3.6-flash}
+      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:-}
+      STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET:-}
+      STRIPE_PRICE_MONTHLY: ${STRIPE_PRICE_MONTHLY:-}
+      STRIPE_PRICE_YEARLY: ${STRIPE_PRICE_YEARLY:-}
+      STRIPE_PRICE_ADDON: ${STRIPE_PRICE_ADDON:-}
+      APP_PUBLIC_URL: ${APP_PUBLIC_URL:-https://zipdeck.app}
+      APP_BILLING_STUB_ENABLED: ${APP_BILLING_STUB_ENABLED:-false}
     depends_on:
       mysql:
         condition: service_healthy

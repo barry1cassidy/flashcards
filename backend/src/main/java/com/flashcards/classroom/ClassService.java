@@ -113,9 +113,11 @@ public class ClassService {
         if (!teacher.isTeacherMode()) {
             throw new ApiException(HttpStatus.FORBIDDEN, "Teacher mode required");
         }
+        String name = request.name().trim();
+        requireUniqueName(userId, name, null);
         StudyClass studyClass = new StudyClass();
         studyClass.setTeacher(teacher);
-        studyClass.setName(request.name().trim());
+        studyClass.setName(name);
         studyClass.setJoinCode(newJoinCode());
         classRepository.save(studyClass);
         return toDetail(studyClass, userId);
@@ -130,7 +132,9 @@ public class ClassService {
     @Transactional
     public ClassDetailResponse update(UUID userId, UUID classId, ClassRequest request) {
         StudyClass studyClass = ownedAccess.requireClassOwner(userId, classId);
-        studyClass.setName(request.name().trim());
+        String name = request.name().trim();
+        requireUniqueName(userId, name, classId);
+        studyClass.setName(name);
         return toDetail(studyClass, userId);
     }
 
@@ -352,6 +356,15 @@ public class ClassService {
         return userRepository
                 .findById(userId)
                 .orElseThrow(() -> new ApiException(HttpStatus.UNAUTHORIZED, "Not authenticated"));
+    }
+
+    private void requireUniqueName(UUID teacherId, String name, UUID exceptClassId) {
+        boolean taken = exceptClassId == null
+                ? classRepository.existsByTeacher_IdAndNameIgnoreCase(teacherId, name)
+                : classRepository.existsByTeacher_IdAndNameIgnoreCaseAndIdNot(teacherId, name, exceptClassId);
+        if (taken) {
+            throw new ApiException(HttpStatus.CONFLICT, "You already have a class with that name");
+        }
     }
 
     private String newJoinCode() {

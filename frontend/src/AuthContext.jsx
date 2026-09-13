@@ -104,6 +104,11 @@ export function AuthProvider({ children }) {
           throw error
         }
       },
+      async refresh() {
+        const me = await api('/api/auth/me')
+        setUser(me)
+        return me
+      },
       async setLocale(locale) {
         await applyLocale(locale)
         if (!user) {

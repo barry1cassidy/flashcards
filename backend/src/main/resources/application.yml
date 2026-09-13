@@ -16,6 +16,8 @@ spring:
       - optional:file:./backend/google-sso.yml
       - optional:file:./agent.yml
       - optional:file:./backend/agent.yml
+      - optional:file:./stripe.yml
+      - optional:file:./backend/stripe.yml
   datasource:
     url: jdbc:mysql://localhost:3306/flashcards?characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
     username: flashcards
@@ -43,12 +45,23 @@ app:
     secret: local-dev-only-change-me-to-a-long-random-string-32b
     expiration-ms: 86400000
   billing:
-    stub-enabled: true
+    stub-enabled: ${APP_BILLING_STUB_ENABLED:true}
+    public-app-url: ${APP_PUBLIC_URL:http://localhost:5173}
+    monthly-price-display: "$3.99"
+    yearly-price-display: "$12.99"
+    addon-price-display: "$2.99"
+    stripe:
+      secret-key: ${STRIPE_SECRET_KEY:}
+      webhook-secret: ${STRIPE_WEBHOOK_SECRET:}
+      price-monthly: ${STRIPE_PRICE_MONTHLY:}
+      price-yearly: ${STRIPE_PRICE_YEARLY:}
+      price-addon: ${STRIPE_PRICE_ADDON:}
   agent:
     api-key: ${AGENT_API_KEY:}
     base-url: ${AGENT_BASE_URL:https://generativelanguage.googleapis.com/v1beta/openai}
     model: ${AGENT_MODEL:gemini-3.6-flash}
-    daily-limit: 10
+    monthly-credits: 40
+    addon-credits: 40
     max-cards: 40
     timeout-seconds: 90
   google:

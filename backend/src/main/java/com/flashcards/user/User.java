@@ -69,6 +69,21 @@ public class User {
     @Column(name = "pro_licensed", nullable = false)
     private boolean proLicensed;
 
+    @Column(name = "pro_expires_at")
+    private Instant proExpiresAt;
+
+    @Column(name = "stripe_customer_id", unique = true, length = 255)
+    private String stripeCustomerId;
+
+    @Column(name = "agent_included_credits", nullable = false)
+    private int agentIncludedCredits;
+
+    @Column(name = "agent_addon_credits", nullable = false)
+    private int agentAddonCredits;
+
+    @Column(name = "agent_credit_period", length = 7)
+    private String agentCreditPeriod;
+
     @Column(nullable = false)
     private boolean admin;
 

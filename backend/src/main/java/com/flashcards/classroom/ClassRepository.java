@@ -34,6 +34,10 @@ public interface ClassRepository extends JpaRepository<StudyClass, UUID> {
 
     boolean existsByJoinCode(String joinCode);
 
+    boolean existsByTeacher_IdAndNameIgnoreCase(UUID teacherId, String name);
+
+    boolean existsByTeacher_IdAndNameIgnoreCaseAndIdNot(UUID teacherId, String name, UUID id);
+
     @Query("""
             SELECT c FROM StudyClass c
             JOIN FETCH c.teacher

@@ -18,6 +18,7 @@ import org.springframework.ai.openai.OpenAiChatOptions;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import com.flashcards.billing.BillingProperties;
 import com.flashcards.billing.ProAccess;
 import com.flashcards.card.CardLanguages;
 import com.flashcards.card.CardService;
@@ -36,7 +37,8 @@ public class AgentService {
     private static final Logger log = LoggerFactory.getLogger(AgentService.class);
 
     private final AgentProperties properties;
-    private final AgentUsageService usageService;
+    private final AgentCreditService creditService;
+    private final BillingProperties billingProperties;
     private final UserRepository userRepository;
     private final GroupService groupService;
     private final DeckService deckService;
@@ -52,14 +54,16 @@ public class AgentService {
 
     public AgentService(
             AgentProperties properties,
-            AgentUsageService usageService,
+            AgentCreditService creditService,
+            BillingProperties billingProperties,
             UserRepository userRepository,
             GroupService groupService,
             DeckService deckService,
             CardService cardService,
             AgentJobStore jobStore) {
         this.properties = properties;
-        this.usageService = usageService;
+        this.creditService = creditService;
+        this.billingProperties = billingProperties;
         this.userRepository = userRepository;
         this.groupService = groupService;
         this.deckService = deckService;
@@ -71,8 +75,17 @@ public class AgentService {
     public AgentStatusResponse status(UUID userId) {
         User user = requireUser(userId);
         boolean pro = ProAccess.allowed(user);
-        int remaining = pro ? usageService.remainingToday(userId) : 0;
-        return new AgentStatusResponse(!pro, properties.configured(), remaining, properties.dailyLimit());
+        CreditBalance credits = pro ? creditService.snapshot(user) : CreditBalance.of(0, user.getAgentAddonCredits());
+        return new AgentStatusResponse(
+                !pro,
+                properties.configured(),
+                credits.includedCredits(),
+                credits.addonCredits(),
+                credits.remainingCredits(),
+                properties.monthlyCredits(),
+                properties.addonCredits(),
+                billingProperties.addonPrice(),
+                billingProperties.addonCheckoutEnabled());
     }
 
     public AgentJobResponse startCreateDeck(UUID userId, AgentCreateRequest request) {
@@ -88,8 +101,8 @@ public class AgentService {
         GroupResponse preferredSet = request.setId() == null
                 ? null
                 : groupService.get(userId, request.setId()).group();
-        int remaining = usageService.consume(userId);
-        AgentJob job = jobStore.create(userId, remaining);
+        CreditBalance credits = creditService.consume(userId);
+        AgentJob job = jobStore.create(userId, credits.remainingCredits());
         log.info(
                 "[agent {}] queued model={} timeout={}s promptChars={} set={}",
                 job.id(),
@@ -98,7 +111,7 @@ public class AgentService {
                 prompt.length(),
                 preferredSet == null ? "-" : preferredSet.id());
         job.step("starting", null);
-        jobExecutor.execute(() -> runJob(job, userId, prompt, preferredSet, remaining));
+        jobExecutor.execute(() -> runJob(job, userId, prompt, preferredSet, credits.remainingCredits()));
         return job.toResponse();
     }
 
@@ -106,7 +119,7 @@ public class AgentService {
         return jobStore.require(userId, jobId).toResponse();
     }
 
-    private void runJob(AgentJob job, UUID userId, String prompt, GroupResponse preferredSet, int remaining) {
+    private void runJob(AgentJob job, UUID userId, String prompt, GroupResponse preferredSet, int remainingCredits) {
         ScheduledFuture<?> beat = heartbeat.scheduleAtFixedRate(
                 () -> {
                     if (job.state() == AgentJob.State.RUNNING) {
@@ -166,7 +179,7 @@ public class AgentService {
                     tools.createdDeckId(),
                     tools.createdSetId(),
                     tools.cardsAdded(),
-                    remaining));
+                    remainingCredits));
         } catch (ApiException ex) {
             log.warn("[agent {}] failed: {}", job.id(), ex.getMessage());
             job.fail(ex.getMessage());

@@ -11,4 +11,8 @@ public interface StudyMixRepository extends JpaRepository<StudyMix, UUID> {
     List<StudyMix> findByUserIdOrderByUpdatedAtDesc(UUID userId);
 
     Optional<StudyMix> findByIdAndUserId(UUID id, UUID userId);
+
+    boolean existsByUser_IdAndNameIgnoreCase(UUID userId, String name);
+
+    boolean existsByUser_IdAndNameIgnoreCaseAndIdNot(UUID userId, String name, UUID id);
 }

@@ -6,6 +6,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.flashcards.billing.ProAccess;
 import com.flashcards.common.ApiException;
 import com.flashcards.security.JwtService;
 import com.flashcards.security.UserPrincipal;
@@ -150,7 +151,8 @@ public class AuthService {
                 studyOrder,
                 studyScope,
                 restudyWait,
-                user.isProLicensed(),
+                ProAccess.allowed(user),
+                user.getProExpiresAt(),
                 user.isAdmin(),
                 user.isTeacherMode());
     }

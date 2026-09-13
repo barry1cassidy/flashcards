@@ -7,5 +7,5 @@ public record AgentCreateResponse(
         UUID deckId,
         UUID setId,
         int cardCount,
-        int remainingToday) {
+        int remainingCredits) {
 }

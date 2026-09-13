@@ -16,9 +16,9 @@ public class AgentJobStore {
 
     private final ConcurrentHashMap<UUID, AgentJob> jobs = new ConcurrentHashMap<>();
 
-    public AgentJob create(UUID userId, int remainingToday) {
+    public AgentJob create(UUID userId, int remainingCredits) {
         prune();
-        AgentJob job = new AgentJob(userId, remainingToday);
+        AgentJob job = new AgentJob(userId, remainingCredits);
         jobs.put(job.id(), job);
         return job;
     }

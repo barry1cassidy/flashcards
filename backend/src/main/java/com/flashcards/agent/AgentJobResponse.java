@@ -10,5 +10,5 @@ public record AgentJobResponse(
         List<AgentStepView> steps,
         String error,
         AgentCreateResponse result,
-        int remainingToday) {
+        int remainingCredits) {
 }

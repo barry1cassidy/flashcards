@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { api } from '../api'
 import { useAuth } from '../AuthContext'
+import { completeCheckout, isNativeApp, startCheckout } from '../billing'
 import { isProLicensed } from '../pro'
 import { translateError } from '../i18n/errors'
 
@@ -13,6 +14,7 @@ export default function AgentPage() {
   const { t } = useTranslation()
   const { user } = useAuth()
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const [status, setStatus] = useState(null)
   const [groups, setGroups] = useState([])
   const [prompt, setPrompt] = useState('')
@@ -39,6 +41,40 @@ export default function AgentPage() {
       })
       .catch((err) => setError(err.message))
   }, [])
+
+  useEffect(() => {
+    const billingParam = searchParams.get('billing')
+    const sessionId = searchParams.get('session_id')
+    if (billingParam === 'canceled') {
+      navigate('/agent', { replace: true })
+      return
+    }
+    if (billingParam !== 'success') {
+      return
+    }
+    let cancelled = false
+    const work = sessionId ? completeCheckout(sessionId) : Promise.resolve()
+    work
+      .then(() => api('/api/agent/status'))
+      .then((agentStatus) => {
+        if (!cancelled) {
+          setStatus(agentStatus)
+        }
+      })
+      .catch((err) => {
+        if (!cancelled) {
+          setError(err.message)
+        }
+      })
+      .finally(() => {
+        if (!cancelled) {
+          navigate('/agent', { replace: true })
+        }
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [searchParams, navigate])
 
   useEffect(() => {
     if (!busy) {
@@ -81,8 +117,9 @@ export default function AgentPage() {
         throw new Error('AI request failed')
       }
       setJob(started)
-      if (typeof started.remainingToday === 'number') {
-        setStatus((current) => (current ? { ...current, remainingToday: started.remainingToday } : current))
+      const latest = await api('/api/agent/status')
+      if (!cancelled.current) {
+        setStatus(latest)
       }
       const current = await pollJob(started.jobId)
       if (!current || cancelled.current) {
@@ -126,6 +163,8 @@ export default function AgentPage() {
   const pro = isProLicensed(user)
   const elapsed = startedAt ? Math.max(0, Math.floor((now - startedAt) / 1000)) : job?.elapsedSeconds || 0
   const steps = job?.steps || []
+  const remaining = status?.remainingCredits ?? 0
+  const canBuyAddon = Boolean(status?.addonCheckoutEnabled) && !isNativeApp()
 
   return (
     <div className="page">
@@ -154,9 +193,28 @@ export default function AgentPage() {
 
       {pro && status?.configured ? (
         <form className="card-form" onSubmit={generate}>
-          <p className="muted">
-            {t('agent.remaining', { count: status.remainingToday, limit: status.dailyLimit })}
-          </p>
+          <p className="muted">{creditSummary(t, status)}</p>
+          {remaining <= 0 ? (
+            <div className="billing-actions">
+              {canBuyAddon ? (
+                <button
+                  className="btn primary"
+                  type="button"
+                  disabled={busy}
+                  onClick={() =>
+                    startCheckout('ADDON', '/agent').catch((err) => setError(err.message))
+                  }
+                >
+                  {t('agent.buyCredits', {
+                    count: status.addonPackCredits,
+                    price: status.addonPrice,
+                  })}
+                </button>
+              ) : (
+                <p>{t('agent.outOfCredits')}</p>
+              )}
+            </div>
+          ) : null}
           <label>
             {t('agent.prompt')}
             <textarea
@@ -181,7 +239,7 @@ export default function AgentPage() {
             </select>
           </label>
           <p className="muted">{t('agent.waitHint')}</p>
-          <button className="btn primary" type="submit" disabled={busy || !prompt.trim() || status.remainingToday <= 0}>
+          <button className="btn primary" type="submit" disabled={busy || !prompt.trim() || remaining <= 0}>
             {busy ? t('agent.generating') : t('agent.generate')}
           </button>
           {busy || steps.length > 0 ? (
@@ -217,6 +275,24 @@ export default function AgentPage() {
       ) : null}
     </div>
   )
+}
+
+function creditSummary(t, status) {
+  if (!status) {
+    return ''
+  }
+  if (status.addonCredits > 0) {
+    return t('agent.remainingWithExtra', {
+      included: status.includedCredits,
+      allowance: status.monthlyAllowance,
+      extra: status.addonCredits,
+      total: status.remainingCredits,
+    })
+  }
+  return t('agent.remaining', {
+    included: status.includedCredits,
+    allowance: status.monthlyAllowance,
+  })
 }
 
 function sleep(ms) {
