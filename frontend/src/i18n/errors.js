@@ -54,6 +54,8 @@ const ERROR_KEYS = {
   'Deck already assigned': 'errors.deckAlreadyAssigned',
   'Add this deck to My Decks first': 'errors.addDeckFirst',
   'Teachers cannot leave their class': 'errors.teacherCannotLeave',
+  'Admin required': 'errors.adminRequired',
+  'User not found': 'errors.userNotFound',
 }
 
 export function translateError(t, message) {

@@ -2619,3 +2619,244 @@ textarea {
   gap: 2px;
   min-height: 44px;
 }
+
+.admin-shell {
+  --admin-bg: #0c0f14;
+  --admin-panel: #141a22;
+  --admin-line: rgba(230, 237, 243, 0.12);
+  --admin-text: #e6edf3;
+  --admin-muted: #8b949e;
+  --admin-accent: #f2b84b;
+  min-height: 100%;
+  min-height: 100dvh;
+  background: var(--admin-bg);
+  color: var(--admin-text);
+  font-family: var(--font-mono);
+  padding-top: var(--safe-top);
+  padding-bottom: var(--safe-bottom);
+  padding-left: var(--safe-left);
+  padding-right: var(--safe-right);
+}
+
+.admin-banner {
+  background: #3d2a0a;
+  color: var(--admin-accent);
+  text-align: center;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 10px 16px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.admin-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 20px 0;
+}
+
+.admin-kicker {
+  margin: 0 0 4px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--admin-muted);
+}
+
+.admin-header h1 {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.admin-shell .user-menu-trigger,
+.admin-shell .user-menu-dropdown,
+.admin-shell .user-menu-item {
+  background: var(--admin-panel);
+  color: var(--admin-text);
+  border-color: var(--admin-line);
+}
+
+.admin-shell .user-menu-item:hover,
+.admin-shell .user-menu-item.selected {
+  background: rgba(242, 184, 75, 0.12);
+}
+
+.admin-main {
+  padding: 20px;
+}
+
+.admin-page {
+  display: grid;
+  gap: 14px;
+}
+
+.admin-search {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.admin-search-field {
+  position: relative;
+  flex: 1;
+  min-width: 200px;
+}
+
+.admin-search-field input {
+  width: 100%;
+  min-height: 44px;
+  border: 1px solid var(--admin-line);
+  background: var(--admin-panel);
+  color: var(--admin-text);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font: inherit;
+}
+
+.admin-btn {
+  min-height: 44px;
+  min-width: 44px;
+  padding: 10px 16px;
+  border: 1px solid var(--admin-accent);
+  background: transparent;
+  color: var(--admin-accent);
+  border-radius: 8px;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.admin-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.admin-count,
+.admin-empty {
+  margin: 0;
+  color: var(--admin-muted);
+  font-size: 0.85rem;
+}
+
+.admin-error {
+  color: #ffb4a9;
+}
+
+.admin-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--admin-line);
+  border-radius: 10px;
+  background: var(--admin-panel);
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.admin-table th,
+.admin-table td {
+  text-align: start;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--admin-line);
+  vertical-align: top;
+  white-space: nowrap;
+}
+
+.admin-table th {
+  color: var(--admin-muted);
+  font-weight: 700;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.admin-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--admin-text);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  touch-action: manipulation;
+}
+
+.admin-flags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+.admin-flags span {
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--admin-accent);
+}
+
+.admin-detail-row td {
+  white-space: normal;
+  background: #0c0f14;
+}
+
+.admin-dl {
+  display: grid;
+  gap: 10px;
+  margin: 0 0 12px;
+}
+
+.admin-dl div {
+  display: grid;
+  gap: 2px;
+}
+
+.admin-dl dt {
+  color: var(--admin-muted);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.admin-dl dd {
+  margin: 0;
+  word-break: break-all;
+}
+
+.admin-subs {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.admin-subs li {
+  display: grid;
+  gap: 2px;
+  min-height: 44px;
+  padding: 10px 0;
+}

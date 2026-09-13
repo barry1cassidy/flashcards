@@ -35,6 +35,38 @@
     "closeMenu": "Cerrar Menú",
     "settings": "Ajustes"
   },
+  "admin": {
+    "enter": "Modo Admin",
+    "exit": "Salir del modo Admin",
+    "banner": "Modo admin",
+    "console": "Admin",
+    "users": "Usuarios y suscripciones",
+    "search": "Buscar",
+    "searchPlaceholder": "Correo o nombre",
+    "userCount_one": "{{count}} usuario",
+    "userCount_other": "{{count}} usuarios",
+    "empty": "Ningún usuario coincide con esa búsqueda.",
+    "colName": "Nombre",
+    "colEmail": "Correo",
+    "colPro": "Pro",
+    "colPlan": "Plan",
+    "colStatus": "Estado",
+    "colExpires": "Vence",
+    "colCredits": "Créditos incl./extra",
+    "flagAdmin": "Admin",
+    "flagTeacher": "Profesor",
+    "yes": "Sí",
+    "no": "No",
+    "userId": "ID de usuario",
+    "created": "Creado",
+    "signIn": "Inicio de sesión",
+    "stripeCustomer": "Cliente de Stripe",
+    "creditPeriod": "Periodo de créditos",
+    "proFlag": "Marca Pro",
+    "cancelScheduled": "cancela al final del periodo",
+    "periodEnd": "Fin del periodo",
+    "noSubscription": "No hay suscripción de Stripe."
+  },
   "classes": {
     "title": "Clases",
     "subtitle": "Únete a una clase con un código, o activa el Modo Profesor para crear una.",
@@ -563,6 +595,8 @@
     "teacherModeRequired": "Activa el Modo Profesor en Ajustes para crear una clase",
     "deckAlreadyAssigned": "Ese mazo ya está asignado a esta clase",
     "addDeckFirst": "Añade este mazo a Mis Mazos primero",
-    "teacherCannotLeave": "Los profesores no pueden salir de su clase"
+    "teacherCannotLeave": "Los profesores no pueden salir de su clase",
+    "adminRequired": "Se necesita un administrador",
+    "userNotFound": "Usuario no encontrado"
   }
 }

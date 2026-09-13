@@ -1,4 +1,4 @@
-package com.flashcards.billing;
+package com.flashcards.security;
 
 import org.springframework.http.HttpStatus;
 

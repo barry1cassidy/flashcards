@@ -11,6 +11,8 @@ import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
 import StudyPage from './pages/StudyPage'
 import AppLayout from './pages/AppLayout'
+import AdminLayout from './pages/AdminLayout'
+import AdminUsersPage from './pages/AdminUsersPage'
 import GroupsPage from './pages/GroupsPage'
 import SettingsPage from './pages/SettingsPage'
 import AgentPage from './pages/AgentPage'
@@ -34,13 +36,16 @@ function DocumentLang() {
     const splash = !user && (pathname === '/' || pathname === '/login' || pathname === '/register')
     const privacy = pathname === '/privacy'
     const join = pathname.startsWith('/join/')
+    const admin = Boolean(user) && pathname.startsWith('/admin')
     document.title = privacy
       ? `${t('privacy.title')} — ${t('app.name')}`
       : join
         ? `${t('classes.joinTitle')} — ${t('app.name')}`
-        : splash
-          ? t('app.title')
-          : t('app.name')
+        : admin
+          ? `${t('admin.console')} — ${t('app.name')}`
+          : splash
+            ? t('app.title')
+            : t('app.name')
     document.documentElement.lang = currentLocale()
     document.documentElement.dir = currentLocale() === 'ar' ? 'rtl' : 'ltr'
   }, [t, i18n.resolvedLanguage, pathname, user])
@@ -82,6 +87,12 @@ function ProtectedLayout() {
       return <LoginPage />
     }
     return <Navigate to="/login" replace />
+  }
+  if (location.pathname.startsWith('/admin')) {
+    if (!isAdmin(user)) {
+      return <Navigate to="/" replace />
+    }
+    return <AdminLayout />
   }
   return <AppLayout />
 }
@@ -156,6 +167,7 @@ export default function App() {
           <Route path="/library/decks/:id" element={<LibraryDeckPage />} />
           <Route path="/classes" element={<AdminOnly><ClassesPage /></AdminOnly>} />
           <Route path="/classes/:id" element={<ClassDetailPage />} />
+          <Route path="/admin" element={<AdminUsersPage />} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

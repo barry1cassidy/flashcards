@@ -35,6 +35,38 @@
     "closeMenu": "Close Menu",
     "settings": "Settings"
   },
+  "admin": {
+    "enter": "Admin Mode",
+    "exit": "Exit Admin Mode",
+    "banner": "Admin mode",
+    "console": "Admin",
+    "users": "Users & subscriptions",
+    "search": "Search",
+    "searchPlaceholder": "Email or name",
+    "userCount_one": "{{count}} user",
+    "userCount_other": "{{count}} users",
+    "empty": "No users match that search.",
+    "colName": "Name",
+    "colEmail": "Email",
+    "colPro": "Pro",
+    "colPlan": "Plan",
+    "colStatus": "Status",
+    "colExpires": "Expires",
+    "colCredits": "Credits in/extra",
+    "flagAdmin": "Admin",
+    "flagTeacher": "Teacher",
+    "yes": "Yes",
+    "no": "No",
+    "userId": "User ID",
+    "created": "Created",
+    "signIn": "Sign-in",
+    "stripeCustomer": "Stripe customer",
+    "creditPeriod": "Credit period",
+    "proFlag": "Pro flag",
+    "cancelScheduled": "cancels at period end",
+    "periodEnd": "Period end",
+    "noSubscription": "No Stripe subscription on file."
+  },
   "classes": {
     "title": "Classes",
     "subtitle": "Join a class with a code, or turn on Teacher Mode to create one.",
@@ -563,6 +595,8 @@
     "teacherModeRequired": "Turn on Teacher Mode in Settings to create a class",
     "deckAlreadyAssigned": "That deck is already assigned to this class",
     "addDeckFirst": "Add this deck to My Decks first",
-    "teacherCannotLeave": "Teachers cannot leave their class"
+    "teacherCannotLeave": "Teachers cannot leave their class",
+    "adminRequired": "Admin required",
+    "userNotFound": "User not found"
   }
 }

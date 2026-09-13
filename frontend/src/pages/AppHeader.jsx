@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '../AuthContext'
+import { isAdmin } from '../admin'
 import { isProLicensed } from '../pro'
 import { useMenu } from '../menu'
 import Brand from './Brand'
@@ -34,12 +35,15 @@ export default function AppHeader() {
   )
 }
 
-function UserMenu() {
+export function UserMenu() {
   const { t } = useTranslation()
   const { user, logout } = useAuth()
   const navigate = useNavigate()
+  const location = useLocation()
   const [open, setOpen] = useState(false)
   const menuRef = useRef(null)
+  const admin = isAdmin(user)
+  const inAdmin = location.pathname.startsWith('/admin')
 
   useEffect(() => {
     function onPointerDown(event) {
@@ -81,6 +85,20 @@ function UserMenu() {
       </button>
       {open ? (
         <div className="user-menu-dropdown" role="menu">
+          {admin ? (
+            <button
+              className="user-menu-item"
+              type="button"
+              role="menuitem"
+              onClick={() => {
+                setOpen(false)
+                navigate(inAdmin ? '/' : '/admin')
+              }}
+            >
+              {inAdmin ? t('admin.exit') : t('admin.enter')}
+            </button>
+          ) : null}
+          {admin ? <div className="user-menu-divider" /> : null}
           <button
             className="user-menu-item"
             type="button"

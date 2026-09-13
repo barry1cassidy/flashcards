@@ -19,6 +19,7 @@ import com.flashcards.agent.CreditBalance;
 import com.flashcards.auth.AuthService;
 import com.flashcards.auth.UserResponse;
 import com.flashcards.common.ApiException;
+import com.flashcards.security.SubscriptionAccess;
 import com.flashcards.user.User;
 import com.flashcards.user.UserRepository;
 
@@ -51,7 +52,7 @@ public class BillingService {
 
     @Transactional(readOnly = true)
     public BillingStatusResponse status(UUID userId) {
-        User user = requireUser(userId);
+        User user = requireOwnAccount(userId);
         UserSubscription current = currentSubscription(userId);
         CreditBalance credits = ProAccess.allowed(user) ? creditService.snapshot(user) : CreditBalance.of(0, user.getAgentAddonCredits());
         return new BillingStatusResponse(
@@ -85,7 +86,7 @@ public class BillingService {
         if (plan == null) {
             throw new ApiException(HttpStatus.BAD_REQUEST, "Invalid billing plan");
         }
-        User user = requireUser(userId);
+        User user = requireOwnAccount(userId);
         if (hasOpenStripeSubscription(userId)) {
             throw new ApiException(HttpStatus.CONFLICT, "Already subscribed");
         }
@@ -111,7 +112,7 @@ public class BillingService {
         if (!properties.addonCheckoutEnabled()) {
             throw new ApiException(HttpStatus.SERVICE_UNAVAILABLE, "Billing is not configured");
         }
-        User user = requireUser(userId);
+        User user = requireOwnAccount(userId);
         ProAccess.require(user);
         String customerId = ensureCustomer(user);
         String page = checkoutReturnPath(returnPath);
@@ -137,7 +138,7 @@ public class BillingService {
             throw new ApiException(HttpStatus.BAD_REQUEST, "Validation failed");
         }
         StripeCheckoutSession session = stripeGateway.retrieveCheckout(sessionId.trim());
-        User user = requireUser(userId);
+        User user = requireOwnAccount(userId);
         if (session.clientReferenceId() != null && !session.clientReferenceId().equals(user.getId().toString())) {
             throw new ApiException(HttpStatus.FORBIDDEN, "Not authenticated");
         }
@@ -151,7 +152,7 @@ public class BillingService {
         if (!properties.stripeCheckoutEnabled()) {
             throw new ApiException(HttpStatus.SERVICE_UNAVAILABLE, "Billing is not configured");
         }
-        User user = requireUser(userId);
+        User user = requireOwnAccount(userId);
         String customerId = user.getStripeCustomerId();
         if (customerId == null || customerId.isBlank()) {
             throw new ApiException(HttpStatus.BAD_REQUEST, "No Stripe customer");
@@ -350,6 +351,12 @@ public class BillingService {
             return "/agent";
         }
         return "/settings";
+    }
+
+    private User requireOwnAccount(UUID actorId) {
+        User actor = requireUser(actorId);
+        SubscriptionAccess.requireOwnerOrAdmin(actor, actorId);
+        return actor;
     }
 
     private User requireUser(UUID userId) {

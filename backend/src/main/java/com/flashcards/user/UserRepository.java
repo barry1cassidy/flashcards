@@ -1,5 +1,6 @@
 package com.flashcards.user;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -14,4 +15,9 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     boolean existsByEmail(String email);
 
     Optional<User> findByStripeCustomerId(String stripeCustomerId);
+
+    List<User> findAllByOrderByCreatedAtDesc();
+
+    List<User> findByEmailContainingIgnoreCaseOrDisplayNameContainingIgnoreCaseOrderByCreatedAtDesc(
+            String email, String displayName);
 }
