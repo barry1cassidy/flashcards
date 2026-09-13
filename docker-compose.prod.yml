@@ -44,6 +44,7 @@ services:
       STRIPE_PRICE_ADDON: ${STRIPE_PRICE_ADDON:-}
       APP_PUBLIC_URL: ${APP_PUBLIC_URL:-https://zipdeck.app}
       APP_BILLING_STUB_ENABLED: ${APP_BILLING_STUB_ENABLED:-false}
+      SPRING_FLYWAY_OUT_OF_ORDER: "true"
     depends_on:
       mysql:
         condition: service_healthy
