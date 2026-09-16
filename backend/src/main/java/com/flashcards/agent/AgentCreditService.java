@@ -90,11 +90,14 @@ public class AgentCreditService {
             return;
         }
         String period = YearMonth.now(ZoneOffset.UTC).toString();
+        int grant = properties.monthlyCredits();
         if (period.equals(user.getAgentCreditPeriod())) {
+            if (user.getAgentIncludedCredits() > grant) {
+                user.setAgentIncludedCredits(grant);
+            }
             return;
         }
         String ref = user.getId() + ":" + period;
-        int grant = properties.monthlyCredits();
         user.setAgentIncludedCredits(grant);
         user.setAgentCreditPeriod(period);
         if (!ledgerRepository.existsByReasonAndProviderRef(CreditReason.PERIOD_GRANT, ref)) {

@@ -5,6 +5,7 @@ import { api } from '../api'
 import { useAuth } from '../AuthContext'
 import { isProLicensed } from '../pro'
 import { translateError } from '../i18n/errors'
+import { sortDecks } from '../deckSort'
 import { MIX_STUDY_ORDERS, normalizeMixStudyOrder } from '../studySettings'
 import ConfirmModal from './ConfirmModal'
 import { GroupBadge } from './ColorPicker'
@@ -48,7 +49,10 @@ export default function MixEditorPage() {
     load().catch((err) => setError(err.message))
   }, [id, isNew, pro])
 
-  const ungrouped = useMemo(() => decks.filter((deck) => !deck.group), [decks])
+  const ungrouped = useMemo(
+    () => sortDecks(decks.filter((deck) => !deck.group), 'NAME_ASC'),
+    [decks],
+  )
   const decksBySet = useMemo(() => {
     const map = new Map()
     for (const deck of decks) {
@@ -60,6 +64,9 @@ export default function MixEditorPage() {
         map.set(key, [])
       }
       map.get(key).push(deck)
+    }
+    for (const [key, list] of map) {
+      map.set(key, sortDecks(list, 'NAME_ASC'))
     }
     return map
   }, [decks])
@@ -155,8 +162,8 @@ export default function MixEditorPage() {
         </div>
         <section className="card-form">
           <p>{t('mix.proRequired')}</p>
-          <Link className="btn primary" to="/settings">
-            {t('agent.goToSettings')}
+          <Link className="btn primary" to="/pro">
+            {t('pro.goToPro')}
           </Link>
         </section>
       </div>
@@ -240,7 +247,7 @@ export default function MixEditorPage() {
                 {open ? (
                   <div className="mix-decks">
                     {setDecks.map((deck) => (
-                      <label key={deck.id} className="mix-pick mix-pick-nested">
+                      <label key={deck.id} className="mix-pick">
                         <input
                           type="checkbox"
                           checked={setChecked || deckIds.has(String(deck.id))}

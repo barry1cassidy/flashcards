@@ -36,7 +36,7 @@ services:
       APP_CORS_ORIGINS: ${APP_CORS_ORIGINS:-http://localhost:5173,http://localhost:5174,http://127.0.0.1:5173,http://127.0.0.1:5174,http://localhost,https://localhost,capacitor://localhost},https://zipdeck.app,https://www.zipdeck.app
       AGENT_API_KEY: ${AGENT_API_KEY:-}
       AGENT_BASE_URL: ${AGENT_BASE_URL:-https://generativelanguage.googleapis.com/v1beta/openai}
-      AGENT_MODEL: ${AGENT_MODEL:-gemini-3.6-flash}
+      AGENT_MODEL: ${AGENT_MODEL:-gemini-3.8-flash}
       STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:-}
       STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET:-}
       STRIPE_PRICE_MONTHLY: ${STRIPE_PRICE_MONTHLY:-}
@@ -44,6 +44,16 @@ services:
       STRIPE_PRICE_ADDON: ${STRIPE_PRICE_ADDON:-}
       APP_PUBLIC_URL: ${APP_PUBLIC_URL:-https://zipdeck.app}
       APP_BILLING_STUB_ENABLED: ${APP_BILLING_STUB_ENABLED:-false}
+      APP_BILLING_PUBLIC_CHECKOUT: ${APP_BILLING_PUBLIC_CHECKOUT:-false}
+      CARD_IMAGES_STORAGE: ${CARD_IMAGES_STORAGE:-local}
+      CARD_IMAGES_DIR: ${CARD_IMAGES_DIR:-/app/data/card-images}
+      CARD_IMAGES_S3_BUCKET: ${CARD_IMAGES_S3_BUCKET:-}
+      CARD_IMAGES_S3_REGION: ${CARD_IMAGES_S3_REGION:-us-east-1}
+      CARD_IMAGES_S3_ENDPOINT: ${CARD_IMAGES_S3_ENDPOINT:-}
+      CARD_IMAGES_S3_PREFIX: ${CARD_IMAGES_S3_PREFIX:-card-images}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-}
+      AWS_REGION: ${CARD_IMAGES_S3_REGION:-us-east-1}
     depends_on:
       mysql:
         condition: service_healthy

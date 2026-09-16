@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.flashcards.card.Card;
+import com.flashcards.card.CardImageService;
 import com.flashcards.card.CardLanguages;
 import com.flashcards.card.CardRepository;
 import com.flashcards.common.ApiException;
@@ -31,18 +32,21 @@ public class DeckService {
     private final CardReviewRepository cardReviewRepository;
     private final UserRepository userRepository;
     private final OwnedAccess ownedAccess;
+    private final CardImageService cardImageService;
 
     public DeckService(
             DeckRepository deckRepository,
             CardRepository cardRepository,
             CardReviewRepository cardReviewRepository,
             UserRepository userRepository,
-            OwnedAccess ownedAccess) {
+            OwnedAccess ownedAccess,
+            CardImageService cardImageService) {
         this.deckRepository = deckRepository;
         this.cardRepository = cardRepository;
         this.cardReviewRepository = cardReviewRepository;
         this.userRepository = userRepository;
         this.ownedAccess = ownedAccess;
+        this.cardImageService = cardImageService;
     }
 
     @Transactional(readOnly = true)
@@ -97,6 +101,9 @@ public class DeckService {
     @Transactional
     public void delete(UUID userId, UUID deckId) {
         Deck deck = requireOwned(userId, deckId);
+        for (Card card : cardRepository.findByDeckIdOrderByPositionAscIdAsc(deckId)) {
+            cardImageService.deleteAll(card);
+        }
         deckRepository.delete(deck);
     }
 

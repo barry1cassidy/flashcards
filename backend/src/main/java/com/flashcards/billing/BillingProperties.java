@@ -5,6 +5,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "app.billing")
 public record BillingProperties(
         boolean stubEnabled,
+        boolean publicCheckout,
         String publicAppUrl,
         String monthlyPriceDisplay,
         String yearlyPriceDisplay,
@@ -39,17 +40,25 @@ public record BillingProperties(
         return stripe != null && stripe.hasSecretKey() && stripe.hasWebhookSecret();
     }
 
+    public boolean paidCheckoutAllowed(boolean admin) {
+        return publicCheckout || admin;
+    }
+
+    public boolean stubAllowed(boolean admin) {
+        return admin && (stubEnabled || !publicCheckout);
+    }
+
     public String appUrl() {
         String url = publicAppUrl == null || publicAppUrl.isBlank() ? "http://localhost:5173" : publicAppUrl.trim();
         return url.endsWith("/") ? url.substring(0, url.length() - 1) : url;
     }
 
     public String monthlyPrice() {
-        return notBlank(monthlyPriceDisplay) ? monthlyPriceDisplay : "$3.99";
+        return notBlank(monthlyPriceDisplay) ? monthlyPriceDisplay : "$7.99";
     }
 
     public String yearlyPrice() {
-        return notBlank(yearlyPriceDisplay) ? yearlyPriceDisplay : "$12.99";
+        return notBlank(yearlyPriceDisplay) ? yearlyPriceDisplay : "$39.99";
     }
 
     public String addonPrice() {

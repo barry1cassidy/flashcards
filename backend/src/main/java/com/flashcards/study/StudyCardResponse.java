@@ -13,7 +13,9 @@ public record StudyCardResponse(
         List<String> choices,
         int hardDays,
         int goodDays,
-        int easyDays) {
+        int easyDays,
+        boolean hasFrontImage,
+        boolean hasBackImage) {
 
     public static StudyCardResponse of(
             UUID id,
@@ -24,9 +26,22 @@ public record StudyCardResponse(
             String backLanguage,
             int hardDays,
             int goodDays,
-            int easyDays) {
+            int easyDays,
+            boolean hasFrontImage,
+            boolean hasBackImage) {
         return new StudyCardResponse(
-                id, front, back, hint, frontLanguage, backLanguage, List.of(), hardDays, goodDays, easyDays);
+                id,
+                front,
+                back,
+                hint,
+                frontLanguage,
+                backLanguage,
+                List.of(),
+                hardDays,
+                goodDays,
+                easyDays,
+                hasFrontImage,
+                hasBackImage);
     }
 
     public static StudyCardResponse quiz(
@@ -39,7 +54,9 @@ public record StudyCardResponse(
             List<String> choices,
             int hardDays,
             int goodDays,
-            int easyDays) {
+            int easyDays,
+            boolean hasFrontImage,
+            boolean hasBackImage) {
         return new StudyCardResponse(
                 id,
                 front,
@@ -50,6 +67,8 @@ public record StudyCardResponse(
                 List.copyOf(choices),
                 hardDays,
                 goodDays,
-                easyDays);
+                easyDays,
+                hasFrontImage,
+                hasBackImage);
     }
 }

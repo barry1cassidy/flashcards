@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.flashcards.card.Card;
+import com.flashcards.card.CardImageService;
 import com.flashcards.card.CardRepository;
 import com.flashcards.card.CardService;
 import com.flashcards.common.ApiException;
@@ -287,7 +288,9 @@ public class StudyService {
                     card.getDeck().getBackLanguage(),
                     hardDays,
                     goodDays,
-                    easyDays);
+                    easyDays,
+                    CardImageService.hasImage(card.getFrontImage()),
+                    CardImageService.hasImage(card.getBackImage()));
         }
         List<String> choices = new ArrayList<>();
         choices.add(card.getBack());
@@ -319,6 +322,8 @@ public class StudyService {
                 choices,
                 hardDays,
                 goodDays,
-                easyDays);
+                easyDays,
+                CardImageService.hasImage(card.getFrontImage()),
+                CardImageService.hasImage(card.getBackImage()));
     }
 }

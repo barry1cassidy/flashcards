@@ -1,8 +1,9 @@
-import { Navigate, Route, Routes, useLocation, useNavigate, useParams } from 'react-router-dom'
+import { Navigate, Outlet, Route, Routes, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AuthProvider, useAuth } from './AuthContext'
 import { isAdmin } from './admin'
+import { isProLicensed } from './pro'
 import { currentLocale } from './i18n'
 import DeckDetailPage from './pages/DeckDetailPage'
 import DecksPage from './pages/DecksPage'
@@ -15,6 +16,8 @@ import AdminLayout from './pages/AdminLayout'
 import AdminUsersPage from './pages/AdminUsersPage'
 import GroupsPage from './pages/GroupsPage'
 import SettingsPage from './pages/SettingsPage'
+import ProPage from './pages/ProPage'
+import HelpPage from './pages/HelpPage'
 import AgentPage from './pages/AgentPage'
 import MixesPage from './pages/MixesPage'
 import MixEditorPage from './pages/MixEditorPage'
@@ -22,6 +25,7 @@ import LibraryPage from './pages/LibraryPage'
 import LibraryGroupPage from './pages/LibraryGroupPage'
 import LibraryDeckPage from './pages/LibraryDeckPage'
 import PrivacyPage from './pages/PrivacyPage'
+import MarketingHeader, { MarketingFooter } from './pages/MarketingHeader'
 import ClassesPage from './pages/ClassesPage'
 import ClassDetailPage from './pages/ClassDetailPage'
 import JoinClassPage from './pages/JoinClassPage'
@@ -37,13 +41,19 @@ function DocumentLang() {
     const privacy = pathname === '/privacy'
     const join = pathname.startsWith('/join/')
     const admin = Boolean(user) && pathname.startsWith('/admin')
+    const billing = pathname.startsWith('/pro')
+    const help = pathname.startsWith('/help')
     document.title = privacy
       ? `${t('privacy.title')} — ${t('app.name')}`
-      : join
+      : help
+        ? `${t('help.title')} — ${t('app.name')}`
+        : join
         ? `${t('classes.joinTitle')} — ${t('app.name')}`
         : admin
           ? `${t('admin.console')} — ${t('app.name')}`
-          : splash
+          : billing
+            ? `${isProLicensed(user) ? t('pro.titleAccount') : t('pro.titleUpgrade')} — ${t('app.name')}`
+            : splash
             ? t('app.title')
             : t('app.name')
     document.documentElement.lang = currentLocale()
@@ -85,6 +95,17 @@ function ProtectedLayout() {
   if (!user) {
     if (location.pathname === '/') {
       return <LoginPage />
+    }
+    if (location.pathname.startsWith('/help')) {
+      return (
+        <div className="marketing">
+          <MarketingHeader />
+          <div className="marketing-wrap">
+            <Outlet />
+          </div>
+          <MarketingFooter />
+        </div>
+      )
     }
     return <Navigate to="/login" replace />
   }
@@ -156,11 +177,13 @@ export default function App() {
           <Route path="/groups/:id" element={<SetsIdRedirect />} />
           <Route path="/decks/:id" element={<DeckDetailPage />} />
           <Route path="/decks/:id/study/:mode" element={<StudyPage />} />
-          <Route path="/create-with-ai" element={<AdminOnly><AgentPage /></AdminOnly>} />
-          <Route path="/mixes/new" element={<AdminOnly><MixEditorPage /></AdminOnly>} />
-          <Route path="/mixes/:id/study/:mode" element={<AdminOnly><StudyPage /></AdminOnly>} />
-          <Route path="/mixes/:id" element={<AdminOnly><MixEditorPage /></AdminOnly>} />
-          <Route path="/mixes" element={<AdminOnly><MixesPage /></AdminOnly>} />
+          <Route path="/create-with-ai" element={<AgentPage />} />
+          <Route path="/mixes/new" element={<MixEditorPage />} />
+          <Route path="/mixes/:id/study/:mode" element={<StudyPage />} />
+          <Route path="/mixes/:id" element={<MixEditorPage />} />
+          <Route path="/mixes" element={<MixesPage />} />
+          <Route path="/pro" element={<ProPage />} />
+          <Route path="/help" element={<HelpPage />} />
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="/library" element={<LibraryPage />} />
           <Route path="/library/groups/:id" element={<LibraryGroupPage />} />

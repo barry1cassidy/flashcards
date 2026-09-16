@@ -107,7 +107,14 @@ public class LibraryService {
         LibraryDeck deck = deckRepository.findWithGroupById(deckId)
                 .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Library deck not found"));
         List<CardResponse> cards = cardRepository.findByDeckIdOrderByPositionAscIdAsc(deckId).stream()
-                .map(card -> new CardResponse(card.getId(), card.getFront(), card.getBack(), card.getHint(), card.getPosition()))
+                .map(card -> new CardResponse(
+                        card.getId(),
+                        card.getFront(),
+                        card.getBack(),
+                        card.getHint(),
+                        card.getPosition(),
+                        false,
+                        false))
                 .toList();
         UUID copiedId = userDeckRepository.findByUser_IdAndLibraryDeckId(userId, deckId).map(Deck::getId).orElse(null);
         LibraryGroup group = deck.getGroup();

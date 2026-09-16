@@ -28,6 +28,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
 import com.flashcards.card.Card;
+import com.flashcards.card.CardImageService;
 import com.flashcards.card.CardRepository;
 import com.flashcards.common.ApiException;
 import com.flashcards.deck.Deck;
@@ -63,6 +64,8 @@ class ClassServiceTest {
     private DeckService deckService;
     @Mock
     private StudyMixRepository mixRepository;
+    @Mock
+    private CardImageService cardImageService;
 
     private ClassService classService;
 
@@ -94,6 +97,7 @@ class ClassServiceTest {
                 userRepository,
                 deckService,
                 ownedAccess,
+                cardImageService,
                 new SecureRandom());
         teacher = user(teacherId, "Ms. Park", "park@school.edu", true);
         student = user(studentId, "Alex", "alex@student.edu", false);
@@ -140,6 +144,20 @@ class ClassServiceTest {
         ApiException ex = assertThrows(ApiException.class, () -> classService.get(strangerId, classId));
         assertEquals(HttpStatus.NOT_FOUND, ex.getStatus());
         assertEquals("Class not found", ex.getMessage());
+    }
+
+    @Test
+    void sameContentIncludesImages() {
+        Deck deck = masterDeck();
+        Card master = card(deck, masterCardId, "hola", "hello", 0);
+        Card copy = card(deck, newCardId, "hola", "hello", 0);
+        assertTrue(ClassService.sameContent(master, copy));
+        master.setFrontImage("abc");
+        assertFalse(ClassService.sameContent(master, copy));
+        copy.setFrontImage("abc");
+        assertTrue(ClassService.sameContent(master, copy));
+        copy.setFrontImage("def");
+        assertFalse(ClassService.sameContent(master, copy));
     }
 
     @Test

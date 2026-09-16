@@ -5,6 +5,7 @@ import java.time.Instant;
 public record BillingStatusResponse(
         boolean stripeEnabled,
         boolean stubEnabled,
+        boolean publicCheckout,
         boolean proLicensed,
         BillingPlan plan,
         SubscriptionStatus status,

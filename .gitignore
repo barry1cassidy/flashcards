@@ -29,3 +29,7 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Local card image files
+backend/data/
+/bucket_keys.txt

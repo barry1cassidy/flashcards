@@ -30,6 +30,8 @@ public class AgentTools {
     private final DeckService deckService;
     private final CardService cardService;
     private final AgentProgress progress;
+    private final String lockedFrontLanguage;
+    private final String lockedBackLanguage;
 
     private UUID createdDeckId;
     private UUID createdSetId;
@@ -43,7 +45,7 @@ public class AgentTools {
             GroupService groupService,
             DeckService deckService,
             CardService cardService) {
-        this(userId, preferredSetId, maxCards, groupService, deckService, cardService, AgentProgress.noop());
+        this(userId, preferredSetId, maxCards, groupService, deckService, cardService, AgentProgress.noop(), null, null);
     }
 
     public AgentTools(
@@ -54,6 +56,19 @@ public class AgentTools {
             DeckService deckService,
             CardService cardService,
             AgentProgress progress) {
+        this(userId, preferredSetId, maxCards, groupService, deckService, cardService, progress, null, null);
+    }
+
+    public AgentTools(
+            UUID userId,
+            UUID preferredSetId,
+            int maxCards,
+            GroupService groupService,
+            DeckService deckService,
+            CardService cardService,
+            AgentProgress progress,
+            String lockedFrontLanguage,
+            String lockedBackLanguage) {
         this.userId = userId;
         this.preferredSetId = preferredSetId;
         this.maxCards = maxCards;
@@ -62,6 +77,8 @@ public class AgentTools {
         this.cardService = cardService;
         this.progress = progress == null ? AgentProgress.noop() : progress;
         this.createdSetId = preferredSetId;
+        this.lockedFrontLanguage = lockedFrontLanguage;
+        this.lockedBackLanguage = lockedBackLanguage;
     }
 
     public UUID createdDeckId() {
@@ -154,14 +171,20 @@ public class AgentTools {
                 groupId = preferredSetId;
             }
             String fallback = CardLanguages.DEFAULT;
+            String front = lockedFrontLanguage != null
+                    ? lockedFrontLanguage
+                    : CardLanguages.normalizeOrFallback(frontLanguage, fallback);
+            String back = lockedBackLanguage != null
+                    ? lockedBackLanguage
+                    : CardLanguages.normalizeOrFallback(backLanguage, fallback);
             DeckResponse deck = deckService.create(
                     userId,
                     new DeckRequest(
                             trimmed,
                             clip(description, 2000),
                             groupId,
-                            CardLanguages.normalizeOrFallback(frontLanguage, fallback),
-                            CardLanguages.normalizeOrFallback(backLanguage, fallback)));
+                            front,
+                            back));
             createdDeckId = deck.id();
             if (deck.group() != null) {
                 createdSetId = deck.group().id();
@@ -172,10 +195,13 @@ public class AgentTools {
         }
     }
 
-    @Tool(description = "Add flashcards to the deck created in this request. Call once with as many cards as needed, up to the limit.")
+    @Tool(description = """
+            Add flashcards to the deck created in this request. Call once.
+            Never send more cards than the remaining room in this deck. Extra cards over the max are discarded and not added.
+            """)
     public String addCards(
             @ToolParam(description = "The deckId returned by create_deck") String deckId,
-            @ToolParam(description = "Cards to add. Each needs a front prompt and a back answer.")
+            @ToolParam(description = "Cards to add. Each needs a front prompt and a back answer. Do not include more than the remaining card limit.")
                     List<AgentCardInput> cards) {
         int requested = cards == null ? 0 : cards.size();
         String tooMany = beginTool("addCards", requested + " cards");
@@ -194,8 +220,9 @@ public class AgentTools {
         }
         int room = Math.max(0, maxCards - cardsAdded);
         if (room == 0) {
-            return error("Card limit of " + maxCards + " already reached");
+            return error("Card limit of " + maxCards + " already reached. Do not add more cards.");
         }
+        int omitted = Math.max(0, requested - room);
         List<CardDraft> drafts = cards.stream()
                 .limit(room)
                 .map(card -> new CardDraft(card.front(), card.back(), card.hint()))
@@ -204,7 +231,14 @@ public class AgentTools {
             int added = cardService.createMany(userId, id, drafts);
             cardsAdded += added;
             createdDeckId = id;
-            return "{\"added\":" + added + ",\"cardCount\":" + cardsAdded + ",\"deckId\":\"" + id + "\"}";
+            String json = "{\"added\":" + added + ",\"cardCount\":" + cardsAdded + ",\"maxCards\":" + maxCards
+                    + ",\"deckId\":\"" + id + "\"";
+            if (omitted > 0) {
+                json += ",\"omitted\":" + omitted
+                        + ",\"note\":\"Card limit is " + maxCards
+                        + ". Extra cards were not added. Do not call addCards again.\"";
+            }
+            return json + "}";
         } catch (ApiException ex) {
             return error(ex.getMessage());
         }

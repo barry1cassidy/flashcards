@@ -32,6 +32,10 @@ spring:
           time_zone: UTC
   flyway:
     enabled: true
+  servlet:
+    multipart:
+      max-file-size: 8MB
+      max-request-size: 9MB
 
 logging:
   level:
@@ -46,9 +50,10 @@ app:
     expiration-ms: 86400000
   billing:
     stub-enabled: ${APP_BILLING_STUB_ENABLED:true}
+    public-checkout: ${APP_BILLING_PUBLIC_CHECKOUT:false}
     public-app-url: ${APP_PUBLIC_URL:http://localhost:5173}
-    monthly-price-display: "$3.99"
-    yearly-price-display: "$12.99"
+    monthly-price-display: "$7.99"
+    yearly-price-display: "$39.99"
     addon-price-display: "$2.99"
     stripe:
       secret-key: ${STRIPE_SECRET_KEY:}
@@ -59,12 +64,25 @@ app:
   agent:
     api-key: ${AGENT_API_KEY:}
     base-url: ${AGENT_BASE_URL:https://generativelanguage.googleapis.com/v1beta/openai}
-    model: ${AGENT_MODEL:gemini-3.6-flash}
-    monthly-credits: 40
-    addon-credits: 40
+    model: ${AGENT_MODEL:gemini-3.8-flash}
+    monthly-credits: 10
+    addon-credits: 10
     max-cards: 40
     timeout-seconds: 90
+    max-prompt-chars: 2000
+    max-pdf-bytes: 8388608
+    max-pdf-pages: 30
+    max-pdf-chars: 40000
   google:
     client-id: ${GOOGLE_CLIENT_ID:}
+  card-images:
+    storage: ${CARD_IMAGES_STORAGE:local}
+    dir: ${CARD_IMAGES_DIR:./data/card-images}
+    bucket: ${CARD_IMAGES_S3_BUCKET:}
+    region: ${CARD_IMAGES_S3_REGION:us-east-1}
+    endpoint: ${CARD_IMAGES_S3_ENDPOINT:}
+    prefix: ${CARD_IMAGES_S3_PREFIX:card-images}
+    max-bytes: 5242880
+    max-edge: 1600
   cors:
     origins: ${APP_CORS_ORIGINS:http://localhost:5173,http://localhost:5174,http://127.0.0.1:5173,http://127.0.0.1:5174,http://localhost,https://localhost,capacitor://localhost,https://zipdeck.app,https://www.zipdeck.app}

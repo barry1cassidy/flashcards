@@ -159,6 +159,20 @@ docker compose -f docker-compose.prod.yml up -d --build
 
 Open Lightsail firewall for **HTTP (80)** and **HTTPS (443)**. Do not publish 3306. Google sign-in needs `https://zipdeck.app` (and `https://www.zipdeck.app` if you use it) as authorized JavaScript origins; password sign-in works without that.
 
+### Card images (S3)
+
+Local development stores Pro card images on disk under `backend/data/card-images` (gitignored). Production uses a **private Lightsail object storage** bucket (S3 API). Do not enable “Host a static website”. On the bucket, open **Permissions → Access keys** and create a key, then put these in the server `.env`:
+
+```
+CARD_IMAGES_STORAGE=s3
+CARD_IMAGES_S3_BUCKET=zipdeck-card-images
+CARD_IMAGES_S3_REGION=us-west-2
+AWS_ACCESS_KEY_ID=...
+AWS_SECRET_ACCESS_KEY=...
+```
+
+The API serves images over `/api` with the user’s JWT. Keep “All objects are private”. Leave `CARD_IMAGES_S3_ENDPOINT` empty.
+
 The first API image build downloads Maven and can take several minutes. After that, `docker compose -f docker-compose.prod.yml up -d --build` picks up git pulls.
 
 ### HTTPS (Let’s Encrypt)

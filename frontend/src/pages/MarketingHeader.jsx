@@ -169,6 +169,9 @@ export function MarketingFooter() {
   return (
     <footer className="site-end">
       <span>{t('marketing.copyright', { year: 2026 })}</span>
+      <Link className="site-end-link" to="/help">
+        {t('nav.help')}
+      </Link>
       <Link className="site-end-link" to="/privacy">
         {t('privacy.title')}
       </Link>

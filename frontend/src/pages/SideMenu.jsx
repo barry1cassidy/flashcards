@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useMenu } from '../menu'
 import { useAuth } from '../AuthContext'
 import { isAdmin } from '../admin'
+import { isProLicensed } from '../pro'
 import Brand from './Brand'
 import MenuIcon from './MenuIcon'
 
@@ -17,8 +18,12 @@ export default function SideMenu() {
   const libraryActive = location.pathname.startsWith('/library')
   const classesActive = location.pathname.startsWith('/classes')
   const setsActive = location.pathname.startsWith('/sets') || location.pathname.startsWith('/groups')
+  const proActive = location.pathname.startsWith('/pro')
   const settingsActive = location.pathname.startsWith('/settings')
+  const helpActive = location.pathname.startsWith('/help')
   const admin = isAdmin(user)
+  const pro = isProLicensed(user)
+  const badge = t('settings.proBadge')
 
   return (
     <nav className="side-menu">
@@ -27,40 +32,46 @@ export default function SideMenu() {
       </Link>
       <NavLink to="/" end className={() => menuLinkClass(decksActive)} onClick={close}>
         <MenuIcon name="decks" />
-        <span>{t('decks.title')}</span>
+        <span className="menu-link-text">{t('decks.title')}</span>
       </NavLink>
       <NavLink to="/sets" className={() => menuLinkClass(setsActive)} onClick={close}>
         <MenuIcon name="groups" />
-        <span>{t('groups.manage')}</span>
+        <span className="menu-link-text">{t('groups.manage')}</span>
       </NavLink>
-      {admin ? (
-        <>
-          <hr className="side-menu-divider" />
-          <NavLink to="/create-with-ai" className={() => menuLinkClass(agentActive)} onClick={close}>
-            <MenuIcon name="agent" />
-            <span>{t('agent.menu')}</span>
-          </NavLink>
-          <NavLink to="/mixes" className={() => menuLinkClass(mixActive)} onClick={close}>
-            <MenuIcon name="mix" />
-            <span>{t('mix.menu')}</span>
-          </NavLink>
-        </>
-      ) : null}
+      <hr className="side-menu-divider" />
+      <NavLink to="/create-with-ai" className={() => menuLinkClass(agentActive)} onClick={close}>
+        <MenuIcon name="agent" />
+        <span className="menu-link-text">{t('agent.menu')}</span>
+        <span className="menu-pro-tag">{badge}</span>
+      </NavLink>
+      <NavLink to="/mixes" className={() => menuLinkClass(mixActive)} onClick={close}>
+        <MenuIcon name="mix" />
+        <span className="menu-link-text">{t('mix.menu')}</span>
+        <span className="menu-pro-tag">{badge}</span>
+      </NavLink>
+      <NavLink to="/pro" className={() => menuLinkClass(proActive)} onClick={close}>
+        <MenuIcon name="pro" />
+        <span className="menu-link-text">{pro ? t('pro.menuAccount') : t('pro.menuUpgrade')}</span>
+      </NavLink>
       <hr className="side-menu-divider" />
       <NavLink to="/library" className={() => menuLinkClass(libraryActive)} onClick={close}>
         <MenuIcon name="library" />
-        <span>{t('library.title')}</span>
+        <span className="menu-link-text">{t('library.title')}</span>
       </NavLink>
       {admin ? (
         <NavLink to="/classes" className={() => menuLinkClass(classesActive)} onClick={close}>
           <MenuIcon name="classes" />
-          <span>{t('classes.title')}</span>
+          <span className="menu-link-text">{t('classes.title')}</span>
         </NavLink>
       ) : null}
       <hr className="side-menu-divider" />
+      <NavLink to="/help" className={() => menuLinkClass(helpActive)} onClick={close}>
+        <MenuIcon name="help" />
+        <span className="menu-link-text">{t('nav.help')}</span>
+      </NavLink>
       <NavLink to="/settings" className={() => menuLinkClass(settingsActive)} onClick={close}>
         <MenuIcon name="settings" />
-        <span>{t('nav.settings')}</span>
+        <span className="menu-link-text">{t('nav.settings')}</span>
       </NavLink>
     </nav>
   )

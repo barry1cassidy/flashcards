@@ -10,6 +10,7 @@ import MatchListStudy from './MatchListStudy'
 import AudioReviewStudy from './AudioReviewStudy'
 import ConfirmModal from './ConfirmModal'
 import RatingRow from './RatingRow'
+import AuthImage from './AuthImage'
 import { useAuth } from '../AuthContext'
 import { answersMatch, diffAnswers } from '../answerCompare'
 
@@ -522,10 +523,16 @@ export default function StudyPage() {
                   aria-hidden={revealed}
                 >
                   <h2>{current.front}</h2>
+                  {current.hasFrontImage ? (
+                    <AuthImage cardId={current.id} side="front" alt="" className="study-card-image" />
+                  ) : null}
                   <span className="flip-cue">{t('study.tapToFlip')}</span>
                 </button>
                 <div className="flip-face flip-face-back" aria-hidden={!revealed}>
                   <p className="flip-prompt muted">{current.front}</p>
+                  {current.hasBackImage ? (
+                    <AuthImage cardId={current.id} side="back" alt="" className="study-card-image" />
+                  ) : null}
                   <p className="answer">{current.back}</p>
                 </div>
               </div>
@@ -548,6 +555,9 @@ export default function StudyPage() {
             <SpeakButton text={current.front} lang={current.frontLanguage} />
           </div>
           <h2>{current.front}</h2>
+          {current.hasFrontImage ? (
+            <AuthImage cardId={current.id} side="front" alt="" className="study-card-image" />
+          ) : null}
           {current.hint ? (
             <div className="hint-block">
               <button className="btn" type="button" onClick={() => setHintOpen((open) => !open)}>

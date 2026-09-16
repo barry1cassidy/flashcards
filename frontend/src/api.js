@@ -64,6 +64,9 @@ async function send(path, options) {
   if (contentType.includes('text/csv')) {
     return response.blob()
   }
+  if (contentType.startsWith('image/')) {
+    return response.blob()
+  }
   if (contentType.includes('application/json')) {
     return response.json()
   }

@@ -5,10 +5,11 @@ import { api } from '../api'
 import { useAuth } from '../AuthContext'
 import { translateError } from '../i18n/errors'
 import { isTeacherMode } from '../teacher'
+import { isAdmin } from '../admin'
 
 export default function ClassesPage() {
   const { t } = useTranslation()
-  const { user } = useAuth()
+  const { user, setTeacherMode } = useAuth()
   const navigate = useNavigate()
   const [searchParams, setSearchParams] = useSearchParams()
   const [data, setData] = useState({ teaching: [], joined: [] })
@@ -18,6 +19,7 @@ export default function ClassesPage() {
   const [busy, setBusy] = useState(false)
   const creating = searchParams.get('new') === '1'
   const teacher = isTeacherMode(user)
+  const admin = isAdmin(user)
   const empty = data.teaching.length === 0 && data.joined.length === 0
 
   async function load() {
@@ -82,6 +84,35 @@ export default function ClassesPage() {
         ) : null}
       </div>
       {error && !creating ? <div className="error">{translateError(t, error)}</div> : null}
+
+      {admin ? (
+        <section className="card-form">
+          <h2 className="section-heading">{t('settings.teacherMode')}</h2>
+          <p className="muted">{t('settings.teacherModeHint')}</p>
+          <div className="radio-list" role="radiogroup" aria-label={t('settings.teacherMode')}>
+            <label className={`radio-row ${teacher ? 'selected' : ''}`}>
+              <input
+                type="radio"
+                name="teacherMode"
+                value="on"
+                checked={teacher}
+                onChange={() => setTeacherMode(true).catch((err) => setError(err.message))}
+              />
+              {t('settings.teacherModeOn')}
+            </label>
+            <label className={`radio-row ${teacher ? '' : 'selected'}`}>
+              <input
+                type="radio"
+                name="teacherMode"
+                value="off"
+                checked={!teacher}
+                onChange={() => setTeacherMode(false).catch((err) => setError(err.message))}
+              />
+              {t('settings.teacherModeOff')}
+            </label>
+          </div>
+        </section>
+      ) : null}
 
       <section className="card-form">
         <h2 className="section-heading">{t('classes.joinHeading')}</h2>

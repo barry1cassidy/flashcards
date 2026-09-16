@@ -1,5 +1,6 @@
 package com.flashcards.agent;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -14,6 +15,7 @@ import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -76,10 +78,30 @@ class AgentToolsTest {
                         new AgentTools.AgentCardInput("gracias", "thanks", null)));
 
         assertTrue(added.contains("\"added\":2"));
-        verify(cardService).createMany(eq(userId), eq(deckId), any());
+        assertTrue(added.contains("\"omitted\":1"));
+        assertTrue(added.contains("\"maxCards\":2"));
+        @SuppressWarnings("unchecked")
+        ArgumentCaptor<List<CardDraft>> drafts = ArgumentCaptor.forClass(List.class);
+        verify(cardService).createMany(eq(userId), eq(deckId), drafts.capture());
+        assertEquals(2, drafts.getValue().size());
         String extra = tools.addCards(deckId.toString(), List.of(new AgentTools.AgentCardInput("si", "yes", null)));
         assertTrue(extra.contains("Card limit"));
         verify(cardService).createMany(eq(userId), eq(deckId), any());
+    }
+
+    @Test
+    void createDeckUsesLockedLanguages() {
+        UUID deckId = UUID.randomUUID();
+        when(deckService.create(eq(userId), any(DeckRequest.class))).thenReturn(deckResponse(deckId, "Travel"));
+        tools = new AgentTools(
+                userId, null, 40, groupService, deckService, cardService, AgentProgress.noop(), "es-ES", "en-US");
+
+        tools.createDeck("Travel", null, "ja-JP", "fr-FR", null);
+
+        ArgumentCaptor<DeckRequest> request = ArgumentCaptor.forClass(DeckRequest.class);
+        verify(deckService).create(eq(userId), request.capture());
+        assertEquals("es-ES", request.getValue().frontLanguage());
+        assertEquals("en-US", request.getValue().backLanguage());
     }
 
     @Test

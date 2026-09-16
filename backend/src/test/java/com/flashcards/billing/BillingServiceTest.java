@@ -55,12 +55,13 @@ class BillingServiceTest {
     void setUp() {
         BillingProperties properties = new BillingProperties(
                 true,
+                true,
                 "http://localhost:5173",
-                "$3.99",
-                "$12.99",
+                "$7.99",
+                "$39.99",
                 "$2.99",
                 new BillingProperties.Stripe("sk_test", "whsec", "price_month", "price_year", "price_addon"));
-        AgentProperties agentProperties = new AgentProperties("", "", "", 40, 40, 40, 90);
+        AgentProperties agentProperties = new AgentProperties("", "", "", 10, 10, 40, 90, 0, 0, 0, 0);
         billingService = new BillingService(
                 properties, stripeGateway, userRepository, subscriptionRepository, creditService, agentProperties);
         user = new User();
@@ -161,6 +162,27 @@ class BillingServiceTest {
                 ApiException.class, () -> billingService.createCheckout(USER_ID, BillingPlan.YEARLY, "/settings"));
         assertEquals(HttpStatus.CONFLICT, ex.getStatus());
         assertEquals("Already subscribed", ex.getMessage());
+        verify(stripeGateway, never()).createCheckout(any(), any(), any(), any(), any(), any(), anyBoolean());
+    }
+
+    @Test
+    void checkoutRejectedForNonAdminWhenPublicCheckoutIsOff() {
+        BillingProperties closed = new BillingProperties(
+                false,
+                false,
+                "http://localhost:5173",
+                "$7.99",
+                "$39.99",
+                "$2.99",
+                new BillingProperties.Stripe("sk_test", "whsec", "price_month", "price_year", "price_addon"));
+        BillingService closedBilling = new BillingService(
+                closed, stripeGateway, userRepository, subscriptionRepository, creditService, new AgentProperties("", "", "", 10, 10, 40, 90, 0, 0, 0, 0));
+        when(userRepository.findById(USER_ID)).thenReturn(Optional.of(user));
+
+        ApiException ex = assertThrows(
+                ApiException.class, () -> closedBilling.createCheckout(USER_ID, BillingPlan.MONTHLY, "/pro"));
+        assertEquals(HttpStatus.SERVICE_UNAVAILABLE, ex.getStatus());
+        assertEquals("Billing is not configured", ex.getMessage());
         verify(stripeGateway, never()).createCheckout(any(), any(), any(), any(), any(), any(), anyBoolean());
     }
 

@@ -18,11 +18,17 @@ public class CardService {
     private final CardRepository cardRepository;
     private final DeckService deckService;
     private final OwnedAccess ownedAccess;
+    private final CardImageService cardImageService;
 
-    public CardService(CardRepository cardRepository, DeckService deckService, OwnedAccess ownedAccess) {
+    public CardService(
+            CardRepository cardRepository,
+            DeckService deckService,
+            OwnedAccess ownedAccess,
+            CardImageService cardImageService) {
         this.cardRepository = cardRepository;
         this.deckService = deckService;
         this.ownedAccess = ownedAccess;
+        this.cardImageService = cardImageService;
     }
 
     @Transactional(readOnly = true)
@@ -86,6 +92,7 @@ public class CardService {
     public void delete(UUID userId, UUID cardId) {
         Card card = requireOwnedCard(userId, cardId);
         UUID deckId = card.getDeck().getId();
+        cardImageService.deleteAll(card);
         cardRepository.delete(card);
         reindex(deckId);
     }
@@ -122,7 +129,14 @@ public class CardService {
     }
 
     public static CardResponse toResponse(Card card) {
-        return new CardResponse(card.getId(), card.getFront(), card.getBack(), card.getHint(), card.getPosition());
+        return new CardResponse(
+                card.getId(),
+                card.getFront(),
+                card.getBack(),
+                card.getHint(),
+                card.getPosition(),
+                CardImageService.hasImage(card.getFrontImage()),
+                CardImageService.hasImage(card.getBackImage()));
     }
 
     public static String trimToNull(String value) {

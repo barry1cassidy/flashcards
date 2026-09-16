@@ -1,0 +1,3 @@
+ALTER TABLE cards
+    ADD COLUMN front_image VARCHAR(64) NULL,
+    ADD COLUMN back_image VARCHAR(64) NULL;

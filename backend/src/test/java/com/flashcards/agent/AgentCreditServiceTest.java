@@ -41,7 +41,7 @@ class AgentCreditServiceTest {
     @BeforeEach
     void setUp() {
         creditService = new AgentCreditService(
-                userRepository, ledgerRepository, new AgentProperties("", "", "", 40, 40, 40, 90));
+                userRepository, ledgerRepository, new AgentProperties("", "", "", 10, 10, 40, 90, 0, 0, 0, 0));
         user = new User();
         user.setId(USER_ID);
         user.setProLicensed(true);
@@ -64,9 +64,9 @@ class AgentCreditServiceTest {
     @Test
     void grantsMonthlyIncludedCreditsForPro() {
         CreditBalance balance = creditService.snapshot(user);
-        assertEquals(40, balance.includedCredits());
+        assertEquals(10, balance.includedCredits());
         assertEquals(0, balance.addonCredits());
-        assertEquals(40, balance.remainingCredits());
+        assertEquals(10, balance.remainingCredits());
         assertEquals(YearMonth.now(ZoneOffset.UTC).toString(), user.getAgentCreditPeriod());
     }
 
@@ -76,9 +76,9 @@ class AgentCreditServiceTest {
         user.setAgentAddonCredits(12);
         user.setAgentCreditPeriod("2020-01");
         CreditBalance balance = creditService.snapshot(user);
-        assertEquals(40, balance.includedCredits());
+        assertEquals(10, balance.includedCredits());
         assertEquals(12, balance.addonCredits());
-        assertEquals(52, balance.remainingCredits());
+        assertEquals(22, balance.remainingCredits());
     }
 
     @Test
@@ -106,7 +106,16 @@ class AgentCreditServiceTest {
     void addonPurchaseIsIdempotentForTheSameSession() {
         CreditBalance first = creditService.grantAddonPurchase(USER_ID, "cs_test_1");
         CreditBalance second = creditService.grantAddonPurchase(USER_ID, "cs_test_1");
-        assertEquals(40, first.addonCredits());
-        assertEquals(40, second.addonCredits());
+        assertEquals(10, first.addonCredits());
+        assertEquals(10, second.addonCredits());
+    }
+
+    @Test
+    void capsIncludedCreditsWhenAllowanceDrops() {
+        user.setAgentIncludedCredits(40);
+        user.setAgentCreditPeriod(YearMonth.now(ZoneOffset.UTC).toString());
+        CreditBalance balance = creditService.snapshot(user);
+        assertEquals(10, balance.includedCredits());
+        assertEquals(10, balance.remainingCredits());
     }
 }

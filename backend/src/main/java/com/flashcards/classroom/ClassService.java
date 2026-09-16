@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.flashcards.card.Card;
+import com.flashcards.card.CardImageService;
 import com.flashcards.card.CardRepository;
 import com.flashcards.common.ApiException;
 import com.flashcards.deck.Deck;
@@ -45,6 +46,7 @@ public class ClassService {
     private final UserRepository userRepository;
     private final DeckService deckService;
     private final OwnedAccess ownedAccess;
+    private final CardImageService cardImageService;
     private final SecureRandom random;
 
     @Autowired
@@ -57,7 +59,8 @@ public class ClassService {
             DeckGroupRepository groupRepository,
             UserRepository userRepository,
             DeckService deckService,
-            OwnedAccess ownedAccess) {
+            OwnedAccess ownedAccess,
+            CardImageService cardImageService) {
         this(
                 classRepository,
                 memberRepository,
@@ -68,6 +71,7 @@ public class ClassService {
                 userRepository,
                 deckService,
                 ownedAccess,
+                cardImageService,
                 new SecureRandom());
     }
 
@@ -81,6 +85,7 @@ public class ClassService {
             UserRepository userRepository,
             DeckService deckService,
             OwnedAccess ownedAccess,
+            CardImageService cardImageService,
             SecureRandom random) {
         this.classRepository = classRepository;
         this.memberRepository = memberRepository;
@@ -91,6 +96,7 @@ public class ClassService {
         this.userRepository = userRepository;
         this.deckService = deckService;
         this.ownedAccess = ownedAccess;
+        this.cardImageService = cardImageService;
         this.random = random;
     }
 
@@ -262,6 +268,7 @@ public class ClassService {
         }
         Set<UUID> masterIds = new HashSet<>();
         List<Card> toAdd = new ArrayList<>();
+        List<Card[]> imageCopies = new ArrayList<>();
         for (Card source : masterCards) {
             masterIds.add(source.getId());
             Card existing = bySource.get(source.getId());
@@ -274,11 +281,13 @@ public class ClassService {
                 card.setPosition(source.getPosition());
                 card.setSourceCardId(source.getId());
                 toAdd.add(card);
+                imageCopies.add(new Card[] {source, card});
             } else {
                 existing.setFront(source.getFront());
                 existing.setBack(source.getBack());
                 existing.setHint(source.getHint());
                 existing.setPosition(source.getPosition());
+                imageCopies.add(new Card[] {source, existing});
             }
         }
         for (Card card : copyCards) {
@@ -287,10 +296,14 @@ public class ClassService {
             }
         }
         if (!toDelete.isEmpty()) {
+            toDelete.forEach(cardImageService::deleteAll);
             cardRepository.deleteAll(toDelete);
         }
         if (!toAdd.isEmpty()) {
             cardRepository.saveAll(toAdd);
+        }
+        for (Card[] pair : imageCopies) {
+            cardImageService.copyFrom(pair[0], pair[1]);
         }
         copy.setName(master.getName());
         copy.setDescription(master.getDescription());
@@ -323,6 +336,7 @@ public class ClassService {
         deckRepository.save(copy);
         List<Card> sourceCards = cardRepository.findByDeckIdOrderByPositionAscIdAsc(master.getId());
         List<Card> cards = new ArrayList<>();
+        List<Card[]> imageCopies = new ArrayList<>();
         for (Card source : sourceCards) {
             Card card = new Card();
             card.setDeck(copy);
@@ -332,8 +346,12 @@ public class ClassService {
             card.setPosition(source.getPosition());
             card.setSourceCardId(source.getId());
             cards.add(card);
+            imageCopies.add(new Card[] {source, card});
         }
         cardRepository.saveAll(cards);
+        for (Card[] pair : imageCopies) {
+            cardImageService.copyFrom(pair[0], pair[1]);
+        }
         return deckService.toResponse(copy, deckService.statsFor(copy));
     }
 
@@ -479,6 +497,8 @@ public class ClassService {
         return Objects.equals(master.getFront(), copy.getFront())
                 && Objects.equals(master.getBack(), copy.getBack())
                 && Objects.equals(master.getHint(), copy.getHint())
+                && Objects.equals(master.getFrontImage(), copy.getFrontImage())
+                && Objects.equals(master.getBackImage(), copy.getBackImage())
                 && master.getPosition() == copy.getPosition();
     }
 

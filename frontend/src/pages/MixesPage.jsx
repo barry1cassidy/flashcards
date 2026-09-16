@@ -44,8 +44,14 @@ export default function MixesPage() {
       {!pro ? (
         <section className="card-form">
           <p>{t('mix.proRequired')}</p>
-          <Link className="btn primary" to="/settings">
-            {t('agent.goToSettings')}
+          <p>{t('mix.proWhy')}</p>
+          <ul className="pro-feature-list">
+            <li>{t('mix.proExample1')}</li>
+            <li>{t('mix.proExample2')}</li>
+            <li>{t('mix.proExample3')}</li>
+          </ul>
+          <Link className="btn primary" to="/pro">
+            {t('pro.goToPro')}
           </Link>
         </section>
       ) : null}

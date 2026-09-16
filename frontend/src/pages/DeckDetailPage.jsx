@@ -11,6 +11,10 @@ import StudyModeModal from './StudyModeModal'
 import { GroupBadge } from './ColorPicker'
 import LanguageSelect from './LanguageSelect'
 import SpeakButton from './SpeakButton'
+import CardImageField from './CardImageField'
+import AuthImage from './AuthImage'
+import { useAuth } from '../AuthContext'
+import { isProLicensed } from '../pro'
 
 function deckUpdateBody(deck, overrides = {}) {
   return {
@@ -25,6 +29,8 @@ function deckUpdateBody(deck, overrides = {}) {
 
 export default function DeckDetailPage() {
   const { t } = useTranslation()
+  const { user } = useAuth()
+  const pro = isProLicensed(user)
   const { id } = useParams()
   const navigate = useNavigate()
   const fileRef = useRef(null)
@@ -44,6 +50,11 @@ export default function DeckDetailPage() {
   const [editName, setEditName] = useState('')
   const [editDescription, setEditDescription] = useState('')
   const [studyOpen, setStudyOpen] = useState(false)
+  const [frontFile, setFrontFile] = useState(null)
+  const [backFile, setBackFile] = useState(null)
+  const [removeFrontImage, setRemoveFrontImage] = useState(false)
+  const [removeBackImage, setRemoveBackImage] = useState(false)
+  const [proModal, setProModal] = useState(false)
 
   async function load() {
     const [deckData, cardData, groupData] = await Promise.all([
@@ -65,27 +76,35 @@ export default function DeckDetailPage() {
     setError('')
     setBusy(true)
     try {
-      if (editing) {
-        await api(`/api/cards/${editing.id}`, {
-          method: 'PUT',
-          body: JSON.stringify({ front, back, hint }),
-        })
-      } else {
-        await api(`/api/decks/${id}/cards`, {
-          method: 'POST',
-          body: JSON.stringify({ front, back, hint }),
-        })
-      }
-      setFront('')
-      setBack('')
-      setHint('')
-      setEditing(null)
-      setCardFormOpen(false)
+      const saved = editing
+        ? await api(`/api/cards/${editing.id}`, {
+            method: 'PUT',
+            body: JSON.stringify({ front, back, hint }),
+          })
+        : await api(`/api/decks/${id}/cards`, {
+            method: 'POST',
+            body: JSON.stringify({ front, back, hint }),
+          })
+      await syncCardImage(saved.id, 'front', frontFile, removeFrontImage, editing?.hasFrontImage)
+      await syncCardImage(saved.id, 'back', backFile, removeBackImage, editing?.hasBackImage)
+      resetCardForm()
       await load()
     } catch (err) {
       setError(err.message)
     } finally {
       setBusy(false)
+    }
+  }
+
+  async function syncCardImage(cardId, side, file, removed, hadImage) {
+    if (file) {
+      const body = new FormData()
+      body.append('file', file)
+      await api(`/api/cards/${cardId}/images/${side}`, { method: 'POST', body })
+      return
+    }
+    if (removed && hadImage) {
+      await api(`/api/cards/${cardId}/images/${side}`, { method: 'DELETE' })
     }
   }
 
@@ -226,11 +245,27 @@ export default function DeckDetailPage() {
     moveCard(from, index)
   }
 
+  function resetCardForm() {
+    setCardFormOpen(false)
+    setEditing(null)
+    setFront('')
+    setBack('')
+    setHint('')
+    setFrontFile(null)
+    setBackFile(null)
+    setRemoveFrontImage(false)
+    setRemoveBackImage(false)
+  }
+
   function openAddCard() {
     setEditing(null)
     setFront('')
     setBack('')
     setHint('')
+    setFrontFile(null)
+    setBackFile(null)
+    setRemoveFrontImage(false)
+    setRemoveBackImage(false)
     setError('')
     setCardFormOpen(true)
   }
@@ -240,6 +275,10 @@ export default function DeckDetailPage() {
     setFront(card.front)
     setBack(card.back)
     setHint(card.hint || '')
+    setFrontFile(null)
+    setBackFile(null)
+    setRemoveFrontImage(false)
+    setRemoveBackImage(false)
     setError('')
     setCardFormOpen(true)
   }
@@ -248,11 +287,7 @@ export default function DeckDetailPage() {
     if (busy) {
       return
     }
-    setCardFormOpen(false)
-    setEditing(null)
-    setFront('')
-    setBack('')
-    setHint('')
+    resetCardForm()
   }
 
   if (!deck) {
@@ -413,6 +448,16 @@ export default function DeckDetailPage() {
                   </div>
                   <div className="card-row-main">
                     <div className="card-row-body">
+                    {(card.hasFrontImage || card.hasBackImage) ? (
+                      <div className="card-row-thumbs">
+                        {card.hasFrontImage ? (
+                          <AuthImage cardId={card.id} side="front" alt="" className="card-row-thumb" />
+                        ) : null}
+                        {card.hasBackImage ? (
+                          <AuthImage cardId={card.id} side="back" alt="" className="card-row-thumb" />
+                        ) : null}
+                      </div>
+                    ) : null}
                       <div className="card-side-line">
                         <strong className="card-side-text">{card.front}</strong>
                         <SpeakButton text={card.front} lang={frontLanguage} />
@@ -466,19 +511,61 @@ export default function DeckDetailPage() {
           >
             <h2>{editing ? t('decks.editCardTitle') : t('decks.addCard')}</h2>
             {error ? <div className="error">{translateError(t, error)}</div> : null}
-            <label>
-              {t('decks.front')}
-              <textarea
-                value={front}
-                onChange={(event) => setFront(event.target.value)}
-                required
-                autoFocus
+            <div className="card-side-block">
+              <label>
+                {t('decks.front')}
+                <textarea
+                  value={front}
+                  onChange={(event) => setFront(event.target.value)}
+                  required
+                  autoFocus
+                />
+              </label>
+              <CardImageField
+                side="front"
+                cardId={editing?.id}
+                hasImage={Boolean(editing?.hasFrontImage)}
+                file={frontFile}
+                removed={removeFrontImage}
+                isPro={pro}
+                disabled={busy}
+                onFile={(next) => {
+                  setFrontFile(next)
+                  setRemoveFrontImage(false)
+                }}
+                onRemove={() => {
+                  setFrontFile(null)
+                  setRemoveFrontImage(true)
+                }}
+                onNeedPro={() => setProModal(true)}
+                onError={setError}
               />
-            </label>
-            <label>
-              {t('decks.back')}
-              <textarea value={back} onChange={(event) => setBack(event.target.value)} required />
-            </label>
+            </div>
+            <div className="card-side-block">
+              <label>
+                {t('decks.back')}
+                <textarea value={back} onChange={(event) => setBack(event.target.value)} required />
+              </label>
+              <CardImageField
+                side="back"
+                cardId={editing?.id}
+                hasImage={Boolean(editing?.hasBackImage)}
+                file={backFile}
+                removed={removeBackImage}
+                isPro={pro}
+                disabled={busy}
+                onFile={(next) => {
+                  setBackFile(next)
+                  setRemoveBackImage(false)
+                }}
+                onRemove={() => {
+                  setBackFile(null)
+                  setRemoveBackImage(true)
+                }}
+                onNeedPro={() => setProModal(true)}
+                onError={setError}
+              />
+            </div>
             <label>
               {t('decks.hint')}
               <textarea
@@ -535,6 +622,15 @@ export default function DeckDetailPage() {
             navigate(filter === 'hard' || filter === 'again' ? `${path}?filter=${filter}` : path)
           }}
           onCancel={() => setStudyOpen(false)}
+        />
+      ) : null}
+      {proModal ? (
+        <ConfirmModal
+          title={t('decks.imageProTitle')}
+          message={t('decks.imageProMessage')}
+          confirmLabel={t('pro.goToPro')}
+          onConfirm={() => navigate('/pro')}
+          onCancel={() => setProModal(false)}
         />
       ) : null}
       {confirm ? (

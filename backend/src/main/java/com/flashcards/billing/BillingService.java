@@ -57,7 +57,8 @@ public class BillingService {
         CreditBalance credits = ProAccess.allowed(user) ? creditService.snapshot(user) : CreditBalance.of(0, user.getAgentAddonCredits());
         return new BillingStatusResponse(
                 properties.stripeCheckoutEnabled(),
-                properties.stubEnabled(),
+                properties.stubAllowed(user.isAdmin()),
+                properties.publicCheckout(),
                 ProAccess.allowed(user),
                 current == null ? null : current.getPlan(),
                 current == null ? null : current.getStatus(),
@@ -67,7 +68,7 @@ public class BillingService {
                 properties.monthlyPrice(),
                 properties.yearlyPrice(),
                 properties.addonPrice(),
-                properties.addonCheckoutEnabled(),
+                properties.addonCheckoutEnabled() && properties.paidCheckoutAllowed(user.isAdmin()),
                 credits.includedCredits(),
                 credits.addonCredits(),
                 credits.remainingCredits(),
@@ -87,6 +88,7 @@ public class BillingService {
             throw new ApiException(HttpStatus.BAD_REQUEST, "Invalid billing plan");
         }
         User user = requireOwnAccount(userId);
+        requirePaidCheckout(user);
         if (hasOpenStripeSubscription(userId)) {
             throw new ApiException(HttpStatus.CONFLICT, "Already subscribed");
         }
@@ -113,6 +115,7 @@ public class BillingService {
             throw new ApiException(HttpStatus.SERVICE_UNAVAILABLE, "Billing is not configured");
         }
         User user = requireOwnAccount(userId);
+        requirePaidCheckout(user);
         ProAccess.require(user);
         String customerId = ensureCustomer(user);
         String page = checkoutReturnPath(returnPath);
@@ -157,15 +160,15 @@ public class BillingService {
         if (customerId == null || customerId.isBlank()) {
             throw new ApiException(HttpStatus.BAD_REQUEST, "No Stripe customer");
         }
-        return new PortalResponse(stripeGateway.createPortalUrl(customerId, properties.appUrl() + "/settings"));
+        return new PortalResponse(stripeGateway.createPortalUrl(customerId, properties.appUrl() + "/pro"));
     }
 
     @Transactional
     public UserResponse stubPro(UUID userId, boolean proLicensed) {
-        if (!properties.stubEnabled()) {
+        User user = requireUser(userId);
+        if (!properties.stubAllowed(user.isAdmin())) {
             throw new ApiException(HttpStatus.NOT_FOUND, "Billing stub is disabled");
         }
-        User user = requireUser(userId);
         if (proLicensed) {
             user.setProLicensed(true);
             userRepository.save(user);
@@ -309,6 +312,12 @@ public class BillingService {
                 .anyMatch(row -> row.grantsAccess(now));
     }
 
+    private void requirePaidCheckout(User user) {
+        if (!properties.paidCheckoutAllowed(user.isAdmin())) {
+            throw new ApiException(HttpStatus.SERVICE_UNAVAILABLE, "Billing is not configured");
+        }
+    }
+
     private UserSubscription currentSubscription(UUID userId) {
         Instant now = Instant.now();
         List<UserSubscription> rows = subscriptionRepository.findByUser_Id(userId);
@@ -347,10 +356,10 @@ public class BillingService {
     }
 
     private static String checkoutReturnPath(String returnPath) {
-        if ("/agent".equals(returnPath)) {
-            return "/agent";
+        if ("/agent".equals(returnPath) || "/create-with-ai".equals(returnPath) || "/pro".equals(returnPath)) {
+            return returnPath;
         }
-        return "/settings";
+        return "/pro";
     }
 
     private User requireOwnAccount(UUID actorId) {

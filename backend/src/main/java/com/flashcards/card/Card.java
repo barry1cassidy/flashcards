@@ -46,6 +46,12 @@ public class Card {
     @Column(columnDefinition = "TEXT")
     private String hint;
 
+    @Column(name = "front_image", length = 64)
+    private String frontImage;
+
+    @Column(name = "back_image", length = 64)
+    private String backImage;
+
     @Column(nullable = false)
     private int position;
 

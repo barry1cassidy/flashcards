@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import AuthImage from './AuthImage'
 
 const BOARD_SIZE = 6
 
@@ -89,6 +90,8 @@ export default function MatchListStudy({ cards, onGrade, onComplete }) {
             <MatchTile
               key={`left-${card.id}`}
               label={card.front}
+              cardId={card.hasFrontImage ? card.id : null}
+              side="front"
               selected={pick?.side === 'left' && pick.id === card.id}
               matched={matched.has(card.id)}
               flash={flash?.ids.includes(card.id) ? flash.type : null}
@@ -102,6 +105,8 @@ export default function MatchListStudy({ cards, onGrade, onComplete }) {
             <MatchTile
               key={`right-${card.id}`}
               label={card.back}
+              cardId={card.hasBackImage ? card.id : null}
+              side="back"
               selected={pick?.side === 'right' && pick.id === card.id}
               matched={matched.has(card.id)}
               flash={flash?.ids.includes(card.id) ? flash.type : null}
@@ -115,7 +120,7 @@ export default function MatchListStudy({ cards, onGrade, onComplete }) {
   )
 }
 
-function MatchTile({ label, selected, matched, flash, onClick }) {
+function MatchTile({ label, cardId, side, selected, matched, flash, onClick }) {
   const className = [
     'match-tile',
     selected ? 'selected' : '',
@@ -127,6 +132,7 @@ function MatchTile({ label, selected, matched, flash, onClick }) {
     .join(' ')
   return (
     <button className={className} type="button" disabled={matched} onClick={onClick}>
+      {cardId ? <AuthImage cardId={cardId} side={side} alt="" className="match-tile-image" /> : null}
       {label}
     </button>
   )

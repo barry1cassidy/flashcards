@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { canSpeak, speak, stopSpeaking } from '../tts'
 import RatingRow from './RatingRow'
+import AuthImage from './AuthImage'
 
 export default function AudioReviewStudy({
   card,
@@ -54,7 +55,13 @@ export default function AudioReviewStudy({
           {revealed || !speechOk ? (
             <>
               <h2>{revealed ? card.back : card.front}</h2>
+              {revealed && card.hasBackImage ? (
+                <AuthImage cardId={card.id} side="back" alt="" className="study-card-image" />
+              ) : null}
               {revealed ? <p className="flip-prompt muted">{card.front}</p> : null}
+              {revealed && card.hasFrontImage ? (
+                <AuthImage cardId={card.id} side="front" alt="" className="study-card-image" />
+              ) : null}
               {!speechOk ? <p className="muted">{t('study.audioUnavailable')}</p> : null}
             </>
           ) : (
