@@ -1,6 +1,12 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { SUPPORT_EMAIL, SUPPORT_MAILTO } from '../support'
+
+const CSV_EXAMPLE = `front,back,hint
+photosynthesis,process plants use to make food
+"hello, world",hola,greeting
+mitochondria,powerhouse of the cell`
 
 const SECTIONS = [
   { id: 'help-start', titleKey: 'help.startTitle' },
@@ -77,6 +83,18 @@ export default function HelpPage() {
           </li>
           <li>
             <strong>{t('help.decksCsv')}</strong> {t('help.decksCsvBody')}
+            <div className="help-csv">
+              <p>{t('help.decksCsvHow')}</p>
+              <ul>
+                <li>{t('help.decksCsvColumns')}</li>
+                <li>{t('help.decksCsvHeader')}</li>
+                <li>{t('help.decksCsvQuote')}</li>
+                <li>{t('help.decksCsvRules')}</li>
+              </ul>
+              <p className="help-demo-label">{t('help.decksCsvExample')}</p>
+              <pre className="help-code">{CSV_EXAMPLE}</pre>
+              <p className="muted">{t('help.decksCsvSheet')}</p>
+            </div>
           </li>
           <li>
             <strong>{t('help.decksOrder')}</strong> {t('help.decksOrderBody')}
@@ -102,6 +120,24 @@ export default function HelpPage() {
           </li>
           <li>
             <strong>{t('study.audio')}</strong> {t('study.audioHint')}
+          </li>
+        </ul>
+        <p>
+          <strong>{t('help.ratingsTitle')}</strong>
+        </p>
+        <p>{t('help.ratingsIntro')}</p>
+        <ul className="help-list">
+          <li>
+            <strong>{t('study.again')}.</strong> {t('help.ratingsMissed')}
+          </li>
+          <li>
+            <strong>{t('study.hard')}.</strong> {t('help.ratingsHard')}
+          </li>
+          <li>
+            <strong>{t('study.good')}.</strong> {t('help.ratingsGotIt')}
+          </li>
+          <li>
+            <strong>{t('study.easy')}.</strong> {t('help.ratingsEasy')}
           </li>
         </ul>
         <p>{t('help.studyRatings')}</p>
@@ -173,6 +209,14 @@ export default function HelpPage() {
       <HelpSection id="help-classes" title={t('help.classesTitle')}>
         <p>{t('help.classesIntro')}</p>
       </HelpSection>
+
+      <section className="card-form help-contact">
+        <h2 className="section-heading">{t('help.contactTitle')}</h2>
+        <p>{t('help.contactBody')}</p>
+        <a className="settings-legal-link" href={SUPPORT_MAILTO}>
+          {SUPPORT_EMAIL}
+        </a>
+      </section>
     </div>
   )
 }

@@ -34,7 +34,8 @@
     "openMenu": "Abrir Menú",
     "closeMenu": "Cerrar Menú",
     "settings": "Ajustes",
-    "help": "Ayuda"
+    "help": "Ayuda",
+    "support": "Soporte"
   },
   "admin": {
     "enter": "Modo Admin",
@@ -244,7 +245,7 @@
     "changesHeading": "Cambios",
     "changesBody": "Podemos actualizar esta política. La fecha de “Última actualización” cambiará cuando lo hagamos. La versión vigente estará siempre en https://zipdeck.app/privacy.",
     "contactHeading": "Contacto",
-    "contactBody": "Para preguntas de privacidad o solicitudes de eliminación, escribe al correo de soporte de usuario que aparece en la pantalla de consentimiento de Google de Zipdeck. Incluye el correo de la cuenta de Zipdeck para que podamos encontrarla."
+    "contactBody": "Para preguntas de privacidad o solicitudes de eliminación, escribe a  support@zipdeck.app. Usa el correo de la cuenta de Zipdeck para que podamos encontrarla."
   },
   "auth": {
     "welcomeBack": "Hola de Nuevo",
@@ -365,7 +366,8 @@
     "step": {
       "starting": "Empezando…",
       "readingPdf": "Leyendo el PDF…",
-      "callingModel": "Esperando al modelo de IA…",
+      "callingModel": "Esperando a la IA…",
+      "retrying": "La IA está ocupada. Reintentando…",
       "listSets": "Buscando tus conjuntos…",
       "createSet": "Creando un conjunto…",
       "createDeck": "Creando el mazo…",
@@ -622,10 +624,23 @@
     "decksSetsBody": "En Gestionar conjuntos agrupas mazos. Sigue pudiendo estudiar un mazo suelto.",
     "decksCsv": "CSV.",
     "decksCsvBody": "Importa o exporta un mazo en CSV si ya tienes una hoja con preguntas y respuestas.",
+    "decksCsvHow": "Abre un mazo y toca Importar CSV. Exportar CSV descarga el mismo formato de tres columnas, para que edites en una hoja y lo vuelvas a importar.",
+    "decksCsvColumns": "Usa un archivo .csv UTF-8 separado por comas. La columna 1 es el frente (pregunta), la 2 el reverso (respuesta). Una tercera columna es una pista opcional.",
+    "decksCsvHeader": "La fila de encabezado es opcional. Si la pones, las dos primeras columnas deben llamarse front y back, o question y answer. Un encabezado hint en la tercera columna vale.",
+    "decksCsvQuote": "Si una celda lleva una coma o comillas, encíerrala entre comillas dobles. Una comilla dentro de la celda se escribe duplicada (\"\").",
+    "decksCsvRules": "Cada tarjeta necesita frente y reverso. Las filas en blanco se saltan. No se aceptan archivos separados por tabulador o punto y coma, ni libros de Excel (.xlsx).",
+    "decksCsvExample": "Formato aceptado",
+    "decksCsvSheet": "En Excel o Hojas de cálculo de Google, usa Archivo → Descargar o Guardar como → CSV UTF-8, y deja las comas como separador.",
     "decksOrder": "Orden.",
     "decksOrderBody": "Arrastra el asa o usa las flechas para poner las tarjetas en el orden que quieras. El orden del mazo es una de las opciones de estudio en Ajustes.",
     "studyTitle": "Modos de estudio",
     "studyIntro": "Estudia desde un mazo (o un mix). Eliges cómo practicar. En Voltear y Audio valoras la tarjeta; Quiz, Escribir Respuesta y Emparejar puntúan lo que eliges o escribes.",
+    "ratingsTitle": "Botones de respuesta",
+    "ratingsIntro": "Cuando aparece la respuesta, compárala con lo que pensaste y toca uno de estos botones.",
+    "ratingsMissed": "Tócalo cuando tu respuesta es incorrecta o no pudiste recordarla. Si aciertas a medias, sé estricto: si en la vida real contaría como un fallo, aquí también es Fallada. Suele usarse entre un 5 y un 20 % de las veces.",
+    "ratingsHard": "Tócalo cuando tu respuesta es correcta, pero dudaste o tardaste mucho en recordarla.",
+    "ratingsGotIt": "Tócalo cuando tu respuesta es correcta, pero te costó un esfuerzo mental recordarla. Si usas Zipdeck como está pensado, este debería ser el botón más habitual: unas 80–95 % de las veces.",
+    "ratingsEasy": "Tócalo cuando tu respuesta es correcta y no te costó ningún esfuerzo mental recordarla.",
     "studyRatings": "Fallada la trae pronto. Difícil la deja cerca. La sé y Fácil alargan la espera. Esas valoraciones alimentan SM-2, más abajo.",
     "studyAfter": "Al terminar una sesión puedes seguir con el resto del mazo, reiniciar lo que acabas de estudiar, o practicar solo las Falladas o las Difíciles. Las valoraciones se quedan; solo cambia la cola.",
     "demoFlip": "Prueba un volteo",
@@ -677,7 +692,9 @@
     "settingsTitle": "Ajustes",
     "settingsIntro": "El idioma y la apariencia se aplican en toda la app. También puedes ordenar Mis Mazos por nombre o último estudio. Las opciones de estudio fijan el orden de las tarjetas (orden del mazo, inverso o aleatorio) y si una tarjeta valorada puede volver el mismo día o espera la fecha de SM-2. El Modo Profesor está en Clases si necesitas dar clase.",
     "classesTitle": "Clases",
-    "classesIntro": "Cualquiera puede unirse a una clase con un código de 6 caracteres. Los profesores activan el Modo Profesor, crean una clase y asignan mazos. Los estudiantes reciben una copia en Mis Mazos, así que las valoraciones son suyas."
+    "classesIntro": "Cualquiera puede unirse a una clase con un código de 6 caracteres. Los profesores activan el Modo Profesor, crean una clase y asignan mazos. Los estudiantes reciben una copia en Mis Mazos, así que las valoraciones son suyas.",
+    "contactTitle": "Contacto",
+    "contactBody": "Si tienes dudas, un problema de facturación o algo que esta página no cubre, escríbenos y te responderemos."
   },
   "errors": {
     "unsupportedLanguage": "Idioma no compatible",
@@ -726,7 +743,13 @@
     "dailyAiLimit": "Se alcanzó el límite diario de IA",
     "outOfAiCredits": "Sin créditos de IA",
     "aiRequestFailed": "Falló la solicitud de IA",
+    "aiBusy": "La IA está ocupada ahora. No se te cobró. Prueba de nuevo en un minuto.",
+    "aiQuota": "La IA se quedó sin cuota hoy. No se te cobró. Prueba mañana.",
+    "aiRequestFailedRefunded": "No se pudo crear el mazo. No se te cobró. Inténtalo de nuevo.",
     "aiDidNotCreateDeck": "La IA no creó un mazo",
+    "aiDidNotCreateDeckRefunded": "La IA no creó un mazo. No se te cobró.",
+    "aiNoCards": "La IA no añadió tarjetas. No se te cobró. Prueba de nuevo con una frase que nombre ambos idiomas, o elige idioma de frente y reverso.",
+    "aiAlreadyCreating": "Ya se está creando un mazo con IA. Espera a que termine.",
     "agentJobNotFound": "No se encontró ese trabajo de IA",
     "aiTimedOut": "La IA sigue en marcha después de varios minutos. Revisa los registros de la API para ver si está bloqueada.",
     "pdfType": "Sube un archivo PDF",

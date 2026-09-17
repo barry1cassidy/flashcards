@@ -1,6 +1,7 @@
 package com.flashcards.agent;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -87,6 +88,47 @@ class AgentToolsTest {
         String extra = tools.addCards(deckId.toString(), List.of(new AgentTools.AgentCardInput("si", "yes", null)));
         assertTrue(extra.contains("Card limit"));
         verify(cardService).createMany(eq(userId), eq(deckId), any());
+    }
+
+    @Test
+    void addCardsRejectsWhenNoneHaveBothSides() {
+        UUID deckId = UUID.randomUUID();
+        when(deckService.create(eq(userId), any(DeckRequest.class))).thenReturn(deckResponse(deckId, "Travel"));
+        when(cardService.createMany(eq(userId), eq(deckId), any())).thenReturn(0);
+        tools.createDeck("Travel", null, "en-US", "zh-CN", null);
+
+        String result = tools.addCards(
+                deckId.toString(), List.of(new AgentTools.AgentCardInput("Hello", "  ", null)));
+
+        assertTrue(result.contains("None of those cards were added"));
+        assertEquals(0, tools.cardsAdded());
+        assertEquals(deckId, tools.createdDeckId());
+    }
+
+    @Test
+    void discardEmptyDeletesDeckWithNoCards() {
+        UUID deckId = UUID.randomUUID();
+        when(deckService.create(eq(userId), any(DeckRequest.class))).thenReturn(deckResponse(deckId, "Travel"));
+        tools.createDeck("Travel", null, "en-US", "zh-CN", null);
+
+        tools.discardEmpty();
+
+        verify(deckService).delete(userId, deckId);
+        assertNull(tools.createdDeckId());
+    }
+
+    @Test
+    void discardCreatedDeletesDeckEvenWithCards() {
+        UUID deckId = UUID.randomUUID();
+        when(deckService.create(eq(userId), any(DeckRequest.class))).thenReturn(deckResponse(deckId, "Travel"));
+        when(cardService.createMany(eq(userId), eq(deckId), any())).thenReturn(1);
+        tools.createDeck("Travel", null, "en-US", "zh-CN", null);
+        tools.addCards(deckId.toString(), List.of(new AgentTools.AgentCardInput("hola", "hello", null)));
+
+        tools.discardCreated();
+
+        verify(deckService).delete(userId, deckId);
+        assertNull(tools.createdDeckId());
     }
 
     @Test

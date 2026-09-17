@@ -31,7 +31,11 @@ public class AgentJob implements AgentProgress {
     private volatile String error;
 
     AgentJob(UUID userId, int remainingCredits) {
-        this.id = UUID.randomUUID();
+        this(UUID.randomUUID(), userId, remainingCredits);
+    }
+
+    AgentJob(UUID id, UUID userId, int remainingCredits) {
+        this.id = id;
         this.userId = userId;
         this.createdAt = Instant.now();
         this.remainingCredits = remainingCredits;

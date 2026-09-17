@@ -101,8 +101,12 @@ public class DeckService {
     @Transactional
     public void delete(UUID userId, UUID deckId) {
         Deck deck = requireOwned(userId, deckId);
-        for (Card card : cardRepository.findByDeckIdOrderByPositionAscIdAsc(deckId)) {
+        List<Card> cards = cardRepository.findByDeckIdOrderByPositionAscIdAsc(deckId);
+        for (Card card : cards) {
             cardImageService.deleteAll(card);
+        }
+        if (!cards.isEmpty()) {
+            cardRepository.deleteAll(cards);
         }
         deckRepository.delete(deck);
     }

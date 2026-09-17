@@ -1914,8 +1914,13 @@ textarea {
 }
 
 .prompt-count.over,
-.field-error {
+.field-error,
+.credit-remaining.is-empty {
   color: var(--error-text);
+}
+
+.credit-remaining.is-empty {
+  font-weight: 700;
 }
 
 .field-error {
@@ -2383,6 +2388,15 @@ textarea.over-limit {
 .legal-doc ul {
   margin: 0 0 16px;
   padding-inline-start: 1.25rem;
+}
+
+.legal-doc a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--text);
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .hero {
@@ -3087,6 +3101,10 @@ textarea.over-limit {
   padding-bottom: calc(48px + var(--safe-bottom));
 }
 
+.help-contact .section-heading {
+  margin: 0;
+}
+
 .help-toc {
   display: flex;
   flex-wrap: wrap;
@@ -3154,6 +3172,41 @@ textarea.over-limit {
   padding-left: 1.2em;
   display: grid;
   gap: 8px;
+}
+
+.help-csv {
+  display: grid;
+  gap: 10px;
+  margin-top: 10px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--bg);
+}
+
+.help-csv p,
+.help-csv ul {
+  margin: 0;
+}
+
+.help-csv ul {
+  padding-left: 1.2em;
+  display: grid;
+  gap: 6px;
+}
+
+.help-code {
+  margin: 0;
+  padding: 12px 14px;
+  overflow-x: auto;
+  max-width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface-2);
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  line-height: 1.5;
+  white-space: pre;
 }
 
 .help-demo {

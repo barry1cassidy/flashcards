@@ -8,9 +8,9 @@ import static org.mockito.Mockito.when;
 
 import java.time.YearMonth;
 import java.time.ZoneOffset;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -36,7 +36,7 @@ class AgentCreditServiceTest {
 
     private AgentCreditService creditService;
     private User user;
-    private final Set<String> refs = new HashSet<>();
+    private final List<AgentCreditLedger> ledger = new ArrayList<>();
 
     @BeforeEach
     void setUp() {
@@ -49,15 +49,20 @@ class AgentCreditServiceTest {
         lenient().when(userRepository.save(user)).thenReturn(user);
         lenient().when(ledgerRepository.save(any(AgentCreditLedger.class))).thenAnswer(invocation -> {
             AgentCreditLedger row = invocation.getArgument(0);
-            if (row.getProviderRef() != null) {
-                refs.add(row.getReason() + ":" + row.getProviderRef());
-            }
+            ledger.add(row);
             return row;
         });
         lenient().when(ledgerRepository.existsByReasonAndProviderRef(any(), any())).thenAnswer(invocation -> {
             CreditReason reason = invocation.getArgument(0);
             String ref = invocation.getArgument(1);
-            return refs.contains(reason + ":" + ref);
+            return ledger.stream().anyMatch(row -> row.getReason() == reason && ref.equals(row.getProviderRef()));
+        });
+        lenient().when(ledgerRepository.findByReasonAndProviderRef(any(), any())).thenAnswer(invocation -> {
+            CreditReason reason = invocation.getArgument(0);
+            String ref = invocation.getArgument(1);
+            return ledger.stream()
+                    .filter(row -> row.getReason() == reason && ref.equals(row.getProviderRef()))
+                    .findFirst();
         });
     }
 
@@ -117,5 +122,32 @@ class AgentCreditServiceTest {
         CreditBalance balance = creditService.snapshot(user);
         assertEquals(10, balance.includedCredits());
         assertEquals(10, balance.remainingCredits());
+    }
+
+    @Test
+    void refundRestoresIncludedCreditOnce() {
+        UUID jobId = UUID.fromString("00000000-0000-0000-0000-0000000000aa");
+        user.setAgentIncludedCredits(1);
+        user.setAgentAddonCredits(4);
+        user.setAgentCreditPeriod(YearMonth.now(ZoneOffset.UTC).toString());
+        creditService.consume(USER_ID, jobId);
+        CreditBalance afterRefund = creditService.refund(USER_ID, jobId);
+        CreditBalance second = creditService.refund(USER_ID, jobId);
+        assertEquals(1, afterRefund.includedCredits());
+        assertEquals(4, afterRefund.addonCredits());
+        assertEquals(1, second.includedCredits());
+        assertEquals(4, second.addonCredits());
+    }
+
+    @Test
+    void refundRestoresAddonCredit() {
+        UUID jobId = UUID.fromString("00000000-0000-0000-0000-0000000000bb");
+        user.setAgentIncludedCredits(0);
+        user.setAgentAddonCredits(2);
+        user.setAgentCreditPeriod(YearMonth.now(ZoneOffset.UTC).toString());
+        creditService.consume(USER_ID, jobId);
+        CreditBalance afterRefund = creditService.refund(USER_ID, jobId);
+        assertEquals(0, afterRefund.includedCredits());
+        assertEquals(2, afterRefund.addonCredits());
     }
 }

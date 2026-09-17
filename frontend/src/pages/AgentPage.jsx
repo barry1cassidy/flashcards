@@ -169,6 +169,14 @@ export default function AgentPage() {
       if (!current || cancelled.current) {
         return
       }
+      try {
+        const after = await api('/api/agent/status')
+        if (!cancelled.current) {
+          setStatus(after)
+        }
+      } catch {
+        // keep the last known credit count
+      }
       if (current.state === 'done' && current.result?.deckId) {
         navigate(`/decks/${current.result.deckId}`)
         return
@@ -245,7 +253,7 @@ export default function AgentPage() {
 
       {pro && status?.configured ? (
         <form className="card-form" onSubmit={generate}>
-          <p className="muted">{creditSummary(t, status)}</p>
+          <p className={remaining <= 0 ? 'credit-remaining is-empty' : 'muted'}>{creditSummary(t, status)}</p>
           <p>{t('agent.creditCost')}</p>
           {remaining <= 0 ? (
             <div className="billing-actions">

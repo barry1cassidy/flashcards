@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.StringJoiner;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.ai.tool.annotation.ToolParam;
 
@@ -20,6 +22,7 @@ import com.flashcards.group.GroupService;
 
 public class AgentTools {
 
+    private static final Logger log = LoggerFactory.getLogger(AgentTools.class);
     private static final String DEFAULT_SET_COLOR = "#4C6FFF";
     private static final int MAX_TOOL_CALLS = 12;
 
@@ -37,6 +40,7 @@ public class AgentTools {
     private UUID createdSetId;
     private int cardsAdded;
     private int toolCalls;
+    private boolean createdSetInThisRequest;
 
     public AgentTools(
             UUID userId,
@@ -93,6 +97,33 @@ public class AgentTools {
         return cardsAdded;
     }
 
+    void discardEmpty() {
+        if (cardsAdded > 0) {
+            return;
+        }
+        discardCreated();
+    }
+
+    void discardCreated() {
+        if (createdDeckId != null) {
+            try {
+                deckService.delete(userId, createdDeckId);
+            } catch (RuntimeException ex) {
+                log.warn("Could not delete AI deck {}: {}", createdDeckId, ex.getMessage());
+            }
+            createdDeckId = null;
+        }
+        if (createdSetInThisRequest && createdSetId != null) {
+            try {
+                groupService.delete(userId, createdSetId);
+            } catch (RuntimeException ex) {
+                log.warn("Could not delete AI set {}: {}", createdSetId, ex.getMessage());
+            }
+            createdSetId = preferredSetId;
+            createdSetInThisRequest = false;
+        }
+    }
+
     @Tool(description = "List the user's existing sets (folders of decks). Use this before creating a set.")
     public String listSets() {
         String tooMany = beginTool("listSets", null);
@@ -134,6 +165,7 @@ public class AgentTools {
             }
             GroupResponse created = groupService.create(userId, new GroupRequest(trimmed, colorOrDefault(color)));
             createdSetId = created.id();
+            createdSetInThisRequest = true;
             return "{\"setId\":\"" + created.id() + "\",\"name\":\"" + escape(created.name()) + "\",\"existing\":false}";
         } catch (ApiException ex) {
             return error(ex.getMessage());
@@ -197,6 +229,7 @@ public class AgentTools {
 
     @Tool(description = """
             Add flashcards to the deck created in this request. Call once.
+            Every card needs a non-empty front and a non-empty back. If the source text is English-only and the user asked for another language on the back, write those translations yourself.
             Never send more cards than the remaining room in this deck. Extra cards over the max are discarded and not added.
             """)
     public String addCards(
@@ -229,6 +262,10 @@ public class AgentTools {
                 .toList();
         try {
             int added = cardService.createMany(userId, id, drafts);
+            if (added == 0) {
+                return error(
+                        "None of those cards were added. Every card needs a non-empty front and a non-empty back. Call addCards again with both sides filled. If the source is one language, put a translation on the other side.");
+            }
             cardsAdded += added;
             createdDeckId = id;
             String json = "{\"added\":" + added + ",\"cardCount\":" + cardsAdded + ",\"maxCards\":" + maxCards

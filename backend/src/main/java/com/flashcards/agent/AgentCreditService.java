@@ -43,6 +43,11 @@ public class AgentCreditService {
 
     @Transactional
     public CreditBalance consume(UUID userId) {
+        return consume(userId, UUID.randomUUID());
+    }
+
+    @Transactional
+    public CreditBalance consume(UUID userId, UUID jobId) {
         User user = requireUser(userId);
         applyPeriod(user);
         if (!ProAccess.allowed(user)) {
@@ -59,9 +64,37 @@ public class AgentCreditService {
             user.setAgentAddonCredits(user.getAgentAddonCredits() - 1);
             bucket = CreditBucket.ADDON;
         }
-        ledger(user.getId(), -1, bucket, CreditReason.GENERATE, UUID.randomUUID().toString());
+        ledger(user.getId(), -1, bucket, CreditReason.GENERATE, jobRef(jobId));
         userRepository.save(user);
         return balanceOf(user);
+    }
+
+    @Transactional
+    public CreditBalance refund(UUID userId, UUID jobId) {
+        String ref = jobRef(jobId);
+        User user = requireUser(userId);
+        if (ledgerRepository.existsByReasonAndProviderRef(CreditReason.REFUND, ref)) {
+            return snapshot(user);
+        }
+        AgentCreditLedger spent = ledgerRepository
+                .findByReasonAndProviderRef(CreditReason.GENERATE, ref)
+                .orElse(null);
+        if (spent == null || spent.getAmount() >= 0) {
+            return snapshot(user);
+        }
+        applyPeriod(user);
+        if (spent.getBucket() == CreditBucket.INCLUDED) {
+            user.setAgentIncludedCredits(Math.min(properties.monthlyCredits(), user.getAgentIncludedCredits() + 1));
+        } else {
+            user.setAgentAddonCredits(user.getAgentAddonCredits() + 1);
+        }
+        ledger(user.getId(), 1, spent.getBucket(), CreditReason.REFUND, ref);
+        userRepository.save(user);
+        return balanceOf(user);
+    }
+
+    private static String jobRef(UUID jobId) {
+        return jobId == null ? UUID.randomUUID().toString() : jobId.toString();
     }
 
     @Transactional

@@ -33,3 +33,4 @@ Thumbs.db
 # Local card image files
 backend/data/
 /bucket_keys.txt
+local_notes_files

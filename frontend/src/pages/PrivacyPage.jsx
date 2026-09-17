@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import MarketingHeader, { MarketingFooter } from './MarketingHeader'
+import { SUPPORT_EMAIL, SUPPORT_MAILTO } from '../support'
 
 export default function PrivacyPage() {
   const { t } = useTranslation()
@@ -50,6 +51,9 @@ export default function PrivacyPage() {
 
         <h2>{t('privacy.contactHeading')}</h2>
         <p>{t('privacy.contactBody')}</p>
+        <p>
+          <a href={SUPPORT_MAILTO}>{SUPPORT_EMAIL}</a>
+        </p>
       </article>
       <MarketingFooter />
     </div>

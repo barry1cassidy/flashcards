@@ -6,6 +6,7 @@ import { DECK_SORTS, normalizeDeckSort } from '../deckSort'
 import { RESTUDY_WAITS, STUDY_ORDERS, normalizeRestudyWait, normalizeStudyOrder } from '../studySettings'
 import { LOCALES, currentLocale } from '../i18n'
 import { translateError } from '../i18n/errors'
+import { SUPPORT_EMAIL, SUPPORT_MAILTO } from '../support'
 
 export default function SettingsPage() {
   const { t } = useTranslation()
@@ -149,6 +150,9 @@ export default function SettingsPage() {
         <Link className="settings-legal-link" to="/privacy">
           {t('privacy.title')}
         </Link>
+        <a className="settings-legal-link" href={SUPPORT_MAILTO}>
+          {SUPPORT_EMAIL}
+        </a>
       </section>
     </div>
   )

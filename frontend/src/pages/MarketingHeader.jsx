@@ -7,6 +7,7 @@ import { currentLocale } from '../i18n'
 import GoogleSignInButton, { getGoogleClientId } from './GoogleSignInButton'
 import Brand from './Brand'
 import { goAfterAuth, inviteAuthState, clearJoinInvite } from '../authRedirect'
+import { SUPPORT_MAILTO } from '../support'
 
 export default function MarketingHeader({ showLoginForm = false, loginOpen, onLoginOpenChange }) {
   const { t } = useTranslation()
@@ -172,6 +173,9 @@ export function MarketingFooter() {
       <Link className="site-end-link" to="/help">
         {t('nav.help')}
       </Link>
+      <a className="site-end-link" href={SUPPORT_MAILTO}>
+        {t('nav.support')}
+      </a>
       <Link className="site-end-link" to="/privacy">
         {t('privacy.title')}
       </Link>

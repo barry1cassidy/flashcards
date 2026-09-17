@@ -34,7 +34,8 @@
     "openMenu": "Open Menu",
     "closeMenu": "Close Menu",
     "settings": "Settings",
-    "help": "Help"
+    "help": "Help",
+    "support": "Support"
   },
   "admin": {
     "enter": "Admin Mode",
@@ -244,7 +245,7 @@
     "changesHeading": "Changes",
     "changesBody": "We may update this policy. The “Last updated” date at the top will change when we do. The current version will always be at https://zipdeck.app/privacy.",
     "contactHeading": "Contact",
-    "contactBody": "For privacy questions or deletion requests, email the user support address shown on Zipdeck’s Google sign-in consent screen. Include the email on the Zipdeck account so we can find it."
+    "contactBody": "For privacy questions or deletion requests, email  support@zipdeck.app. Write from the email on the Zipdeck account so we can find it."
   },
   "auth": {
     "welcomeBack": "Welcome Back",
@@ -365,7 +366,8 @@
     "step": {
       "starting": "Starting…",
       "readingPdf": "Reading PDF…",
-      "callingModel": "Waiting on the AI model…",
+      "callingModel": "Waiting on the AI…",
+      "retrying": "The AI is busy. Trying again…",
       "listSets": "Looking up your sets…",
       "createSet": "Creating a set…",
       "createDeck": "Creating the deck…",
@@ -622,10 +624,23 @@
     "decksSetsBody": "Open Manage Sets to group decks. You can still study one deck on its own.",
     "decksCsv": "CSV.",
     "decksCsvBody": "Import or export a deck as CSV if you already have a spreadsheet of prompts and answers.",
+    "decksCsvHow": "Open a deck, then tap Import CSV. Export CSV downloads the same three-column layout, so you can edit in a spreadsheet and import it back.",
+    "decksCsvColumns": "Use a comma-separated UTF-8 .csv file. Column 1 is the front (prompt), column 2 is the back (answer). A third column is an optional hint.",
+    "decksCsvHeader": "A header row is optional. If you include one, the first two columns must be named front and back, or question and answer. A hint header in the third column is fine.",
+    "decksCsvQuote": "Wrap any cell that contains a comma or a quotation mark in double quotes. Write a quote inside a cell as two quotes together (\"\").",
+    "decksCsvRules": "Every card needs both a front and a back. Blank rows are skipped. Tab-separated files, semicolon-separated files, and Excel workbooks (.xlsx) are not accepted.",
+    "decksCsvExample": "Accepted layout",
+    "decksCsvSheet": "From Excel or Google Sheets, use File → Download or Save as → CSV UTF-8, and keep commas as the separator.",
     "decksOrder": "Order.",
     "decksOrderBody": "Drag the handle or use the arrows to put cards in the order you want. Deck order is one of the study-order options in Settings.",
     "studyTitle": "Study modes",
     "studyIntro": "Study from a deck (or a mix). You choose how you want to practice. After Flip and Audio you rate the card; Quiz, Write, and Match score from what you picked or typed.",
+    "ratingsTitle": "Answer buttons",
+    "ratingsIntro": "After the answer is shown, compare what you thought of with what is on the card, then tap one of these buttons.",
+    "ratingsMissed": "Tap this when your answer is wrong or you could not recall it. If you are only partly right, be strict: if it would count as a fail in real life, it counts as Missed here too. You will typically use this about 5–20% of the time.",
+    "ratingsHard": "Tap this when your answer is correct, but you had doubts or it took a long time to recall.",
+    "ratingsGotIt": "Tap this when your answer is correct, but it took some mental effort to recall. When you use Zipdeck as intended, this should be the button you tap most often — typically about 80–95% of the time.",
+    "ratingsEasy": "Tap this when your answer is correct and it took no mental effort to recall.",
     "studyRatings": "Missed brings the card back soon. Hard keeps it close. Got it and Easy stretch the wait. Those ratings feed SM-2, below.",
     "studyAfter": "When a session ends you can continue the rest of the deck, restart what you just studied, or drill only Missed or Hard cards. Ratings stay; only the queue changes.",
     "demoFlip": "Try a flip",
@@ -677,7 +692,9 @@
     "settingsTitle": "Settings",
     "settingsIntro": "Language and appearance follow you on every screen. You can also sort My Decks by name or last studied. Study options set card order (deck order, reverse, or random) and whether a rated card can return the same day or waits for the SM-2 date. Teacher Mode is on the Classes page if you need to run a class.",
     "classesTitle": "Classes",
-    "classesIntro": "Anyone can join a class with a 6-character code. Teachers turn on Teacher Mode, create a class, and assign decks. Students get a copy in My Decks, so their ratings are their own."
+    "classesIntro": "Anyone can join a class with a 6-character code. Teachers turn on Teacher Mode, create a class, and assign decks. Students get a copy in My Decks, so their ratings are their own.",
+    "contactTitle": "Contact",
+    "contactBody": "Questions, billing issues, or something this page does not cover — email us and we will get back to you."
   },
   "errors": {
     "unsupportedLanguage": "Unsupported language",
@@ -726,7 +743,13 @@
     "dailyAiLimit": "Daily AI limit reached",
     "outOfAiCredits": "Out of AI credits",
     "aiRequestFailed": "AI request failed",
+    "aiBusy": "The AI is busy right now. You were not charged. Try again in a minute.",
+    "aiQuota": "The AI is out of quota for today. You were not charged. Try again tomorrow.",
+    "aiRequestFailedRefunded": "Could not create the deck. You were not charged. Try again.",
     "aiDidNotCreateDeck": "The AI did not create a deck",
+    "aiDidNotCreateDeckRefunded": "The AI did not create a deck. You were not charged.",
+    "aiNoCards": "The AI didn't add any cards. You were not charged. Try again with a short prompt that names both languages, or set Front and Back Language.",
+    "aiAlreadyCreating": "An AI deck is already being created. Wait for it to finish.",
     "agentJobNotFound": "That AI job was not found",
     "aiTimedOut": "The AI is still running after several minutes. Check the API logs to see if it is stuck.",
     "pdfType": "Upload a PDF file",
