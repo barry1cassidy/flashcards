@@ -1,6 +1,6 @@
 {
-  "appId": "com.flashcards.app",
-  "appName": "Flashcards",
+  "appId": "com.zipdeck.app",
+  "appName": "Zipdeck",
   "webDir": "dist",
   "server": {
     "androidScheme": "http",

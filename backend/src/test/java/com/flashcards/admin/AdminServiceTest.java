@@ -3,6 +3,7 @@ package com.flashcards.admin;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -18,6 +19,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
+import com.flashcards.billing.BillingPlan;
+import com.flashcards.billing.BillingService;
 import com.flashcards.billing.UserSubscriptionRepository;
 import com.flashcards.common.ApiException;
 import com.flashcards.user.User;
@@ -30,6 +33,8 @@ class AdminServiceTest {
     private UserRepository userRepository;
     @Mock
     private UserSubscriptionRepository subscriptionRepository;
+    @Mock
+    private BillingService billingService;
 
     private AdminService adminService;
     private final UUID adminId = UUID.fromString("00000000-0000-0000-0000-000000000001");
@@ -37,7 +42,7 @@ class AdminServiceTest {
 
     @BeforeEach
     void setUp() {
-        adminService = new AdminService(userRepository, subscriptionRepository);
+        adminService = new AdminService(userRepository, subscriptionRepository, billingService);
     }
 
     @Test
@@ -124,5 +129,49 @@ class AdminServiceTest {
         AdminUserResponse row = adminService.getUser(adminId, memberId);
         assertEquals(memberId, row.id());
         assertEquals("student@example.com", row.email());
+    }
+
+    @Test
+    void nonAdminCannotGrantSubscription() {
+        User member = new User();
+        member.setId(memberId);
+        member.setAdmin(false);
+        when(userRepository.findById(memberId)).thenReturn(Optional.of(member));
+
+        ApiException ex = assertThrows(
+                ApiException.class, () -> adminService.grantSubscription(memberId, adminId, BillingPlan.MONTHLY));
+        assertEquals(HttpStatus.FORBIDDEN, ex.getStatus());
+        assertEquals("Admin required", ex.getMessage());
+        verify(billingService, never()).grantAdminSubscription(any(), any());
+    }
+
+    @Test
+    void adminGrantDelegatesToBilling() {
+        User admin = new User();
+        admin.setId(adminId);
+        admin.setAdmin(true);
+        User member = new User();
+        member.setId(memberId);
+        member.setEmail("student@example.com");
+        member.setDisplayName("Student");
+        when(userRepository.findById(adminId)).thenReturn(Optional.of(admin));
+        when(userRepository.findById(memberId)).thenReturn(Optional.of(member));
+        when(subscriptionRepository.findByUser_Id(memberId)).thenReturn(List.of());
+
+        AdminUserResponse row = adminService.grantSubscription(adminId, memberId, BillingPlan.YEARLY);
+        assertEquals(memberId, row.id());
+        verify(billingService).grantAdminSubscription(memberId, BillingPlan.YEARLY);
+    }
+
+    @Test
+    void nonAdminCannotCancelSubscription() {
+        User member = new User();
+        member.setId(memberId);
+        member.setAdmin(false);
+        when(userRepository.findById(memberId)).thenReturn(Optional.of(member));
+
+        ApiException ex = assertThrows(ApiException.class, () -> adminService.cancelSubscription(memberId, adminId));
+        assertEquals(HttpStatus.FORBIDDEN, ex.getStatus());
+        verify(billingService, never()).cancelAdminSubscription(any());
     }
 }

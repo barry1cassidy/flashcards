@@ -1,8 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
+import { Capacitor } from '@capacitor/core'
+import { ErrorCode, GoogleSignIn } from '@capawesome/capacitor-google-sign-in'
 import { useTranslation } from 'react-i18next'
 import { currentLocale, localeBcp47 } from '../i18n'
 
 const GIS_SRC = 'https://accounts.google.com/gsi/client'
+
+let nativeGoogleReady
 
 export function getGoogleClientId() {
   return String(import.meta.env.VITE_GOOGLE_CLIENT_ID || '').trim()
@@ -34,6 +38,23 @@ function loadGoogleIdentity() {
   })
 }
 
+function ensureNativeGoogle(clientId) {
+  if (!nativeGoogleReady) {
+    nativeGoogleReady = GoogleSignIn.initialize({ clientId })
+  }
+  return nativeGoogleReady
+}
+
+function isNativeCancel(error) {
+  const code = String(error?.code || '')
+  const message = String(error?.message || '').toLowerCase()
+  return (
+    code === ErrorCode.SignInCanceled ||
+    code === 'SIGN_IN_CANCELED' ||
+    message.includes('cancel')
+  )
+}
+
 function GoogleMark() {
   return (
     <span className="google-signin-g" aria-hidden="true">
@@ -54,11 +75,12 @@ export default function GoogleSignInButton({ onCredential, disabled }) {
   const [loadError, setLoadError] = useState('')
   const clientId = getGoogleClientId()
   const locale = localeBcp47(currentLocale())
+  const native = Capacitor.isNativePlatform()
 
   onCredentialRef.current = onCredential
 
   useEffect(() => {
-    if (!clientId) {
+    if (!clientId || native) {
       return undefined
     }
     let cancelled = false
@@ -124,10 +146,42 @@ export default function GoogleSignInButton({ onCredential, disabled }) {
       observer?.disconnect()
       hostRef.current?.replaceChildren()
     }
-  }, [clientId, locale])
+  }, [clientId, locale, native])
+
+  async function onNativeClick() {
+    if (!clientId || disabled) {
+      return
+    }
+    setLoadError('')
+    try {
+      await ensureNativeGoogle(clientId)
+      const result = await GoogleSignIn.signIn()
+      if (result?.idToken) {
+        onCredentialRef.current(result.idToken)
+      } else {
+        setLoadError('Google sign-in failed to load')
+      }
+    } catch (error) {
+      if (!isNativeCancel(error)) {
+        setLoadError('Google sign-in failed to load')
+      }
+    }
+  }
 
   if (!clientId) {
     return null
+  }
+
+  if (native) {
+    return (
+      <div className={`google-signin ${disabled ? 'is-busy' : ''}`}>
+        <button className="google-signin-native" type="button" disabled={disabled} onClick={onNativeClick}>
+          <GoogleMark />
+          <span>{t('auth.continueWithGoogle')}</span>
+        </button>
+        {loadError ? <p className="error">{t('errors.googleFailedToLoad')}</p> : null}
+      </div>
+    )
   }
 
   return (

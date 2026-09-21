@@ -213,10 +213,17 @@ The native app is the same Vite React UI in a WebView. Keep coding in Cursor; in
 
 ```bash
 cd frontend
-copy .env.android.example .env.android   # Windows; already points at the Lightsail test API
+copy .env.android.example .env.android   # Windows; points at https://zipdeck.app
 npm run android
 ```
 
 That builds with `VITE_API_BASE`, syncs Capacitor, and opens Android Studio. Pick an emulator (or a USB phone) and Run.
 
-The Lightsail API must allow Capacitor origins (included in `APP_CORS_ORIGINS`). After pulling CORS changes, rebuild the API container on the VM. Google sign-in in the WebView is not wired yet; use email/password first.
+The API must allow Capacitor origins (included in `APP_CORS_ORIGINS`). Put the same `VITE_GOOGLE_CLIENT_ID` Web client ID in `.env.android` as the website uses.
+
+Google’s JavaScript button does not work in the Android WebView (tiny error page, then blank). The app uses native Google Sign-In instead. Adding `https://localhost` as a JavaScript origin will not fix that. In the **same Google Cloud project** as the Web client, create an **Android** OAuth client:
+
+- Package name: `com.zipdeck.app`
+- SHA-1 (this machine’s debug keystore): `6E:2D:F0:66:99:01:DE:EB:89:5E:F5:85:FE:0B:1F:D2:DB:B7:AA:A5`
+
+Do not paste the Android client ID into the app. The plugin still sends the **Web** client ID so `/api/auth/google` can verify the token. iOS will use an iOS OAuth client plus bundle ID `com.zipdeck.app` when that project exists.

@@ -78,6 +78,7 @@ const ERROR_KEYS = {
   'Teachers cannot leave their class': 'errors.teacherCannotLeave',
   'Admin required': 'errors.adminRequired',
   'User not found': 'errors.userNotFound',
+  'No admin subscription': 'errors.noAdminSubscription',
 }
 
 export function translateError(t, message) {

@@ -67,7 +67,16 @@
     "proFlag": "Pro flag",
     "cancelScheduled": "cancels at period end",
     "periodEnd": "Period end",
-    "noSubscription": "No Stripe subscription on file."
+    "noSubscription": "No subscription on file.",
+    "grantHeading": "Free Pro grant",
+    "grantHint": "Starts a free Pro period from today, monthly or yearly, with the same credits as a paid plan. It is not charged. Granting again replaces the current free period.",
+    "grantMonthly": "Grant monthly",
+    "grantYearly": "Grant yearly",
+    "cancelGrant": "Cancel free Pro",
+    "confirmGrantMonthly": "Give this user a free monthly Pro period starting today?",
+    "confirmGrantYearly": "Give this user a free yearly Pro period starting today?",
+    "confirmCancelGrant": "End this free Pro grant now? They keep any paid subscription.",
+    "confirmAction": "Confirm"
   },
   "classes": {
     "title": "Classes",
@@ -775,6 +784,7 @@
     "addDeckFirst": "Add this deck to My Decks first",
     "teacherCannotLeave": "Teachers cannot leave their class",
     "adminRequired": "Admin required",
-    "userNotFound": "User not found"
+    "userNotFound": "User not found",
+    "noAdminSubscription": "No admin subscription"
   }
 }

@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.flashcards.billing.BillingPlan;
+import com.flashcards.billing.BillingService;
 import com.flashcards.billing.ProAccess;
 import com.flashcards.billing.UserSubscription;
 import com.flashcards.billing.UserSubscriptionRepository;
@@ -26,10 +28,15 @@ public class AdminService {
 
     private final UserRepository userRepository;
     private final UserSubscriptionRepository subscriptionRepository;
+    private final BillingService billingService;
 
-    public AdminService(UserRepository userRepository, UserSubscriptionRepository subscriptionRepository) {
+    public AdminService(
+            UserRepository userRepository,
+            UserSubscriptionRepository subscriptionRepository,
+            BillingService billingService) {
         this.userRepository = userRepository;
         this.subscriptionRepository = subscriptionRepository;
+        this.billingService = billingService;
     }
 
     @Transactional(readOnly = true)
@@ -60,6 +67,20 @@ public class AdminService {
         List<UserSubscription> subscriptions = new ArrayList<>(subscriptionRepository.findByUser_Id(user.getId()));
         subscriptions.sort(Comparator.comparing(UserSubscription::getUpdatedAt).reversed());
         return toResponse(user, subscriptions);
+    }
+
+    @Transactional
+    public AdminUserResponse grantSubscription(UUID actorId, UUID userId, BillingPlan plan) {
+        requireAdmin(actorId);
+        billingService.grantAdminSubscription(userId, plan);
+        return getUser(actorId, userId);
+    }
+
+    @Transactional
+    public AdminUserResponse cancelSubscription(UUID actorId, UUID userId) {
+        requireAdmin(actorId);
+        billingService.cancelAdminSubscription(userId);
+        return getUser(actorId, userId);
     }
 
     private Map<UUID, List<UserSubscription>> subscriptionsByUser() {

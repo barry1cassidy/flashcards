@@ -417,6 +417,28 @@ h1 {
   height: 100% !important;
 }
 
+.google-signin-native {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--input-bg);
+  color: var(--text);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.google-signin-native:disabled {
+  opacity: 0.6;
+}
+
 .google-signin.is-busy {
   pointer-events: none;
   opacity: 0.6;
@@ -2699,14 +2721,21 @@ textarea.over-limit {
 
 .site-end {
   border-top: 1px solid var(--line);
-  padding: 26px 32px calc(26px + var(--safe-bottom));
+  padding: 16px 32px calc(16px + var(--safe-bottom));
   font-size: 0.85rem;
   color: var(--muted);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 16px;
+  gap: 12px 24px;
   flex-wrap: wrap;
+}
+
+.site-end-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 16px;
 }
 
 .site-end-link {
@@ -2783,6 +2812,18 @@ textarea.over-limit {
 
   .marketing-wrap {
     padding: 0 20px;
+  }
+
+  .site-end {
+    flex-direction: column;
+    justify-content: center;
+    gap: 0;
+    padding: 12px 20px calc(16px + var(--safe-bottom));
+    text-align: center;
+  }
+
+  .site-end-links {
+    justify-content: center;
   }
 }
 
@@ -3090,6 +3131,44 @@ textarea.over-limit {
   gap: 2px;
   min-height: 44px;
   padding: 10px 0;
+}
+
+.admin-grant {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--admin-line);
+  display: grid;
+  gap: 10px;
+}
+
+.admin-grant p {
+  margin: 0;
+  color: var(--admin-muted);
+  font-size: 0.85rem;
+}
+
+.admin-grant p strong {
+  color: var(--admin-text);
+}
+
+.admin-grant-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.admin-grant-confirm {
+  display: grid;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid var(--admin-line);
+  border-radius: 8px;
+  background: #080a0e;
+}
+
+.admin-btn-danger {
+  border-color: #ffb4a9;
+  color: #ffb4a9;
 }
 
 .help-page {

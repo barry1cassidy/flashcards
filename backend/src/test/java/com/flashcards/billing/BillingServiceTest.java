@@ -6,12 +6,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -79,10 +79,13 @@ class BillingServiceTest {
         });
         lenient().when(subscriptionRepository.findByUser_Id(USER_ID)).thenAnswer(invocation -> List.copyOf(rows));
         lenient()
-                .when(subscriptionRepository.findByProviderAndProviderSubscriptionId(eq(BillingProvider.STRIPE), any()))
+                .when(subscriptionRepository.findByProviderAndProviderSubscriptionId(any(), any()))
                 .thenAnswer(invocation -> {
+                    BillingProvider provider = invocation.getArgument(0);
                     String id = invocation.getArgument(1);
-                    return rows.stream().filter(row -> row.getProviderSubscriptionId().equals(id)).findFirst();
+                    return rows.stream()
+                            .filter(row -> row.getProvider() == provider && row.getProviderSubscriptionId().equals(id))
+                            .findFirst();
                 });
         lenient().when(creditService.snapshot(any(User.class))).thenAnswer(invocation -> {
             User current = invocation.getArgument(0);
@@ -184,6 +187,63 @@ class BillingServiceTest {
         assertEquals(HttpStatus.SERVICE_UNAVAILABLE, ex.getStatus());
         assertEquals("Billing is not configured", ex.getMessage());
         verify(stripeGateway, never()).createCheckout(any(), any(), any(), any(), any(), any(), anyBoolean());
+    }
+
+    @Test
+    void grantAdminYearlyGivesProUntilNextYear() {
+        when(userRepository.findById(USER_ID)).thenReturn(Optional.of(user));
+        when(userRepository.save(user)).thenReturn(user);
+
+        billingService.grantAdminSubscription(USER_ID, BillingPlan.YEARLY);
+
+        assertEquals(1, rows.size());
+        assertEquals(BillingProvider.ADMIN, rows.get(0).getProvider());
+        assertEquals("admin:" + USER_ID, rows.get(0).getProviderSubscriptionId());
+        assertEquals(BillingPlan.YEARLY, rows.get(0).getPlan());
+        assertEquals(SubscriptionStatus.ACTIVE, rows.get(0).getStatus());
+        assertFalse(rows.get(0).isCancelAtPeriodEnd());
+        long days = Duration.between(Instant.now(), rows.get(0).getCurrentPeriodEnd()).toDays();
+        assertTrue(days >= 364 && days <= 367);
+        assertTrue(user.isProLicensed());
+        assertEquals(rows.get(0).getCurrentPeriodEnd(), user.getProExpiresAt());
+        verify(creditService).snapshot(user);
+        verify(stripeGateway, never()).createCheckout(any(), any(), any(), any(), any(), any(), anyBoolean());
+    }
+
+    @Test
+    void grantAdminMonthlyCanBeCanceledImmediately() {
+        when(userRepository.findById(USER_ID)).thenReturn(Optional.of(user));
+        when(userRepository.save(user)).thenReturn(user);
+
+        billingService.grantAdminSubscription(USER_ID, BillingPlan.MONTHLY);
+        long days = Duration.between(Instant.now(), rows.get(0).getCurrentPeriodEnd()).toDays();
+        assertTrue(days >= 27 && days <= 32);
+        assertTrue(ProAccess.allowed(user));
+
+        billingService.cancelAdminSubscription(USER_ID);
+
+        assertEquals(SubscriptionStatus.CANCELED, rows.get(0).getStatus());
+        assertFalse(rows.get(0).getCurrentPeriodEnd().isAfter(Instant.now()));
+        assertFalse(user.isProLicensed());
+        assertFalse(ProAccess.allowed(user));
+    }
+
+    @Test
+    void cancelAdminSubscriptionRejectedWhenMissing() {
+        when(userRepository.findById(USER_ID)).thenReturn(Optional.of(user));
+
+        ApiException ex = assertThrows(ApiException.class, () -> billingService.cancelAdminSubscription(USER_ID));
+        assertEquals(HttpStatus.NOT_FOUND, ex.getStatus());
+        assertEquals("No admin subscription", ex.getMessage());
+    }
+
+    @Test
+    void grantAdminRejectsAddonPlan() {
+        ApiException ex =
+                assertThrows(ApiException.class, () -> billingService.grantAdminSubscription(USER_ID, BillingPlan.ADDON));
+        assertEquals(HttpStatus.BAD_REQUEST, ex.getStatus());
+        assertEquals("Invalid billing plan", ex.getMessage());
+        verify(userRepository, never()).findById(USER_ID);
     }
 
     @Test

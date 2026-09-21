@@ -169,17 +169,18 @@ export function MarketingFooter() {
   const { t } = useTranslation()
   return (
     <footer className="site-end">
+      <div className="site-end-links">
+        <Link className="site-end-link" to="/help">
+          {t('nav.help')}
+        </Link>
+        <a className="site-end-link" href={SUPPORT_MAILTO}>
+          {t('nav.support')}
+        </a>
+        <Link className="site-end-link" to="/privacy">
+          {t('privacy.title')}
+        </Link>
+      </div>
       <span>{t('marketing.copyright', { year: 2026 })}</span>
-      <Link className="site-end-link" to="/help">
-        {t('nav.help')}
-      </Link>
-      <a className="site-end-link" href={SUPPORT_MAILTO}>
-        {t('nav.support')}
-      </a>
-      <Link className="site-end-link" to="/privacy">
-        {t('privacy.title')}
-      </Link>
-      <span>{t('marketing.builtFor')}</span>
     </footer>
   )
 }

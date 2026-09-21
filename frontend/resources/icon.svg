@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 108 108" width="1024" height="1024">
+  <rect width="108" height="108" fill="#A59CFF"/>
+  <defs>
+    <linearGradient id="zipdeck-icon-face" x1="8%" y1="88%" x2="92%" y2="12%">
+      <stop offset="0%" stop-color="#5B6EF0"/>
+      <stop offset="38%" stop-color="#876DC7"/>
+      <stop offset="72%" stop-color="#AF6CA1"/>
+      <stop offset="100%" stop-color="#E06B78"/>
+    </linearGradient>
+  </defs>
+  <g transform="translate(23.5 44.6) rotate(-18 20 13)">
+    <rect width="40" height="26" rx="7" fill="#2A2654" opacity="0.28"/>
+  </g>
+  <g transform="translate(23 43) rotate(-18 20 13)">
+    <rect width="40" height="26" rx="7" fill="#3F3A78"/>
+    <rect x="4" y="4" width="32" height="18" rx="4.5" fill="#5C5698"/>
+  </g>
+  <g transform="translate(45.5 41.6) rotate(17 20 13)">
+    <rect width="40" height="26" rx="7" fill="#2A2654" opacity="0.28"/>
+  </g>
+  <g transform="translate(45 40) rotate(17 20 13)">
+    <rect width="40" height="26" rx="7" fill="#4E4888"/>
+    <rect x="4" y="4" width="32" height="18" rx="4.5" fill="#6E68AA"/>
+  </g>
+  <g transform="translate(30.6 39.8)">
+    <rect width="48" height="32" rx="9" fill="#2A2654" opacity="0.22"/>
+  </g>
+  <g transform="translate(30 38)">
+    <rect width="48" height="32" rx="9" fill="url(#zipdeck-icon-face)"/>
+    <rect x="4" y="4" width="40" height="24" rx="7" fill="none" stroke="#fff" stroke-opacity="0.22" stroke-width="1.25"/>
+    <path
+      fill="#fff"
+      d="M10.5 7.2H33.7A2.3 2.3 0 0 1 35.4 11.1L22.2 24.2H36A2.4 2.4 0 1 1 36 29H10.6A2.3 2.3 0 0 1 8.9 25.1L22.1 12H10.5A2.4 2.4 0 1 1 10.5 7.2Z"
+    />
+  </g>
+</svg>

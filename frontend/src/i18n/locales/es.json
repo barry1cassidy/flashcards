@@ -67,7 +67,16 @@
     "proFlag": "Marca Pro",
     "cancelScheduled": "cancela al final del periodo",
     "periodEnd": "Fin del periodo",
-    "noSubscription": "No hay suscripción de Stripe."
+    "noSubscription": "No hay suscripción registrada.",
+    "grantHeading": "Pro gratuito",
+    "grantHint": "Empieza un periodo Pro gratuito desde hoy, mensual o anual, con los mismos créditos que un plan de pago. No se cobra. Si lo vuelves a conceder, sustituye el periodo gratuito actual.",
+    "grantMonthly": "Conceder mensual",
+    "grantYearly": "Conceder anual",
+    "cancelGrant": "Cancelar Pro gratuito",
+    "confirmGrantMonthly": "¿Dar a este usuario un periodo Pro mensual gratuito a partir de hoy?",
+    "confirmGrantYearly": "¿Dar a este usuario un periodo Pro anual gratuito a partir de hoy?",
+    "confirmCancelGrant": "¿Terminar ahora este Pro gratuito? Conservan cualquier suscripción de pago.",
+    "confirmAction": "Confirmar"
   },
   "classes": {
     "title": "Clases",
@@ -775,6 +784,7 @@
     "addDeckFirst": "Añade este mazo a Mis Mazos primero",
     "teacherCannotLeave": "Los profesores no pueden salir de su clase",
     "adminRequired": "Se necesita un administrador",
-    "userNotFound": "Usuario no encontrado"
+    "userNotFound": "Usuario no encontrado",
+    "noAdminSubscription": "No hay suscripción de administrador"
   }
 }

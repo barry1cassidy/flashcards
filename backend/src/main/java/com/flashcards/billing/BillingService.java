@@ -1,6 +1,7 @@
 package com.flashcards.billing;
 
 import java.time.Instant;
+import java.time.ZoneOffset;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
@@ -161,6 +162,58 @@ public class BillingService {
             throw new ApiException(HttpStatus.BAD_REQUEST, "No Stripe customer");
         }
         return new PortalResponse(stripeGateway.createPortalUrl(customerId, properties.appUrl() + "/pro"));
+    }
+
+    @Transactional
+    public void grantAdminSubscription(UUID userId, BillingPlan plan) {
+        if (plan != BillingPlan.MONTHLY && plan != BillingPlan.YEARLY) {
+            throw new ApiException(HttpStatus.BAD_REQUEST, "Invalid billing plan");
+        }
+        User user = userRepository
+                .findById(userId)
+                .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "User not found"));
+        String subscriptionId = adminSubscriptionId(userId);
+        UserSubscription row = subscriptionRepository
+                .findByProviderAndProviderSubscriptionId(BillingProvider.ADMIN, subscriptionId)
+                .orElseGet(UserSubscription::new);
+        row.setUser(user);
+        row.setProvider(BillingProvider.ADMIN);
+        row.setProviderCustomerId(null);
+        row.setProviderSubscriptionId(subscriptionId);
+        row.setPlan(plan);
+        row.setStatus(SubscriptionStatus.ACTIVE);
+        row.setCurrentPeriodEnd(adminPeriodEnd(plan));
+        row.setCancelAtPeriodEnd(false);
+        subscriptionRepository.save(row);
+        refreshEntitlement(user);
+    }
+
+    @Transactional
+    public void cancelAdminSubscription(UUID userId) {
+        User user = userRepository
+                .findById(userId)
+                .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "User not found"));
+        UserSubscription row = subscriptionRepository
+                .findByProviderAndProviderSubscriptionId(BillingProvider.ADMIN, adminSubscriptionId(userId))
+                .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "No admin subscription"));
+        Instant now = Instant.now();
+        if (!row.grantsAccess(now)) {
+            throw new ApiException(HttpStatus.NOT_FOUND, "No admin subscription");
+        }
+        row.setStatus(SubscriptionStatus.CANCELED);
+        row.setCancelAtPeriodEnd(false);
+        row.setCurrentPeriodEnd(now);
+        subscriptionRepository.save(row);
+        refreshEntitlement(user);
+    }
+
+    static String adminSubscriptionId(UUID userId) {
+        return "admin:" + userId;
+    }
+
+    static Instant adminPeriodEnd(BillingPlan plan) {
+        var now = Instant.now().atZone(ZoneOffset.UTC);
+        return (plan == BillingPlan.YEARLY ? now.plusYears(1) : now.plusMonths(1)).toInstant();
     }
 
     @Transactional

@@ -14,6 +14,8 @@ export default function AdminUsersPage() {
   const [openId, setOpenId] = useState('')
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(true)
+  const [pending, setPending] = useState(null)
+  const [acting, setActing] = useState(false)
 
   useEffect(() => {
     let cancelled = false
@@ -51,6 +53,39 @@ export default function AdminUsersPage() {
   function search(event) {
     event.preventDefault()
     setSubmitted(query.trim())
+  }
+
+  function toggleUser(userId) {
+    setOpenId((current) => (current === userId ? '' : userId))
+    setPending(null)
+  }
+
+  function replaceUser(updated) {
+    setUsers((current) => current.map((row) => (row.id === updated.id ? updated : row)))
+  }
+
+  async function runPending() {
+    if (!pending || acting) {
+      return
+    }
+    setActing(true)
+    setError('')
+    try {
+      const path =
+        pending.action === 'CANCEL'
+          ? `/api/admin/users/${pending.userId}/subscription/cancel`
+          : `/api/admin/users/${pending.userId}/subscription`
+      const updated = await api(path, {
+        method: 'POST',
+        body: pending.action === 'CANCEL' ? undefined : JSON.stringify({ plan: pending.action }),
+      })
+      replaceUser(updated)
+      setPending(null)
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setActing(false)
+    }
   }
 
   return (
@@ -94,7 +129,12 @@ export default function AdminUsersPage() {
                   user={user}
                   sub={sub}
                   open={open}
-                  onToggle={() => setOpenId(open ? '' : user.id)}
+                  onToggle={() => toggleUser(user.id)}
+                  pending={pending?.userId === user.id ? pending.action : null}
+                  acting={acting}
+                  onAsk={(action) => setPending({ userId: user.id, action })}
+                  onConfirm={runPending}
+                  onCancelAsk={() => setPending(null)}
                   t={t}
                 />
               )
@@ -107,7 +147,8 @@ export default function AdminUsersPage() {
   )
 }
 
-function FragmentRow({ user, sub, open, onToggle, t }) {
+function FragmentRow({ user, sub, open, onToggle, pending, acting, onAsk, onConfirm, onCancelAsk, t }) {
+  const adminGrant = activeAdminGrant(user)
   return (
     <>
       <tr>
@@ -164,7 +205,7 @@ function FragmentRow({ user, sub, open, onToggle, t }) {
             {user.subscriptions?.length ? (
               <ul className="admin-subs">
                 {user.subscriptions.map((item) => (
-                  <li key={item.providerSubscriptionId}>
+                  <li key={`${item.provider}:${item.providerSubscriptionId}`}>
                     <strong>
                       {item.provider} {item.plan} {item.status}
                     </strong>
@@ -178,11 +219,76 @@ function FragmentRow({ user, sub, open, onToggle, t }) {
             ) : (
               <p className="admin-empty">{t('admin.noSubscription')}</p>
             )}
+            <div className="admin-grant">
+              <p>
+                <strong>{t('admin.grantHeading')}</strong>
+              </p>
+              <p>{t('admin.grantHint')}</p>
+              {pending ? (
+                <div className="admin-grant-confirm">
+                  <p>
+                    {pending === 'YEARLY'
+                      ? t('admin.confirmGrantYearly')
+                      : pending === 'MONTHLY'
+                        ? t('admin.confirmGrantMonthly')
+                        : t('admin.confirmCancelGrant')}
+                  </p>
+                  <div className="admin-grant-actions">
+                    <button
+                      className={pending === 'CANCEL' ? 'admin-btn admin-btn-danger' : 'admin-btn'}
+                      type="button"
+                      disabled={acting}
+                      onClick={onConfirm}
+                    >
+                      {t('admin.confirmAction')}
+                    </button>
+                    <button className="admin-btn" type="button" disabled={acting} onClick={onCancelAsk}>
+                      {t('common.cancel')}
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div className="admin-grant-actions">
+                  <button className="admin-btn" type="button" disabled={acting} onClick={() => onAsk('MONTHLY')}>
+                    {t('admin.grantMonthly')}
+                  </button>
+                  <button className="admin-btn" type="button" disabled={acting} onClick={() => onAsk('YEARLY')}>
+                    {t('admin.grantYearly')}
+                  </button>
+                  {adminGrant ? (
+                    <button
+                      className="admin-btn admin-btn-danger"
+                      type="button"
+                      disabled={acting}
+                      onClick={() => onAsk('CANCEL')}
+                    >
+                      {t('admin.cancelGrant')}
+                    </button>
+                  ) : null}
+                </div>
+              )}
+            </div>
           </td>
         </tr>
       ) : null}
     </>
   )
+}
+
+function activeAdminGrant(user) {
+  const now = Date.now()
+  return (user.subscriptions || []).some((item) => {
+    if (item.provider !== 'ADMIN') {
+      return false
+    }
+    if (item.status !== 'ACTIVE' && item.status !== 'PAST_DUE' && item.status !== 'TRIALING') {
+      return false
+    }
+    if (!item.currentPeriodEnd) {
+      return true
+    }
+    return new Date(item.currentPeriodEnd).getTime() >= now
+  })
 }
 
 function formatStamp(value) {

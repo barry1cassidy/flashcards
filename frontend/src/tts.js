@@ -1,7 +1,17 @@
+import { Capacitor } from '@capacitor/core'
+import { TextToSpeech } from '@capacitor-community/text-to-speech'
+
 let playTimer = 0
 
-export function canSpeak() {
+function webSpeechOk() {
   return typeof window !== 'undefined' && 'speechSynthesis' in window
+}
+
+export function canSpeak() {
+  if (typeof window === 'undefined') {
+    return false
+  }
+  return Capacitor.isNativePlatform() || webSpeechOk()
 }
 
 export function stopSpeaking() {
@@ -9,7 +19,11 @@ export function stopSpeaking() {
     window.clearTimeout(playTimer)
     playTimer = 0
   }
-  if (!canSpeak()) {
+  if (Capacitor.isNativePlatform()) {
+    TextToSpeech.stop().catch(() => {})
+    return
+  }
+  if (!webSpeechOk()) {
     return
   }
   window.speechSynthesis.cancel()
@@ -19,8 +33,22 @@ export function speak(text, lang = 'en-US') {
   if (!canSpeak() || !text) {
     return
   }
-  const utterance = new SpeechSynthesisUtterance(String(text))
-  utterance.lang = lang || 'en-US'
+  const spoken = String(text)
+  const locale = lang || 'en-US'
+  if (Capacitor.isNativePlatform()) {
+    stopSpeaking()
+    TextToSpeech.speak({
+      text: spoken,
+      lang: locale,
+      rate: 1,
+      pitch: 1,
+      volume: 1,
+      category: 'ambient',
+    }).catch(() => {})
+    return
+  }
+  const utterance = new SpeechSynthesisUtterance(spoken)
+  utterance.lang = locale
   const voice = pickVoice(utterance.lang)
   if (voice) {
     utterance.voice = voice
@@ -49,7 +77,7 @@ function pickVoice(lang) {
   )
 }
 
-if (typeof window !== 'undefined' && canSpeak()) {
+if (webSpeechOk()) {
   window.speechSynthesis.getVoices()
   window.speechSynthesis.addEventListener('voiceschanged', () => {
     window.speechSynthesis.getVoices()
