@@ -20,5 +20,10 @@ public record BillingStatusResponse(
         int addonCredits,
         int remainingCredits,
         int monthlyAllowance,
-        int addonPackCredits) {
+        int addonPackCredits,
+        boolean googlePlayEnabled,
+        boolean googleAddonEnabled,
+        String googleProductMonthly,
+        String googleProductYearly,
+        String googleProductAddon) {
 }

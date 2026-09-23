@@ -3,7 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '../AuthContext'
 import { isAdmin } from '../admin'
-import { completeCheckout, isNativeApp, loadBillingStatus, openBillingPortal, startCheckout } from '../billing'
+import { completeCheckout, isNativeApp, loadBillingStatus, openBillingPortal, restorePlayPurchases, startCheckout, startPlayPurchase } from '../billing'
 import { isProLicensed } from '../pro'
 import { translateError } from '../i18n/errors'
 
@@ -127,12 +127,24 @@ function ProSection({ user, onError, onStub, refresh }) {
   const yearly = billing?.yearlyPrice || '$39.99'
   const periodEnd = formatDate(billing?.currentPeriodEnd || user?.proExpiresAt, i18n.language)
   const stripeOn = Boolean(billing?.stripeEnabled)
+  const playOn = Boolean(billing?.googlePlayEnabled)
   const canPay = Boolean(billing?.publicCheckout) || admin
   const showSubscribe = stripeOn && !native && !pro && canPay
-  const showComingSoon = !pro && !canPay
+  const showPlaySubscribe = playOn && native && !pro
+  const showComingSoon = !pro && !showSubscribe && !showPlaySubscribe
   const showManage = stripeOn && !native && pro && billing?.provider === 'STRIPE'
-  const showNativeHint = native && !pro
+  const showPlayManage = playOn && native && pro && billing?.provider === 'GOOGLE'
   const planLabel = billing?.plan === 'YEARLY' ? t('pro.planYearly') : billing?.plan === 'MONTHLY' ? t('pro.planMonthly') : ''
+
+  async function finishPlay(updated) {
+    if (!updated) {
+      return
+    }
+    await refresh()
+    const status = await loadBillingStatus()
+    setBilling(status)
+    setNotice('success')
+  }
 
   const stubButton =
     admin && billing?.stubEnabled ? (
@@ -162,12 +174,6 @@ function ProSection({ user, onError, onStub, refresh }) {
           </ul>
           <p className="muted">{t('pro.priceBlurb', { monthly, yearly })}</p>
           {showComingSoon ? <p className="muted">{t('pro.comingSoon')}</p> : null}
-          {showNativeHint ? (
-            <p className="muted">
-              {t('settings.proOnWeb')}{' '}
-              <a href="https://zipdeck.app/pro">{t('settings.proOpenWebsite')}</a>
-            </p>
-          ) : null}
           {showSubscribe ? (
             <div className="billing-actions">
               <button className="btn primary" type="button" disabled={busy} onClick={() => runBilling(() => startCheckout('MONTHLY', '/pro'))}>
@@ -175,6 +181,37 @@ function ProSection({ user, onError, onStub, refresh }) {
               </button>
               <button className="btn primary" type="button" disabled={busy} onClick={() => runBilling(() => startCheckout('YEARLY', '/pro'))}>
                 {t('settings.proYearly', { price: yearly })}
+              </button>
+            </div>
+          ) : null}
+          {showPlaySubscribe ? (
+            <div className="billing-actions">
+              <button
+                className="btn primary"
+                type="button"
+                disabled={busy}
+                onClick={() =>
+                  runBilling(() =>
+                    startPlayPurchase(billing, billing.googleProductMonthly, user?.id).then(finishPlay)
+                  )
+                }
+              >
+                {t('settings.proMonthly', { price: monthly })}
+              </button>
+              <button
+                className="btn primary"
+                type="button"
+                disabled={busy}
+                onClick={() =>
+                  runBilling(() =>
+                    startPlayPurchase(billing, billing.googleProductYearly, user?.id).then(finishPlay)
+                  )
+                }
+              >
+                {t('settings.proYearly', { price: yearly })}
+              </button>
+              <button className="btn" type="button" disabled={busy} onClick={() => runBilling(() => restorePlayPurchases(user?.id).then(finishPlay))}>
+                {t('settings.proRestore')}
               </button>
             </div>
           ) : null}
@@ -196,6 +233,16 @@ function ProSection({ user, onError, onStub, refresh }) {
               <div className="billing-actions">
                 <button className="btn" type="button" disabled={busy} onClick={() => runBilling(() => openBillingPortal())}>
                   {t('settings.proManage')}
+                </button>
+              </div>
+            ) : null}
+            {showPlayManage ? (
+              <div className="billing-actions">
+                <a className="btn" href="https://play.google.com/store/account/subscriptions">
+                  {t('settings.proManage')}
+                </a>
+                <button className="btn" type="button" disabled={busy} onClick={() => runBilling(() => restorePlayPurchases(user?.id).then(finishPlay))}>
+                  {t('settings.proRestore')}
                 </button>
               </div>
             ) : null}
@@ -237,6 +284,25 @@ function ProSection({ user, onError, onStub, refresh }) {
                   type="button"
                   disabled={busy}
                   onClick={() => runBilling(() => startCheckout('ADDON', '/pro'))}
+                >
+                  {t('settings.buyCredits', {
+                    count: billing.addonPackCredits,
+                    price: billing.addonPrice,
+                  })}
+                </button>
+              </div>
+            ) : null}
+            {billing?.googleAddonEnabled && native ? (
+              <div className="billing-actions">
+                <button
+                  className="btn"
+                  type="button"
+                  disabled={busy}
+                  onClick={() =>
+                    runBilling(() =>
+                      startPlayPurchase(billing, billing.googleProductAddon, user?.id).then(finishPlay)
+                    )
+                  }
                 >
                   {t('settings.buyCredits', {
                     count: billing.addonPackCredits,

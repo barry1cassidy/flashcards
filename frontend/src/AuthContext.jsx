@@ -3,6 +3,7 @@ import { api, getToken, setToken } from './api'
 import { applyLocale, deviceLocale } from './i18n'
 import { applyTheme } from './theme'
 import { clearJoinInvite } from './authRedirect'
+import { offerSavePassword } from './offerSavePassword'
 
 const AuthContext = createContext(null)
 
@@ -54,6 +55,7 @@ export function AuthProvider({ children }) {
         })
         setToken(result.token)
         setUser(result.user)
+        await offerSavePassword(email, password)
         return result.user
       },
       async loginWithGoogle(idToken, locale) {
@@ -72,6 +74,7 @@ export function AuthProvider({ children }) {
         })
         setToken(result.token)
         setUser(result.user)
+        await offerSavePassword(email, password)
         return result.user
       },
       async setTheme(theme) {

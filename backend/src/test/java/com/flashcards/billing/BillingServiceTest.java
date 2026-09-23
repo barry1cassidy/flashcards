@@ -46,6 +46,8 @@ class BillingServiceTest {
     private UserSubscriptionRepository subscriptionRepository;
     @Mock
     private AgentCreditService creditService;
+    @Mock
+    private PlayBillingGateway playBillingGateway;
 
     private final List<UserSubscription> rows = new ArrayList<>();
     private BillingService billingService;
@@ -60,10 +62,17 @@ class BillingServiceTest {
                 "$7.99",
                 "$39.99",
                 "$2.99",
-                new BillingProperties.Stripe("sk_test", "whsec", "price_month", "price_year", "price_addon"));
+                new BillingProperties.Stripe("sk_test", "whsec", "price_month", "price_year", "price_addon"),
+                googleConfig());
         AgentProperties agentProperties = new AgentProperties("", "", "", 10, 10, 40, 90, 0, 0, 0, 0);
         billingService = new BillingService(
-                properties, stripeGateway, userRepository, subscriptionRepository, creditService, agentProperties);
+                properties,
+                stripeGateway,
+                userRepository,
+                subscriptionRepository,
+                creditService,
+                agentProperties,
+                playBillingGateway);
         user = new User();
         user.setId(USER_ID);
         user.setEmail("barry@example.com");
@@ -91,6 +100,17 @@ class BillingServiceTest {
             User current = invocation.getArgument(0);
             return CreditBalance.of(current.getAgentIncludedCredits(), current.getAgentAddonCredits());
         });
+        lenient().when(subscriptionRepository.findByUser_IdAndProvider(any(), any())).thenAnswer(invocation -> {
+            BillingProvider provider = invocation.getArgument(1);
+            return rows.stream().filter(row -> row.getProvider() == provider).toList();
+        });
+        lenient().when(playBillingGateway.enabled()).thenReturn(false);
+        lenient().when(playBillingGateway.addonEnabled()).thenReturn(false);
+    }
+
+    private static BillingProperties.Google googleConfig() {
+        return new BillingProperties.Google(
+                "com.zipdeck.app", "google-play.json", "pro_monthly", "pro_yearly", "credits_addon");
     }
 
     @Test
@@ -177,9 +197,16 @@ class BillingServiceTest {
                 "$7.99",
                 "$39.99",
                 "$2.99",
-                new BillingProperties.Stripe("sk_test", "whsec", "price_month", "price_year", "price_addon"));
+                new BillingProperties.Stripe("sk_test", "whsec", "price_month", "price_year", "price_addon"),
+                googleConfig());
         BillingService closedBilling = new BillingService(
-                closed, stripeGateway, userRepository, subscriptionRepository, creditService, new AgentProperties("", "", "", 10, 10, 40, 90, 0, 0, 0, 0));
+                closed,
+                stripeGateway,
+                userRepository,
+                subscriptionRepository,
+                creditService,
+                new AgentProperties("", "", "", 10, 10, 40, 90, 0, 0, 0, 0),
+                playBillingGateway);
         when(userRepository.findById(USER_ID)).thenReturn(Optional.of(user));
 
         ApiException ex = assertThrows(
@@ -252,5 +279,62 @@ class BillingServiceTest {
         assertEquals(SubscriptionStatus.PAST_DUE, BillingService.statusFrom("past_due"));
         assertEquals(SubscriptionStatus.CANCELED, BillingService.statusFrom("canceled"));
         assertEquals(SubscriptionStatus.INCOMPLETE, BillingService.statusFrom("incomplete"));
+    }
+
+    @Test
+    void googleMonthlyPurchaseGrantsPro() {
+        when(userRepository.findById(USER_ID)).thenReturn(Optional.of(user));
+        when(userRepository.save(user)).thenReturn(user);
+        when(playBillingGateway.enabled()).thenReturn(true);
+        Instant end = Instant.now().plusSeconds(60 * 60 * 24 * 30);
+        when(playBillingGateway.verifySubscription("pro_monthly", "token-1"))
+                .thenReturn(new PlayPurchaseRecord(
+                        "pro_monthly",
+                        "token-1",
+                        "GPA.123",
+                        USER_ID.toString(),
+                        true,
+                        true,
+                        false,
+                        false,
+                        end,
+                        false));
+
+        billingService.completeGooglePurchase(USER_ID, "pro_monthly", "token-1", "GPA.123");
+
+        assertEquals(1, rows.size());
+        assertEquals(BillingProvider.GOOGLE, rows.get(0).getProvider());
+        assertEquals("token-1", rows.get(0).getProviderSubscriptionId());
+        assertEquals(BillingPlan.MONTHLY, rows.get(0).getPlan());
+        assertEquals(SubscriptionStatus.ACTIVE, rows.get(0).getStatus());
+        assertTrue(user.isProLicensed());
+        assertEquals(end, user.getProExpiresAt());
+        verify(playBillingGateway).acknowledgeSubscription("pro_monthly", "token-1");
+        verify(stripeGateway, never()).createCheckout(any(), any(), any(), any(), any(), any(), anyBoolean());
+    }
+
+    @Test
+    void googleAddonPurchaseGrantsCredits() {
+        user.setProLicensed(true);
+        when(userRepository.findById(USER_ID)).thenReturn(Optional.of(user));
+        when(playBillingGateway.enabled()).thenReturn(true);
+        when(playBillingGateway.verifyProduct("credits_addon", "token-addon"))
+                .thenReturn(new PlayPurchaseRecord(
+                        "credits_addon",
+                        "token-addon",
+                        "GPA.addon",
+                        USER_ID.toString(),
+                        false,
+                        true,
+                        false,
+                        false,
+                        null,
+                        false));
+
+        billingService.completeGooglePurchase(USER_ID, "credits_addon", "token-addon", "GPA.addon");
+
+        verify(creditService).grantAddonPurchase(USER_ID, "token-addon");
+        verify(playBillingGateway).acknowledgeProduct("credits_addon", "token-addon");
+        assertTrue(rows.isEmpty());
     }
 }

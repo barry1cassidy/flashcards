@@ -13,7 +13,14 @@ frontend/dist/
 # Env / secrets
 .env
 .env.local
+frontend/.env.android
+frontend/android/keystore.properties
+frontend/android/*.jks
+frontend/android/*.keystore
+frontend/android/*.p12
 backend/google-sso.yml
+backend/google-play.yml
+backend/google-play.json
 backend/agent.yml
 backend/stripe.yml
 backend/src/main/resources/application-local.yml

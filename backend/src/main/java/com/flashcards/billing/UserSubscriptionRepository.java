@@ -12,4 +12,6 @@ public interface UserSubscriptionRepository extends JpaRepository<UserSubscripti
             BillingProvider provider, String providerSubscriptionId);
 
     List<UserSubscription> findByUser_Id(UUID userId);
+
+    List<UserSubscription> findByUser_IdAndProvider(UUID userId, BillingProvider provider);
 }

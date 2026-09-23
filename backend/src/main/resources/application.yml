@@ -18,6 +18,8 @@ spring:
       - optional:file:./backend/agent.yml
       - optional:file:./stripe.yml
       - optional:file:./backend/stripe.yml
+      - optional:file:./google-play.yml
+      - optional:file:./backend/google-play.yml
   datasource:
     url: jdbc:mysql://localhost:3306/flashcards?characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
     username: flashcards
@@ -61,6 +63,12 @@ app:
       price-monthly: ${STRIPE_PRICE_MONTHLY:}
       price-yearly: ${STRIPE_PRICE_YEARLY:}
       price-addon: ${STRIPE_PRICE_ADDON:}
+    google:
+      package-name: ${GOOGLE_PLAY_PACKAGE_NAME:com.zipdeck.app}
+      credentials-path: ${GOOGLE_PLAY_CREDENTIALS_PATH:}
+      product-monthly: ${GOOGLE_PLAY_PRODUCT_MONTHLY:pro_monthly}
+      product-yearly: ${GOOGLE_PLAY_PRODUCT_YEARLY:pro_yearly}
+      product-addon: ${GOOGLE_PLAY_PRODUCT_ADDON:credits_addon}
   agent:
     api-key: ${AGENT_API_KEY:}
     base-url: ${AGENT_BASE_URL:https://generativelanguage.googleapis.com/v1beta/openai}

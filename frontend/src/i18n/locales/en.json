@@ -599,6 +599,7 @@
     "proYearly": "Subscribe {{price}} / year",
     "proManage": "Manage Billing",
     "proThanks": "You are Pro. Thanks for supporting Zipdeck.",
+    "proRestore": "Restore purchases",
     "proOnWeb": "Subscribe on the website, then sign in here with the same account.",
     "proOpenWebsite": "Open zipdeck.app",
     "proUnavailable": "Paid Pro is not available yet. It will show up here after billing is turned on.",

@@ -216,7 +216,8 @@ export default function AgentPage() {
   const elapsed = startedAt ? Math.max(0, Math.floor((now - startedAt) / 1000)) : job?.elapsedSeconds || 0
   const steps = job?.steps || []
   const remaining = status?.remainingCredits ?? 0
-  const canBuyAddon = Boolean(status?.addonCheckoutEnabled) && !isNativeApp()
+  const native = isNativeApp()
+  const canBuyAddon = Boolean(status?.addonCheckoutEnabled) && !native
   const canSubmit =
     !busy && remaining > 0 && !promptOverLimit && !fileError && Boolean(prompt.trim() || pdf)
 
@@ -271,6 +272,13 @@ export default function AgentPage() {
                     price: status.addonPrice,
                   })}
                 </button>
+              ) : native ? (
+                <Link className="btn primary" to="/pro">
+                  {t('agent.buyCredits', {
+                    count: status.addonPackCredits,
+                    price: status.addonPrice,
+                  })}
+                </Link>
               ) : (
                 <p>{t('agent.outOfCredits')}</p>
               )}

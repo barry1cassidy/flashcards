@@ -135,17 +135,21 @@ function LoginFields() {
         <label>
           {t('auth.email')}
           <input
+            id="login-username"
+            name="username"
             type="email"
             value={email}
             onChange={(event) => setEmail(event.target.value)}
             required
-            autoComplete="email"
+            autoComplete="username"
             placeholder="you@example.com"
           />
         </label>
         <label>
           {t('auth.password')}
           <input
+            id="login-password"
+            name="password"
             type="password"
             value={password}
             onChange={(event) => setPassword(event.target.value)}

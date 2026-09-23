@@ -10,7 +10,8 @@ public record BillingProperties(
         String monthlyPriceDisplay,
         String yearlyPriceDisplay,
         String addonPriceDisplay,
-        Stripe stripe) {
+        Stripe stripe,
+        Google google) {
 
     public record Stripe(
             String secretKey, String webhookSecret, String priceMonthly, String priceYearly, String priceAddon) {
@@ -20,6 +21,24 @@ public record BillingProperties(
 
         boolean hasWebhookSecret() {
             return notBlank(webhookSecret);
+        }
+    }
+
+    public record Google(
+            String packageName,
+            String credentialsPath,
+            String productMonthly,
+            String productYearly,
+            String productAddon) {
+        boolean enabled() {
+            return notBlank(packageName)
+                    && notBlank(credentialsPath)
+                    && notBlank(productMonthly)
+                    && notBlank(productYearly);
+        }
+
+        boolean addonEnabled() {
+            return enabled() && notBlank(productAddon);
         }
     }
 
@@ -38,6 +57,14 @@ public record BillingProperties(
 
     public boolean stripeWebhookEnabled() {
         return stripe != null && stripe.hasSecretKey() && stripe.hasWebhookSecret();
+    }
+
+    public boolean googlePlayEnabled() {
+        return google != null && google.enabled();
+    }
+
+    public boolean googleAddonEnabled() {
+        return google != null && google.addonEnabled();
     }
 
     public boolean paidCheckoutAllowed(boolean admin) {
@@ -84,6 +111,22 @@ public record BillingProperties(
             return BillingPlan.ADDON;
         }
         return BillingPlan.MONTHLY;
+    }
+
+    public BillingPlan planForGoogleProduct(String productId) {
+        if (google == null || !notBlank(productId)) {
+            throw new IllegalArgumentException("Invalid billing plan");
+        }
+        if (productId.equals(google.productYearly())) {
+            return BillingPlan.YEARLY;
+        }
+        if (productId.equals(google.productAddon())) {
+            return BillingPlan.ADDON;
+        }
+        if (productId.equals(google.productMonthly())) {
+            return BillingPlan.MONTHLY;
+        }
+        throw new IllegalArgumentException("Invalid billing plan");
     }
 
     private static boolean notBlank(String value) {

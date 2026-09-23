@@ -4,4 +4,5 @@
     <string name="title_activity_main">Zipdeck</string>
     <string name="package_name">com.zipdeck.app</string>
     <string name="custom_url_scheme">com.zipdeck.app</string>
+    <string name="asset_statements" translatable="false">[{\n  \"relation\": [\"delegate_permission/common.get_login_creds\"],\n  \"target\": {\n    \"namespace\": \"web\",\n    \"site\": \"https://zipdeck.app\"\n  }\n}]</string>
 </resources>

@@ -2,5 +2,7 @@ target
 .idea
 *.iml
 google-sso.yml
+google-play.yml
+google-play.json
 agent.yml
 src/main/resources/application-local.yml

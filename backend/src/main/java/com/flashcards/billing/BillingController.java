@@ -53,6 +53,19 @@ public class BillingController {
         return billingService.createPortal(AuthSupport.requireUser(authentication).id());
     }
 
+    @PostMapping("/google/purchase")
+    public UserResponse googlePurchase(
+            Authentication authentication, @RequestBody(required = false) GooglePurchaseRequest request) {
+        if (request == null) {
+            throw new ApiException(HttpStatus.BAD_REQUEST, "Validation failed");
+        }
+        return billingService.completeGooglePurchase(
+                AuthSupport.requireUser(authentication).id(),
+                request.productId(),
+                request.purchaseToken(),
+                request.orderId());
+    }
+
     @PostMapping("/stripe/webhook")
     public void stripeWebhook(
             @RequestHeader(value = "Stripe-Signature", required = false) String signature,

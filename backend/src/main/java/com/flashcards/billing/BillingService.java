@@ -35,6 +35,7 @@ public class BillingService {
     private final UserSubscriptionRepository subscriptionRepository;
     private final AgentCreditService creditService;
     private final AgentProperties agentProperties;
+    private final PlayBillingGateway playBillingGateway;
 
     public BillingService(
             BillingProperties properties,
@@ -42,13 +43,15 @@ public class BillingService {
             UserRepository userRepository,
             UserSubscriptionRepository subscriptionRepository,
             AgentCreditService creditService,
-            AgentProperties agentProperties) {
+            AgentProperties agentProperties,
+            PlayBillingGateway playBillingGateway) {
         this.properties = properties;
         this.stripeGateway = stripeGateway;
         this.userRepository = userRepository;
         this.subscriptionRepository = subscriptionRepository;
         this.creditService = creditService;
         this.agentProperties = agentProperties;
+        this.playBillingGateway = playBillingGateway;
     }
 
     @Transactional(readOnly = true)
@@ -74,7 +77,93 @@ public class BillingService {
                 credits.addonCredits(),
                 credits.remainingCredits(),
                 agentProperties.monthlyCredits(),
-                agentProperties.addonCredits());
+                agentProperties.addonCredits(),
+                playBillingGateway.enabled(),
+                playBillingGateway.addonEnabled(),
+                googleProductId(properties.google() == null ? null : properties.google().productMonthly()),
+                googleProductId(properties.google() == null ? null : properties.google().productYearly()),
+                googleProductId(properties.google() == null ? null : properties.google().productAddon()));
+    }
+
+    @Transactional
+    public UserResponse completeGooglePurchase(UUID userId, String productId, String purchaseToken, String orderId) {
+        if (!playBillingGateway.enabled()) {
+            throw new ApiException(HttpStatus.SERVICE_UNAVAILABLE, "Billing is not configured");
+        }
+        if (productId == null || productId.isBlank() || purchaseToken == null || purchaseToken.isBlank()) {
+            throw new ApiException(HttpStatus.BAD_REQUEST, "Validation failed");
+        }
+        User user = requireOwnAccount(userId);
+        String sku = productId.trim();
+        String token = purchaseToken.trim();
+        BillingPlan plan;
+        try {
+            plan = properties.planForGoogleProduct(sku);
+        } catch (IllegalArgumentException ex) {
+            throw new ApiException(HttpStatus.BAD_REQUEST, "Invalid billing plan");
+        }
+        PlayPurchaseRecord record = plan == BillingPlan.ADDON
+                ? playBillingGateway.verifyProduct(sku, token)
+                : playBillingGateway.verifySubscription(sku, token);
+        if (record.productId() != null && !record.productId().isBlank()) {
+            sku = record.productId();
+            try {
+                plan = properties.planForGoogleProduct(sku);
+            } catch (IllegalArgumentException ex) {
+                throw new ApiException(HttpStatus.BAD_REQUEST, "Invalid billing plan");
+            }
+        }
+        String obfuscated = record.obfuscatedAccountId();
+        if (obfuscated != null && !obfuscated.isBlank() && !obfuscated.equals(user.getId().toString())) {
+            throw new ApiException(HttpStatus.FORBIDDEN, "Not authenticated");
+        }
+        if (plan == BillingPlan.ADDON) {
+            if (!record.active()) {
+                throw new ApiException(HttpStatus.BAD_GATEWAY, "Payment failed");
+            }
+            ProAccess.require(user);
+            creditService.grantAddonPurchase(user.getId(), token);
+            if (!record.consumed()) {
+                playBillingGateway.acknowledgeProduct(sku, token);
+            }
+            return AuthService.toUserResponse(requireUser(userId));
+        }
+        applyGoogleSubscription(user, record, plan, orderId);
+        if (record.active() && !record.acknowledged()) {
+            playBillingGateway.acknowledgeSubscription(sku, token);
+        }
+        return AuthService.toUserResponse(requireUser(userId));
+    }
+
+    void applyGoogleSubscription(User user, PlayPurchaseRecord record, BillingPlan plan, String orderId) {
+        String token = record.purchaseToken();
+        UserSubscription row = subscriptionRepository
+                .findByProviderAndProviderSubscriptionId(BillingProvider.GOOGLE, token)
+                .or(() -> subscriptionRepository.findByUser_IdAndProvider(user.getId(), BillingProvider.GOOGLE).stream()
+                        .findFirst())
+                .orElseGet(UserSubscription::new);
+        row.setUser(user);
+        row.setProvider(BillingProvider.GOOGLE);
+        row.setProviderCustomerId(orderId == null || orderId.isBlank() ? record.orderId() : orderId.trim());
+        row.setProviderSubscriptionId(token);
+        row.setPlan(plan);
+        row.setStatus(googleStatus(record));
+        row.setCurrentPeriodEnd(record.expiryTime());
+        row.setCancelAtPeriodEnd(record.cancelAtPeriodEnd());
+        subscriptionRepository.save(row);
+        refreshEntitlement(user);
+    }
+
+    static SubscriptionStatus googleStatus(PlayPurchaseRecord record) {
+        Instant now = Instant.now();
+        if (record.active() && (record.expiryTime() == null || !record.expiryTime().isBefore(now))) {
+            return SubscriptionStatus.ACTIVE;
+        }
+        return SubscriptionStatus.EXPIRED;
+    }
+
+    private static String googleProductId(String productId) {
+        return productId == null || productId.isBlank() ? "" : productId;
     }
 
     @Transactional

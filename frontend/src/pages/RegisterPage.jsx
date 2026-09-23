@@ -44,15 +44,32 @@ export default function RegisterPage() {
             {error ? <div className="error">{translateError(t, error)}</div> : null}
             <label>
               {t('auth.name')}
-              <input value={displayName} onChange={(e) => setDisplayName(e.target.value)} required autoComplete="name" />
+              <input
+                id="register-name"
+                name="name"
+                value={displayName}
+                onChange={(e) => setDisplayName(e.target.value)}
+                required
+                autoComplete="name"
+              />
             </label>
             <label>
               {t('auth.email')}
-              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required autoComplete="email" />
+              <input
+                id="register-username"
+                name="username"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                autoComplete="username"
+              />
             </label>
             <label>
               {t('auth.password')}
               <input
+                id="register-password"
+                name="password"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}

@@ -1,0 +1,11 @@
+# Copy to google-play.yml in this folder (gitignored).
+# Point credentials-path at the Play API service-account JSON on the server.
+# Do not commit the JSON.
+app:
+  billing:
+    google:
+      package-name: com.zipdeck.app
+      credentials-path: ./google-play.json
+      product-monthly: pro_monthly
+      product-yearly: pro_yearly
+      product-addon: credits_addon
