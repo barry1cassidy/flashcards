@@ -207,6 +207,23 @@ sudo chmod +x /etc/letsencrypt/renewal-hooks/deploy/reload-nginx.sh
 
 Adjust the `cd` path if the repo lives somewhere else on the instance.
 
+### Play Billing key
+
+The Android app sends each purchase token to the API, which asks Google whether the purchase is real. That call needs a Play Developer API service-account JSON. It is gitignored and excluded from the image, so it has to be placed on the host and mounted in.
+
+1. Google Cloud → IAM → the Play service account → Keys → Add key → JSON. Keep it off git.
+2. Play Console → Users and permissions → invite that service-account email and give it access to orders and subscriptions for Zipdeck.
+3. Put the file on the instance and restrict it:
+
+```bash
+sudo install -m 600 /path/to/downloaded.json /opt/zipdeck/google-play.json
+```
+
+4. In `.env`, set `GOOGLE_PLAY_CREDENTIALS_PATH=/app/google-play.json` (the path **inside** the container). Override `GOOGLE_PLAY_CREDENTIALS_HOST_PATH` only if the file is not at `/opt/zipdeck/google-play.json`.
+5. `docker compose -f docker-compose.prod.yml up -d api` — no image rebuild needed.
+
+Create the file before starting the container. A bind mount to a missing path makes Docker create a directory there instead, and purchases then fail verification. Check with `docker compose -f docker-compose.prod.yml exec api ls -l /app/google-play.json`. Until the key is readable, `/api/billing/status` reports Play billing off and the app hides Subscribe.
+
 ## Android (Capacitor)
 
 The native app is the same Vite React UI in a WebView. Keep coding in Cursor; install **Android Studio** for the SDK and emulator.
