@@ -3,7 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '../AuthContext'
 import { isAdmin } from '../admin'
-import { completeCheckout, isNativeApp, loadBillingStatus, openBillingPortal, restorePlayPurchases, startCheckout, startPlayPurchase } from '../billing'
+import { completeCheckout, isAndroidApp, isNativeApp, loadBillingStatus, openBillingPortal, restorePlayPurchases, startCheckout, startPlayPurchase } from '../billing'
 import { isProLicensed } from '../pro'
 import { translateError } from '../i18n/errors'
 
@@ -46,6 +46,7 @@ function ProSection({ user, onError, onStub, refresh }) {
   const [notice, setNotice] = useState('')
   const pro = isProLicensed(user)
   const native = isNativeApp()
+  const android = isAndroidApp()
   const admin = isAdmin(user)
 
   useEffect(() => {
@@ -130,10 +131,10 @@ function ProSection({ user, onError, onStub, refresh }) {
   const playOn = Boolean(billing?.googlePlayEnabled)
   const canPay = Boolean(billing?.publicCheckout) || admin
   const showSubscribe = stripeOn && !native && !pro && canPay
-  const showPlaySubscribe = playOn && native && !pro
+  const showPlaySubscribe = playOn && android && !pro
   const showComingSoon = !pro && !showSubscribe && !showPlaySubscribe
   const showManage = stripeOn && !native && pro && billing?.provider === 'STRIPE'
-  const showPlayManage = playOn && native && pro && billing?.provider === 'GOOGLE'
+  const showPlayManage = playOn && android && pro && billing?.provider === 'GOOGLE'
   const planLabel = billing?.plan === 'YEARLY' ? t('pro.planYearly') : billing?.plan === 'MONTHLY' ? t('pro.planMonthly') : ''
 
   async function finishPlay(updated) {
@@ -292,7 +293,7 @@ function ProSection({ user, onError, onStub, refresh }) {
                 </button>
               </div>
             ) : null}
-            {billing?.googleAddonEnabled && native ? (
+            {billing?.googleAddonEnabled && android ? (
               <div className="billing-actions">
                 <button
                   className="btn"

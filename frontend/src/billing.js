@@ -9,6 +9,10 @@ export function isNativeApp() {
   return Capacitor.isNativePlatform()
 }
 
+export function isAndroidApp() {
+  return Capacitor.getPlatform() === 'android'
+}
+
 export function loadBillingStatus() {
   return api('/api/billing/status')
 }
