@@ -3,7 +3,6 @@
   "appName": "Zipdeck",
   "webDir": "dist",
   "server": {
-    "hostname": "zipdeck.app",
     "androidScheme": "https"
   }
 }

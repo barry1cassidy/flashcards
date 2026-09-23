@@ -10,7 +10,7 @@ Capacitor wraps this Vite React app in a native WebView. Do not add Ionic UI com
 
 - **Pages stay self-contained.** One screen per route; logic in hooks. App chrome (header + left menu) lives in `AppLayout`, not in each page.
 - **Navigation:** keep `react-router-dom`. Prefer `Link` / `useNavigate` over `window.location` (except a last-resort auth bounce). The left menu is a split pane on wide screens and an overlay drawer on small ones — that maps to Ionic `IonSplitPane` + `IonMenu` if we adopt Ionic later.
-- **API:** keep `fetch` behind `api.js`. Web uses same-origin `/api`. Native builds set `VITE_API_BASE` (see `.env.android.example`). Do not scatter absolute URLs in pages.
+- **API:** keep `fetch` behind `api.js`. Web uses same-origin `/api`. Native builds set `VITE_API_BASE` (see `.env.android.example`). Do not scatter absolute URLs in pages. Never set `server.hostname` in `capacitor.config.json` to a domain the app calls: Capacitor serves any request matching its own hostname from the bundled assets, so the API would return `index.html` with a 200 instead of reaching the server.
 - **Dialogs:** do not add new `window.prompt`, `window.confirm`, or `window.alert`. Use in-app modals/forms (existing confirms can stay until touched).
 - **Pointers:** every action must work with tap, not hover-only. Hover is extra, never the only way. Accordion sections open on tap.
 - **Inputs:** prefer real `<button>` / `<input>` with ~44px tap targets. File pickers and color inputs stay isolated (Capacitor plugins later).
