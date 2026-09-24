@@ -45,14 +45,21 @@ function ensureNativeGoogle(clientId) {
   return nativeGoogleReady
 }
 
-function isNativeCancel(error) {
+function nativeSignInError(error) {
   const code = String(error?.code || '')
-  const message = String(error?.message || '').toLowerCase()
-  return (
+  const message = String(error?.message || '').trim()
+  const lower = message.toLowerCase()
+  if (lower.includes('reauth') || lower.includes('unregistered')) {
+    return message
+  }
+  if (
     code === ErrorCode.SignInCanceled ||
     code === 'SIGN_IN_CANCELED' ||
-    message.includes('cancel')
-  )
+    lower.includes('cancel')
+  ) {
+    return ''
+  }
+  return message || 'Google sign-in failed to load'
 }
 
 function GoogleMark() {
@@ -155,6 +162,11 @@ export default function GoogleSignInButton({ onCredential, disabled }) {
     setLoadError('')
     try {
       await ensureNativeGoogle(clientId)
+      try {
+        await GoogleSignIn.signOut()
+      } catch {
+        // No previous Google session, or Play services ignored the clear.
+      }
       const result = await GoogleSignIn.signIn()
       if (result?.idToken) {
         onCredentialRef.current(result.idToken)
@@ -162,8 +174,9 @@ export default function GoogleSignInButton({ onCredential, disabled }) {
         setLoadError('Google sign-in failed to load')
       }
     } catch (error) {
-      if (!isNativeCancel(error)) {
-        setLoadError('Google sign-in failed to load')
+      const shown = nativeSignInError(error)
+      if (shown) {
+        setLoadError(shown)
       }
     }
   }
@@ -179,7 +192,11 @@ export default function GoogleSignInButton({ onCredential, disabled }) {
           <GoogleMark />
           <span>{t('auth.continueWithGoogle')}</span>
         </button>
-        {loadError ? <p className="error">{t('errors.googleFailedToLoad')}</p> : null}
+        {loadError ? (
+          <p className="error">
+            {loadError === 'Google sign-in failed to load' ? t('errors.googleFailedToLoad') : loadError}
+          </p>
+        ) : null}
       </div>
     )
   }

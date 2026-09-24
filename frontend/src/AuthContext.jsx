@@ -1,4 +1,6 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
+import { Capacitor } from '@capacitor/core'
+import { GoogleSignIn } from '@capawesome/capacitor-google-sign-in'
 import { api, getToken, setToken } from './api'
 import { applyLocale, deviceLocale } from './i18n'
 import { applyTheme } from './theme'
@@ -139,6 +141,9 @@ export function AuthProvider({ children }) {
         clearJoinInvite()
         applyTheme('DARK')
         applyLocale(deviceLocale())
+        if (Capacitor.isNativePlatform()) {
+          GoogleSignIn.signOut().catch(() => {})
+        }
       },
     }),
     [user, ready],
