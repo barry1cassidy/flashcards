@@ -238,9 +238,17 @@ That builds with `VITE_API_BASE`, syncs Capacitor, and opens Android Studio. Pic
 
 The API must allow Capacitor origins (included in `APP_CORS_ORIGINS`). Put the same `VITE_GOOGLE_CLIENT_ID` Web client ID in `.env.android` as the website uses.
 
-Google’s JavaScript button does not work in the Android WebView (tiny error page, then blank). The app uses native Google Sign-In instead. Adding `https://localhost` as a JavaScript origin will not fix that. In the **same Google Cloud project** as the Web client, create an **Android** OAuth client:
+Google’s JavaScript button does not work in the Android WebView (tiny error page, then blank). The app uses native Google Sign-In instead. Adding `https://localhost` as a JavaScript origin will not fix that. Never set `server.hostname` to `zipdeck.app`.
 
-- Package name: `com.zipdeck.app`
-- SHA-1 (this machine’s debug keystore): `6E:2D:F0:66:99:01:DE:EB:89:5E:F5:85:FE:0B:1F:D2:DB:B7:AA:A5`
+In the **same Google Cloud project** as the Web client, create one **Android** OAuth client per signing SHA-1 (`com.zipdeck.app`). Do not paste those Android client IDs into the app or `.env`. The plugin still sends the **Web** client ID so `/api/auth/google` can verify the token.
 
-Do not paste the Android client ID into the app. The plugin still sends the **Web** client ID so `/api/auth/google` can verify the token. iOS will use an iOS OAuth client plus bundle ID `com.zipdeck.app` when that project exists.
+Play App Signing (required for the store, including internal testing and production) re-signs each device APK. New apps use quantum-ready hybrid signing, so Play holds **several** app-signing certs: older-Android classical, a different classical for the hybrid signature, PQC, and any **Previous** key after a key change. Google Sign-In looks up package + the SHA-1 **on the installed APK**. A missing client shows as `[16] Account reauth failed` after the account picker, with no `/api/auth/google` line.
+
+Before a **production** Play rollout (and any time a new device/track fails Google login):
+
+1. Play Console → Protected with Play → Manage Play app signing.
+2. Register an Android OAuth client for **every** App signing SHA-1 on that page (Classical / Classic variants, PQC, Previous). Ignore the upload-key block. SHA-1 is 20 colon-separated pairs, not SHA-256.
+3. Keep the debug client if you still sideload: `6E:2D:F0:66:99:01:DE:EB:89:5E:F5:85:FE:0B:1F:D2:DB:B7:AA:A5` (this machine’s debug keystore).
+4. If `[16]` still appears, pull the Play install and compare `apksigner verify --print-certs` Signer #1 certificate SHA-1 to Cloud — that fingerprint is a Play cert you skipped, not a bad AAB.
+
+`google-play.json` / `GOOGLE_PLAY_CREDENTIALS_PATH` are Play Billing only. They are not used for Google login. iOS stays one OAuth client (bundle ID `com.zipdeck.app`).
