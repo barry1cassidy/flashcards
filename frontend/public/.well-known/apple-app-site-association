@@ -1,0 +1,10 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appID": "TA5H8MHX2X.com.zipdeck.app",
+        "paths": ["*"]
+      }
+    ]
+  }
+}

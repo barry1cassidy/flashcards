@@ -282,7 +282,7 @@ Copy the AAB out of `build/` if you want a dated name in Downloads. Play rejects
 
 The iOS app is the same Vite React UI in a WebView. Keep coding in Cursor. Signed builds and the Simulator need a **Mac + Xcode** (physical or a rented cloud Mac). This Windows machine cannot compile or upload iOS. Do not add Ionic UI.
 
-Leave `frontend/capacitor.config.json` `server.hostname` **unset**. Setting it to a domain the app calls (including `zipdeck.app`) makes Capacitor serve bundled `index.html` for `/api` and login never leaves the device. iOS Associated Domains / password autofill is not set up yet.
+Leave `frontend/capacitor.config.json` `server.hostname` **unset** until native apps call `https://api.zipdeck.app`. Setting it to a domain the app still uses for `/api` makes Capacitor serve bundled `index.html` and login never leaves the device. The site hosts `https://zipdeck.app/.well-known/apple-app-site-association` (`TA5H8MHX2X.com.zipdeck.app`). Associated Domains `applinks:zipdeck.app` still has to be added in Xcode on the Mac before a TestFlight build can use it.
 
 On the Mac, clone this repo and work from `frontend`. First time only, if `ios/` is missing:
 
