@@ -240,7 +240,7 @@ The native app is the same Vite React UI in a WebView. Keep coding in Cursor; in
 
 ```bash
 cd frontend
-copy .env.android.example .env.android   # Windows; points at https://zipdeck.app
+copy .env.android.example .env.android   # Windows; points at https://api.zipdeck.app
 npm run android
 ```
 
@@ -248,7 +248,7 @@ That builds with `VITE_API_BASE`, syncs Capacitor, and opens Android Studio. Pic
 
 The API must allow Capacitor origins (included in `APP_CORS_ORIGINS`). Put the same `VITE_GOOGLE_CLIENT_ID` Web client ID in `.env.android` as the website uses.
 
-Google’s JavaScript button does not work in the Android WebView (tiny error page, then blank). The app uses native Google Sign-In instead. Adding `https://localhost` as a JavaScript origin will not fix that. Never set `server.hostname` to `zipdeck.app`.
+Google’s JavaScript button does not work in the Android WebView (tiny error page, then blank). The app uses native Google Sign-In instead. Adding `https://localhost` as a JavaScript origin will not fix that. `server.hostname` is `zipdeck.app` for password autofill. Native `VITE_API_BASE` must stay `https://api.zipdeck.app` so `/api` is not served from the bundle.
 
 In the **same Google Cloud project** as the Web client, create one **Android** OAuth client per signing SHA-1 (`com.zipdeck.app`). Do not paste those Android client IDs into the app or `.env`. The plugin still sends the **Web** client ID so `/api/auth/google` can verify the token.
 
@@ -265,13 +265,13 @@ Before a **production** Play rollout (and any time a new device/track fails Goog
 
 ### Android release build
 
-This is how we produce the signed AAB for Play **internal testing** and, later, production. Leave `frontend/capacitor.config.json` `server.hostname` **unset**. `androidScheme` stays `https` so the WebView origin is `https://localhost`. Setting `hostname` to a domain the app calls (including `zipdeck.app`) makes Capacitor serve bundled `index.html` for `/api` and login never leaves the device.
+This is how we produce the signed AAB for Play **internal testing** and, later, production. `server.hostname` is `zipdeck.app` and `androidScheme` is `https` (WebView origin `https://zipdeck.app`). `VITE_API_BASE` must be `https://api.zipdeck.app`. Pointing the API at `zipdeck.app` makes Capacitor serve bundled `index.html` for `/api` and login never leaves the device.
 
 1. Copy `frontend/.env.android.example` to gitignored `frontend/.env.android` if it is missing.
-2. Set `VITE_API_BASE=https://zipdeck.app`. Relative `/api` has no proxy on device.
+2. Set `VITE_API_BASE=https://api.zipdeck.app`. Relative `/api` has no proxy on device.
 3. Set `VITE_GOOGLE_CLIENT_ID` to the **Web** OAuth client ID (same as the website and API). Do not put an Android client ID in this file or in the app.
 4. Bump `versionCode` (integer, must increase on every Play upload) and `versionName` in `frontend/android/app/build.gradle`.
-5. From `frontend`, run `npm run cap:sync` (`build:android` then `npx cap sync android`). Confirm `frontend/android/app/src/main/assets/capacitor.config.json` still has no `hostname` key before bundling.
+5. From `frontend`, run `npm run cap:sync` (`build:android` then `npx cap sync android`). Confirm `frontend/android/app/src/main/assets/capacitor.config.json` has `"hostname": "zipdeck.app"` and that the JS bundle calls `https://api.zipdeck.app`, not `https://zipdeck.app/api`.
 6. Release signing reads gitignored `frontend/android/keystore.properties`. The keys are `storeFile`, `storePassword`, `keyAlias`, and `keyPassword`. The upload keystore file named by `storeFile` lives next to that properties file and is also gitignored. Do not commit either file.
 7. From `frontend/android`, run `.\gradlew.bat bundleRelease`. The AAB is `frontend/android/app/build/outputs/bundle/release/app-release.aab`.
 8. Play Console → Test and release → Internal testing → create a release, upload **only** that AAB, then Review and Start rollout. Production uses the same AAB steps on the Production track once the store listing is ready.
@@ -282,7 +282,7 @@ Copy the AAB out of `build/` if you want a dated name in Downloads. Play rejects
 
 The iOS app is the same Vite React UI in a WebView. Keep coding in Cursor. Signed builds and the Simulator need a **Mac + Xcode** (physical or a rented cloud Mac). This Windows machine cannot compile or upload iOS. Do not add Ionic UI.
 
-Leave `frontend/capacitor.config.json` `server.hostname` **unset** until native apps call `https://api.zipdeck.app`. Setting it to a domain the app still uses for `/api` makes Capacitor serve bundled `index.html` and login never leaves the device. The site hosts `https://zipdeck.app/.well-known/apple-app-site-association` (`TA5H8MHX2X.com.zipdeck.app`). Associated Domains `applinks:zipdeck.app` still has to be added in Xcode on the Mac before a TestFlight build can use it.
+`server.hostname` is `zipdeck.app` for password autofill. Native builds must use `VITE_API_BASE=https://api.zipdeck.app`. Setting hostname to the API host makes Capacitor serve bundled `index.html` and login never leaves the device. The site hosts `https://zipdeck.app/.well-known/apple-app-site-association` (`TA5H8MHX2X.com.zipdeck.app`). Associated Domains in Xcode must include `applinks:zipdeck.app`.
 
 On the Mac, clone this repo and work from `frontend`. First time only, if `ios/` is missing:
 
@@ -295,7 +295,7 @@ npx cap add ios
 
 Reuse the Android Vite env (there is no separate `.env.ios`). Copy `frontend/.env.android.example` to gitignored `frontend/.env.android`:
 
-1. `VITE_API_BASE=https://zipdeck.app` — relative `/api` has no proxy on device.
+1. `VITE_API_BASE=https://api.zipdeck.app` — relative `/api` has no proxy on device. Do not use `https://zipdeck.app`.
 2. `VITE_GOOGLE_CLIENT_ID` — the **Web** OAuth client ID (same as the website and API). Do not put the iOS client ID in this file, in `VITE_GOOGLE_CLIENT_ID`, or in git.
 
 Then:
