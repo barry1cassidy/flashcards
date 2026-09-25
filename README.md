@@ -187,6 +187,16 @@ sudo certbot certonly --standalone -d zipdeck.app -d www.zipdeck.app
 docker compose -f docker-compose.prod.yml up -d --build
 ```
 
+To add `api.zipdeck.app` to the **same** certificate (one renewal, required before native apps call that host):
+
+```bash
+nslookup api.zipdeck.app
+sudo certbot certonly --webroot -w /var/www/certbot --expand \
+  -d zipdeck.app -d www.zipdeck.app -d api.zipdeck.app
+```
+
+`--expand` must list every name already on the cert plus the new one. Then rebuild `web` so Nginx loads the `api.zipdeck.app` server block, and recreate `api` so CORS includes `capacitor://zipdeck.app`.
+
 Certs are read from `/etc/letsencrypt/live/zipdeck.app/`. After Nginx is serving HTTPS, switch Certbot renewals from standalone to webroot so the timer does not fight Nginx for port 80. In `/etc/letsencrypt/renewal/zipdeck.app.conf` set:
 
 ```
@@ -252,3 +262,73 @@ Before a **production** Play rollout (and any time a new device/track fails Goog
 4. If `[16]` still appears, pull the Play install and compare `apksigner verify --print-certs` Signer #1 certificate SHA-1 to Cloud — that fingerprint is a Play cert you skipped, not a bad AAB.
 
 `google-play.json` / `GOOGLE_PLAY_CREDENTIALS_PATH` are Play Billing only. They are not used for Google login. iOS stays one OAuth client (bundle ID `com.zipdeck.app`).
+
+### Android release build
+
+This is how we produce the signed AAB for Play **internal testing** and, later, production. Leave `frontend/capacitor.config.json` `server.hostname` **unset**. `androidScheme` stays `https` so the WebView origin is `https://localhost`. Setting `hostname` to a domain the app calls (including `zipdeck.app`) makes Capacitor serve bundled `index.html` for `/api` and login never leaves the device.
+
+1. Copy `frontend/.env.android.example` to gitignored `frontend/.env.android` if it is missing.
+2. Set `VITE_API_BASE=https://zipdeck.app`. Relative `/api` has no proxy on device.
+3. Set `VITE_GOOGLE_CLIENT_ID` to the **Web** OAuth client ID (same as the website and API). Do not put an Android client ID in this file or in the app.
+4. Bump `versionCode` (integer, must increase on every Play upload) and `versionName` in `frontend/android/app/build.gradle`.
+5. From `frontend`, run `npm run cap:sync` (`build:android` then `npx cap sync android`). Confirm `frontend/android/app/src/main/assets/capacitor.config.json` still has no `hostname` key before bundling.
+6. Release signing reads gitignored `frontend/android/keystore.properties`. The keys are `storeFile`, `storePassword`, `keyAlias`, and `keyPassword`. The upload keystore file named by `storeFile` lives next to that properties file and is also gitignored. Do not commit either file.
+7. From `frontend/android`, run `.\gradlew.bat bundleRelease`. The AAB is `frontend/android/app/build/outputs/bundle/release/app-release.aab`.
+8. Play Console → Test and release → Internal testing → create a release, upload **only** that AAB, then Review and Start rollout. Production uses the same AAB steps on the Production track once the store listing is ready.
+
+Copy the AAB out of `build/` if you want a dated name in Downloads. Play rejects a reuse of the same `versionCode`.
+
+## iOS (Capacitor)
+
+The iOS app is the same Vite React UI in a WebView. Keep coding in Cursor. Signed builds and the Simulator need a **Mac + Xcode** (physical or a rented cloud Mac). This Windows machine cannot compile or upload iOS. Do not add Ionic UI.
+
+Leave `frontend/capacitor.config.json` `server.hostname` **unset**. Setting it to a domain the app calls (including `zipdeck.app`) makes Capacitor serve bundled `index.html` for `/api` and login never leaves the device. iOS Associated Domains / password autofill is not set up yet.
+
+On the Mac, clone this repo and work from `frontend`. First time only, if `ios/` is missing:
+
+```bash
+cd frontend
+npm ci
+npm install @capacitor/ios
+npx cap add ios
+```
+
+Reuse the Android Vite env (there is no separate `.env.ios`). Copy `frontend/.env.android.example` to gitignored `frontend/.env.android`:
+
+1. `VITE_API_BASE=https://zipdeck.app` — relative `/api` has no proxy on device.
+2. `VITE_GOOGLE_CLIENT_ID` — the **Web** OAuth client ID (same as the website and API). Do not put the iOS client ID in this file, in `VITE_GOOGLE_CLIENT_ID`, or in git.
+
+Then:
+
+```bash
+cd frontend
+npm run build:android
+npx cap sync ios
+npx cap open ios
+```
+
+`build:android` is the production-API Vite mode; it is what we sync into iOS as well. The API must allow Capacitor origins (included in `APP_CORS_ORIGINS`).
+
+Google’s JavaScript button does not work in the iOS WebView (`capacitor://localhost`). The app uses native Google Sign-In (`@capawesome/capacitor-google-sign-in`). Do not add `capacitor://localhost` or any `capacitor://` URL as a Google JavaScript origin or redirect URI.
+
+In the **same Google Cloud project** as the Web client, create one **iOS** OAuth client with bundle ID `com.zipdeck.app`. The plugin still sends the **Web** client ID so `/api/auth/google` can verify the token. Configure the iOS client only in `Info.plist` on the Mac (Xcode **App** target → **Info**):
+
+- `GIDClientID` — the iOS OAuth client ID (`….apps.googleusercontent.com`).
+- `CFBundleURLTypes` → `CFBundleURLSchemes` — the **reversed** iOS URL scheme Google shows on that client (`com.googleusercontent.apps.…`). Role can stay **Editor**.
+- `ITSAppUsesNonExemptEncryption` — Boolean **NO** (standard HTTPS only; avoids a TestFlight export-compliance prompt).
+
+Do not paste those values into git or chat.
+
+### iOS TestFlight build
+
+This is how we produce the signed archive for **internal** TestFlight. App name Zipdeck, bundle ID `com.zipdeck.app`. StoreKit / App Store IAP is not wired yet; the native Pro page must not show Stripe or “subscribe on the website.”
+
+1. On a browser: App Store Connect → register App ID `com.zipdeck.app` if needed (Certificates, Identifiers & Profiles → Identifiers), then Apps → New App → iOS, name Zipdeck, SKU `zipdeck`.
+2. On the Mac: `git pull`, then from `frontend` run `npm ci`, `npm run build:android`, `npx cap sync ios`. Confirm `GIDClientID` and the URL scheme survived the sync (`cap sync` does not overwrite `Info.plist`).
+3. Xcode → **App** target (under TARGETS) → **Signing & Capabilities**: Automatically manage signing, your Apple Developer team, bundle identifier `com.zipdeck.app`. Do not commit team IDs, certificates, or provisioning profiles.
+4. Destination: **Any iOS Device (arm64)** (Archive stays disabled while a simulator is selected). Product → Archive.
+5. Organizer → **Archives** → Distribute App → **App Store Connect** → Upload. Skip Xcode Cloud “Get Started” until a manual upload has worked. Newer Xcode may skip the options/signing sheets when automatic signing is already on.
+6. App Store Connect → Zipdeck → TestFlight. Wait until the build is **Ready to Test**. Create an **Internal Testing** group (Enable Automatic Distribution is fine), add yourself, attach the build. Internal testers skip Beta App Review.
+7. On the test iPhone, sign into the App Store / TestFlight with the **same Apple ID** that received the invite, then install from the email’s View in TestFlight link or from the TestFlight app.
+
+A USB phone cannot attach to a cloud Mac. Simulator Google Sign-In is unreliable; TestFlight on a device is the real check. Digital goods on iOS must use StoreKit later — do not add a website subscribe CTA in the iOS app.
