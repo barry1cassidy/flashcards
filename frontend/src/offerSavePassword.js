@@ -1,6 +1,24 @@
+import { Capacitor } from '@capacitor/core'
+import { SavePassword } from '@capgo/capacitor-autofill-save-password'
+
 export async function offerSavePassword(email, password) {
   const id = String(email || '').trim()
-  if (!id || !password || typeof navigator === 'undefined' || !navigator.credentials?.store) {
+  if (!id || !password) {
+    return
+  }
+  if (Capacitor.getPlatform() === 'ios') {
+    try {
+      await SavePassword.promptDialog({
+        username: id,
+        password,
+        url: 'zipdeck.app',
+      })
+    } catch {
+      // User dismissed the sheet, or Keychain is unavailable.
+    }
+    return
+  }
+  if (typeof navigator === 'undefined' || !navigator.credentials?.store) {
     return
   }
   try {

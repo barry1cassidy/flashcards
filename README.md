@@ -282,7 +282,7 @@ Copy the AAB out of `build/` if you want a dated name in Downloads. Play rejects
 
 The iOS app is the same Vite React UI in a WebView. Keep coding in Cursor. Signed builds and the Simulator need a **Mac + Xcode** (physical or a rented cloud Mac). This Windows machine cannot compile or upload iOS. Do not add Ionic UI.
 
-`server.hostname` is `zipdeck.app` for password autofill. Native builds must use `VITE_API_BASE=https://api.zipdeck.app`. Setting hostname to the API host makes Capacitor serve bundled `index.html` and login never leaves the device. The site hosts `https://zipdeck.app/.well-known/apple-app-site-association` (`TA5H8MHX2X.com.zipdeck.app`). Associated Domains in Xcode must include `applinks:zipdeck.app`.
+`server.hostname` is `zipdeck.app` for password autofill. Native builds must use `VITE_API_BASE=https://api.zipdeck.app`. Setting hostname to the API host makes Capacitor serve bundled `index.html` and login never leaves the device. The site hosts `https://zipdeck.app/.well-known/apple-app-site-association` (`TA5H8MHX2X.com.zipdeck.app`). Associated Domains in Xcode must include `applinks:zipdeck.app` and `webcredentials:zipdeck.app`. After email/password login, iOS uses `@capgo/capacitor-autofill-save-password` to show the Keychain save sheet (a `fetch()` login never triggers it on its own).
 
 On the Mac, clone this repo and work from `frontend`. First time only, if `ios/` is missing:
 

@@ -6,5 +6,8 @@
         "paths": ["*"]
       }
     ]
+  },
+  "webcredentials": {
+    "apps": ["TA5H8MHX2X.com.zipdeck.app"]
   }
 }
