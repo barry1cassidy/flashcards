@@ -263,6 +263,24 @@ Before a **production** Play rollout (and any time a new device/track fails Goog
 
 `google-play.json` / `GOOGLE_PLAY_CREDENTIALS_PATH` are Play Billing only. They are not used for Google login. iOS stays one OAuth client (bundle ID `com.zipdeck.app`).
 
+### Password autofill
+
+The website and both apps share passwords saved for **zipdeck.app**. That needs a WebView origin of `zipdeck.app` and an API on a **different** host.
+
+- **Android** Digital Asset Links: `https://zipdeck.app/.well-known/assetlinks.json` (`get_login_creds`, package `com.zipdeck.app`). Include a SHA-256 for **every** Play app-signing cert, especially **Download certificates → `deployment_cert.der`** (that is the cert on many phones). Classical / PQC SHA-256s alone are not enough. After changing the file, rebuild `web` and confirm the URL returns JSON, not `index.html`.
+- **iOS** AASA: `https://zipdeck.app/.well-known/apple-app-site-association` must be JSON (`applinks` + `webcredentials`, app `TA5H8MHX2X.com.zipdeck.app`). Nginx has an explicit location so `try_files` cannot serve the React app. Apple’s CDN can cache a bad file for up to a week.
+- **Xcode** Associated Domains: `applinks:zipdeck.app` and `webcredentials:zipdeck.app`. Enable Associated Domains on the App ID at [developer.apple.com/account](https://developer.apple.com/account) (not App Store Connect).
+- After email/password login, iOS must call `@capgo/capacitor-autofill-save-password` (`offerSavePassword.js`). Android offers save from the form fields once the origin is `zipdeck.app`. Google Sign-In users never see a password sheet.
+
+Check after a `web` deploy:
+
+```bash
+curl -sI https://zipdeck.app/.well-known/assetlinks.json
+curl -sI https://zipdeck.app/.well-known/apple-app-site-association
+```
+
+Both must be `200` and `application/json`, not `text/html`.
+
 ### Android release build
 
 This is how we produce the signed AAB for Play **internal testing** and, later, production. `server.hostname` is `zipdeck.app` and `androidScheme` is `https` (WebView origin `https://zipdeck.app`). `VITE_API_BASE` must be `https://api.zipdeck.app`. Pointing the API at `zipdeck.app` makes Capacitor serve bundled `index.html` for `/api` and login never leaves the device.
@@ -325,7 +343,7 @@ This is how we produce the signed archive for **internal** TestFlight. App name 
 
 1. On a browser: App Store Connect → register App ID `com.zipdeck.app` if needed (Certificates, Identifiers & Profiles → Identifiers), then Apps → New App → iOS, name Zipdeck, SKU `zipdeck`.
 2. On the Mac: `git pull`, then from `frontend` run `npm ci`, `npm run build:android`, `npx cap sync ios`. Confirm `GIDClientID` and the URL scheme survived the sync (`cap sync` does not overwrite `Info.plist`).
-3. Xcode → **App** target (under TARGETS) → **Signing & Capabilities**: Automatically manage signing, your Apple Developer team, bundle identifier `com.zipdeck.app`. Do not commit team IDs, certificates, or provisioning profiles.
+3. Xcode → **App** target (under TARGETS) → **Signing & Capabilities**: Automatically manage signing, your Apple Developer team, bundle identifier `com.zipdeck.app`. Associated Domains must list `applinks:zipdeck.app` and `webcredentials:zipdeck.app`. Do not commit team IDs, certificates, or provisioning profiles.
 4. Destination: **Any iOS Device (arm64)** (Archive stays disabled while a simulator is selected). Product → Archive.
 5. Organizer → **Archives** → Distribute App → **App Store Connect** → Upload. Skip Xcode Cloud “Get Started” until a manual upload has worked. Newer Xcode may skip the options/signing sheets when automatic signing is already on.
 6. App Store Connect → Zipdeck → TestFlight. Wait until the build is **Ready to Test**. Create an **Internal Testing** group (Enable Automatic Distribution is fine), add yourself, attach the build. Internal testers skip Beta App Review.
