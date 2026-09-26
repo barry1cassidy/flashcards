@@ -53,6 +53,7 @@ app:
   billing:
     stub-enabled: ${APP_BILLING_STUB_ENABLED:true}
     public-checkout: ${APP_BILLING_PUBLIC_CHECKOUT:false}
+    allow-emails: ${APP_BILLING_ALLOW_EMAILS:barry1cassidy@gmail.com,barry1cassidy@hotmail.com,barry1cassidy@yahoo.com,*@zipdeck.app}
     public-app-url: ${APP_PUBLIC_URL:http://localhost:5173}
     monthly-price-display: "$7.99"
     yearly-price-display: "$39.99"
@@ -69,6 +70,11 @@ app:
       product-monthly: ${GOOGLE_PLAY_PRODUCT_MONTHLY:pro_monthly}
       product-yearly: ${GOOGLE_PLAY_PRODUCT_YEARLY:pro_yearly}
       product-addon: ${GOOGLE_PLAY_PRODUCT_ADDON:credits_addon}
+    apple:
+      bundle-id: ${APPLE_BUNDLE_ID:com.zipdeck.app}
+      product-monthly: ${APPLE_PRODUCT_MONTHLY:pro_monthly}
+      product-yearly: ${APPLE_PRODUCT_YEARLY:pro_yearly}
+      product-addon: ${APPLE_PRODUCT_ADDON:credits_addon}
   agent:
     api-key: ${AGENT_API_KEY:}
     base-url: ${AGENT_BASE_URL:https://generativelanguage.googleapis.com/v1beta/openai}

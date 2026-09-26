@@ -4,6 +4,7 @@ import { api } from './api'
 const completing = new Map()
 
 const PlayBilling = registerPlugin('PlayBilling')
+const AppleBilling = registerPlugin('AppleBilling')
 
 export function isNativeApp() {
   return Capacitor.isNativePlatform()
@@ -11,6 +12,10 @@ export function isNativeApp() {
 
 export function isAndroidApp() {
   return Capacitor.getPlatform() === 'android'
+}
+
+export function isIosApp() {
+  return Capacitor.getPlatform() === 'ios'
 }
 
 export function loadBillingStatus() {
@@ -103,4 +108,54 @@ function playProductType(billing, productId) {
     return 'inapp'
   }
   return 'subs'
+}
+
+export async function startApplePurchase(productId, accountId) {
+  const native = await AppleBilling.purchase({
+    productId,
+    accountId: accountId || '',
+  })
+  if (native?.canceled) {
+    return null
+  }
+  return submitAppleTransaction(native)
+}
+
+export async function restoreApplePurchases(accountId) {
+  return submitApplePurchases(await AppleBilling.restore({ accountId: accountId || '' }))
+}
+
+export async function syncApplePurchases(accountId) {
+  return submitApplePurchases(await AppleBilling.entitlements({ accountId: accountId || '' }))
+}
+
+async function submitApplePurchases(result) {
+  const purchases = Array.isArray(result?.purchases) ? result.purchases : []
+  let latest = null
+  for (const purchase of purchases) {
+    const updated = await submitAppleTransaction(purchase)
+    if (updated) {
+      latest = updated
+    }
+  }
+  return latest
+}
+
+async function submitAppleTransaction(native) {
+  if (!native?.jwsRepresentation || !native?.productId) {
+    throw new Error('Payment failed')
+  }
+  const updated = await api('/api/billing/apple/purchase', {
+    method: 'POST',
+    skipSaving: true,
+    body: JSON.stringify({
+      productId: native.productId,
+      signedTransaction: native.jwsRepresentation,
+      transactionId: native.transactionId || '',
+    }),
+  })
+  if (native.transactionId) {
+    await AppleBilling.finish({ transactionId: native.transactionId })
+  }
+  return updated
 }

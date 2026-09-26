@@ -90,7 +90,8 @@ public class AgentService {
                 properties.monthlyCredits(),
                 properties.addonCredits(),
                 billingProperties.addonPrice(),
-                billingProperties.addonCheckoutEnabled() && billingProperties.paidCheckoutAllowed(user.isAdmin()));
+                billingProperties.addonCheckoutEnabled()
+                        && billingProperties.paidCheckoutAllowed(user.isAdmin(), user.getEmail()));
     }
 
     public AgentJobResponse startCreateDeck(UUID userId, AgentCreateRequest request, MultipartFile file) {

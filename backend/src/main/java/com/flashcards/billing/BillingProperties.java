@@ -1,5 +1,7 @@
 package com.flashcards.billing;
 
+import java.util.Locale;
+
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties(prefix = "app.billing")
@@ -11,7 +13,9 @@ public record BillingProperties(
         String yearlyPriceDisplay,
         String addonPriceDisplay,
         Stripe stripe,
-        Google google) {
+        Google google,
+        Apple apple,
+        String allowEmails) {
 
     public record Stripe(
             String secretKey, String webhookSecret, String priceMonthly, String priceYearly, String priceAddon) {
@@ -35,6 +39,17 @@ public record BillingProperties(
                     && notBlank(credentialsPath)
                     && notBlank(productMonthly)
                     && notBlank(productYearly);
+        }
+
+        boolean addonEnabled() {
+            return enabled() && notBlank(productAddon);
+        }
+    }
+
+    public record Apple(
+            String bundleId, String productMonthly, String productYearly, String productAddon) {
+        boolean enabled() {
+            return notBlank(bundleId) && notBlank(productMonthly) && notBlank(productYearly);
         }
 
         boolean addonEnabled() {
@@ -67,8 +82,44 @@ public record BillingProperties(
         return google != null && google.addonEnabled();
     }
 
+    public boolean appleIapEnabled() {
+        return apple != null && apple.enabled();
+    }
+
+    public boolean appleAddonEnabled() {
+        return apple != null && apple.addonEnabled();
+    }
+
+    public String appleBundleId() {
+        return apple == null || !notBlank(apple.bundleId()) ? "" : apple.bundleId().trim();
+    }
+
     public boolean paidCheckoutAllowed(boolean admin) {
-        return publicCheckout || admin;
+        return paidCheckoutAllowed(admin, null);
+    }
+
+    public boolean paidCheckoutAllowed(boolean admin, String email) {
+        return publicCheckout || admin || emailAllowed(email);
+    }
+
+    public boolean emailAllowed(String email) {
+        if (!notBlank(email) || !notBlank(allowEmails)) {
+            return false;
+        }
+        String normalized = email.trim().toLowerCase(Locale.ROOT);
+        for (String raw : allowEmails.split(",")) {
+            String entry = raw.trim().toLowerCase(Locale.ROOT);
+            if (entry.isEmpty()) {
+                continue;
+            }
+            if (entry.startsWith("*@") && normalized.endsWith(entry.substring(1))) {
+                return true;
+            }
+            if (normalized.equals(entry)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean stubAllowed(boolean admin) {
@@ -124,6 +175,22 @@ public record BillingProperties(
             return BillingPlan.ADDON;
         }
         if (productId.equals(google.productMonthly())) {
+            return BillingPlan.MONTHLY;
+        }
+        throw new IllegalArgumentException("Invalid billing plan");
+    }
+
+    public BillingPlan planForAppleProduct(String productId) {
+        if (apple == null || !notBlank(productId)) {
+            throw new IllegalArgumentException("Invalid billing plan");
+        }
+        if (productId.equals(apple.productYearly())) {
+            return BillingPlan.YEARLY;
+        }
+        if (productId.equals(apple.productAddon())) {
+            return BillingPlan.ADDON;
+        }
+        if (productId.equals(apple.productMonthly())) {
             return BillingPlan.MONTHLY;
         }
         throw new IllegalArgumentException("Invalid billing plan");

@@ -66,6 +66,18 @@ public class BillingController {
                 request.orderId());
     }
 
+    @PostMapping("/apple/purchase")
+    public UserResponse applePurchase(
+            Authentication authentication, @RequestBody(required = false) ApplePurchaseRequest request) {
+        if (request == null) {
+            throw new ApiException(HttpStatus.BAD_REQUEST, "Validation failed");
+        }
+        return billingService.completeApplePurchase(
+                AuthSupport.requireUser(authentication).id(),
+                request.productId(),
+                request.signedTransaction());
+    }
+
     @PostMapping("/stripe/webhook")
     public void stripeWebhook(
             @RequestHeader(value = "Stripe-Signature", required = false) String signature,

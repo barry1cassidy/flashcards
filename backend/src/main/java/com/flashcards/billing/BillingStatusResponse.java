@@ -25,5 +25,11 @@ public record BillingStatusResponse(
         boolean googleAddonEnabled,
         String googleProductMonthly,
         String googleProductYearly,
-        String googleProductAddon) {
+        String googleProductAddon,
+        boolean appleEnabled,
+        boolean appleAddonEnabled,
+        String appleProductMonthly,
+        String appleProductYearly,
+        String appleProductAddon,
+        boolean checkoutAllowed) {
 }

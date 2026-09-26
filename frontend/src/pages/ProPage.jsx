@@ -3,7 +3,20 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '../AuthContext'
 import { isAdmin } from '../admin'
-import { completeCheckout, isAndroidApp, isNativeApp, loadBillingStatus, openBillingPortal, restorePlayPurchases, startCheckout, startPlayPurchase } from '../billing'
+import {
+  completeCheckout,
+  isAndroidApp,
+  isIosApp,
+  isNativeApp,
+  loadBillingStatus,
+  openBillingPortal,
+  restoreApplePurchases,
+  restorePlayPurchases,
+  startApplePurchase,
+  startCheckout,
+  startPlayPurchase,
+  syncApplePurchases,
+} from '../billing'
 import { isProLicensed } from '../pro'
 import { translateError } from '../i18n/errors'
 
@@ -47,6 +60,7 @@ function ProSection({ user, onError, onStub, refresh }) {
   const pro = isProLicensed(user)
   const native = isNativeApp()
   const android = isAndroidApp()
+  const ios = isIosApp()
   const admin = isAdmin(user)
 
   useEffect(() => {
@@ -66,6 +80,30 @@ function ProSection({ user, onError, onStub, refresh }) {
       cancelled = true
     }
   }, [user?.proLicensed, user?.proExpiresAt, onError])
+
+  useEffect(() => {
+    if (!ios || !user?.id) {
+      return
+    }
+    let cancelled = false
+    syncApplePurchases(user.id)
+      .then(async (updated) => {
+        if (cancelled || !updated) {
+          return
+        }
+        await refresh()
+        const status = await loadBillingStatus()
+        if (!cancelled) {
+          setBilling(status)
+        }
+      })
+      .catch(() => {
+        // Empty until a sandbox or App Store account has a purchase.
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [ios, user?.id, refresh])
 
   useEffect(() => {
     const billingParam = searchParams.get('billing')
@@ -129,12 +167,15 @@ function ProSection({ user, onError, onStub, refresh }) {
   const periodEnd = formatDate(billing?.currentPeriodEnd || user?.proExpiresAt, i18n.language)
   const stripeOn = Boolean(billing?.stripeEnabled)
   const playOn = Boolean(billing?.googlePlayEnabled)
-  const canPay = Boolean(billing?.publicCheckout) || admin
+  const appleOn = Boolean(billing?.appleEnabled)
+  const canPay = Boolean(billing?.checkoutAllowed)
   const showSubscribe = stripeOn && !native && !pro && canPay
-  const showPlaySubscribe = playOn && android && !pro
-  const showComingSoon = !pro && !showSubscribe && !showPlaySubscribe
+  const showPlaySubscribe = playOn && android && !pro && canPay
+  const showAppleSubscribe = appleOn && ios && !pro && canPay
+  const showComingSoon = !pro && !showSubscribe && !showPlaySubscribe && !showAppleSubscribe
   const showManage = stripeOn && !native && pro && billing?.provider === 'STRIPE'
   const showPlayManage = playOn && android && pro && billing?.provider === 'GOOGLE'
+  const showAppleManage = appleOn && ios && pro && billing?.provider === 'APPLE'
   const planLabel = billing?.plan === 'YEARLY' ? t('pro.planYearly') : billing?.plan === 'MONTHLY' ? t('pro.planMonthly') : ''
 
   async function finishPlay(updated) {
@@ -216,6 +257,42 @@ function ProSection({ user, onError, onStub, refresh }) {
               </button>
             </div>
           ) : null}
+          {showAppleSubscribe ? (
+            <div className="billing-actions">
+              <button
+                className="btn primary"
+                type="button"
+                disabled={busy}
+                onClick={() =>
+                  runBilling(() =>
+                    startApplePurchase(billing.appleProductMonthly, user?.id).then(finishPlay)
+                  )
+                }
+              >
+                {t('settings.proMonthly', { price: monthly })}
+              </button>
+              <button
+                className="btn primary"
+                type="button"
+                disabled={busy}
+                onClick={() =>
+                  runBilling(() =>
+                    startApplePurchase(billing.appleProductYearly, user?.id).then(finishPlay)
+                  )
+                }
+              >
+                {t('settings.proYearly', { price: yearly })}
+              </button>
+              <button
+                className="btn"
+                type="button"
+                disabled={busy}
+                onClick={() => runBilling(() => restoreApplePurchases(user?.id).then(finishPlay))}
+              >
+                {t('settings.proRestore')}
+              </button>
+            </div>
+          ) : null}
           {stubButton}
         </section>
       ) : (
@@ -243,6 +320,21 @@ function ProSection({ user, onError, onStub, refresh }) {
                   {t('settings.proManage')}
                 </a>
                 <button className="btn" type="button" disabled={busy} onClick={() => runBilling(() => restorePlayPurchases(user?.id).then(finishPlay))}>
+                  {t('settings.proRestore')}
+                </button>
+              </div>
+            ) : null}
+            {showAppleManage ? (
+              <div className="billing-actions">
+                <a className="btn" href="https://apps.apple.com/account/subscriptions">
+                  {t('settings.proManage')}
+                </a>
+                <button
+                  className="btn"
+                  type="button"
+                  disabled={busy}
+                  onClick={() => runBilling(() => restoreApplePurchases(user?.id).then(finishPlay))}
+                >
                   {t('settings.proRestore')}
                 </button>
               </div>
@@ -293,7 +385,7 @@ function ProSection({ user, onError, onStub, refresh }) {
                 </button>
               </div>
             ) : null}
-            {billing?.googleAddonEnabled && android ? (
+            {billing?.googleAddonEnabled && android && canPay ? (
               <div className="billing-actions">
                 <button
                   className="btn"
@@ -302,6 +394,25 @@ function ProSection({ user, onError, onStub, refresh }) {
                   onClick={() =>
                     runBilling(() =>
                       startPlayPurchase(billing, billing.googleProductAddon, user?.id).then(finishPlay)
+                    )
+                  }
+                >
+                  {t('settings.buyCredits', {
+                    count: billing.addonPackCredits,
+                    price: billing.addonPrice,
+                  })}
+                </button>
+              </div>
+            ) : null}
+            {billing?.appleAddonEnabled && ios && canPay ? (
+              <div className="billing-actions">
+                <button
+                  className="btn"
+                  type="button"
+                  disabled={busy}
+                  onClick={() =>
+                    runBilling(() =>
+                      startApplePurchase(billing.appleProductAddon, user?.id).then(finishPlay)
                     )
                   }
                 >

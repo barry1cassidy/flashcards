@@ -48,6 +48,8 @@ class BillingServiceTest {
     private AgentCreditService creditService;
     @Mock
     private PlayBillingGateway playBillingGateway;
+    @Mock
+    private AppleBillingGateway appleBillingGateway;
 
     private final List<UserSubscription> rows = new ArrayList<>();
     private BillingService billingService;
@@ -63,7 +65,9 @@ class BillingServiceTest {
                 "$39.99",
                 "$2.99",
                 new BillingProperties.Stripe("sk_test", "whsec", "price_month", "price_year", "price_addon"),
-                googleConfig());
+                googleConfig(),
+                appleConfig(),
+                "");
         AgentProperties agentProperties = new AgentProperties("", "", "", 10, 10, 40, 90, 0, 0, 0, 0);
         billingService = new BillingService(
                 properties,
@@ -72,7 +76,8 @@ class BillingServiceTest {
                 subscriptionRepository,
                 creditService,
                 agentProperties,
-                playBillingGateway);
+                playBillingGateway,
+                appleBillingGateway);
         user = new User();
         user.setId(USER_ID);
         user.setEmail("barry@example.com");
@@ -106,11 +111,40 @@ class BillingServiceTest {
         });
         lenient().when(playBillingGateway.enabled()).thenReturn(false);
         lenient().when(playBillingGateway.addonEnabled()).thenReturn(false);
+        lenient().when(appleBillingGateway.enabled()).thenReturn(false);
+        lenient().when(appleBillingGateway.addonEnabled()).thenReturn(false);
     }
 
     private static BillingProperties.Google googleConfig() {
         return new BillingProperties.Google(
                 "com.zipdeck.app", "google-play.json", "pro_monthly", "pro_yearly", "credits_addon");
+    }
+
+    private static BillingProperties.Apple appleConfig() {
+        return new BillingProperties.Apple("com.zipdeck.app", "pro_monthly", "pro_yearly", "credits_addon");
+    }
+
+    private BillingService closedBilling(String allowEmails) {
+        BillingProperties closed = new BillingProperties(
+                false,
+                false,
+                "http://localhost:5173",
+                "$7.99",
+                "$39.99",
+                "$2.99",
+                new BillingProperties.Stripe("sk_test", "whsec", "price_month", "price_year", "price_addon"),
+                googleConfig(),
+                appleConfig(),
+                allowEmails);
+        return new BillingService(
+                closed,
+                stripeGateway,
+                userRepository,
+                subscriptionRepository,
+                creditService,
+                new AgentProperties("", "", "", 10, 10, 40, 90, 0, 0, 0, 0),
+                playBillingGateway,
+                appleBillingGateway);
     }
 
     @Test
@@ -198,7 +232,9 @@ class BillingServiceTest {
                 "$39.99",
                 "$2.99",
                 new BillingProperties.Stripe("sk_test", "whsec", "price_month", "price_year", "price_addon"),
-                googleConfig());
+                googleConfig(),
+                appleConfig(),
+                "");
         BillingService closedBilling = new BillingService(
                 closed,
                 stripeGateway,
@@ -206,7 +242,8 @@ class BillingServiceTest {
                 subscriptionRepository,
                 creditService,
                 new AgentProperties("", "", "", 10, 10, 40, 90, 0, 0, 0, 0),
-                playBillingGateway);
+                playBillingGateway,
+                appleBillingGateway);
         when(userRepository.findById(USER_ID)).thenReturn(Optional.of(user));
 
         ApiException ex = assertThrows(
@@ -214,6 +251,37 @@ class BillingServiceTest {
         assertEquals(HttpStatus.SERVICE_UNAVAILABLE, ex.getStatus());
         assertEquals("Billing is not configured", ex.getMessage());
         verify(stripeGateway, never()).createCheckout(any(), any(), any(), any(), any(), any(), anyBoolean());
+    }
+
+    @Test
+    void checkoutAllowedForAllowlistedEmailWhenPublicCheckoutIsOff() {
+        user.setEmail("barry1cassidy@gmail.com");
+        BillingService testers = closedBilling("barry1cassidy@gmail.com,*@zipdeck.app");
+        when(userRepository.findById(USER_ID)).thenReturn(Optional.of(user));
+        when(userRepository.save(user)).thenReturn(user);
+        when(stripeGateway.createCustomer(any(), any(), any())).thenReturn("cus_test");
+        when(stripeGateway.createCheckout(any(), any(), any(), any(), any(), any(), anyBoolean()))
+                .thenReturn(new StripeCheckoutSession(
+                        "cs_test", "https://checkout.example/session", "cus_test", null, USER_ID.toString(), "unpaid", Map.of()));
+
+        CheckoutResponse response = testers.createCheckout(USER_ID, BillingPlan.MONTHLY, "/pro");
+
+        assertEquals("https://checkout.example/session", response.url());
+        BillingStatusResponse status = testers.status(USER_ID);
+        assertTrue(status.checkoutAllowed());
+        assertFalse(status.publicCheckout());
+    }
+
+    @Test
+    void googlePurchaseRejectedWhenEmailIsNotAllowlisted() {
+        BillingService closed = closedBilling("");
+        when(userRepository.findById(USER_ID)).thenReturn(Optional.of(user));
+        when(playBillingGateway.enabled()).thenReturn(true);
+
+        ApiException ex = assertThrows(
+                ApiException.class, () -> closed.completeGooglePurchase(USER_ID, "pro_monthly", "token-1", "GPA.123"));
+        assertEquals(HttpStatus.SERVICE_UNAVAILABLE, ex.getStatus());
+        verify(playBillingGateway, never()).verifySubscription(any(), any());
     }
 
     @Test
@@ -335,6 +403,78 @@ class BillingServiceTest {
 
         verify(creditService).grantAddonPurchase(USER_ID, "token-addon");
         verify(playBillingGateway).acknowledgeProduct("credits_addon", "token-addon");
+        assertTrue(rows.isEmpty());
+    }
+
+    @Test
+    void appleMonthlyPurchaseGrantsPro() {
+        when(userRepository.findById(USER_ID)).thenReturn(Optional.of(user));
+        when(userRepository.save(user)).thenReturn(user);
+        when(appleBillingGateway.enabled()).thenReturn(true);
+        Instant end = Instant.now().plusSeconds(60 * 60 * 24 * 30);
+        when(appleBillingGateway.verify("signed-jws"))
+                .thenReturn(new ApplePurchaseRecord(
+                        "pro_monthly",
+                        "orig-1",
+                        "txn-1",
+                        USER_ID.toString(),
+                        true,
+                        true,
+                        end,
+                        false));
+
+        billingService.completeApplePurchase(USER_ID, "pro_monthly", "signed-jws");
+
+        assertEquals(1, rows.size());
+        assertEquals(BillingProvider.APPLE, rows.get(0).getProvider());
+        assertEquals("orig-1", rows.get(0).getProviderSubscriptionId());
+        assertEquals(BillingPlan.MONTHLY, rows.get(0).getPlan());
+        assertEquals(SubscriptionStatus.ACTIVE, rows.get(0).getStatus());
+        assertTrue(user.isProLicensed());
+        assertEquals(end, user.getProExpiresAt());
+        verify(stripeGateway, never()).createCheckout(any(), any(), any(), any(), any(), any(), anyBoolean());
+    }
+
+    @Test
+    void appleAddonPurchaseGrantsCredits() {
+        user.setProLicensed(true);
+        when(userRepository.findById(USER_ID)).thenReturn(Optional.of(user));
+        when(appleBillingGateway.enabled()).thenReturn(true);
+        when(appleBillingGateway.verify("signed-addon"))
+                .thenReturn(new ApplePurchaseRecord(
+                        "credits_addon",
+                        "orig-addon",
+                        "txn-addon",
+                        USER_ID.toString(),
+                        false,
+                        true,
+                        null,
+                        false));
+
+        billingService.completeApplePurchase(USER_ID, "credits_addon", "signed-addon");
+
+        verify(creditService).grantAddonPurchase(USER_ID, "txn-addon");
+        assertTrue(rows.isEmpty());
+    }
+
+    @Test
+    void applePurchaseRejectedWhenAccountDoesNotMatch() {
+        when(userRepository.findById(USER_ID)).thenReturn(Optional.of(user));
+        when(appleBillingGateway.enabled()).thenReturn(true);
+        when(appleBillingGateway.verify("signed-jws"))
+                .thenReturn(new ApplePurchaseRecord(
+                        "pro_monthly",
+                        "orig-1",
+                        "txn-1",
+                        "00000000-0000-0000-0000-000000000099",
+                        true,
+                        true,
+                        Instant.now().plusSeconds(3600),
+                        false));
+
+        ApiException ex =
+                assertThrows(ApiException.class, () -> billingService.completeApplePurchase(USER_ID, "pro_monthly", "signed-jws"));
+        assertEquals(HttpStatus.FORBIDDEN, ex.getStatus());
         assertTrue(rows.isEmpty());
     }
 }

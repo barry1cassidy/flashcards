@@ -234,6 +234,16 @@ sudo install -m 600 /path/to/downloaded.json /opt/zipdeck/google-play.json
 
 Create the file before starting the container. A bind mount to a missing path makes Docker create a directory there instead, and purchases then fail verification. Check with `docker compose -f docker-compose.prod.yml exec api ls -l /app/google-play.json`. Until the key is readable, `/api/billing/status` reports Play billing off and the app hides Subscribe.
 
+### Tester checkout allowlist
+
+While `APP_BILLING_PUBLIC_CHECKOUT` is `false`, only admins and emails in `APP_BILLING_ALLOW_EMAILS` see Subscribe (website, Play, and App Store). Add this to the server `.env`, then recreate `api`:
+
+```
+APP_BILLING_ALLOW_EMAILS=barry1cassidy@gmail.com,barry1cassidy@hotmail.com,barry1cassidy@yahoo.com,*@zipdeck.app
+```
+
+Leave `APP_BILLING_PUBLIC_CHECKOUT=false` until testing is done. Then clear `APP_BILLING_ALLOW_EMAILS` and set `APP_BILLING_PUBLIC_CHECKOUT=true`.
+
 ## Android (Capacitor)
 
 The native app is the same Vite React UI in a WebView. Keep coding in Cursor; install **Android Studio** for the SDK and emulator.
@@ -337,16 +347,30 @@ In the **same Google Cloud project** as the Web client, create one **iOS** OAuth
 
 Do not paste those values into git or chat.
 
+### App Store subscriptions
+
+Digital Pro on iOS uses StoreKit, not Stripe. Product IDs must match App Store Connect: `pro_monthly`, `pro_yearly`, and consumable `credits_addon`. The API verifies the signed StoreKit 2 transaction at `/api/billing/apple/purchase`. No In-App Purchase `.p8` key is required for that.
+
+The Swift plugin lives at `frontend/ios-native/AppleBillingPlugin.swift` because `ios/` is created on the Mac. After `git pull`:
+
+1. Copy `frontend/ios-native/AppleBillingPlugin.swift` into the Xcode **App** target (same target as `Info.plist`). Capacitor 8 registers it through `CAPBridgedPlugin`.
+2. Signing & Capabilities → add **In-App Purchase** if it is not already there. Keep Associated Domains (`applinks:zipdeck.app`, `webcredentials:zipdeck.app`).
+3. `npm run build:android` then `npx cap sync ios`. Confirm the plugin file is still in the App target (`cap sync` must not delete it).
+
+Paid Applications must be **Active**. Sandbox testers: App Store Connect → Users and Access → Sandbox. On the phone, stay signed into the TestFlight Apple ID, then add the sandbox tester under **Settings → App Store → Sandbox Account**. TestFlight IAP is sandbox; it does not charge real money.
+
+Do not add a website Subscribe button or Stripe checkout in the iOS app.
+
 ### iOS TestFlight build
 
-This is how we produce the signed archive for **internal** TestFlight. App name Zipdeck, bundle ID `com.zipdeck.app`. StoreKit / App Store IAP is not wired yet; the native Pro page must not show Stripe or “subscribe on the website.”
+This is how we produce the signed archive for **internal** TestFlight. App name Zipdeck, bundle ID `com.zipdeck.app`. The native Pro page uses StoreKit (`pro_monthly`, `pro_yearly`, `credits_addon`). It must not show Stripe or “subscribe on the website.”
 
 1. On a browser: App Store Connect → register App ID `com.zipdeck.app` if needed (Certificates, Identifiers & Profiles → Identifiers), then Apps → New App → iOS, name Zipdeck, SKU `zipdeck`.
-2. On the Mac: `git pull`, then from `frontend` run `npm ci`, `npm run build:android`, `npx cap sync ios`. Confirm `GIDClientID` and the URL scheme survived the sync (`cap sync` does not overwrite `Info.plist`).
-3. Xcode → **App** target (under TARGETS) → **Signing & Capabilities**: Automatically manage signing, your Apple Developer team, bundle identifier `com.zipdeck.app`. Associated Domains must list `applinks:zipdeck.app` and `webcredentials:zipdeck.app`. Do not commit team IDs, certificates, or provisioning profiles.
+2. On the Mac: `git pull`, then from `frontend` run `npm ci`, `npm run build:android`, `npx cap sync ios`. Confirm `GIDClientID` and the URL scheme survived the sync (`cap sync` does not overwrite `Info.plist`). Copy `frontend/ios-native/AppleBillingPlugin.swift` into the **App** target if it is not already there.
+3. Xcode → **App** target (under TARGETS) → **Signing & Capabilities**: Automatically manage signing, your Apple Developer team, bundle identifier `com.zipdeck.app`. Associated Domains must list `applinks:zipdeck.app` and `webcredentials:zipdeck.app`. Add **In-App Purchase**. Do not commit team IDs, certificates, or provisioning profiles.
 4. Destination: **Any iOS Device (arm64)** (Archive stays disabled while a simulator is selected). Product → Archive.
 5. Organizer → **Archives** → Distribute App → **App Store Connect** → Upload. Skip Xcode Cloud “Get Started” until a manual upload has worked. Newer Xcode may skip the options/signing sheets when automatic signing is already on.
 6. App Store Connect → Zipdeck → TestFlight. Wait until the build is **Ready to Test**. Create an **Internal Testing** group (Enable Automatic Distribution is fine), add yourself, attach the build. Internal testers skip Beta App Review.
-7. On the test iPhone, sign into the App Store / TestFlight with the **same Apple ID** that received the invite, then install from the email’s View in TestFlight link or from the TestFlight app.
+7. On the test iPhone, sign into the App Store / TestFlight with the **same Apple ID** that received the invite, then install from the email’s View in TestFlight link or from the TestFlight app. For purchases, sign the sandbox tester in under **Settings → App Store → Sandbox Account**.
 
-A USB phone cannot attach to a cloud Mac. Simulator Google Sign-In is unreliable; TestFlight on a device is the real check. Digital goods on iOS must use StoreKit later — do not add a website subscribe CTA in the iOS app.
+A USB phone cannot attach to a cloud Mac. Simulator Google Sign-In is unreliable; TestFlight on a device is the real check. Digital goods on iOS must use StoreKit — do not add a website subscribe CTA in the iOS app.
