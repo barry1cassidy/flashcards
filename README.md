@@ -223,16 +223,36 @@ The Android app sends each purchase token to the API, which asks Google whether 
 
 1. Google Cloud → IAM → the Play service account → Keys → Add key → JSON. Keep it off git.
 2. Play Console → Users and permissions → invite that service-account email and give it access to orders and subscriptions for Zipdeck.
-3. Put the file on the instance and restrict it:
+3. Put the file on the instance. The API process is user `app` (uid **10001**), not `ubuntu`, so mode `600` owned by `ubuntu` makes `/api/billing/status` report `googlePlayEnabled: false` and Android hides Subscribe:
 
 ```bash
-sudo install -m 600 /path/to/downloaded.json /opt/zipdeck/google-play.json
+sudo install -m 644 /path/to/downloaded.json /opt/zipdeck/google-play.json
 ```
 
-4. In `.env`, set `GOOGLE_PLAY_CREDENTIALS_PATH=/app/google-play.json` (the path **inside** the container). Override `GOOGLE_PLAY_CREDENTIALS_HOST_PATH` only if the file is not at `/opt/zipdeck/google-play.json`.
+4. In `.env`, set `GOOGLE_PLAY_CREDENTIALS_PATH=/app/google-play.json` (the path **inside** the container). Override `GOOGLE_PLAY_CREDENTIALS_HOST_PATH` only if the file is not at `/opt/zipdeck/google-play.json`. Product IDs default to `pro_monthly`, `pro_yearly`, `credits_addon`.
 5. `docker compose -f docker-compose.prod.yml up -d api` — no image rebuild needed.
 
-Create the file before starting the container. A bind mount to a missing path makes Docker create a directory there instead, and purchases then fail verification. Check with `docker compose -f docker-compose.prod.yml exec api ls -l /app/google-play.json`. Until the key is readable, `/api/billing/status` reports Play billing off and the app hides Subscribe.
+Create the file before starting the container. A bind mount to a missing path makes Docker create a directory there instead, and purchases then fail verification. Check with `docker compose -f docker-compose.prod.yml exec api ls -l /app/google-play.json` (must be a file, not a directory) and `exec api id` (`uid=10001(app)`). Until that user can read the file, Play Subscribe stays hidden.
+
+### Stripe (website)
+
+Stay in the Stripe **sandbox** until website payments are tested. In `.env`:
+
+```
+STRIPE_SECRET_KEY=sk_test_...
+STRIPE_WEBHOOK_SECRET=whsec_...
+STRIPE_PRICE_MONTHLY=price_...
+STRIPE_PRICE_YEARLY=price_...
+STRIPE_PRICE_ADDON=price_...
+```
+
+Secret key: Developers → API keys (not the `pk_test_` publishable key). Price IDs come from Product catalog → Zipdeck Pro (monthly and yearly) and Zipdeck AI credits. Webhook: Developers → Webhooks / Add destination → **Webhook endpoint**
+
+```
+https://api.zipdeck.app/api/billing/stripe/webhook
+```
+
+Events: `checkout.session.completed`, `customer.subscription.created`, `customer.subscription.updated`, `customer.subscription.deleted`. Signing secret is `whsec_…`. Then `docker compose -f docker-compose.prod.yml up -d api`. `/api/billing/status` should show `stripeEnabled: true`. Live mode needs a second webhook and live keys later — do not reuse sandbox `price_` or `whsec_` values.
 
 ### Tester checkout allowlist
 
