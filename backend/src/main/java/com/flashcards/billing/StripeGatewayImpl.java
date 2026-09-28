@@ -196,8 +196,20 @@ public class StripeGatewayImpl implements StripeGateway {
                 subscription.getStatus(),
                 priceId,
                 periodEnd,
-                Boolean.TRUE.equals(subscription.getCancelAtPeriodEnd()),
+                cancelsAtPeriodEnd(
+                        subscription.getCancelAtPeriodEnd(), subscription.getCancelAt(), subscription.getEndedAt()),
                 subscription.getMetadata() == null ? Map.of() : subscription.getMetadata());
+    }
+
+    /**
+     * Portal cancellations on flexible billing set {@code cancel_at} to the period end and leave
+     * {@code cancel_at_period_end} false. {@code ended_at} stays empty until the subscription actually ends.
+     */
+    static boolean cancelsAtPeriodEnd(Boolean cancelAtPeriodEnd, Long cancelAt, Long endedAt) {
+        if (Boolean.TRUE.equals(cancelAtPeriodEnd)) {
+            return true;
+        }
+        return cancelAt != null && endedAt == null;
     }
 
     private static SubscriptionItem firstItem(Subscription subscription) {
