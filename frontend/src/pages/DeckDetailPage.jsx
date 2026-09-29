@@ -334,27 +334,16 @@ export default function DeckDetailPage() {
           {deck.description ? <p>{deck.description}</p> : null}
           <p className="muted">{stats.join(' · ')}</p>
         </div>
-        <div className={editingDeck ? 'header-actions deck-edit-actions' : 'header-actions'}>
-          {editingDeck ? (
-            <>
-              <button className="btn primary" type="submit" form="deck-details-form" disabled={busy}>
-                {t('decks.saveChanges')}
-              </button>
-              <button className="btn" type="button" disabled={busy} onClick={leaveEditMode}>
-                {t('common.cancel')}
-              </button>
-            </>
-          ) : (
-            <>
-              <button className="btn primary" type="button" onClick={() => setStudyOpen(true)}>
-                {t('decks.studyDeck')}
-              </button>
-              <button className="btn" type="button" onClick={beginEdit}>
-                {t('decks.editDeck')}
-              </button>
-            </>
-          )}
-        </div>
+        {editingDeck ? null : (
+          <div className="header-actions">
+            <button className="btn primary" type="button" onClick={() => setStudyOpen(true)}>
+              {t('decks.studyDeck')}
+            </button>
+            <button className="btn" type="button" onClick={beginEdit}>
+              {t('decks.editDeck')}
+            </button>
+          </div>
+        )}
       </div>
       {error ? <div className="error">{translateError(t, error)}</div> : null}
 
@@ -364,20 +353,28 @@ export default function DeckDetailPage() {
             {t('decks.detailsSection')}
           </h2>
           {editingDeck ? (
-            <button
-              className="btn danger"
-              type="button"
-              onClick={() =>
-                setConfirm({
-                  title: t('decks.deleteDeckTitle'),
-                  message: t('decks.deleteDeckMessage'),
-                  confirmLabel: t('decks.deleteDeckConfirm'),
-                  onConfirm: deleteDeck,
-                })
-              }
-            >
-              {t('decks.deleteDeckConfirm')}
-            </button>
+            <div className="header-actions deck-detail-actions">
+              <button className="btn primary" type="submit" form="deck-details-form" disabled={busy}>
+                {t('decks.saveChanges')}
+              </button>
+              <button className="btn" type="button" disabled={busy} onClick={leaveEditMode}>
+                {t('common.cancel')}
+              </button>
+              <button
+                className="btn danger"
+                type="button"
+                onClick={() =>
+                  setConfirm({
+                    title: t('decks.deleteDeckTitle'),
+                    message: t('decks.deleteDeckMessage'),
+                    confirmLabel: t('decks.deleteDeckConfirm'),
+                    onConfirm: deleteDeck,
+                  })
+                }
+              >
+                {t('decks.deleteDeckConfirm')}
+              </button>
+            </div>
           ) : null}
         </div>
         {editingDeck ? (
@@ -443,7 +440,7 @@ export default function DeckDetailPage() {
           <h2 id="deck-cards-heading" className="section-heading">
             {t('decks.cardsSection')}
           </h2>
-          <div className="header-actions">
+          <div className="header-actions deck-card-actions">
             {editingDeck ? (
               <>
                 <button className="btn primary" type="button" onClick={openAddCard}>
