@@ -346,7 +346,7 @@ export default function DeckDetailPage() {
             </>
           ) : (
             <>
-              <button className="btn primary deck-study-btn" type="button" onClick={() => setStudyOpen(true)}>
+              <button className="btn primary" type="button" onClick={() => setStudyOpen(true)}>
                 {t('decks.studyDeck')}
               </button>
               <button className="btn" type="button" onClick={beginEdit}>
