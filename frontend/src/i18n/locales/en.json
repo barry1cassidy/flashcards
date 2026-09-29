@@ -600,7 +600,7 @@
     "proMonthly": "Subscribe {{price}} / month",
     "proYearly": "Subscribe {{price}} / year",
     "proManage": "Manage Billing",
-    "proThanks": "You are Pro. Thanks for supporting Zipdeck.",
+    "proThanks": "Your Pro subscription is active.",
     "proRestore": "Restore purchases",
     "proOnWeb": "Subscribe on the website, then sign in here with the same account.",
     "proOpenWebsite": "Open zipdeck.app",
