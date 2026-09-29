@@ -1447,6 +1447,48 @@ textarea {
   margin: 0;
 }
 
+.deck-details-read {
+  display: grid;
+  gap: 16px;
+  margin: 0;
+}
+
+.deck-details-read div {
+  display: grid;
+  gap: 4px;
+}
+
+.deck-details-read dt {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.deck-details-read dd {
+  margin: 0;
+}
+
+.deck-study-btn {
+  min-height: 48px;
+  padding: 14px 26px;
+  font-size: 1.05rem;
+}
+
+.deck-edit-actions {
+  align-self: center;
+}
+
+.deck-edit-actions .btn {
+  min-height: 48px;
+  padding: 14px 22px;
+  font-size: 1.05rem;
+}
+
+.deck-edit-actions .btn:not(.primary) {
+  border: 1px solid var(--line);
+  background: var(--surface);
+}
+
 .radio-list {
   display: grid;
   gap: 4px;
@@ -2255,6 +2297,14 @@ textarea.over-limit {
   .card-row {
     flex-direction: column;
     align-items: stretch;
+  }
+
+  .deck-edit-actions {
+    width: 100%;
+  }
+
+  .deck-edit-actions .btn {
+    flex: 1;
   }
 
   .card-row-body,

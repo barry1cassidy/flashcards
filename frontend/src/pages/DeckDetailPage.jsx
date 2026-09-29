@@ -5,7 +5,7 @@ import { api } from '../api'
 import { downloadBlob, csvFilename } from '../download'
 import { formatDate } from '../i18n/format'
 import { translateError } from '../i18n/errors'
-import { normalizeSpeechLanguage } from '../speechLanguages'
+import { SPEECH_LANGUAGES, normalizeSpeechLanguage } from '../speechLanguages'
 import ConfirmModal from './ConfirmModal'
 import StudyModeModal from './StudyModeModal'
 import { GroupBadge } from './ColorPicker'
@@ -49,6 +49,9 @@ export default function DeckDetailPage() {
   const [editingDeck, setEditingDeck] = useState(false)
   const [editName, setEditName] = useState('')
   const [editDescription, setEditDescription] = useState('')
+  const [editGroupId, setEditGroupId] = useState('')
+  const [editFrontLanguage, setEditFrontLanguage] = useState('en-US')
+  const [editBackLanguage, setEditBackLanguage] = useState('en-US')
   const [studyOpen, setStudyOpen] = useState(false)
   const [frontFile, setFrontFile] = useState(null)
   const [backFile, setBackFile] = useState(null)
@@ -134,23 +137,54 @@ export default function DeckDetailPage() {
     return updated
   }
 
-  async function saveDeckDetails(event) {
+  function beginEdit() {
+    setEditName(deck.name)
+    setEditDescription(deck.description || '')
+    setEditGroupId(deck.group?.id ?? '')
+    setEditFrontLanguage(normalizeSpeechLanguage(deck.frontLanguage, 'en-US'))
+    setEditBackLanguage(normalizeSpeechLanguage(deck.backLanguage, 'en-US'))
+    setError('')
+    setEditingDeck(true)
+  }
+
+  function leaveEditMode() {
+    setEditingDeck(false)
+    resetCardForm()
+  }
+
+  async function finishEdit(event) {
     event.preventDefault()
     const nextName = editName.trim()
     const nextDescription = editDescription.trim()
     if (!nextName) {
       return
     }
-    if (nextName === deck.name && nextDescription === (deck.description || '').trim()) {
-      setEditingDeck(false)
+    const nextGroupId = editGroupId || null
+    const unchanged =
+      nextName === deck.name &&
+      nextDescription === (deck.description || '').trim() &&
+      nextGroupId === (deck.group?.id ?? null) &&
+      editFrontLanguage === normalizeSpeechLanguage(deck.frontLanguage, 'en-US') &&
+      editBackLanguage === normalizeSpeechLanguage(deck.backLanguage, 'en-US')
+    if (unchanged) {
+      leaveEditMode()
       return
     }
     setError('')
+    setBusy(true)
     try {
-      await saveDeck({ name: nextName, description: nextDescription })
-      setEditingDeck(false)
+      await saveDeck({
+        name: nextName,
+        description: nextDescription,
+        groupId: nextGroupId,
+        frontLanguage: editFrontLanguage,
+        backLanguage: editBackLanguage,
+      })
+      leaveEditMode()
     } catch (err) {
       setError(err.message)
+    } finally {
+      setBusy(false)
     }
   }
 
@@ -176,25 +210,6 @@ export default function DeckDetailPage() {
     try {
       const data = await api(`/api/decks/${id}/export`)
       downloadBlob(data, csvFilename(deck?.name))
-    } catch (err) {
-      setError(err.message)
-    }
-  }
-
-  async function changeGroup(event) {
-    const value = event.target.value
-    setError('')
-    try {
-      await saveDeck({ groupId: value || null })
-    } catch (err) {
-      setError(err.message)
-    }
-  }
-
-  async function changeLanguage(side, value) {
-    setError('')
-    try {
-      await saveDeck({ [side]: value })
     } catch (err) {
       setError(err.message)
     }
@@ -319,21 +334,26 @@ export default function DeckDetailPage() {
           {deck.description ? <p>{deck.description}</p> : null}
           <p className="muted">{stats.join(' · ')}</p>
         </div>
-        <div className="header-actions">
-          <button className="btn primary" type="button" onClick={() => setStudyOpen(true)}>
-            {t('decks.study')}
-          </button>
-          <button
-            className="btn"
-            type="button"
-            onClick={() => {
-              setEditName(deck.name)
-              setEditDescription(deck.description || '')
-              setEditingDeck(true)
-            }}
-          >
-            {t('decks.editDeck')}
-          </button>
+        <div className={editingDeck ? 'header-actions deck-edit-actions' : 'header-actions'}>
+          {editingDeck ? (
+            <>
+              <button className="btn primary" type="submit" form="deck-details-form" disabled={busy}>
+                {t('decks.saveChanges')}
+              </button>
+              <button className="btn" type="button" disabled={busy} onClick={leaveEditMode}>
+                {t('common.cancel')}
+              </button>
+            </>
+          ) : (
+            <>
+              <button className="btn primary deck-study-btn" type="button" onClick={() => setStudyOpen(true)}>
+                {t('decks.studyDeck')}
+              </button>
+              <button className="btn" type="button" onClick={beginEdit}>
+                {t('decks.editDeck')}
+              </button>
+            </>
+          )}
         </div>
       </div>
       {error ? <div className="error">{translateError(t, error)}</div> : null}
@@ -343,48 +363,79 @@ export default function DeckDetailPage() {
           <h2 id="deck-details-heading" className="section-heading">
             {t('decks.detailsSection')}
           </h2>
-          <button
-            className="btn danger"
-            type="button"
-            onClick={() =>
-              setConfirm({
-                title: t('decks.deleteDeckTitle'),
-                message: t('decks.deleteDeckMessage'),
-                confirmLabel: t('decks.deleteDeckConfirm'),
-                onConfirm: deleteDeck,
-              })
-            }
-          >
-            {t('common.delete')}
-          </button>
+          {editingDeck ? (
+            <button
+              className="btn danger"
+              type="button"
+              onClick={() =>
+                setConfirm({
+                  title: t('decks.deleteDeckTitle'),
+                  message: t('decks.deleteDeckMessage'),
+                  confirmLabel: t('decks.deleteDeckConfirm'),
+                  onConfirm: deleteDeck,
+                })
+              }
+            >
+              {t('decks.deleteDeckConfirm')}
+            </button>
+          ) : null}
         </div>
-        <div className="card-form">
-          <label className="group-select-label">
-            {t('decks.deckGroup')}
-            <select value={deck.group?.id ?? ''} onChange={changeGroup}>
-              <option value="">{t('decks.noGroup')}</option>
-              {groups.map((group) => (
-                <option key={group.id} value={group.id}>
-                  {group.name}
-                </option>
-              ))}
-            </select>
-          </label>
-          <div className="lang-row">
-            <LanguageSelect
-              id="deck-front-language"
-              label={t('decks.frontLanguage')}
-              value={frontLanguage}
-              onChange={(value) => changeLanguage('frontLanguage', value)}
-            />
-            <LanguageSelect
-              id="deck-back-language"
-              label={t('decks.backLanguage')}
-              value={backLanguage}
-              onChange={(value) => changeLanguage('backLanguage', value)}
-            />
-          </div>
-        </div>
+        {editingDeck ? (
+          <form id="deck-details-form" className="card-form" onSubmit={finishEdit}>
+            <label>
+              {t('decks.deckName')}
+              <input value={editName} onChange={(event) => setEditName(event.target.value)} required autoFocus />
+            </label>
+            <label>
+              {t('decks.description')}
+              <textarea
+                value={editDescription}
+                maxLength={2000}
+                onChange={(event) => setEditDescription(event.target.value)}
+              />
+            </label>
+            <label className="group-select-label">
+              {t('decks.deckGroup')}
+              <select value={editGroupId} onChange={(event) => setEditGroupId(event.target.value)}>
+                <option value="">{t('decks.noGroup')}</option>
+                {groups.map((group) => (
+                  <option key={group.id} value={group.id}>
+                    {group.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <div className="lang-row">
+              <LanguageSelect
+                id="deck-front-language"
+                label={t('decks.frontLanguage')}
+                value={editFrontLanguage}
+                onChange={setEditFrontLanguage}
+              />
+              <LanguageSelect
+                id="deck-back-language"
+                label={t('decks.backLanguage')}
+                value={editBackLanguage}
+                onChange={setEditBackLanguage}
+              />
+            </div>
+          </form>
+        ) : (
+          <dl className="deck-details-read">
+            <div>
+              <dt>{t('decks.deckGroup')}</dt>
+              <dd>{deck.group?.name || t('decks.noGroup')}</dd>
+            </div>
+            <div>
+              <dt>{t('decks.frontLanguage')}</dt>
+              <dd>{languageName(frontLanguage)}</dd>
+            </div>
+            <div>
+              <dt>{t('decks.backLanguage')}</dt>
+              <dd>{languageName(backLanguage)}</dd>
+            </div>
+          </dl>
+        )}
       </section>
 
       <section className="deck-section" aria-labelledby="deck-cards-heading">
@@ -393,12 +444,16 @@ export default function DeckDetailPage() {
             {t('decks.cardsSection')}
           </h2>
           <div className="header-actions">
-            <button className="btn primary" type="button" onClick={openAddCard}>
-              {t('decks.addCard')}
-            </button>
-            <button className="btn" type="button" onClick={() => fileRef.current?.click()}>
-              {t('decks.importCsv')}
-            </button>
+            {editingDeck ? (
+              <>
+                <button className="btn primary" type="button" onClick={openAddCard}>
+                  {t('decks.addCard')}
+                </button>
+                <button className="btn" type="button" onClick={() => fileRef.current?.click()}>
+                  {t('decks.importCsv')}
+                </button>
+              </>
+            ) : null}
             <button className="btn" type="button" onClick={exportCsv}>
               {t('decks.exportCsv')}
             </button>
@@ -409,43 +464,45 @@ export default function DeckDetailPage() {
           <div className="empty">{t('decks.emptyCards')}</div>
         ) : (
           <>
-            <p className="muted">{t('decks.reorderHint')}</p>
+            {editingDeck ? <p className="muted">{t('decks.reorderHint')}</p> : null}
             <ul className="card-list">
               {cards.map((card, index) => (
                 <li
                   key={card.id}
                   className="card-row"
-                  onDragOver={onDragOver}
-                  onDrop={(event) => onDrop(event, index)}
+                  onDragOver={editingDeck ? onDragOver : undefined}
+                  onDrop={editingDeck ? (event) => onDrop(event, index) : undefined}
                 >
-                  <div className="reorder-controls">
-                    <span
-                      className="drag-handle"
-                      draggable
-                      aria-hidden="true"
-                      onDragStart={(event) => onDragStart(event, index)}
-                    >
-                      <GripIcon />
-                    </span>
-                    <button
-                      className="btn ghost icon-btn"
-                      type="button"
-                      aria-label={t('decks.moveUp')}
-                      disabled={index === 0}
-                      onClick={() => moveCard(index, index - 1)}
-                    >
-                      ↑
-                    </button>
-                    <button
-                      className="btn ghost icon-btn"
-                      type="button"
-                      aria-label={t('decks.moveDown')}
-                      disabled={index === cards.length - 1}
-                      onClick={() => moveCard(index, index + 1)}
-                    >
-                      ↓
-                    </button>
-                  </div>
+                  {editingDeck ? (
+                    <div className="reorder-controls">
+                      <span
+                        className="drag-handle"
+                        draggable
+                        aria-hidden="true"
+                        onDragStart={(event) => onDragStart(event, index)}
+                      >
+                        <GripIcon />
+                      </span>
+                      <button
+                        className="btn ghost icon-btn"
+                        type="button"
+                        aria-label={t('decks.moveUp')}
+                        disabled={index === 0}
+                        onClick={() => moveCard(index, index - 1)}
+                      >
+                        ↑
+                      </button>
+                      <button
+                        className="btn ghost icon-btn"
+                        type="button"
+                        aria-label={t('decks.moveDown')}
+                        disabled={index === cards.length - 1}
+                        onClick={() => moveCard(index, index + 1)}
+                      >
+                        ↓
+                      </button>
+                    </div>
+                  ) : null}
                   <div className="card-row-main">
                     <div className="card-row-body">
                     {(card.hasFrontImage || card.hasBackImage) ? (
@@ -472,29 +529,27 @@ export default function DeckDetailPage() {
                         </p>
                       ) : null}
                     </div>
-                    <div className="card-row-actions">
-                      <button
-                        className="btn ghost"
-                        type="button"
-                        onClick={() => openEditCard(card)}
-                      >
-                        {t('common.edit')}
-                      </button>
-                      <button
-                        className="btn ghost"
-                        type="button"
-                        onClick={() =>
-                          setConfirm({
-                            title: t('decks.deleteCardTitle'),
-                            message: t('decks.deleteCardMessage'),
-                            confirmLabel: t('decks.deleteCardConfirm'),
-                            onConfirm: () => deleteCard(card.id),
-                          })
-                        }
-                      >
-                        {t('common.delete')}
-                      </button>
-                    </div>
+                    {editingDeck ? (
+                      <div className="card-row-actions">
+                        <button className="btn ghost" type="button" onClick={() => openEditCard(card)}>
+                          {t('common.edit')}
+                        </button>
+                        <button
+                          className="btn ghost"
+                          type="button"
+                          onClick={() =>
+                            setConfirm({
+                              title: t('decks.deleteCardTitle'),
+                              message: t('decks.deleteCardMessage'),
+                              confirmLabel: t('decks.deleteCardConfirm'),
+                              onConfirm: () => deleteCard(card.id),
+                            })
+                          }
+                        >
+                          {t('common.delete')}
+                        </button>
+                      </div>
+                    ) : null}
                   </div>
                 </li>
               ))}
@@ -585,33 +640,6 @@ export default function DeckDetailPage() {
           </form>
         </div>
       ) : null}
-      {editingDeck ? (
-        <div className="modal-backdrop" onClick={() => setEditingDeck(false)}>
-          <form className="modal" onClick={(event) => event.stopPropagation()} onSubmit={saveDeckDetails}>
-            <h2>{t('decks.editDeckTitle')}</h2>
-            <label>
-              {t('decks.deckName')}
-              <input value={editName} onChange={(event) => setEditName(event.target.value)} required autoFocus />
-            </label>
-            <label>
-              {t('decks.description')}
-              <textarea
-                value={editDescription}
-                maxLength={2000}
-                onChange={(event) => setEditDescription(event.target.value)}
-              />
-            </label>
-            <div className="header-actions">
-              <button className="btn primary" type="submit">
-                {t('common.save')}
-              </button>
-              <button className="btn ghost" type="button" onClick={() => setEditingDeck(false)}>
-                {t('common.cancel')}
-              </button>
-            </div>
-          </form>
-        </div>
-      ) : null}
       {studyOpen ? (
         <StudyModeModal
           hardCount={deck.hardCount || 0}
@@ -645,6 +673,10 @@ export default function DeckDetailPage() {
       ) : null}
     </div>
   )
+}
+
+function languageName(code) {
+  return SPEECH_LANGUAGES.find((language) => language.code === code)?.name || code
 }
 
 function GripIcon() {

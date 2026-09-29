@@ -286,6 +286,7 @@
     "descriptionPlaceholder": "Description (optional)",
     "editDeck": "Edit Deck",
     "editDeckTitle": "Edit Deck",
+    "saveChanges": "Save Changes",
     "importCsv": "Import CSV",
     "importing": "Importing…",
     "exportCsv": "Export CSV",
@@ -332,6 +333,7 @@
     "filterGroup": "Set",
     "studySection": "Study",
     "study": "Study",
+    "studyDeck": "Study Deck",
     "detailsSection": "Deck Details",
     "cardsSection": "Cards"
   },
