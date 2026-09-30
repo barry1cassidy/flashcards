@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '../AuthContext'
 import { isAdmin } from '../admin'
@@ -204,6 +204,22 @@ function ProSection({ user, onError, onStub, refresh }) {
   return (
     <>
       {notice === 'success' ? <p className="ok">{t('settings.proThanks')}</p> : null}
+
+      {!pro && billing?.addonCredits > 0 ? (
+        <section className="card-form pro-account-card">
+          <h2 className="section-heading">{t('pro.balanceTitle')}</h2>
+          <p className="credit-balance-value">
+            <span className="credit-balance-count">{billing.addonCredits}</span>
+            {t('pro.balanceLeftLabel', { count: billing.addonCredits })}
+          </p>
+          <p className="muted">{t('pro.addonBalanceNote', { count: billing.addonCredits })}</p>
+          <div className="billing-actions">
+            <Link className="btn" to="/create-with-ai">
+              {t('agent.menu')}
+            </Link>
+          </div>
+        </section>
+      ) : null}
 
       {!pro ? (
         <section className="card-form pro-account-card">

@@ -100,6 +100,28 @@ class AgentCreditServiceTest {
     }
 
     @Test
+    void consumeSpendsAddonCreditsAfterProEnds() {
+        user.setProLicensed(false);
+        user.setAgentIncludedCredits(4);
+        user.setAgentAddonCredits(3);
+        user.setAgentCreditPeriod("2026-09");
+        CreditBalance balance = creditService.consume(USER_ID);
+        assertEquals(0, balance.includedCredits());
+        assertEquals(2, balance.addonCredits());
+        assertEquals(2, balance.remainingCredits());
+        assertEquals(null, user.getAgentCreditPeriod());
+    }
+
+    @Test
+    void consumeRequiresProWhenAddonCreditsAreGone() {
+        user.setProLicensed(false);
+        user.setAgentAddonCredits(0);
+        ApiException ex = assertThrows(ApiException.class, () -> creditService.consume(USER_ID));
+        assertEquals(HttpStatus.FORBIDDEN, ex.getStatus());
+        assertEquals("Pro license required", ex.getMessage());
+    }
+
+    @Test
     void consumeFailsWhenEmpty() {
         user.setAgentCreditPeriod(YearMonth.now(ZoneOffset.UTC).toString());
         ApiException ex = assertThrows(ApiException.class, () -> creditService.consume(USER_ID));

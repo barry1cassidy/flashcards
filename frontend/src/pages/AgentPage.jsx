@@ -215,6 +215,7 @@ export default function AgentPage() {
   }
 
   const pro = isProLicensed(user)
+  const canUseAi = pro || (status?.addonCredits ?? 0) > 0
   const elapsed = startedAt ? Math.max(0, Math.floor((now - startedAt) / 1000)) : job?.elapsedSeconds || 0
   const steps = job?.steps || []
   const remaining = status?.remainingCredits ?? 0
@@ -233,7 +234,7 @@ export default function AgentPage() {
       </div>
       {error ? <div className="error">{translateError(t, error)}</div> : null}
 
-      {!pro ? (
+      {status && !canUseAi ? (
         <section className="card-form">
           <p>{t('agent.proRequired')}</p>
           <p>{t('agent.proWhy')}</p>
@@ -248,17 +249,18 @@ export default function AgentPage() {
         </section>
       ) : null}
 
-      {pro && status && !status.configured ? (
+      {canUseAi && status && !status.configured ? (
         <section className="card-form">
           <p>{t('agent.notConfigured')}</p>
         </section>
       ) : null}
 
-      {pro && status?.configured ? (
+      {canUseAi && status?.configured ? (
         <form className="card-form" onSubmit={generate}>
           <p className={remaining <= 0 ? 'credit-remaining is-empty' : 'muted'}>{creditSummary(t, status)}</p>
+          {!pro ? <p className="muted">{t('agent.addonWithoutPro')}</p> : null}
           <p>{t('agent.creditCost')}</p>
-          {remaining <= 0 ? (
+          {remaining <= 0 && pro ? (
             <div className="billing-actions">
               {canBuyAddon ? (
                 <button

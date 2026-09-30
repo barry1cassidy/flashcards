@@ -50,7 +50,7 @@ public class AgentCreditService {
     public CreditBalance consume(UUID userId, UUID jobId) {
         User user = requireUser(userId);
         applyPeriod(user);
-        if (!ProAccess.allowed(user)) {
+        if (!ProAccess.allowed(user) && user.getAgentAddonCredits() <= 0) {
             throw new ApiException(HttpStatus.FORBIDDEN, "Pro license required");
         }
         if (user.getAgentIncludedCredits() <= 0 && user.getAgentAddonCredits() <= 0) {

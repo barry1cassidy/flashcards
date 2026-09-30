@@ -87,7 +87,7 @@ public class AgentService {
         CreditBalance credits = pro ? creditService.snapshot(user) : CreditBalance.of(0, user.getAgentAddonCredits());
         int remaining = Math.max(0, credits.remainingCredits() - jobStore.activeCount(userId));
         return new AgentStatusResponse(
-                !pro,
+                !pro && credits.addonCredits() <= 0,
                 properties.configured(),
                 credits.includedCredits(),
                 credits.addonCredits(),
@@ -102,7 +102,9 @@ public class AgentService {
     public AgentJobResponse startCreateDeck(UUID userId, AgentCreateRequest request, MultipartFile file) {
         expiredStoreSubscriptionRefresh.refresh(userId);
         User user = requireUser(userId);
-        ProAccess.require(user);
+        if (!ProAccess.allowed(user) && user.getAgentAddonCredits() <= 0) {
+            throw new ApiException(HttpStatus.FORBIDDEN, "Pro license required");
+        }
         if (!properties.configured() || chatClient == null) {
             throw new ApiException(HttpStatus.SERVICE_UNAVAILABLE, "AI is not configured");
         }
