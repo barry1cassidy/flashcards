@@ -155,6 +155,7 @@ function ProSection({ user, onError, onStub, refresh }) {
   async function runBilling(work) {
     setBusy(true)
     onError('')
+    setNotice('')
     try {
       await work()
     } catch (err) {
@@ -182,6 +183,7 @@ function ProSection({ user, onError, onStub, refresh }) {
 
   async function finishPlay(updated) {
     if (!updated) {
+      setNotice('empty')
       return
     }
     await refresh()
@@ -202,6 +204,7 @@ function ProSection({ user, onError, onStub, refresh }) {
   return (
     <>
       {notice === 'success' ? <p className="ok">{t('settings.proThanks')}</p> : null}
+      {notice === 'empty' ? <p>{t('settings.proRestoreNone')}</p> : null}
 
       {!pro ? (
         <section className="card-form pro-account-card">
