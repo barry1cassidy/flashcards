@@ -549,6 +549,36 @@ textarea {
   min-height: 44px;
 }
 
+.restore-purchases {
+  margin-top: 14px;
+}
+
+.restore-purchases .muted {
+  font-size: 0.875rem;
+  line-height: 1.45;
+}
+
+.restore-purchases-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin-top: 2px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--blue);
+  font: inherit;
+  font-size: 0.875rem;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.restore-purchases-link:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
 .pro-account-card > .section-heading {
   font-size: 1.4rem;
   font-weight: 700;

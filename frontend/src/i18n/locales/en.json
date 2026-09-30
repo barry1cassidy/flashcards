@@ -602,6 +602,7 @@
     "proManage": "Manage Billing",
     "proThanks": "Your Pro subscription is active.",
     "proRestore": "Restore purchases",
+    "proRestoreHint": "If you already subscribed on this phone and Pro is not showing on this account, restore the purchase. Zipdeck checks the store and applies that subscription here. You are not charged again.",
     "proOnWeb": "Subscribe on the website, then sign in here with the same account.",
     "proOpenWebsite": "Open zipdeck.app",
     "proUnavailable": "Paid Pro is not available yet. It will show up here after billing is turned on.",

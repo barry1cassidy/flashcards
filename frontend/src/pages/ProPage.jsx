@@ -227,6 +227,7 @@ function ProSection({ user, onError, onStub, refresh }) {
             </div>
           ) : null}
           {showPlaySubscribe ? (
+            <>
             <div className="billing-actions">
               <button
                 className="btn primary"
@@ -252,12 +253,17 @@ function ProSection({ user, onError, onStub, refresh }) {
               >
                 {t('settings.proYearly', { price: yearly })}
               </button>
-              <button className="btn" type="button" disabled={busy} onClick={() => runBilling(() => restorePlayPurchases(user?.id).then(finishPlay))}>
-                {t('settings.proRestore')}
-              </button>
             </div>
+            <RestorePurchases
+              busy={busy}
+              hint={t('settings.proRestoreHint')}
+              label={t('settings.proRestore')}
+              onRestore={() => runBilling(() => restorePlayPurchases(user?.id).then(finishPlay))}
+            />
+            </>
           ) : null}
           {showAppleSubscribe ? (
+            <>
             <div className="billing-actions">
               <button
                 className="btn primary"
@@ -283,15 +289,14 @@ function ProSection({ user, onError, onStub, refresh }) {
               >
                 {t('settings.proYearly', { price: yearly })}
               </button>
-              <button
-                className="btn"
-                type="button"
-                disabled={busy}
-                onClick={() => runBilling(() => restoreApplePurchases(user?.id).then(finishPlay))}
-              >
-                {t('settings.proRestore')}
-              </button>
             </div>
+            <RestorePurchases
+              busy={busy}
+              hint={t('settings.proRestoreHint')}
+              label={t('settings.proRestore')}
+              onRestore={() => runBilling(() => restoreApplePurchases(user?.id).then(finishPlay))}
+            />
+            </>
           ) : null}
           {stubButton}
         </section>
@@ -319,9 +324,6 @@ function ProSection({ user, onError, onStub, refresh }) {
                 <a className="btn" href="https://play.google.com/store/account/subscriptions">
                   {t('settings.proManage')}
                 </a>
-                <button className="btn" type="button" disabled={busy} onClick={() => runBilling(() => restorePlayPurchases(user?.id).then(finishPlay))}>
-                  {t('settings.proRestore')}
-                </button>
               </div>
             ) : null}
             {showAppleManage ? (
@@ -329,14 +331,6 @@ function ProSection({ user, onError, onStub, refresh }) {
                 <a className="btn" href="https://apps.apple.com/account/subscriptions">
                   {t('settings.proManage')}
                 </a>
-                <button
-                  className="btn"
-                  type="button"
-                  disabled={busy}
-                  onClick={() => runBilling(() => restoreApplePurchases(user?.id).then(finishPlay))}
-                >
-                  {t('settings.proRestore')}
-                </button>
               </div>
             ) : null}
           </section>
@@ -428,6 +422,17 @@ function ProSection({ user, onError, onStub, refresh }) {
         </>
       )}
     </>
+  )
+}
+
+function RestorePurchases({ busy, hint, label, onRestore }) {
+  return (
+    <div className="restore-purchases">
+      <p className="muted">{hint}</p>
+      <button className="restore-purchases-link" type="button" disabled={busy} onClick={onRestore}>
+        {label}
+      </button>
+    </div>
   )
 }
 
