@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { api } from '../api'
 import { useAuth } from '../AuthContext'
 import { isProLicensed } from '../pro'
+import { useResumeExpiredSubscription } from '../useResumeExpiredSubscription'
 import { translateError } from '../i18n/errors'
 import { sortDecks } from '../deckSort'
 import { MIX_STUDY_ORDERS, normalizeMixStudyOrder } from '../studySettings'
@@ -15,6 +16,7 @@ export default function MixEditorPage() {
   const { id } = useParams()
   const isNew = !id
   const { user } = useAuth()
+  useResumeExpiredSubscription()
   const navigate = useNavigate()
   const [name, setName] = useState('')
   const [includeAll, setIncludeAll] = useState(false)

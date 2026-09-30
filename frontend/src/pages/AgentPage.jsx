@@ -5,6 +5,7 @@ import { api } from '../api'
 import { useAuth } from '../AuthContext'
 import { completeCheckout, isNativeApp, startCheckout } from '../billing'
 import { isProLicensed } from '../pro'
+import { useResumeExpiredSubscription } from '../useResumeExpiredSubscription'
 import { translateError } from '../i18n/errors'
 import LanguageSelect from './LanguageSelect'
 
@@ -16,6 +17,7 @@ const MAX_PDF_BYTES = 8 * 1024 * 1024
 export default function AgentPage() {
   const { t } = useTranslation()
   const { user } = useAuth()
+  useResumeExpiredSubscription()
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const [status, setStatus] = useState(null)

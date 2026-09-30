@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.flashcards.billing.ExpiredStoreSubscriptionRefresh;
 import com.flashcards.billing.ProAccess;
 import com.flashcards.card.CardRepository;
 import com.flashcards.common.ApiException;
@@ -35,6 +36,7 @@ public class StudyMixService {
     private final CardReviewRepository cardReviewRepository;
     private final StudyService studyService;
     private final OwnedAccess ownedAccess;
+    private final ExpiredStoreSubscriptionRefresh expiredStoreSubscriptionRefresh;
 
     public StudyMixService(
             StudyMixRepository mixRepository,
@@ -43,7 +45,8 @@ public class StudyMixService {
             CardRepository cardRepository,
             CardReviewRepository cardReviewRepository,
             StudyService studyService,
-            OwnedAccess ownedAccess) {
+            OwnedAccess ownedAccess,
+            ExpiredStoreSubscriptionRefresh expiredStoreSubscriptionRefresh) {
         this.mixRepository = mixRepository;
         this.userRepository = userRepository;
         this.deckRepository = deckRepository;
@@ -51,6 +54,7 @@ public class StudyMixService {
         this.cardReviewRepository = cardReviewRepository;
         this.studyService = studyService;
         this.ownedAccess = ownedAccess;
+        this.expiredStoreSubscriptionRefresh = expiredStoreSubscriptionRefresh;
     }
 
     @Transactional(readOnly = true)
@@ -202,6 +206,7 @@ public class StudyMixService {
     }
 
     private User requireProUser(UUID userId) {
+        expiredStoreSubscriptionRefresh.refresh(userId);
         User user = userRepository
                 .findById(userId)
                 .orElseThrow(() -> new ApiException(HttpStatus.UNAUTHORIZED, "Not authenticated"));

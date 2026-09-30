@@ -15,6 +15,7 @@ import CardImageField from './CardImageField'
 import AuthImage from './AuthImage'
 import { useAuth } from '../AuthContext'
 import { isProLicensed } from '../pro'
+import { useResumeExpiredSubscription } from '../useResumeExpiredSubscription'
 
 function deckUpdateBody(deck, overrides = {}) {
   return {
@@ -30,6 +31,7 @@ function deckUpdateBody(deck, overrides = {}) {
 export default function DeckDetailPage() {
   const { t } = useTranslation()
   const { user } = useAuth()
+  useResumeExpiredSubscription()
   const pro = isProLicensed(user)
   const { id } = useParams()
   const navigate = useNavigate()

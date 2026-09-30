@@ -22,6 +22,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.mock.web.MockMultipartFile;
 
+import com.flashcards.billing.ExpiredStoreSubscriptionRefresh;
 import com.flashcards.common.ApiException;
 import com.flashcards.deck.Deck;
 import com.flashcards.security.OwnedAccess;
@@ -37,6 +38,8 @@ class CardImageServiceTest {
     private OwnedAccess ownedAccess;
     @Mock
     private UserRepository userRepository;
+    @Mock
+    private ExpiredStoreSubscriptionRefresh expiredStoreSubscriptionRefresh;
 
     private CardImageService service;
     private User user;
@@ -48,7 +51,7 @@ class CardImageServiceTest {
     void setUp() throws Exception {
         CardImageProperties properties =
                 new CardImageProperties("local", "./data/card-images", "", "us-east-1", "", "card-images", 5_000_000, 1600);
-        service = new CardImageService(store, properties, ownedAccess, userRepository);
+        service = new CardImageService(store, properties, ownedAccess, userRepository, expiredStoreSubscriptionRefresh);
         user = new User();
         user.setId(userId);
         user.setProLicensed(true);

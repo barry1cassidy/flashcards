@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { api } from '../api'
 import { useAuth } from '../AuthContext'
 import { isProLicensed } from '../pro'
+import { useResumeExpiredSubscription } from '../useResumeExpiredSubscription'
 import { translateError } from '../i18n/errors'
 import { MIX_STUDY_ORDERS, normalizeMixStudyOrder } from '../studySettings'
 import StudyModeModal from './StudyModeModal'
@@ -11,6 +12,7 @@ import StudyModeModal from './StudyModeModal'
 export default function MixesPage() {
   const { t } = useTranslation()
   const { user } = useAuth()
+  useResumeExpiredSubscription()
   const navigate = useNavigate()
   const [mixes, setMixes] = useState([])
   const [error, setError] = useState('')

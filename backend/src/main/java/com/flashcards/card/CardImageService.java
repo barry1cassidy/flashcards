@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.flashcards.billing.ExpiredStoreSubscriptionRefresh;
 import com.flashcards.billing.ProAccess;
 import com.flashcards.common.ApiException;
 import com.flashcards.security.OwnedAccess;
@@ -25,20 +26,24 @@ public class CardImageService {
     private final CardImageProperties properties;
     private final OwnedAccess ownedAccess;
     private final UserRepository userRepository;
+    private final ExpiredStoreSubscriptionRefresh expiredStoreSubscriptionRefresh;
 
     public CardImageService(
             CardImageStore store,
             CardImageProperties properties,
             OwnedAccess ownedAccess,
-            UserRepository userRepository) {
+            UserRepository userRepository,
+            ExpiredStoreSubscriptionRefresh expiredStoreSubscriptionRefresh) {
         this.store = store;
         this.properties = properties;
         this.ownedAccess = ownedAccess;
         this.userRepository = userRepository;
+        this.expiredStoreSubscriptionRefresh = expiredStoreSubscriptionRefresh;
     }
 
     @Transactional
     public CardResponse save(UUID userId, UUID cardId, CardImageSide side, MultipartFile file) {
+        expiredStoreSubscriptionRefresh.refresh(userId);
         User user = requireUser(userId);
         ProAccess.require(user);
         Card card = ownedAccess.requireCard(userId, cardId);

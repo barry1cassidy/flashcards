@@ -18,11 +18,13 @@ import {
   syncApplePurchases,
 } from '../billing'
 import { isProLicensed } from '../pro'
+import { useResumeExpiredSubscription } from '../useResumeExpiredSubscription'
 import { translateError } from '../i18n/errors'
 
 export default function ProPage() {
   const { t } = useTranslation()
   const { user, setProLicensed, refresh } = useAuth()
+  useResumeExpiredSubscription()
   const [error, setError] = useState('')
 
   async function run(work) {

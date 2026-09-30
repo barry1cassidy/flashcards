@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.flashcards.billing.BillingProperties;
+import com.flashcards.billing.ExpiredStoreSubscriptionRefresh;
 import com.flashcards.billing.ProAccess;
 import com.flashcards.card.CardLanguages;
 import com.flashcards.card.CardService;
@@ -46,6 +47,7 @@ public class AgentService {
     private final CardService cardService;
     private final PdfTextExtractor pdfTextExtractor;
     private final AgentJobStore jobStore;
+    private final ExpiredStoreSubscriptionRefresh expiredStoreSubscriptionRefresh;
     private final ChatClient chatClient;
     private final ExecutorService jobExecutor = Executors.newVirtualThreadPerTaskExecutor();
     private final ScheduledExecutorService heartbeat = Executors.newSingleThreadScheduledExecutor(thread -> {
@@ -63,7 +65,8 @@ public class AgentService {
             DeckService deckService,
             CardService cardService,
             PdfTextExtractor pdfTextExtractor,
-            AgentJobStore jobStore) {
+            AgentJobStore jobStore,
+            ExpiredStoreSubscriptionRefresh expiredStoreSubscriptionRefresh) {
         this.properties = properties;
         this.creditService = creditService;
         this.billingProperties = billingProperties;
@@ -73,10 +76,12 @@ public class AgentService {
         this.cardService = cardService;
         this.pdfTextExtractor = pdfTextExtractor;
         this.jobStore = jobStore;
+        this.expiredStoreSubscriptionRefresh = expiredStoreSubscriptionRefresh;
         this.chatClient = properties.configured() ? ChatClient.create(openAiChatModel()) : null;
     }
 
     public AgentStatusResponse status(UUID userId) {
+        expiredStoreSubscriptionRefresh.refresh(userId);
         User user = requireUser(userId);
         boolean pro = ProAccess.allowed(user);
         CreditBalance credits = pro ? creditService.snapshot(user) : CreditBalance.of(0, user.getAgentAddonCredits());
@@ -95,6 +100,7 @@ public class AgentService {
     }
 
     public AgentJobResponse startCreateDeck(UUID userId, AgentCreateRequest request, MultipartFile file) {
+        expiredStoreSubscriptionRefresh.refresh(userId);
         User user = requireUser(userId);
         ProAccess.require(user);
         if (!properties.configured() || chatClient == null) {

@@ -503,6 +503,10 @@ public class BillingService {
         };
     }
 
+    void syncEntitlement(UUID userId) {
+        userRepository.findById(userId).ifPresent(this::refreshEntitlement);
+    }
+
     private void refreshEntitlement(User user) {
         Instant now = Instant.now();
         List<UserSubscription> rows = subscriptionRepository.findByUser_Id(user.getId());

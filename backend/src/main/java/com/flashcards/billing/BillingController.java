@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.flashcards.auth.AuthService;
 import com.flashcards.auth.UserResponse;
 import com.flashcards.common.ApiException;
 import com.flashcards.security.AdminAccess;
@@ -22,10 +23,25 @@ public class BillingController {
 
     private final BillingService billingService;
     private final UserRepository userRepository;
+    private final ExpiredStoreSubscriptionRefresh expiredStoreSubscriptionRefresh;
 
-    public BillingController(BillingService billingService, UserRepository userRepository) {
+    public BillingController(
+            BillingService billingService,
+            UserRepository userRepository,
+            ExpiredStoreSubscriptionRefresh expiredStoreSubscriptionRefresh) {
         this.billingService = billingService;
         this.userRepository = userRepository;
+        this.expiredStoreSubscriptionRefresh = expiredStoreSubscriptionRefresh;
+    }
+
+    @PostMapping("/refresh-expired")
+    public UserResponse refreshExpired(Authentication authentication) {
+        var userId = AuthSupport.requireUser(authentication).id();
+        expiredStoreSubscriptionRefresh.refresh(userId);
+        return userRepository
+                .findById(userId)
+                .map(AuthService::toUserResponse)
+                .orElseThrow(() -> new ApiException(HttpStatus.UNAUTHORIZED, "Not authenticated"));
     }
 
     @GetMapping("/status")
