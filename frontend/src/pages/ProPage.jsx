@@ -204,7 +204,6 @@ function ProSection({ user, onError, onStub, refresh }) {
   return (
     <>
       {notice === 'success' ? <p className="ok">{t('settings.proThanks')}</p> : null}
-      {notice === 'empty' ? <p>{t('settings.proRestoreNone')}</p> : null}
 
       {!pro ? (
         <section className="card-form pro-account-card">
@@ -263,6 +262,7 @@ function ProSection({ user, onError, onStub, refresh }) {
               busy={busy}
               hint={t('settings.proRestoreHint')}
               label={t('settings.proRestore')}
+              result={notice === 'empty' ? t('settings.proRestoreNone') : ''}
               onRestore={() => runBilling(() => restorePlayPurchases(user?.id).then(finishPlay))}
             />
             </>
@@ -299,6 +299,7 @@ function ProSection({ user, onError, onStub, refresh }) {
               busy={busy}
               hint={t('settings.proRestoreHint')}
               label={t('settings.proRestore')}
+              result={notice === 'empty' ? t('settings.proRestoreNone') : ''}
               onRestore={() => runBilling(() => restoreApplePurchases(user?.id).then(finishPlay))}
             />
             </>
@@ -430,13 +431,18 @@ function ProSection({ user, onError, onStub, refresh }) {
   )
 }
 
-function RestorePurchases({ busy, hint, label, onRestore }) {
+function RestorePurchases({ busy, hint, label, onRestore, result }) {
   return (
     <div className="restore-purchases">
       <p className="muted">{hint}</p>
       <button className="restore-purchases-link" type="button" disabled={busy} onClick={onRestore}>
         {label}
       </button>
+      {result ? (
+        <p className="restore-purchases-result" role="status">
+          {result}
+        </p>
+      ) : null}
     </div>
   )
 }
