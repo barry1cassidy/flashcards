@@ -3,8 +3,10 @@ import Foundation
 import StoreKit
 
 /// Copy this file into the Xcode App target (same target as Info.plist).
-/// Capacitor 8 picks it up through CAPBridgedPlugin. Do not finish a
-/// consumable until the API has verified the signed transaction.
+/// It does not register itself. MainViewController.swift must call
+/// `registerPluginInstance(AppleBillingPlugin())` or JS gets
+/// "AppleBilling plugin is not implemented on ios".
+/// Do not finish a consumable until the API has verified the signed transaction.
 @objc(AppleBillingPlugin)
 public class AppleBillingPlugin: CAPPlugin, CAPBridgedPlugin {
     public let identifier = "AppleBillingPlugin"
