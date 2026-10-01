@@ -23,11 +23,13 @@ public class AppleBillingPlugin: CAPPlugin, CAPBridgedPlugin {
             call.reject("Payment failed")
             return
         }
-        Task {
+        // StoreKit only presents the purchase sheet from the main thread.
+        // A background task returns without a sheet and without an error.
+        Task { @MainActor in
             do {
                 let products = try await Product.products(for: [productId])
                 guard let product = products.first else {
-                    self.fail(call, "Payment failed")
+                    self.fail(call, "This subscription is not available in the App Store yet.")
                     return
                 }
                 var options = Set<Product.PurchaseOption>()
@@ -50,7 +52,8 @@ public class AppleBillingPlugin: CAPPlugin, CAPBridgedPlugin {
                     self.fail(call, "Payment failed")
                 }
             } catch {
-                self.fail(call, "Payment failed")
+                let message = error.localizedDescription.trimmingCharacters(in: .whitespacesAndNewlines)
+                self.fail(call, message.isEmpty ? "Payment failed" : message)
             }
         }
     }

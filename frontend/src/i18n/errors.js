@@ -39,6 +39,7 @@ const ERROR_KEYS = {
   'Stripe webhook is not configured': 'errors.stripeWebhookNotConfigured',
   'Invalid Stripe signature': 'errors.invalidStripeSignature',
   'Payment failed': 'errors.paymentFailed',
+  'This subscription is not available in the App Store yet.': 'errors.subscriptionUnavailable',
   'No Stripe customer': 'errors.noStripeCustomer',
   'Pro license required': 'errors.proRequired',
   'AI is not configured': 'errors.aiNotConfigured',

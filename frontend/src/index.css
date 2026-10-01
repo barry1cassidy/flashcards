@@ -585,6 +585,225 @@ textarea {
   line-height: 1.45;
 }
 
+.pro-upgrade-card {
+  display: grid;
+  gap: 22px;
+}
+
+.pro-offer {
+  display: grid;
+  gap: 12px;
+}
+
+.pro-plan-list {
+  display: grid;
+  gap: 12px;
+}
+
+.pro-plan-card {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 14px;
+  min-height: 72px;
+  margin: 0;
+  padding: 16px 16px 14px;
+  border: 1.5px solid var(--line);
+  border-radius: 16px;
+  background: var(--surface-2);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.pro-plan-card:has(.pro-plan-badge) {
+  margin-top: 8px;
+}
+
+.pro-plan-card.is-selected {
+  border-color: var(--cobalt);
+  background: var(--due-bg);
+  box-shadow: inset 0 0 0 1px var(--cobalt);
+}
+
+.pro-plan-card input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.pro-plan-radio {
+  flex: 0 0 22px;
+  width: 22px;
+  height: 22px;
+  border: 2px solid var(--muted);
+  border-radius: 50%;
+  background: var(--card);
+  box-shadow: inset 0 0 0 4px transparent;
+}
+
+.pro-plan-card.is-selected .pro-plan-radio {
+  border-color: var(--cobalt);
+  background: var(--cobalt);
+  box-shadow: inset 0 0 0 4px var(--card);
+}
+
+.pro-plan-copy {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+
+.pro-plan-badge {
+  position: absolute;
+  top: -10px;
+  left: 14px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: var(--mint);
+  color: #062016;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.pro-plan-title {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.pro-plan-price {
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.pro-plan-detail {
+  color: var(--muted);
+  font-size: 0.86rem;
+  font-weight: 500;
+}
+
+.pro-offer-subscribe {
+  width: 100%;
+  min-height: 50px;
+  border-radius: 999px;
+  font-size: 1.05rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.pro-offer-renew {
+  margin: 0;
+  text-align: center;
+}
+
+.pro-offer .restore-purchases {
+  margin-top: 2px;
+  text-align: center;
+}
+
+.pro-offer .restore-purchases .muted {
+  margin: 0 auto;
+  max-width: 36em;
+}
+
+.pro-offer .restore-purchases-link {
+  justify-content: center;
+  width: 100%;
+}
+
+.pro-benefits {
+  display: grid;
+  gap: 12px;
+}
+
+.pro-benefits-heading {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.pro-benefit-list {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pro-benefit-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 14px;
+  border-radius: 14px;
+  background: var(--surface-2);
+}
+
+.pro-benefit-item strong {
+  display: block;
+  font-size: 1rem;
+  letter-spacing: -0.02em;
+}
+
+.pro-benefit-item p {
+  margin: 4px 0 0;
+}
+
+.pro-benefit-icon {
+  display: grid;
+  place-items: center;
+  flex: 0 0 42px;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  color: #fff;
+}
+
+.pro-benefit-icon svg {
+  display: block;
+}
+
+.pro-benefit-item-ai .pro-benefit-icon {
+  background: linear-gradient(160deg, #8b6cff, var(--cobalt));
+}
+
+.pro-benefit-item-mix .pro-benefit-icon {
+  background: linear-gradient(160deg, var(--cobalt), #2f8bff);
+}
+
+.pro-benefit-item-images .pro-benefit-icon {
+  background: linear-gradient(160deg, var(--gold), var(--coral));
+}
+
+.pro-benefit-item-credits .pro-benefit-icon {
+  background: linear-gradient(160deg, var(--mint), #1f9d6a);
+}
+
+.pro-benefit-item-devices .pro-benefit-icon {
+  background: linear-gradient(160deg, #6d7bff, #3d4fd4);
+}
+
+html[data-theme='light'] .pro-plan-card.is-selected {
+  background: rgba(76, 111, 255, 0.08);
+}
+
+html[data-theme='light'] .pro-benefit-item {
+  background: #eef1f8;
+}
+
 .pro-account-card > .section-heading {
   font-size: 1.4rem;
   font-weight: 700;
