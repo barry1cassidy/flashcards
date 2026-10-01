@@ -448,7 +448,7 @@ function ProSection({ user, onError, onStub, refresh }) {
 
 function PlanOption({ selected, badge, title, price, detail, onSelect }) {
   return (
-    <label className={`pro-plan-card${selected ? ' is-selected' : ''}`}>
+    <label className={`pro-plan-card${selected ? ' is-selected' : ''}`} onClick={onSelect}>
       <input type="radio" name="pro-plan" checked={selected} onChange={onSelect} />
       <span className="pro-plan-radio" aria-hidden="true" />
       <span className="pro-plan-copy">
