@@ -332,7 +332,7 @@ The iOS app is the same Vite React UI in a WebView. Keep coding in Cursor. Signe
 
 `server.hostname` is `zipdeck.app` for password autofill. Native builds must use `VITE_API_BASE=https://api.zipdeck.app`. Setting hostname to the API host makes Capacitor serve bundled `index.html` and login never leaves the device. The site hosts `https://zipdeck.app/.well-known/apple-app-site-association` (`TA5H8MHX2X.com.zipdeck.app`). Associated Domains in Xcode must include `applinks:zipdeck.app` and `webcredentials:zipdeck.app`. After email/password login, iOS uses `@capgo/capacitor-autofill-save-password` to show the Keychain save sheet (a `fetch()` login never triggers it on its own).
 
-On the Mac, clone this repo and work from `frontend`. First time only, if `ios/` is missing:
+On the Mac, clone this repo and work from `frontend` (`pwd` must end in `frontend` or `npm ci` prints npm’s help). First time only, if `ios/` is missing:
 
 ```bash
 cd frontend
@@ -340,6 +340,8 @@ npm ci
 npm install @capacitor/ios
 npx cap add ios
 ```
+
+Do not commit `frontend/ios/`, `package.json`, or `package-lock.json` from the Mac. `ios/` holds `GIDClientID` and signing. After `cap add ios`, copy the Swift files as in **App Store subscriptions** below — `cap add` / `cap sync` never copy `ios-native/`. Capacitor 8.5 `SceneDelegate` must instantiate `MainViewController()`; the storyboard Custom Class is ignored.
 
 Reuse the Android Vite env (there is no separate `.env.ios`). Copy `frontend/.env.android.example` to gitignored `frontend/.env.android`:
 
@@ -357,7 +359,7 @@ npx cap open ios
 
 `build:android` is the production-API Vite mode; it is what we sync into iOS as well. The API must allow Capacitor origins (included in `APP_CORS_ORIGINS`).
 
-Google’s JavaScript button does not work in the iOS WebView (`capacitor://localhost`). The app uses native Google Sign-In (`@capawesome/capacitor-google-sign-in`). Do not add `capacitor://localhost` or any `capacitor://` URL as a Google JavaScript origin or redirect URI.
+Google’s JavaScript button does not work in the iOS WebView. With `server.hostname` set, the origin is `capacitor://zipdeck.app` (not a Google JS origin). The app uses native Google Sign-In (`@capawesome/capacitor-google-sign-in`). Do not add `capacitor://localhost`, `capacitor://zipdeck.app`, or any `capacitor://` URL as a Google JavaScript origin or redirect URI.
 
 In the **same Google Cloud project** as the Web client, create one **iOS** OAuth client with bundle ID `com.zipdeck.app`. The plugin still sends the **Web** client ID so `/api/auth/google` can verify the token. Configure the iOS client only in `Info.plist` on the Mac (Xcode **App** target → **Info**):
 
@@ -371,14 +373,37 @@ Do not paste those values into git or chat.
 
 Digital Pro on iOS uses StoreKit, not Stripe. Product IDs must match App Store Connect: `pro_monthly`, `pro_yearly`, and consumable `credits_addon`. The API verifies the signed StoreKit 2 transaction at `/api/billing/apple/purchase`. No In-App Purchase `.p8` key is required for that.
 
-The Swift plugin lives at `frontend/ios-native/` because `ios/` is created on the Mac. Copying the plugin `.swift` file is **not** enough: Capacitor 8 only talks to in-app plugins that `registerPluginInstance` loads, the same way Android `MainActivity` calls `registerPlugin(PlayBillingPlugin.class)`. Without that, Subscribe shows `AppleBilling plugin is not implemented on ios`. After `git pull`:
+The Swift sources live at `frontend/ios-native/` because `ios/` is created on the Mac. **`npx cap sync ios` does not copy that folder.** After every `git pull` that touches `ios-native/`, copy the files into the Xcode App target yourself and confirm they replaced the copies Xcode compiles.
 
-1. Copy **both** `frontend/ios-native/AppleBillingPlugin.swift` and `frontend/ios-native/MainViewController.swift` into the Xcode **App** target (same target as `Info.plist`). Replace older copies.
-2. Open `ios/App/App/Base.lproj/Main.storyboard` (or the App storyboard). Select the WebView controller. Identity Inspector → Custom Class = `MainViewController`, module **App** (or Inherit Module From Target). It must not stay `CAPBridgeViewController` or the register call never runs.
-3. Signing & Capabilities → add **In-App Purchase** if it is not already there. Keep Associated Domains (`applinks:zipdeck.app`, `webcredentials:zipdeck.app`).
-4. `npm run build:android` then `npx cap sync ios`. Confirm both Swift files are still in the App target (`cap sync` must not delete them).
+Copying `AppleBillingPlugin.swift` is **not** enough: Capacitor 8 only talks to in-app plugins that `registerPluginInstance` loads, the same way Android `MainActivity` calls `registerPlugin(PlayBillingPlugin.class)`. That call lives on `MainViewController`. **Capacitor 8.5 ignores `Main.storyboard`:** `SceneDelegate` creates the window in code with `CAPBridgeViewController()`, so the storyboard Custom Class never runs and Subscribe shows `AppleBilling plugin is not implemented on ios`. Set `window?.rootViewController = MainViewController()` in `SceneDelegate.swift`. StoreKit must start the purchase on the main thread (`Task { @MainActor in }`). If Subscribe returns with no sheet and no error, Xcode is still compiling an old plugin copy.
 
-Paid Applications must be **Active**. Sandbox testers: App Store Connect → Users and Access → Sandbox. On the phone, stay signed into the TestFlight Apple ID, then add the sandbox tester under **Settings → App Store → Sandbox Account**. TestFlight IAP is sandbox; it does not charge real money.
+Xcode may keep **two** on-disk copies. Overwrite both after pull:
+
+```bash
+cp frontend/ios-native/AppleBillingPlugin.swift frontend/ios/App/App/AppleBillingPlugin.swift
+cp frontend/ios-native/AppleBillingPlugin.swift frontend/ios/App/AppleBillingPlugin.swift
+cp frontend/ios-native/MainViewController.swift frontend/ios/App/App/MainViewController.swift
+cp frontend/ios-native/MainViewController.swift frontend/ios/App/MainViewController.swift
+cp frontend/ios-native/SceneDelegate.swift frontend/ios/App/App/SceneDelegate.swift
+```
+
+Then `find frontend/ios -name AppleBillingPlugin.swift` and `grep MainActor` on every path except `ios-native` (that one is the source). `grep rootViewController ios/App/App/SceneDelegate.swift` must show `MainViewController()`. Close stale Xcode tabs **without saving** or the editor will write the old buffer back.
+
+After `git pull`:
+
+1. Copy **all three** Swift files into the Xcode **App** target as above (same target as `Info.plist`). Add `MainViewController.swift` with File → Add Files if it is not already in the project. Overwrite `SceneDelegate.swift` — do not leave `CAPBridgeViewController()` as the root controller.
+2. Confirm **Build Phases → Compile Sources** lists `AppleBillingPlugin.swift`, `MainViewController.swift`, and `SceneDelegate.swift` (select the blue App project, then TARGETS → App → Build Phases).
+3. In `SceneDelegate.swift`, `willConnectTo` must use `window?.rootViewController = MainViewController()`. The storyboard Custom Class does not matter on Capacitor 8.5. Grep must show `MainViewController()`, not `CAPBridgeViewController()`.
+4. Signing & Capabilities → add **In-App Purchase** if it is not already there. Keep Associated Domains (`applinks:zipdeck.app`, `webcredentials:zipdeck.app`).
+5. `npm run build:android` then `npx cap sync ios`. Confirm the three Swift files are still in Compile Sources (`cap sync` must not delete them). If you sync after copying, copy the Swift files **again**.
+
+**Paid Apps** (App Store Connect → **Business** → Agreements) must be **Active** or StoreKit returns no products and Subscribe shows “This subscription is not available in the App Store yet.” **Pending User Info** / **Processing** means tax or banking is incomplete. Complete the **electronic W-9** in that page (do not download a blank IRS form). US individual / sole proprietor is **Non-Exempt Payee**. Leave Business Name blank unless you file under a different legal name. Add a **bank account** on the same page. Do not paste TINs or bank numbers into git or chat. Bank can stay **Processing** after Paid Apps is already Active.
+
+Products: subscription group with `pro_monthly` and `pro_yearly`, plus consumable `credits_addon`. Each needs English (U.S.) display name/description and a US price. **Prepare for Submission** is enough for TestFlight once Paid Apps is Active. The banner “first auto-renewable subscription must be submitted with a new app version” is for the public store, not sandbox. The 1024 icon is optional on the IAP product page.
+
+`AppleBilling plugin is not implemented on ios` means SceneDelegate is still creating `CAPBridgeViewController()`. “Not available in the App Store yet” means Paid Apps is not Active, or the product ID/metadata does not match.
+
+TestFlight IAP is always sandbox and does **not** charge a real card. The sheet says **Environment: Sandbox**. Stay on the real TestFlight Apple ID (do not add that address as a Sandbox tester). Users and Access → Sandbox testers are optional extras. On iOS 26, **Settings → App Store** has no Sandbox Account row; it is under **Settings → Developer**, which needs Developer Mode (USB + Xcode). A cloud Mac cannot enable that. Skip it for TestFlight.
 
 Do not add a website Subscribe button or Stripe checkout in the iOS app.
 
@@ -387,11 +412,14 @@ Do not add a website Subscribe button or Stripe checkout in the iOS app.
 This is how we produce the signed archive for **internal** TestFlight. App name Zipdeck, bundle ID `com.zipdeck.app`. The native Pro page uses StoreKit (`pro_monthly`, `pro_yearly`, `credits_addon`). It must not show Stripe or “subscribe on the website.”
 
 1. On a browser: App Store Connect → register App ID `com.zipdeck.app` if needed (Certificates, Identifiers & Profiles → Identifiers), then Apps → New App → iOS, name Zipdeck, SKU `zipdeck`.
-2. On the Mac: `git pull`, then from `frontend` run `npm ci`, `npm run build:android`, `npx cap sync ios`. Confirm `GIDClientID` and the URL scheme survived the sync (`cap sync` does not overwrite `Info.plist`). Copy `frontend/ios-native/AppleBillingPlugin.swift` **and** `frontend/ios-native/MainViewController.swift` into the **App** target (replace older copies). Set the storyboard WebView controller Custom Class to `MainViewController` so Capacitor registers AppleBilling. If that class stays `CAPBridgeViewController`, Subscribe fails with `AppleBilling plugin is not implemented on ios`.
-3. Xcode → **App** target (under TARGETS) → **Signing & Capabilities**: Automatically manage signing, your Apple Developer team, bundle identifier `com.zipdeck.app`. Associated Domains must list `applinks:zipdeck.app` and `webcredentials:zipdeck.app`. Add **In-App Purchase**. Do not commit team IDs, certificates, or provisioning profiles.
-4. Destination: **Any iOS Device (arm64)** (Archive stays disabled while a simulator is selected). Product → Archive.
-5. Organizer → **Archives** → Distribute App → **App Store Connect** → Upload. Skip Xcode Cloud “Get Started” until a manual upload has worked. Newer Xcode may skip the options/signing sheets when automatic signing is already on.
-6. App Store Connect → Zipdeck → TestFlight. Wait until the build is **Ready to Test**. Create an **Internal Testing** group (Enable Automatic Distribution is fine), add yourself, attach the build. Internal testers skip Beta App Review.
-7. On the test iPhone, sign into the App Store / TestFlight with the **same Apple ID** that received the invite, then install from the email’s View in TestFlight link or from the TestFlight app. For purchases, sign the sandbox tester in under **Settings → App Store → Sandbox Account**.
+2. On the Mac: `git pull` (if pull refuses to overwrite `frontend/package.json` or `package-lock.json`, `git restore` those two files only — they are leftover Mac `npm install @capacitor/ios` edits; do not commit them). From `frontend` run `npm ci`, `npm install @capacitor/ios` if needed, `npm run build:android`, `npx cap sync ios`. Confirm `GIDClientID`, the URL scheme, and `ITSAppUsesNonExemptEncryption=NO` survived (`cap sync` does not overwrite `Info.plist`).
+3. Copy all `frontend/ios-native/*.swift` files into the App target as in **App Store subscriptions** (overwrite `ios/App/App/SceneDelegate.swift` and both plugin copies). `SceneDelegate` must set `rootViewController = MainViewController()`. Compile Sources must list `AppleBillingPlugin`, `MainViewController`, and `SceneDelegate`. If Subscribe fails with `AppleBilling plugin is not implemented on ios`, SceneDelegate is still creating `CAPBridgeViewController()`.
+4. Xcode → **App** target (under TARGETS) → **Signing & Capabilities**: Automatically manage signing, your Apple Developer team, bundle identifier `com.zipdeck.app`. Associated Domains must list `applinks:zipdeck.app` and `webcredentials:zipdeck.app`. Add **In-App Purchase**. Do not commit team IDs, certificates, or provisioning profiles.
+5. Bump **Build** (`CFBundleVersion`) on every upload. Apple rejects a reuse of the same version+build (all-`1.0 (1)` archives fail). Version can stay `1.0`.
+6. App Store icon is the **1024×1024** slot in **Assets.xcassets → AppIcon**, not an App Store Connect upload (there is no icon file picker). The PNG must be RGB with **no alpha**. Confirm it on the TestFlight / home-screen icon; the Apps list in App Store Connect often stays a placeholder until a version is submitted. Listing screenshots go in App Store Connect → the iOS version → **Previews and Screenshots → iPhone 6.5"** (1284×2778). A 6.9" set is optional if 6.5" is present.
+7. Destination: **Any iOS Device (arm64)** (Archive stays disabled while a simulator is selected). Product → Archive. Skip Xcode Cloud **Get Started**.
+8. Organizer → **Archives** → select the **newest** row. **Distribute App** is on the right of that window (or right-click the row). Distribute → **App Store Connect** → Upload. Newer Xcode may skip the options/signing sheets when automatic signing is already on.
+9. App Store Connect → Zipdeck → TestFlight. Wait until the build is **Ready to Test**. Create an **Internal Testing** group (Enable Automatic Distribution is fine), add yourself, attach the build. Internal testers skip Beta App Review.
+10. On the test iPhone, sign into the App Store / TestFlight with the **same Apple ID** that received the invite, then install from the email’s View in TestFlight link or from the TestFlight app. Subscribe with that Apple ID. Do not sign the phone into a Sandbox tester as the main Apple ID. TestFlight is already sandbox (no real charge). iOS 26 will not show **Settings → App Store → Sandbox Account** without Developer Mode. Subscribe is allowlisted: Zipdeck accounts `barry1cassidy@…` or `@zipdeck.app` see StoreKit; everyone else still sees coming soon. That is expected. The sheet must say **Environment: Sandbox**, not a website.
 
 A USB phone cannot attach to a cloud Mac. Simulator Google Sign-In is unreliable; TestFlight on a device is the real check. Digital goods on iOS must use StoreKit — do not add a website subscribe CTA in the iOS app.
