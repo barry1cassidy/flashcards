@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { api } from '../api'
+import { useAuth } from '../AuthContext'
+import { isEmailVerified } from '../email'
 import { translateError } from '../i18n/errors'
 import { GroupBadge } from './ColorPicker'
 import SpeakButton from './SpeakButton'
@@ -13,6 +15,8 @@ export default function LibraryDeckPage() {
   const { t } = useTranslation()
   const { id } = useParams()
   const navigate = useNavigate()
+  const { user } = useAuth()
+  const verified = isEmailVerified(user)
   const [deck, setDeck] = useState(null)
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
@@ -129,17 +133,25 @@ export default function LibraryDeckPage() {
               <p className="muted">{t('decks.cards', { count: deck.cards.length })}</p>
             </div>
             <div className="header-actions">
-              <button className="btn primary" type="button" disabled={busy} onClick={onStudyClick}>
-                {t('decks.study')}
-              </button>
-              {deck.copiedDeckId ? (
-                <Link className="btn" to={`/decks/${deck.copiedDeckId}`}>
-                  {t('library.openInMyDecks')}
-                </Link>
+              {verified ? (
+                <>
+                  <button className="btn primary" type="button" disabled={busy} onClick={onStudyClick}>
+                    {t('decks.study')}
+                  </button>
+                  {deck.copiedDeckId ? (
+                    <Link className="btn" to={`/decks/${deck.copiedDeckId}`}>
+                      {t('library.openInMyDecks')}
+                    </Link>
+                  ) : (
+                    <button className="btn" type="button" disabled={busy} onClick={addOnly}>
+                      {busy ? t('library.adding') : t('library.addToMyDecks')}
+                    </button>
+                  )}
+                </>
               ) : (
-                <button className="btn" type="button" disabled={busy} onClick={addOnly}>
-                  {busy ? t('library.adding') : t('library.addToMyDecks')}
-                </button>
+                <Link className="btn primary" to="/verify">
+                  {t('verify.gateCta')}
+                </Link>
               )}
             </div>
           </div>

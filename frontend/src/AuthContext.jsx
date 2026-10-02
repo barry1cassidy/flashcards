@@ -79,6 +79,21 @@ export function AuthProvider({ children }) {
         await offerSavePassword(email, password)
         return result.user
       },
+      async verifyEmail(code) {
+        const updated = await api('/api/auth/verify-email', {
+          method: 'POST',
+          body: JSON.stringify({ code }),
+        })
+        setUser(updated)
+        return updated
+      },
+      async resendVerification() {
+        const updated = await api('/api/auth/resend-verification', {
+          method: 'POST',
+        })
+        setUser(updated)
+        return updated
+      },
       async setTheme(theme) {
         return patchUser(setUser, user, { theme })
       },

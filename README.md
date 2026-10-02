@@ -27,6 +27,8 @@ FLUSH PRIVILEGES;
 
 The API expects `localhost:3306`, database `flashcards`, user `flashcards`, password `flashcards`. Override with standard Spring datasource environment variables if needed.
 
+Email verification needs `RESEND_API_KEY` (see **Email verification (Resend)** below). Without it, new email/password accounts are created but no code is mailed.
+
 ## Run the API
 
 ```bash
@@ -117,6 +119,59 @@ Restart both the Vite dev server and Spring Boot after saving. Flyway migration 
 
 If the Google button is missing, `.env.local` is absent or Vite was not restarted. If Google shows `redirect_uri_mismatch` or origin errors, the JavaScript origin must match the URL in the address bar exactly, including port. If Google shows that the app has not completed verification, add your Gmail under **Audience → Test users**.
 
+## Email verification (Resend)
+
+New **email/password** accounts must enter a 6-digit code before My Decks, Study Mix, AI, classes, and Pro unlock. Sample Sets, Help, and Settings stay available. Existing accounts stay verified. **Google sign-in** skips this (Google already verified the address).
+
+You do not need Resend’s Node/PHP sample or the **Send email** button in their onboarding screen. Zipdeck already sends through `POST https://api.resend.com/emails`.
+
+### 1. Create an API key
+
+On the [Resend onboarding](https://resend.com/onboarding) **Add an API key** step (or [API Keys](https://resend.com/api-keys)):
+
+1. Click **Add API Key**.
+2. Name it `Zipdeck` (or `Zipdeck production`).
+3. Permission: **Sending access**.
+4. Copy the `re_…` value once. Do not commit it or paste it into chat.
+
+### 2. First send (before zipdeck.app is verified)
+
+Resend only delivers from `onboarding@resend.dev` to **the email you used to create the Resend account**. Leave `APP_MAIL_FROM` at `Zipdeck <onboarding@resend.dev>` until the domain is verified.
+
+Local PowerShell, then restart the API:
+
+```powershell
+$env:RESEND_API_KEY="re_..."
+cd backend
+.\mvnw.cmd spring-boot:run
+```
+
+Register at [http://localhost:5173/register](http://localhost:5173/register) with that same Resend-account email. You should land on **Verify your email**, get a 6-digit code in the inbox (and in [Resend → Emails](https://resend.com/emails)), and unlock the app after submitting it. Codes expire in 15 minutes; wait 60 seconds between resends.
+
+If the inbox is empty: confirm the API was started **after** `RESEND_API_KEY` was set, the To address matches the Resend login, and [Resend → Logs](https://resend.com/logs) is not rejecting the request.
+
+### 3. Verify zipdeck.app (required before public sign-up)
+
+Anyone else’s inbox needs a verified domain:
+
+1. Resend → [Domains](https://resend.com/domains) → **Add Domain** → `zipdeck.app` (or `send.zipdeck.app` if the root domain already has email DNS you do not want to touch).
+2. Add the DNS records Resend shows (DKIM CNAME/TXT, SPF, and optional MX) at the registrar for zipdeck.app.
+3. Wait until the domain is **Verified**.
+4. On the Lightsail host `.env`:
+
+```
+RESEND_API_KEY=re_...
+APP_MAIL_FROM=Zipdeck <noreply@zipdeck.app>
+```
+
+Use `noreply@send.zipdeck.app` instead if you verified that subdomain. Then recreate the API (no image rebuild):
+
+```bash
+docker compose -f docker-compose.prod.yml up -d api
+```
+
+Until that domain is verified, production can only mail the Resend account email, same as local.
+
 ## CSV format
 
 Import and export use `front,back` columns. A header row of `front,back` (or `question,answer`) is optional:
@@ -153,7 +208,7 @@ sudo usermod -aG docker $USER
 git clone https://github.com/barry1cassidy/flashcards.git
 cd flashcards
 cp .env.example .env
-# edit .env: set MYSQL_PASSWORD, MYSQL_ROOT_PASSWORD, APP_JWT_SECRET, and AGENT_API_KEY
+# edit .env: set MYSQL_PASSWORD, MYSQL_ROOT_PASSWORD, APP_JWT_SECRET, AGENT_API_KEY, and RESEND_API_KEY
 docker compose -f docker-compose.prod.yml up -d --build
 ```
 

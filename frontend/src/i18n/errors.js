@@ -80,6 +80,10 @@ const ERROR_KEYS = {
   'Admin required': 'errors.adminRequired',
   'User not found': 'errors.userNotFound',
   'No admin subscription': 'errors.noAdminSubscription',
+  'Verify your email': 'errors.verifyEmail',
+  'That code is wrong or has expired': 'errors.verifyCodeInvalid',
+  'Wait a minute before requesting another code': 'errors.verifyWait',
+  'Could not send email': 'errors.mailFailed',
 }
 
 export function translateError(t, message) {

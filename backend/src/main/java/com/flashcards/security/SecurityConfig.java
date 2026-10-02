@@ -25,10 +25,15 @@ import com.flashcards.auth.GoogleProperties;
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final EmailVerifiedFilter emailVerifiedFilter;
     private final CorsProperties corsProperties;
 
-    public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter, CorsProperties corsProperties) {
+    public SecurityConfig(
+            JwtAuthenticationFilter jwtAuthenticationFilter,
+            EmailVerifiedFilter emailVerifiedFilter,
+            CorsProperties corsProperties) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+        this.emailVerifiedFilter = emailVerifiedFilter;
         this.corsProperties = corsProperties;
     }
 
@@ -52,7 +57,8 @@ public class SecurityConfig {
                     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
                     response.getWriter().write("{\"message\":\"Not authenticated\"}");
                 }))
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(emailVerifiedFilter, JwtAuthenticationFilter.class);
         return http.build();
     }
 

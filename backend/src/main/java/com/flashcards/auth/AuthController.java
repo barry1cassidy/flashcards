@@ -55,4 +55,14 @@ public class AuthController {
     public UserResponse updateMe(Authentication authentication, @Valid @RequestBody UpdateMeRequest request) {
         return authService.updateMe(AuthSupport.requireUser(authentication).id(), request);
     }
+
+    @PostMapping("/verify-email")
+    public UserResponse verifyEmail(Authentication authentication, @Valid @RequestBody VerifyEmailRequest request) {
+        return authService.verifyEmail(AuthSupport.requireUser(authentication).id(), request.code());
+    }
+
+    @PostMapping("/resend-verification")
+    public UserResponse resendVerification(Authentication authentication) {
+        return authService.resendVerification(AuthSupport.requireUser(authentication).id());
+    }
 }

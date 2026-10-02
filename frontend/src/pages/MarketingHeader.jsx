@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useAuth } from '../AuthContext'
 import { translateError } from '../i18n/errors'
 import { currentLocale } from '../i18n'
+import { isEmailVerified } from '../email'
 import GoogleSignInButton, { getGoogleClientId } from './GoogleSignInButton'
 import Brand from './Brand'
 import { goAfterAuth, inviteAuthState, clearJoinInvite } from '../authRedirect'
@@ -101,7 +102,11 @@ function LoginFields() {
     setError('')
     setBusy(true)
     try {
-      await work()
+      const signedIn = await work()
+      if (signedIn && !isEmailVerified(signedIn)) {
+        navigate('/verify', { replace: true })
+        return
+      }
       goAfterAuth(navigate, location)
     } catch (err) {
       setError(err.message)

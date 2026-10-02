@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
-import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
+import { Link, Navigate, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { api } from '../api'
 import { useAuth } from '../AuthContext'
+import { isEmailVerified } from '../email'
 import { inviteAuthState, peekJoinInvite, rememberJoinInvite, takeJoinInvite } from '../authRedirect'
 import { translateError } from '../i18n/errors'
 import MarketingHeader, { MarketingFooter } from './MarketingHeader'
@@ -29,10 +30,12 @@ export default function JoinClassPage() {
   }, [code])
 
   useEffect(() => {
-    if (!ready || user) {
+    if (!ready) {
       return
     }
-    rememberJoinInvite(joinPath)
+    if (!user || !isEmailVerified(user)) {
+      rememberJoinInvite(joinPath)
+    }
   }, [ready, user, joinPath])
 
   useEffect(() => {
@@ -42,7 +45,7 @@ export default function JoinClassPage() {
     if (skipAutoJoin.current === null) {
       skipAutoJoin.current = Boolean(user) && peekJoinInvite() !== joinPath
     }
-    if (skipAutoJoin.current || !user || !preview || joiningCodes.has(code)) {
+    if (skipAutoJoin.current || !user || !isEmailVerified(user) || !preview || joiningCodes.has(code)) {
       return
     }
     joiningCodes.add(code)
@@ -80,6 +83,10 @@ export default function JoinClassPage() {
 
   if (!ready) {
     return <div className="page-loading">{t('app.loading')}</div>
+  }
+
+  if (user && !isEmailVerified(user)) {
+    return <Navigate to="/verify" replace />
   }
 
   return (

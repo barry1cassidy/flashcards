@@ -1,13 +1,16 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Outlet, useLocation } from 'react-router-dom'
+import { Outlet, useLocation, Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { MenuContext } from '../menu'
+import { useAuth } from '../AuthContext'
+import { isEmailVerified } from '../email'
 import AppHeader from './AppHeader'
 import SideMenu from './SideMenu'
 import { SPLIT_PANE_QUERY, useMediaQuery } from '../useMediaQuery'
 
 export default function AppLayout() {
   const { t } = useTranslation()
+  const { user } = useAuth()
   const location = useLocation()
   const split = useMediaQuery(SPLIT_PANE_QUERY)
   const [open, setOpen] = useState(false)
@@ -62,6 +65,14 @@ export default function AppLayout() {
         </aside>
         <div className="app-pane">
           <AppHeader />
+          {!isEmailVerified(user) && !location.pathname.startsWith('/verify') ? (
+            <div className="verify-banner" role="status">
+              <p>{t('verify.banner')}</p>
+              <Link className="btn primary" to="/verify">
+                {t('verify.gateCta')}
+              </Link>
+            </div>
+          ) : null}
           <main className="page-content">
             <Outlet />
           </main>

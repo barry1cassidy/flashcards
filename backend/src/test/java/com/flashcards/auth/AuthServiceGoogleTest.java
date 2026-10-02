@@ -2,6 +2,7 @@ package com.flashcards.auth;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -32,12 +33,15 @@ class AuthServiceGoogleTest {
     private JwtService jwtService;
     @Mock
     private GoogleTokenService googleTokenService;
+    @Mock
+    private EmailVerificationService emailVerificationService;
 
     private AuthService authService;
 
     @BeforeEach
     void setUp() {
-        authService = new AuthService(userRepository, passwordEncoder, jwtService, googleTokenService);
+        authService = new AuthService(
+                userRepository, passwordEncoder, jwtService, googleTokenService, emailVerificationService);
     }
 
     @Test
@@ -62,6 +66,7 @@ class AuthServiceGoogleTest {
         ArgumentCaptor<User> saved = ArgumentCaptor.forClass(User.class);
         verify(userRepository).save(saved.capture());
         assertEquals("sub-1", saved.getValue().getGoogleSub());
+        assertTrue(saved.getValue().isEmailVerified());
     }
 
     @Test

@@ -89,6 +89,9 @@ app:
     max-pdf-chars: 40000
   google:
     client-id: ${GOOGLE_CLIENT_ID:}
+  mail:
+    resend-api-key: ${RESEND_API_KEY:}
+    from: "${APP_MAIL_FROM:Zipdeck <onboarding@resend.dev>}"
   card-images:
     storage: ${CARD_IMAGES_STORAGE:local}
     dir: ${CARD_IMAGES_DIR:./data/card-images}

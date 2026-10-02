@@ -22,5 +22,6 @@ public record UserResponse(
         boolean proLicensed,
         Instant proExpiresAt,
         boolean admin,
-        boolean teacherMode) {
+        boolean teacherMode,
+        boolean emailVerified) {
 }

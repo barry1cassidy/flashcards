@@ -90,6 +90,9 @@ public class User {
     @Column(name = "teacher_mode", nullable = false)
     private boolean teacherMode;
 
+    @Column(name = "email_verified", nullable = false)
+    private boolean emailVerified = true;
+
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 

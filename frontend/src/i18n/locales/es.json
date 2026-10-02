@@ -274,7 +274,21 @@
     "createAccountButton": "Crear Cuenta",
     "alreadyHaveAccount": "¿Ya tienes una cuenta?",
     "orEmail": "o entra con correo",
+    "orEmailRegister": "o regístrate con correo",
     "continueWithGoogle": "Continuar con Google"
+  },
+  "verify": {
+    "title": "Verifica tu correo",
+    "menu": "Verificar correo",
+    "subtitle": "Enviamos un código de 6 dígitos a {{email}}. Introdúcelo para desbloquear Mis Mazos, Mix de Estudio, IA y Pro.",
+    "codeLabel": "Código",
+    "submit": "Verificar",
+    "checking": "Comprobando…",
+    "resend": "Enviar un código nuevo",
+    "resent": "Va de camino un código nuevo.",
+    "banner": "Verifica tu correo para crear mazos y usar la app completa.",
+    "gateCta": "Verificar correo",
+    "allowedHint": "Mientras tanto puedes ver los Conjuntos de muestra y la Ayuda."
   },
   "decks": {
     "title": "Mis Mazos",
@@ -800,6 +814,10 @@
     "teacherCannotLeave": "Los profesores no pueden salir de su clase",
     "adminRequired": "Se necesita un administrador",
     "userNotFound": "Usuario no encontrado",
-    "noAdminSubscription": "No hay suscripción de administrador"
+    "noAdminSubscription": "No hay suscripción de administrador",
+    "verifyEmail": "Verifica tu correo",
+    "verifyCodeInvalid": "Ese código es incorrecto o ha caducado",
+    "verifyWait": "Espera un minuto antes de pedir otro código",
+    "mailFailed": "No se pudo enviar el correo"
   }
 }

@@ -5,11 +5,13 @@ import { useAuth } from '../AuthContext'
 import { currentLocale } from '../i18n'
 import { translateError } from '../i18n/errors'
 import { goAfterAuth, inviteAuthState } from '../authRedirect'
+import { isEmailVerified } from '../email'
 import MarketingHeader, { MarketingFooter } from './MarketingHeader'
+import GoogleSignInButton, { getGoogleClientId } from './GoogleSignInButton'
 
 export default function RegisterPage() {
   const { t } = useTranslation()
-  const { register } = useAuth()
+  const { register, loginWithGoogle } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
   const [displayName, setDisplayName] = useState('')
@@ -17,19 +19,28 @@ export default function RegisterPage() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
+  const googleEnabled = Boolean(getGoogleClientId())
 
-  async function onSubmit(event) {
-    event.preventDefault()
+  async function finishAuth(work) {
     setError('')
     setBusy(true)
     try {
-      await register(displayName, email, password, currentLocale())
+      const created = await work()
+      if (created && !isEmailVerified(created)) {
+        navigate('/verify', { replace: true })
+        return
+      }
       goAfterAuth(navigate, location)
     } catch (err) {
       setError(err.message)
     } finally {
       setBusy(false)
     }
+  }
+
+  async function onSubmit(event) {
+    event.preventDefault()
+    await finishAuth(() => register(displayName, email, password, currentLocale()))
   }
 
   return (
@@ -40,8 +51,21 @@ export default function RegisterPage() {
           <p className="kicker">{t('marketing.kicker')}</p>
           <h1>{t('auth.createYourAccount')}</h1>
           <p className="muted">{t('auth.registerSubtitle')}</p>
+          {error ? <div className="error">{translateError(t, error)}</div> : null}
+          {googleEnabled ? (
+            <>
+              <GoogleSignInButton
+                disabled={busy}
+                onCredential={(idToken) =>
+                  finishAuth(() => loginWithGoogle(idToken, currentLocale()))
+                }
+              />
+              <p className="auth-divider">
+                <span>{t('auth.orEmailRegister')}</span>
+              </p>
+            </>
+          ) : null}
           <form onSubmit={onSubmit} className="stack">
-            {error ? <div className="error">{translateError(t, error)}</div> : null}
             <label>
               {t('auth.name')}
               <input

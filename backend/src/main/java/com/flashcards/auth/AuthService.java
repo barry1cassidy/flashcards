@@ -26,16 +26,19 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final GoogleTokenService googleTokenService;
+    private final EmailVerificationService emailVerificationService;
 
     public AuthService(
             UserRepository userRepository,
             PasswordEncoder passwordEncoder,
             JwtService jwtService,
-            GoogleTokenService googleTokenService) {
+            GoogleTokenService googleTokenService,
+            EmailVerificationService emailVerificationService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
         this.googleTokenService = googleTokenService;
+        this.emailVerificationService = emailVerificationService;
     }
 
     @Transactional
@@ -54,7 +57,9 @@ public class AuthService {
         user.setStudyOrder(StudyOrder.POSITION);
         user.setStudyScope(StudyScope.DUE_ONLY);
         user.setRestudyWait(RestudyWait.ONE_DAY);
+        user.setEmailVerified(false);
         userRepository.save(user);
+        emailVerificationService.issueAndSend(user);
         return toAuthResponse(user);
     }
 
@@ -97,6 +102,7 @@ public class AuthService {
             user.setEmail(email);
         }
         user.setGoogleSub(profile.subject());
+        user.setEmailVerified(true);
         userRepository.save(user);
         return toAuthResponse(user);
     }
@@ -129,6 +135,23 @@ public class AuthService {
         return toUserResponse(user);
     }
 
+    @Transactional
+    public UserResponse verifyEmail(UUID userId, String code) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ApiException(HttpStatus.UNAUTHORIZED, "Not authenticated"));
+        emailVerificationService.verify(user, code);
+        return toUserResponse(userRepository.findById(userId)
+                .orElseThrow(() -> new ApiException(HttpStatus.UNAUTHORIZED, "Not authenticated")));
+    }
+
+    @Transactional
+    public UserResponse resendVerification(UUID userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ApiException(HttpStatus.UNAUTHORIZED, "Not authenticated"));
+        emailVerificationService.issueAndSend(user);
+        return toUserResponse(user);
+    }
+
     private AuthResponse toAuthResponse(User user) {
         UserPrincipal principal = new UserPrincipal(user.getId(), user.getEmail(), user.getDisplayName());
         return new AuthResponse(jwtService.createToken(principal), toUserResponse(user));
@@ -154,7 +177,8 @@ public class AuthService {
                 ProAccess.allowed(user),
                 user.getProExpiresAt(),
                 user.isAdmin(),
-                user.isTeacherMode());
+                user.isTeacherMode(),
+                user.isEmailVerified());
     }
 
     private static String displayNameFrom(GoogleTokenService.GoogleProfile profile, String email) {

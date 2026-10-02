@@ -3,12 +3,14 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '../AuthContext'
 import { isAdmin } from '../admin'
+import { isEmailVerified } from '../email'
 import { isProLicensed } from '../pro'
 import { useMenu } from '../menu'
 import Brand from './Brand'
 
 export default function AppHeader() {
   const { t } = useTranslation()
+  const { user } = useAuth()
   const { open, toggle } = useMenu()
 
   return (
@@ -24,7 +26,7 @@ export default function AppHeader() {
         >
           <span className="menu-toggle-bars" aria-hidden="true" />
         </button>
-        <Link to="/" className="header-brand">
+        <Link to={isEmailVerified(user) ? '/' : '/verify'} className="header-brand">
           <Brand />
         </Link>
       </div>

@@ -3,6 +3,7 @@ import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AuthProvider, useAuth } from './AuthContext'
 import { isAdmin } from './admin'
+import { isEmailVerified } from './email'
 import { isProLicensed } from './pro'
 import { currentLocale } from './i18n'
 import DeckDetailPage from './pages/DeckDetailPage'
@@ -29,6 +30,7 @@ import MarketingHeader, { MarketingFooter } from './pages/MarketingHeader'
 import ClassesPage from './pages/ClassesPage'
 import ClassDetailPage from './pages/ClassDetailPage'
 import JoinClassPage from './pages/JoinClassPage'
+import VerifyEmailPage from './pages/VerifyEmailPage'
 import SavingIndicator from './pages/SavingIndicator'
 import { pathAfterAuth, peekJoinInvite, shouldResumeJoinInvite } from './authRedirect'
 
@@ -43,9 +45,12 @@ function DocumentLang() {
     const admin = Boolean(user) && pathname.startsWith('/admin')
     const billing = pathname.startsWith('/pro')
     const help = pathname.startsWith('/help')
+    const verify = pathname.startsWith('/verify')
     document.title = privacy
       ? `${t('privacy.title')} — ${t('app.name')}`
-      : help
+      : verify
+        ? `${t('verify.title')} — ${t('app.name')}`
+        : help
         ? `${t('help.title')} — ${t('app.name')}`
         : join
         ? `${t('classes.joinTitle')} — ${t('app.name')}`
@@ -73,6 +78,9 @@ function InviteResume() {
   const navigate = useNavigate()
   useEffect(() => {
     if (!ready || !user || location.pathname.startsWith('/join/')) {
+      return
+    }
+    if (!isEmailVerified(user)) {
       return
     }
     if (!shouldResumeJoinInvite()) {
@@ -109,6 +117,9 @@ function ProtectedLayout() {
     }
     return <Navigate to="/login" replace />
   }
+  if (!isEmailVerified(user) && !unverifiedPath(location.pathname)) {
+    return <Navigate to="/verify" replace />
+  }
   if (location.pathname.startsWith('/admin')) {
     if (!isAdmin(user)) {
       return <Navigate to="/" replace />
@@ -116,6 +127,15 @@ function ProtectedLayout() {
     return <AdminLayout />
   }
   return <AppLayout />
+}
+
+function unverifiedPath(pathname) {
+  return (
+    pathname.startsWith('/verify') ||
+    pathname.startsWith('/help') ||
+    pathname.startsWith('/library') ||
+    pathname.startsWith('/settings')
+  )
 }
 
 function SetsIdRedirect() {
@@ -130,6 +150,9 @@ function GuestOnly({ children }) {
     return <LoadingScreen />
   }
   if (user) {
+    if (!isEmailVerified(user)) {
+      return <Navigate to="/verify" replace />
+    }
     const next = pathAfterAuth(location)
     return <Navigate to={next} replace />
   }
@@ -183,6 +206,7 @@ export default function App() {
           <Route path="/mixes/:id" element={<MixEditorPage />} />
           <Route path="/mixes" element={<MixesPage />} />
           <Route path="/pro" element={<ProPage />} />
+          <Route path="/verify" element={<VerifyEmailPage />} />
           <Route path="/help" element={<HelpPage />} />
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="/library" element={<LibraryPage />} />

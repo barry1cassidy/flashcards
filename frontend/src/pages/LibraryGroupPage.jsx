@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { api } from '../api'
+import { useAuth } from '../AuthContext'
+import { isEmailVerified } from '../email'
 import { translateError } from '../i18n/errors'
 import { isLanguageLibraryGroup } from '../libraryGroup'
 import { GroupBadge } from './ColorPicker'
@@ -9,6 +11,8 @@ import { GroupBadge } from './ColorPicker'
 export default function LibraryGroupPage() {
   const { t } = useTranslation()
   const { id } = useParams()
+  const { user } = useAuth()
+  const verified = isEmailVerified(user)
   const [group, setGroup] = useState(null)
   const [error, setError] = useState('')
   const [addingId, setAddingId] = useState(null)
@@ -77,7 +81,7 @@ export default function LibraryGroupPage() {
                     <Link className="btn" to={`/decks/${deck.copiedDeckId}`}>
                       {t('library.openInMyDecks')}
                     </Link>
-                  ) : (
+                  ) : verified ? (
                     <button
                       className="btn primary"
                       type="button"
@@ -86,6 +90,10 @@ export default function LibraryGroupPage() {
                     >
                       {addingId === deck.id ? t('library.adding') : t('library.addToMyDecks')}
                     </button>
+                  ) : (
+                    <Link className="btn primary" to="/verify">
+                      {t('verify.gateCta')}
+                    </Link>
                   )}
                 </div>
               </article>

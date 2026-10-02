@@ -3082,6 +3082,33 @@ textarea.over-limit {
   width: min(440px, 100%);
 }
 
+.register-panel .google-signin-host {
+  width: 100%;
+}
+
+.verify-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 12px 16px 0;
+  padding: 12px 16px;
+  min-height: 44px;
+  border-radius: var(--radius);
+  background: var(--card);
+  border: 1px solid var(--line);
+}
+
+.verify-banner p {
+  margin: 0;
+  flex: 1 1 12rem;
+}
+
+.verify-banner .btn {
+  flex: 0 0 auto;
+}
+
 @media (max-width: 900px) {
   .hero {
     padding: 56px 0 40px;
