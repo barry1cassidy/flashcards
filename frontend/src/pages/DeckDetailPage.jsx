@@ -36,9 +36,12 @@ export default function DeckDetailPage() {
   const { id } = useParams()
   const navigate = useNavigate()
   const fileRef = useRef(null)
-  const dragIndex = useRef(null)
+  const listRef = useRef(null)
+  const cardsRef = useRef([])
+  const drag = useRef(null)
   const [deck, setDeck] = useState(null)
   const [cards, setCards] = useState([])
+  const [draggingId, setDraggingId] = useState(null)
   const [groups, setGroups] = useState([])
   const [front, setFront] = useState('')
   const [back, setBack] = useState('')
@@ -60,6 +63,7 @@ export default function DeckDetailPage() {
   const [removeFrontImage, setRemoveFrontImage] = useState(false)
   const [removeBackImage, setRemoveBackImage] = useState(false)
   const [proModal, setProModal] = useState(false)
+  cardsRef.current = cards
 
   async function load() {
     const [deckData, cardData, groupData] = await Promise.all([
@@ -150,6 +154,11 @@ export default function DeckDetailPage() {
   }
 
   function leaveEditMode() {
+    window.removeEventListener('pointermove', reorderWindow.current.onMove)
+    window.removeEventListener('pointerup', reorderWindow.current.onEnd)
+    window.removeEventListener('pointercancel', reorderWindow.current.onEnd)
+    drag.current = null
+    setDraggingId(null)
     setEditingDeck(false)
     resetCardForm()
   }
@@ -224,42 +233,99 @@ export default function DeckDetailPage() {
     })
   }
 
-  async function moveCard(from, to) {
-    if (to < 0 || to >= cards.length || from === to) {
-      return
-    }
-    const next = [...cards]
-    const [item] = next.splice(from, 1)
-    next.splice(to, 0, item)
-    setCards(next)
+  async function persistOrder(nextCards) {
     setError('')
     try {
-      await saveOrder(next)
+      await saveOrder(nextCards)
     } catch (err) {
       setError(err.message)
       await load()
     }
   }
 
-  function onDragStart(event, index) {
-    dragIndex.current = index
-    event.dataTransfer.effectAllowed = 'move'
-    event.dataTransfer.setData('text/plain', String(index))
-  }
-
-  function onDragOver(event) {
-    event.preventDefault()
-    event.dataTransfer.dropEffect = 'move'
-  }
-
-  function onDrop(event, index) {
-    event.preventDefault()
-    const from = dragIndex.current
-    dragIndex.current = null
-    if (from == null) {
+  async function moveCard(from, to) {
+    const next = moveItem(cards, from, to)
+    if (next === cards) {
       return
     }
-    moveCard(from, index)
+    cardsRef.current = next
+    setCards(next)
+    await persistOrder(next)
+  }
+
+  const reorderWindow = useRef({
+    onMove(event) {
+      reorderWindow.current.move(event)
+    },
+    onEnd(event) {
+      window.removeEventListener('pointermove', reorderWindow.current.onMove)
+      window.removeEventListener('pointerup', reorderWindow.current.onEnd)
+      window.removeEventListener('pointercancel', reorderWindow.current.onEnd)
+      reorderWindow.current.end(event)
+    },
+    move() {},
+    end() {},
+  })
+  reorderWindow.current.move = (event) => {
+    const state = drag.current
+    if (!state || event.pointerId !== state.pointerId) {
+      return
+    }
+    event.preventDefault()
+    const edge = 48
+    if (event.clientY < edge) {
+      window.scrollBy(0, -16)
+    } else if (event.clientY > window.innerHeight - edge) {
+      window.scrollBy(0, 16)
+    }
+    const to = rowIndexFromPoint(listRef.current, event.clientY)
+    const from = cardsRef.current.findIndex((card) => card.id === state.id)
+    if (from < 0 || to < 0 || from === to) {
+      return
+    }
+    const next = moveItem(cardsRef.current, from, to)
+    cardsRef.current = next
+    setCards(next)
+  }
+  reorderWindow.current.end = (event) => {
+    const state = drag.current
+    if (!state || event.pointerId !== state.pointerId) {
+      return
+    }
+    drag.current = null
+    setDraggingId(null)
+    try {
+      if (event.currentTarget?.hasPointerCapture?.(event.pointerId)) {
+        event.currentTarget.releasePointerCapture(event.pointerId)
+      }
+    } catch {
+      // already released
+    }
+    const now = cardsRef.current.findIndex((card) => card.id === state.id)
+    if (now >= 0 && now !== state.fromIndex) {
+      persistOrder(cardsRef.current)
+    }
+  }
+
+  function onReorderPointerDown(event, index) {
+    if (busy || (event.pointerType === 'mouse' && event.button !== 0)) {
+      return
+    }
+    event.preventDefault()
+    drag.current = {
+      id: cards[index].id,
+      fromIndex: index,
+      pointerId: event.pointerId,
+    }
+    setDraggingId(cards[index].id)
+    try {
+      event.currentTarget.setPointerCapture(event.pointerId)
+    } catch {
+      // Some WebViews reject capture; window listeners still track the finger.
+    }
+    window.addEventListener('pointermove', reorderWindow.current.onMove, { passive: false })
+    window.addEventListener('pointerup', reorderWindow.current.onEnd)
+    window.addEventListener('pointercancel', reorderWindow.current.onEnd)
   }
 
   function resetCardForm() {
@@ -464,24 +530,23 @@ export default function DeckDetailPage() {
         ) : (
           <>
             {editingDeck ? <p className="muted">{t('decks.reorderHint')}</p> : null}
-            <ul className="card-list">
+            <ul ref={listRef} className={`card-list${draggingId ? ' is-reordering' : ''}`}>
               {cards.map((card, index) => (
                 <li
                   key={card.id}
-                  className="card-row"
-                  onDragOver={editingDeck ? onDragOver : undefined}
-                  onDrop={editingDeck ? (event) => onDrop(event, index) : undefined}
+                  className={`card-row${card.id === draggingId ? ' is-dragging' : ''}`}
                 >
                   {editingDeck ? (
                     <div className="reorder-controls">
-                      <span
+                      <button
+                        type="button"
                         className="drag-handle"
-                        draggable
-                        aria-hidden="true"
-                        onDragStart={(event) => onDragStart(event, index)}
+                        aria-label={t('decks.reorderHandle')}
+                        aria-pressed={card.id === draggingId}
+                        onPointerDown={(event) => onReorderPointerDown(event, index)}
                       >
                         <GripIcon />
-                      </span>
+                      </button>
                       <button
                         className="btn ghost icon-btn"
                         type="button"
@@ -676,6 +741,33 @@ export default function DeckDetailPage() {
 
 function languageName(code) {
   return SPEECH_LANGUAGES.find((language) => language.code === code)?.name || code
+}
+
+function moveItem(list, from, to) {
+  if (to < 0 || to >= list.length || from === to) {
+    return list
+  }
+  const next = [...list]
+  const [item] = next.splice(from, 1)
+  next.splice(to, 0, item)
+  return next
+}
+
+function rowIndexFromPoint(list, clientY) {
+  if (!list) {
+    return -1
+  }
+  const rows = [...list.querySelectorAll(':scope > .card-row')]
+  if (rows.length === 0) {
+    return -1
+  }
+  for (let i = 0; i < rows.length; i++) {
+    const rect = rows[i].getBoundingClientRect()
+    if (clientY < rect.top + rect.height / 2) {
+      return i
+    }
+  }
+  return rows.length - 1
 }
 
 function GripIcon() {

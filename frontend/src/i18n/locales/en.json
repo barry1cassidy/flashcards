@@ -322,6 +322,7 @@
     "emptyCards": "This deck has no cards yet.",
     "moveUp": "Move Up",
     "moveDown": "Move Down",
+    "reorderHandle": "Drag to reorder",
     "reorderHint": "Drag the handle or use the arrows to change deck order.",
     "front": "Front",
     "back": "Back",

@@ -966,12 +966,28 @@ html[data-theme='light'] .pro-benefit-item {
   justify-content: center;
   width: 44px;
   height: 44px;
+  padding: 0;
+  border: 0;
+  background: transparent;
   color: var(--muted);
   cursor: grab;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
-.drag-handle:active {
+.drag-handle:active,
+.card-list.is-reordering .drag-handle {
   cursor: grabbing;
+}
+
+.card-list.is-reordering {
+  touch-action: none;
+  user-select: none;
+}
+
+.card-row.is-dragging {
+  opacity: 0.72;
 }
 
 .btn.icon-btn {

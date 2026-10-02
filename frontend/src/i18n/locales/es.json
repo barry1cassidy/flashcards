@@ -321,6 +321,7 @@
     "emptyCards": "Este mazo aún no tiene tarjetas.",
     "moveUp": "Subir",
     "moveDown": "Bajar",
+    "reorderHandle": "Arrastra para reordenar",
     "reorderHint": "Arrastra el asa o usa las flechas para cambiar el orden del mazo.",
     "front": "Frente",
     "back": "Reverso",
