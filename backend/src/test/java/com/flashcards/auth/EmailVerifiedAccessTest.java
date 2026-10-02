@@ -17,6 +17,7 @@ class EmailVerifiedAccessTest {
         assertTrue(EmailVerifiedAccess.allowedWhileUnverified("GET", "/api/library/decks/1"));
         assertTrue(EmailVerifiedAccess.allowedWhileUnverified("GET", "/api/billing/status"));
         assertTrue(EmailVerifiedAccess.allowedWhileUnverified("GET", "/api/join/ABC123"));
+        assertTrue(EmailVerifiedAccess.allowedWhileUnverified("GET", "/api/shares/K7M2QX"));
         assertTrue(EmailVerifiedAccess.allowedWhileUnverified("OPTIONS", "/api/decks"));
     }
 
@@ -27,5 +28,6 @@ class EmailVerifiedAccessTest {
         assertFalse(EmailVerifiedAccess.allowedWhileUnverified("POST", "/api/billing/checkout"));
         assertFalse(EmailVerifiedAccess.allowedWhileUnverified("POST", "/api/agent/jobs"));
         assertFalse(EmailVerifiedAccess.allowedWhileUnverified("GET", "/api/mixes"));
+        assertFalse(EmailVerifiedAccess.allowedWhileUnverified("POST", "/api/shares/K7M2QX/copy"));
     }
 }

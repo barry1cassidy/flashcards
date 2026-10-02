@@ -20,4 +20,6 @@ public interface DeckGroupRepository extends JpaRepository<DeckGroup, UUID> {
     boolean existsByUser_IdAndNameIgnoreCaseAndIdNot(UUID userId, String name, UUID id);
 
     List<DeckGroup> findByIdInAndUser_Id(Collection<UUID> ids, UUID userId);
+
+    Optional<DeckGroup> findByUser_IdAndSourceShareId(UUID userId, UUID sourceShareId);
 }

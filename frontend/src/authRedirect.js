@@ -1,4 +1,4 @@
-const JOIN_PATH = /^\/join\/[^/]+$/
+const JOIN_PATH = /^\/(join|share)\/[^/]+$/
 const JOIN_INVITE_KEY = 'flashcards.joinInvite'
 const JOIN_RESUME_KEY = 'flashcards.joinResume'
 

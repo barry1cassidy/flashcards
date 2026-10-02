@@ -18,6 +18,7 @@ const SECTIONS = [
   { id: 'help-mix', titleKey: 'help.mixTitle' },
   { id: 'help-pro', titleKey: 'help.proTitle' },
   { id: 'help-settings', titleKey: 'help.settingsTitle' },
+  { id: 'help-share', titleKey: 'help.shareTitle' },
   { id: 'help-classes', titleKey: 'help.classesTitle' },
 ]
 
@@ -206,6 +207,9 @@ export default function HelpPage() {
         </p>
       </HelpSection>
 
+      <HelpSection id="help-share" title={t('help.shareTitle')}>
+        <p>{t('help.shareIntro')}</p>
+      </HelpSection>
       <HelpSection id="help-classes" title={t('help.classesTitle')}>
         <p>{t('help.classesIntro')}</p>
       </HelpSection>

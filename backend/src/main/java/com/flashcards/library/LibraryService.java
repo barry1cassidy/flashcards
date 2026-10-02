@@ -16,6 +16,7 @@ import com.flashcards.card.CardLanguages;
 import com.flashcards.card.CardRepository;
 import com.flashcards.card.CardResponse;
 import com.flashcards.common.ApiException;
+import com.flashcards.common.CopyNames;
 import com.flashcards.deck.Deck;
 import com.flashcards.deck.DeckRepository;
 import com.flashcards.deck.DeckResponse;
@@ -154,7 +155,10 @@ public class LibraryService {
                 });
         Deck deck = new Deck();
         deck.setUser(user);
-        deck.setName(libraryDeck.getName());
+        deck.setName(CopyNames.unique(
+                libraryDeck.getName(),
+                CopyNames.DECK,
+                name -> userDeckRepository.existsByUser_IdAndNameIgnoreCase(userId, name)));
         deck.setDescription(libraryDeck.getDescription());
         deck.setGroup(group);
         deck.setFrontLanguage(CardLanguages.normalize(libraryGroup.getSourceLanguage(), CardLanguages.DEFAULT));

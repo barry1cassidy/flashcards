@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.flashcards.security.AuthSupport;
+import com.flashcards.share.ShareLinkResponse;
+import com.flashcards.share.ShareService;
 
 import jakarta.validation.Valid;
 
@@ -24,9 +26,11 @@ import jakarta.validation.Valid;
 public class DeckController {
 
     private final DeckService deckService;
+    private final ShareService shareService;
 
-    public DeckController(DeckService deckService) {
+    public DeckController(DeckService deckService, ShareService shareService) {
         this.deckService = deckService;
+        this.shareService = shareService;
     }
 
     @GetMapping
@@ -57,5 +61,21 @@ public class DeckController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(Authentication authentication, @PathVariable UUID id) {
         deckService.delete(AuthSupport.requireUser(authentication).id(), id);
+    }
+
+    @GetMapping("/{id}/share")
+    public ShareLinkResponse share(Authentication authentication, @PathVariable UUID id) {
+        return shareService.deckLink(AuthSupport.requireUser(authentication).id(), id);
+    }
+
+    @PostMapping("/{id}/share")
+    public ShareLinkResponse createShare(Authentication authentication, @PathVariable UUID id) {
+        return shareService.createDeckShare(AuthSupport.requireUser(authentication).id(), id);
+    }
+
+    @DeleteMapping("/{id}/share")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void revokeShare(Authentication authentication, @PathVariable UUID id) {
+        shareService.revokeDeckShare(AuthSupport.requireUser(authentication).id(), id);
     }
 }

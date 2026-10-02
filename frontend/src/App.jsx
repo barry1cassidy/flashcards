@@ -30,6 +30,7 @@ import MarketingHeader, { MarketingFooter } from './pages/MarketingHeader'
 import ClassesPage from './pages/ClassesPage'
 import ClassDetailPage from './pages/ClassDetailPage'
 import JoinClassPage from './pages/JoinClassPage'
+import SharePage from './pages/SharePage'
 import VerifyEmailPage from './pages/VerifyEmailPage'
 import SavingIndicator from './pages/SavingIndicator'
 import { pathAfterAuth, peekJoinInvite, shouldResumeJoinInvite } from './authRedirect'
@@ -77,7 +78,7 @@ function InviteResume() {
   const location = useLocation()
   const navigate = useNavigate()
   useEffect(() => {
-    if (!ready || !user || location.pathname.startsWith('/join/')) {
+    if (!ready || !user || location.pathname.startsWith('/join/') || location.pathname.startsWith('/share/')) {
       return
     }
     if (!isEmailVerified(user)) {
@@ -192,6 +193,7 @@ export default function App() {
         />
         <Route path="/privacy" element={<PrivacyPage />} />
         <Route path="/join/:code" element={<JoinClassPage />} />
+        <Route path="/share/:code" element={<SharePage />} />
         <Route element={<ProtectedLayout />}>
           <Route path="/" element={<DecksPage />} />
           <Route path="/sets" element={<GroupsPage />} />

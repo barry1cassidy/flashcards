@@ -1,4 +1,4 @@
-package com.flashcards.group;
+package com.flashcards.share;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -6,10 +6,14 @@ import java.util.UUID;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
+import com.flashcards.deck.Deck;
+import com.flashcards.group.DeckGroup;
 import com.flashcards.user.User;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,7 +21,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,8 +28,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "deck_groups")
-public class DeckGroup {
+@Table(name = "content_shares")
+public class ContentShare {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -36,33 +39,30 @@ public class DeckGroup {
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private User user;
+    private User owner;
 
-    @Column(nullable = false, length = 80)
-    private String name;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 8)
+    private ShareKind kind;
 
-    @Column(nullable = false, length = 7)
-    private String color;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "deck_id")
+    private Deck deck;
 
-    @JdbcTypeCode(SqlTypes.CHAR)
-    @Column(name = "source_share_id", length = 36, columnDefinition = "CHAR(36)")
-    private UUID sourceShareId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "group_id")
+    private DeckGroup group;
+
+    @Column(nullable = false, unique = true, length = 8)
+    private String code;
 
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 
-    @Column(name = "updated_at", nullable = false)
-    private Instant updatedAt;
-
     @PrePersist
     void onCreate() {
-        Instant now = Instant.now();
-        createdAt = now;
-        updatedAt = now;
-    }
-
-    @PreUpdate
-    void onUpdate() {
-        updatedAt = Instant.now();
+        if (createdAt == null) {
+            createdAt = Instant.now();
+        }
     }
 }

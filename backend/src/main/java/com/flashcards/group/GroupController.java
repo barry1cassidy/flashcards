@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.flashcards.deck.DeckResponse;
 import com.flashcards.security.AuthSupport;
+import com.flashcards.share.ShareLinkResponse;
+import com.flashcards.share.ShareService;
 
 import jakarta.validation.Valid;
 
@@ -25,9 +27,11 @@ import jakarta.validation.Valid;
 public class GroupController {
 
     private final GroupService groupService;
+    private final ShareService shareService;
 
-    public GroupController(GroupService groupService) {
+    public GroupController(GroupService groupService, ShareService shareService) {
         this.groupService = groupService;
+        this.shareService = shareService;
     }
 
     @GetMapping
@@ -74,5 +78,21 @@ public class GroupController {
             @PathVariable UUID id,
             @PathVariable UUID deckId) {
         return groupService.removeDeck(AuthSupport.requireUser(authentication).id(), id, deckId);
+    }
+
+    @GetMapping("/{id}/share")
+    public ShareLinkResponse share(Authentication authentication, @PathVariable UUID id) {
+        return shareService.setLink(AuthSupport.requireUser(authentication).id(), id);
+    }
+
+    @PostMapping("/{id}/share")
+    public ShareLinkResponse createShare(Authentication authentication, @PathVariable UUID id) {
+        return shareService.createSetShare(AuthSupport.requireUser(authentication).id(), id);
+    }
+
+    @DeleteMapping("/{id}/share")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void revokeShare(Authentication authentication, @PathVariable UUID id) {
+        shareService.revokeSetShare(AuthSupport.requireUser(authentication).id(), id);
     }
 }

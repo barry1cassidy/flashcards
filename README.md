@@ -121,7 +121,7 @@ If the Google button is missing, `.env.local` is absent or Vite was not restarte
 
 ## Email verification (Resend)
 
-New **email/password** accounts must enter a 6-digit code before My Decks, Study Mix, AI, classes, and Pro unlock. Sample Sets, Help, and Settings stay available. Existing accounts stay verified. **Google sign-in** skips this (Google already verified the address).
+New **email/password** accounts must enter a 6-digit code before My Decks, Study Mix, AI, classes, Pro, and copying a shared deck or set unlock. Sample Sets, Help, and Settings stay available. Existing accounts stay verified. **Google sign-in** skips this (Google already verified the address).
 
 You do not need Resend’s Node/PHP sample or the **Send email** button in their onboarding screen. Zipdeck already sends through `POST https://api.resend.com/emails`.
 

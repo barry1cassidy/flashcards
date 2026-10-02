@@ -5,6 +5,8 @@ import { api } from '../api'
 import { formatDate } from '../i18n/format'
 import { translateError } from '../i18n/errors'
 import ConfirmModal from './ConfirmModal'
+import ShareModal from './ShareModal'
+import MenuIcon from './MenuIcon'
 import { GroupBadge } from './ColorPicker'
 import GroupForm from './GroupForm'
 import { useAuth } from '../AuthContext'
@@ -21,6 +23,7 @@ export default function GroupDetailPage() {
   const [addDeckId, setAddDeckId] = useState('')
   const [error, setError] = useState('')
   const [confirmDelete, setConfirmDelete] = useState(false)
+  const [shareOpen, setShareOpen] = useState(false)
 
   async function load() {
     const [detail, deckData] = await Promise.all([api(`/api/groups/${id}`), api('/api/decks')])
@@ -91,9 +94,19 @@ export default function GroupDetailPage() {
           <h1>{group.name}</h1>
           <p className="muted">{t('groups.decks', { count: group.deckCount })}</p>
         </div>
-          <button className="btn danger" type="button" onClick={() => setConfirmDelete(true)}>
-            {t('groups.deleteGroup')}
-          </button>
+          <div className="header-actions">
+            <button
+              className="btn ghost icon-btn"
+              type="button"
+              onClick={() => setShareOpen(true)}
+              aria-label={t('share.share')}
+            >
+              <MenuIcon name="share" />
+            </button>
+            <button className="btn danger" type="button" onClick={() => setConfirmDelete(true)}>
+              {t('groups.deleteGroup')}
+            </button>
+          </div>
         </div>
         {error ? <div className="error">{translateError(t, error)}</div> : null}
         <section className="card-form">
@@ -156,6 +169,14 @@ export default function GroupDetailPage() {
             ))}
           </ul>
         )}
+      {shareOpen ? (
+        <ShareModal
+          kind="SET"
+          targetId={id}
+          name={group.name}
+          onClose={() => setShareOpen(false)}
+        />
+      ) : null}
       {confirmDelete ? (
         <ConfirmModal
           title={t('groups.deleteGroupTitle')}

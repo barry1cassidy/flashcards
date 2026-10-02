@@ -67,6 +67,10 @@ public class Deck {
     @Column(name = "class_synced_at")
     private Instant classSyncedAt;
 
+    @JdbcTypeCode(SqlTypes.CHAR)
+    @Column(name = "source_share_id", length = 36, columnDefinition = "CHAR(36)")
+    private UUID sourceShareId;
+
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 

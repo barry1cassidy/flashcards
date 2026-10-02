@@ -47,6 +47,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/auth/register", "/api/auth/login", "/api/auth/google")
                                 .permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/join/*").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/shares/*").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/billing/stripe/webhook").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .anyRequest().authenticated())

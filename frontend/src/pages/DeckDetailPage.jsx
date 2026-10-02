@@ -7,6 +7,8 @@ import { formatDate } from '../i18n/format'
 import { translateError } from '../i18n/errors'
 import { SPEECH_LANGUAGES, normalizeSpeechLanguage } from '../speechLanguages'
 import ConfirmModal from './ConfirmModal'
+import ShareModal from './ShareModal'
+import MenuIcon from './MenuIcon'
 import StudyModeModal from './StudyModeModal'
 import { GroupBadge } from './ColorPicker'
 import LanguageSelect from './LanguageSelect'
@@ -58,6 +60,7 @@ export default function DeckDetailPage() {
   const [editFrontLanguage, setEditFrontLanguage] = useState('en-US')
   const [editBackLanguage, setEditBackLanguage] = useState('en-US')
   const [studyOpen, setStudyOpen] = useState(false)
+  const [shareOpen, setShareOpen] = useState(false)
   const [frontFile, setFrontFile] = useState(null)
   const [backFile, setBackFile] = useState(null)
   const [removeFrontImage, setRemoveFrontImage] = useState(false)
@@ -404,6 +407,14 @@ export default function DeckDetailPage() {
         </div>
         {editingDeck ? null : (
           <div className="header-actions">
+            <button
+              className="btn ghost icon-btn"
+              type="button"
+              onClick={() => setShareOpen(true)}
+              aria-label={t('share.share')}
+            >
+              <MenuIcon name="share" />
+            </button>
             <button className="btn primary" type="button" onClick={() => setStudyOpen(true)}>
               {t('decks.studyDeck')}
             </button>
@@ -703,6 +714,14 @@ export default function DeckDetailPage() {
             </div>
           </form>
         </div>
+      ) : null}
+      {shareOpen ? (
+        <ShareModal
+          kind="DECK"
+          targetId={id}
+          name={deck.name}
+          onClose={() => setShareOpen(false)}
+        />
       ) : null}
       {studyOpen ? (
         <StudyModeModal

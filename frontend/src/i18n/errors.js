@@ -84,6 +84,8 @@ const ERROR_KEYS = {
   'That code is wrong or has expired': 'errors.verifyCodeInvalid',
   'Wait a minute before requesting another code': 'errors.verifyWait',
   'Could not send email': 'errors.mailFailed',
+  'Share not found': 'errors.shareNotFound',
+  'Could not create a share link': 'errors.shareCreateFailed',
 }
 
 export function translateError(t, message) {

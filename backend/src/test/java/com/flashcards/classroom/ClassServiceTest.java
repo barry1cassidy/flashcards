@@ -274,12 +274,38 @@ class ClassServiceTest {
         assertEquals(studentId, savedDeck.getValue().getUser().getId());
         assertEquals(deckId, savedDeck.getValue().getClassSourceDeckId());
         assertEquals("Period 3 Spanish", savedDeck.getValue().getGroup().getName());
+        assertEquals("Greetings", savedDeck.getValue().getName());
         @SuppressWarnings("unchecked")
         ArgumentCaptor<List<Card>> savedCards = ArgumentCaptor.forClass(List.class);
         verify(cardRepository).saveAll(savedCards.capture());
         assertEquals(1, savedCards.getValue().size());
         assertEquals(masterCardId, savedCards.getValue().get(0).getSourceCardId());
         assertEquals("hola", savedCards.getValue().get(0).getFront());
+    }
+
+    @Test
+    void copyRenamesWhenDeckNameTaken() {
+        Deck master = masterDeck();
+        when(classRepository.findVisible(classId, studentId)).thenReturn(Optional.of(studyClass));
+        when(classDeckRepository.findByStudyClass_IdAndDeck_Id(classId, deckId))
+                .thenReturn(Optional.of(assignment(master)));
+        when(deckRepository.findByUser_IdAndClassSourceDeckId(studentId, deckId)).thenReturn(Optional.empty());
+        when(userRepository.findById(studentId)).thenReturn(Optional.of(student));
+        when(groupRepository.findByUser_IdAndNameIgnoreCase(studentId, "Period 3 Spanish"))
+                .thenReturn(Optional.of(classSet()));
+        when(deckRepository.existsByUser_IdAndNameIgnoreCase(studentId, "Greetings")).thenReturn(true);
+        when(deckRepository.existsByUser_IdAndNameIgnoreCase(studentId, "Greetings (copy 1)")).thenReturn(false);
+        when(deckRepository.save(any(Deck.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        when(cardRepository.findByDeckIdOrderByPositionAscIdAsc(deckId)).thenReturn(List.of());
+        when(cardRepository.saveAll(any())).thenAnswer(invocation -> invocation.getArgument(0));
+        when(deckService.statsFor(any(Deck.class))).thenReturn(new DeckStats(0, 0, 0, null, 0, 0));
+        when(deckService.toResponse(any(Deck.class), any())).thenReturn(deckResponse(copyId));
+
+        classService.copyAssignedDeck(studentId, classId, deckId);
+
+        ArgumentCaptor<Deck> saved = ArgumentCaptor.forClass(Deck.class);
+        verify(deckRepository).save(saved.capture());
+        assertEquals("Greetings (copy 1)", saved.getValue().getName());
     }
 
     @Test
@@ -420,6 +446,15 @@ class ClassServiceTest {
         created.setCreatedAt(Instant.parse("2026-09-01T00:00:00Z"));
         created.setUpdatedAt(created.getCreatedAt());
         return created;
+    }
+
+    private DeckGroup classSet() {
+        DeckGroup group = new DeckGroup();
+        group.setId(UUID.fromString("00000000-0000-0000-0000-0000000000ee"));
+        group.setUser(student);
+        group.setName("Period 3 Spanish");
+        group.setColor(ClassService.CLASS_SET_COLOR);
+        return group;
     }
 
     private Deck masterDeck() {

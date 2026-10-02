@@ -21,6 +21,7 @@ import com.flashcards.card.Card;
 import com.flashcards.card.CardImageService;
 import com.flashcards.card.CardRepository;
 import com.flashcards.common.ApiException;
+import com.flashcards.common.CopyNames;
 import com.flashcards.deck.Deck;
 import com.flashcards.deck.DeckRepository;
 import com.flashcards.deck.DeckResponse;
@@ -305,7 +306,10 @@ public class ClassService {
         for (Card[] pair : imageCopies) {
             cardImageService.copyFrom(pair[0], pair[1]);
         }
-        copy.setName(master.getName());
+        copy.setName(CopyNames.unique(
+                master.getName(),
+                CopyNames.DECK,
+                name -> deckRepository.existsByUser_IdAndNameIgnoreCaseAndIdNot(userId, name, copy.getId())));
         copy.setDescription(master.getDescription());
         copy.setFrontLanguage(master.getFrontLanguage());
         copy.setBackLanguage(master.getBackLanguage());
@@ -326,7 +330,10 @@ public class ClassService {
                 });
         Deck copy = new Deck();
         copy.setUser(user);
-        copy.setName(master.getName());
+        copy.setName(CopyNames.unique(
+                master.getName(),
+                CopyNames.DECK,
+                name -> deckRepository.existsByUser_IdAndNameIgnoreCase(userId, name)));
         copy.setDescription(master.getDescription());
         copy.setGroup(group);
         copy.setFrontLanguage(master.getFrontLanguage());

@@ -991,6 +991,9 @@ html[data-theme='light'] .pro-benefit-item {
 }
 
 .btn.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   width: 44px;
   min-width: 44px;
   height: 44px;
@@ -3206,6 +3209,10 @@ textarea.over-limit {
 
 .class-join-url {
   word-break: break-all;
+}
+
+.share-modal {
+  width: min(480px, 100%);
 }
 
 .class-deck-row {

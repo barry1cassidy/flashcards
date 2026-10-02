@@ -31,6 +31,9 @@ public final class EmailVerifiedAccess {
         if ("GET".equals(verb) && path.startsWith("/api/join/")) {
             return true;
         }
+        if ("GET".equals(verb) && path.startsWith("/api/shares/")) {
+            return true;
+        }
         return false;
     }
 }
