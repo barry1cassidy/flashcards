@@ -14,8 +14,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flashcards.common.ApiException;
+
+import tools.jackson.databind.ObjectMapper;
 
 @Service
 public class ResendMailSender implements MailSender {
