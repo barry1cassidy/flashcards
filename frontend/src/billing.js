@@ -148,9 +148,15 @@ async function submitApplePurchases(result) {
   const purchases = Array.isArray(result?.purchases) ? result.purchases : []
   let latest = null
   for (const purchase of purchases) {
-    const updated = await submitAppleTransaction(purchase)
-    if (updated) {
-      latest = updated
+    try {
+      const updated = await submitAppleTransaction(purchase)
+      if (updated) {
+        latest = updated
+      }
+    } catch (err) {
+      if (err?.message === 'Not authenticated') {
+        throw err
+      }
     }
   }
   return latest

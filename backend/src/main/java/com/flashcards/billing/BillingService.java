@@ -171,8 +171,11 @@ public class BillingService {
             if (!record.active()) {
                 throw new ApiException(HttpStatus.BAD_GATEWAY, "Payment failed");
             }
-            ProAccess.require(user);
-            creditService.grantAddonPurchase(user.getId(), firstNonBlank(record.transactionId(), sku));
+            String ref = firstNonBlank(record.transactionId(), sku);
+            if (!creditService.hasAddonPurchase(ref)) {
+                ProAccess.require(user);
+            }
+            creditService.grantAddonPurchase(user.getId(), ref);
             return AuthService.toUserResponse(requireUser(userId));
         }
         applyAppleSubscription(user, record, plan);

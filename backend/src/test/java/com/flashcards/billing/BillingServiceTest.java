@@ -101,6 +101,7 @@ class BillingServiceTest {
                             .filter(row -> row.getProvider() == provider && row.getProviderSubscriptionId().equals(id))
                             .findFirst();
                 });
+        lenient().when(creditService.hasAddonPurchase(any())).thenReturn(false);
         lenient().when(creditService.snapshot(any(User.class))).thenAnswer(invocation -> {
             User current = invocation.getArgument(0);
             return CreditBalance.of(current.getAgentIncludedCredits(), current.getAgentAddonCredits());
@@ -455,6 +456,29 @@ class BillingServiceTest {
 
         verify(creditService).grantAddonPurchase(USER_ID, "txn-addon");
         assertTrue(rows.isEmpty());
+    }
+
+    @Test
+    void appleAddonReplayAfterExpiryDoesNotRequireProWhenAlreadyGranted() {
+        user.setProLicensed(false);
+        user.setProExpiresAt(Instant.now().minus(Duration.ofDays(1)));
+        when(userRepository.findById(USER_ID)).thenReturn(Optional.of(user));
+        when(appleBillingGateway.enabled()).thenReturn(true);
+        when(creditService.hasAddonPurchase("txn-addon")).thenReturn(true);
+        when(appleBillingGateway.verify("signed-addon"))
+                .thenReturn(new ApplePurchaseRecord(
+                        "credits_addon",
+                        "orig-addon",
+                        "txn-addon",
+                        USER_ID.toString(),
+                        false,
+                        true,
+                        null,
+                        false));
+
+        billingService.completeApplePurchase(USER_ID, "credits_addon", "signed-addon");
+
+        verify(creditService).grantAddonPurchase(USER_ID, "txn-addon");
     }
 
     @Test

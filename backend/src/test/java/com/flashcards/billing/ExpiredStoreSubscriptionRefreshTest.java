@@ -1,7 +1,7 @@
 package com.flashcards.billing;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -57,7 +57,8 @@ class ExpiredStoreSubscriptionRefreshTest {
                 properties, userRepository, subscriptionRepository, playBillingGateway, billingService);
         user = new User();
         user.setId(USER_ID);
-        when(playBillingGateway.enabled()).thenReturn(true);
+        lenient().when(userRepository.findById(USER_ID)).thenReturn(java.util.Optional.of(user));
+        lenient().when(playBillingGateway.enabled()).thenReturn(true);
     }
 
     @Test
@@ -103,6 +104,21 @@ class ExpiredStoreSubscriptionRefreshTest {
 
         refresh.refresh(USER_ID);
 
+        verify(playBillingGateway, never()).verifySubscription(any(), any());
+    }
+
+    @Test
+    void persistsAnExpiredAppleSubscriptionSoAddonCreditsStayUsable() {
+        user.setProLicensed(true);
+        user.setProExpiresAt(Instant.now().minus(1, ChronoUnit.DAYS));
+        user.setAgentIncludedCredits(4);
+        UserSubscription apple = googleRow(Instant.now().minus(1, ChronoUnit.DAYS));
+        apple.setProvider(BillingProvider.APPLE);
+        when(subscriptionRepository.findByUser_Id(USER_ID)).thenReturn(List.of(apple));
+
+        refresh.refresh(USER_ID);
+
+        verify(billingService).syncEntitlement(USER_ID);
         verify(playBillingGateway, never()).verifySubscription(any(), any());
     }
 

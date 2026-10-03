@@ -42,7 +42,7 @@ public class ExpiredStoreSubscriptionRefresh {
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void refresh(UUID userId) {
-        if (userId == null || !playBillingGateway.enabled()) {
+        if (userId == null) {
             return;
         }
         Instant now = Instant.now();
@@ -58,12 +58,24 @@ public class ExpiredStoreSubscriptionRefresh {
             });
             return;
         }
+        persistExpiredEntitlement(userId);
+        if (!playBillingGateway.enabled()) {
+            return;
+        }
         for (UserSubscription row : rows) {
             if (!expiredGoogleSubscription(row, now) || checkedRecently(row, now)) {
                 continue;
             }
             refreshGoogle(row);
         }
+    }
+
+    private void persistExpiredEntitlement(UUID userId) {
+        userRepository.findById(userId).ifPresent(user -> {
+            if (user.isProLicensed() || user.getAgentIncludedCredits() > 0 || user.getAgentCreditPeriod() != null) {
+                billingService.syncEntitlement(userId);
+            }
+        });
     }
 
     private void refreshGoogle(UserSubscription row) {

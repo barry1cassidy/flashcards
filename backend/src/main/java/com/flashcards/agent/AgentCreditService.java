@@ -97,6 +97,13 @@ public class AgentCreditService {
         return jobId == null ? UUID.randomUUID().toString() : jobId.toString();
     }
 
+    public boolean hasAddonPurchase(String sessionId) {
+        if (sessionId == null || sessionId.isBlank()) {
+            return false;
+        }
+        return ledgerRepository.existsByReasonAndProviderRef(CreditReason.ADDON_PURCHASE, sessionId.trim());
+    }
+
     @Transactional
     public CreditBalance grantAddonPurchase(UUID userId, String sessionId) {
         if (sessionId == null || sessionId.isBlank()) {

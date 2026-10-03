@@ -50,7 +50,7 @@ export default function AgentPage() {
         setGroups(groupData)
       })
       .catch((err) => setError(err.message))
-  }, [])
+  }, [user?.proLicensed, user?.proExpiresAt])
 
   useEffect(() => {
     const billingParam = searchParams.get('billing')
@@ -215,7 +215,7 @@ export default function AgentPage() {
   }
 
   const pro = isProLicensed(user)
-  const canUseAi = pro || (status?.addonCredits ?? 0) > 0
+  const canUseAi = status ? !status.proRequired : pro
   const elapsed = startedAt ? Math.max(0, Math.floor((now - startedAt) / 1000)) : job?.elapsedSeconds || 0
   const steps = job?.steps || []
   const remaining = status?.remainingCredits ?? 0
