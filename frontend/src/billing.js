@@ -122,7 +122,22 @@ export async function startApplePurchase(productId, accountId) {
 }
 
 export async function restoreApplePurchases(accountId) {
-  return submitApplePurchases(await AppleBilling.restore({ accountId: accountId || '' }))
+  const result = await AppleBilling.restore({ accountId: accountId || '' })
+  const purchases = Array.isArray(result?.purchases) ? result.purchases : []
+  let latest = null
+  for (const purchase of purchases) {
+    try {
+      const updated = await submitAppleTransaction(purchase)
+      if (updated?.proLicensed) {
+        latest = updated
+      }
+    } catch (err) {
+      if (err?.message !== 'Not authenticated') {
+        throw err
+      }
+    }
+  }
+  return latest
 }
 
 export async function syncApplePurchases(accountId) {

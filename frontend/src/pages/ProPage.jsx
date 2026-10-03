@@ -162,9 +162,7 @@ function ProSection({ user, onError, onStub, refresh }) {
     try {
       await work()
     } catch (err) {
-      const message = err?.message || 'Payment failed'
-      setBillingError(message)
-      onError(message)
+      setBillingError(err?.message || 'Payment failed')
     } finally {
       setBusy(false)
     }
@@ -241,6 +239,11 @@ function ProSection({ user, onError, onStub, refresh }) {
   return (
     <>
       {notice === 'success' ? <p className="ok">{t('settings.proThanks')}</p> : null}
+      {billingError ? (
+        <div className="error" role="alert">
+          {translateError(t, billingError)}
+        </div>
+      ) : null}
 
       {!pro && billing?.addonCredits > 0 ? (
         <section className="card-form pro-account-card">
@@ -262,11 +265,6 @@ function ProSection({ user, onError, onStub, refresh }) {
         <section className="card-form pro-account-card pro-upgrade-card">
           {canSubscribe ? (
             <div className="pro-offer">
-              {billingError ? (
-                <div className="error" role="alert">
-                  {translateError(t, billingError)}
-                </div>
-              ) : null}
               <div className="pro-plan-list" role="radiogroup" aria-label={t('pro.planChoiceLabel')}>
                 <PlanOption
                   selected={plan === 'YEARLY'}

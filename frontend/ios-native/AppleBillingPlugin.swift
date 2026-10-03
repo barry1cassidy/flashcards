@@ -97,6 +97,9 @@ public class AppleBillingPlugin: CAPPlugin, CAPBridgedPlugin {
         var seen = Set<UInt64>()
         var purchases: [[String: Any]] = []
         for await result in Transaction.unfinished {
+            guard let transaction = try? verified(result), stillActive(transaction) else {
+                continue
+            }
             if let item = encode(result), seen.insert(item.0).inserted {
                 purchases.append(item.1)
             }
@@ -107,6 +110,18 @@ public class AppleBillingPlugin: CAPPlugin, CAPBridgedPlugin {
             }
         }
         return purchases
+    }
+
+    /// Unfinished transactions stay in the queue after a subscription ends.
+    /// Android restore only returns purchases that are still active.
+    private func stillActive(_ transaction: Transaction) -> Bool {
+        if transaction.revocationDate != nil {
+            return false
+        }
+        if let expires = transaction.expirationDate {
+            return expires > Date()
+        }
+        return true
     }
 
     private func encode(_ result: VerificationResult<Transaction>) -> (UInt64, [String: Any])? {
