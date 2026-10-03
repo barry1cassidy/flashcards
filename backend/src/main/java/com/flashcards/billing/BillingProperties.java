@@ -132,11 +132,11 @@ public record BillingProperties(
     }
 
     public String monthlyPrice() {
-        return notBlank(monthlyPriceDisplay) ? monthlyPriceDisplay : "$7.99";
+        return notBlank(monthlyPriceDisplay) ? monthlyPriceDisplay : "$4.99";
     }
 
     public String yearlyPrice() {
-        return notBlank(yearlyPriceDisplay) ? yearlyPriceDisplay : "$39.99";
+        return notBlank(yearlyPriceDisplay) ? yearlyPriceDisplay : "$34.99";
     }
 
     public String addonPrice() {

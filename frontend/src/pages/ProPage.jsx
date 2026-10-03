@@ -177,8 +177,8 @@ function ProSection({ user, onError, onStub, refresh }) {
     })
   }
 
-  const monthly = billing?.monthlyPrice || '$7.99'
-  const yearly = billing?.yearlyPrice || '$39.99'
+  const monthly = billing?.monthlyPrice || '$4.99'
+  const yearly = billing?.yearlyPrice || '$34.99'
   const periodEnd = formatDate(billing?.currentPeriodEnd || user?.proExpiresAt, i18n.language)
   const stripeOn = Boolean(billing?.stripeEnabled)
   const playOn = Boolean(billing?.googlePlayEnabled)
