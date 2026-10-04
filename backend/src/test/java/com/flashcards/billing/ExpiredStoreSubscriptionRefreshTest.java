@@ -45,8 +45,8 @@ class ExpiredStoreSubscriptionRefreshTest {
                 false,
                 false,
                 "http://localhost:5173",
-                "$4.99",
-                "$34.99",
+                "$5.99",
+                "$39.99",
                 "$2.99",
                 null,
                 new BillingProperties.Google(

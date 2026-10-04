@@ -55,8 +55,8 @@ app:
     public-checkout: ${APP_BILLING_PUBLIC_CHECKOUT:false}
     allow-emails: ${APP_BILLING_ALLOW_EMAILS:barry1cassidy@gmail.com,barry1cassidy@hotmail.com,barry1cassidy@yahoo.com,*@zipdeck.app}
     public-app-url: ${APP_PUBLIC_URL:http://localhost:5173}
-    monthly-price-display: "$4.99"
-    yearly-price-display: "$34.99"
+    monthly-price-display: "$5.99"
+    yearly-price-display: "$39.99"
     addon-price-display: "$2.99"
     stripe:
       secret-key: ${STRIPE_SECRET_KEY:}
