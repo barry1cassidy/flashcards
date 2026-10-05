@@ -1,9 +1,9 @@
 package com.flashcards.admin;
 
-import java.util.List;
 import java.util.UUID;
 
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,9 +25,11 @@ public class AdminController {
     }
 
     @GetMapping("/users")
-    public List<AdminUserResponse> users(
-            Authentication authentication, @RequestParam(name = "q", required = false) String query) {
-        return adminService.listUsers(AuthSupport.requireUser(authentication).id(), query);
+    public AdminUsersPageResponse users(
+            Authentication authentication,
+            @RequestParam(name = "q", required = false) String query,
+            @RequestParam(name = "pro", required = false, defaultValue = "false") boolean proOnly) {
+        return adminService.listUsers(AuthSupport.requireUser(authentication).id(), query, proOnly);
     }
 
     @GetMapping("/users/{userId}")
@@ -47,5 +49,10 @@ public class AdminController {
     @PostMapping("/users/{userId}/subscription/cancel")
     public AdminUserResponse cancelSubscription(Authentication authentication, @PathVariable UUID userId) {
         return adminService.cancelSubscription(AuthSupport.requireUser(authentication).id(), userId);
+    }
+
+    @DeleteMapping("/users/{userId}")
+    public void deleteUser(Authentication authentication, @PathVariable UUID userId) {
+        adminService.deleteUser(AuthSupport.requireUser(authentication).id(), userId);
     }
 }

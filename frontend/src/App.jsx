@@ -2,6 +2,7 @@ import { Navigate, Outlet, Route, Routes, useLocation, useNavigate, useParams } 
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AuthProvider, useAuth } from './AuthContext'
+import { AiCreditsProvider } from './AiCreditsContext'
 import { isAdmin } from './admin'
 import { isEmailVerified } from './email'
 import { isProLicensed } from './pro'
@@ -199,10 +200,11 @@ function AdminOnly({ children }) {
 export default function App() {
   return (
     <AuthProvider>
-      <DocumentLang />
-      <SavingIndicator />
-      <InviteResume />
-      <Routes>
+      <AiCreditsProvider>
+        <DocumentLang />
+        <SavingIndicator />
+        <InviteResume />
+        <Routes>
         <Route
           path="/login"
           element={
@@ -247,7 +249,8 @@ export default function App() {
           <Route path="/admin" element={<AdminUsersPage />} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
+        </Routes>
+      </AiCreditsProvider>
     </AuthProvider>
   )
 }

@@ -2622,6 +2622,25 @@ button.agent-preset:disabled {
   min-width: 0;
 }
 
+.menu-link-copy {
+  display: grid;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.menu-link-copy .menu-link-text {
+  flex: none;
+}
+
+.menu-link-sub {
+  font-family: var(--font-sans, inherit);
+  font-size: 0.78rem;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--mint);
+}
+
 .menu-pro-tag {
   flex-shrink: 0;
   font-size: 0.68rem;
@@ -3864,10 +3883,59 @@ button.agent-preset:disabled {
   gap: 14px;
 }
 
+.admin-summary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.admin-summary-item {
+  display: grid;
+  gap: 4px;
+  padding: 14px 16px;
+  border: 1px solid var(--admin-line);
+  border-radius: 10px;
+  background: var(--admin-panel);
+}
+
+.admin-summary-label {
+  color: var(--admin-muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.admin-summary-value {
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--admin-text);
+}
+
 .admin-search {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
+  align-items: center;
+}
+
+.admin-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  color: var(--admin-text);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.admin-filter input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--admin-accent);
 }
 
 .admin-search-field {
@@ -4012,6 +4080,21 @@ button.agent-preset:disabled {
   word-break: break-all;
 }
 
+.admin-credits-detail dd {
+  display: grid;
+  gap: 4px;
+}
+
+.admin-credits-remaining {
+  color: var(--mint);
+  font-size: 1.05rem;
+}
+
+.admin-credits-breakdown {
+  color: var(--admin-muted);
+  font-size: 0.85rem;
+}
+
 .admin-subs {
   list-style: none;
   margin: 0;
@@ -4033,6 +4116,12 @@ button.agent-preset:disabled {
   border-top: 1px solid var(--admin-line);
   display: grid;
   gap: 10px;
+}
+
+.admin-delete {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--admin-line);
 }
 
 .admin-grant p {

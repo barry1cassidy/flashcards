@@ -52,7 +52,7 @@ class AdminServiceTest {
         member.setAdmin(false);
         when(userRepository.findById(memberId)).thenReturn(Optional.of(member));
 
-        ApiException ex = assertThrows(ApiException.class, () -> adminService.listUsers(memberId, null));
+        ApiException ex = assertThrows(ApiException.class, () -> adminService.listUsers(memberId, null, false));
         assertEquals(HttpStatus.FORBIDDEN, ex.getStatus());
         assertEquals("Admin required", ex.getMessage());
     }
@@ -74,13 +74,39 @@ class AdminServiceTest {
         when(userRepository.findAllByOrderByCreatedAtDesc()).thenReturn(List.of(admin, member));
         when(subscriptionRepository.findAll()).thenReturn(List.of());
 
-        List<AdminUserResponse> rows = adminService.listUsers(adminId, "  ");
-        assertEquals(2, rows.size());
-        assertEquals("GOOGLE", rows.get(0).signIn());
-        assertEquals("PASSWORD", rows.get(1).signIn());
-        assertTrue(rows.stream().noneMatch(row -> String.valueOf(row).contains("not-for-admin-views")));
-        assertTrue(rows.stream().noneMatch(row -> String.valueOf(row).contains("sub-123")));
-        verify(userRepository).findAllByOrderByCreatedAtDesc();
+        AdminUsersPageResponse page = adminService.listUsers(adminId, "  ", false);
+        assertEquals(2, page.users().size());
+        assertEquals(2, page.totalUsers());
+        assertEquals(0, page.totalPro());
+        assertEquals("GOOGLE", page.users().get(0).signIn());
+        assertEquals("PASSWORD", page.users().get(1).signIn());
+        assertTrue(page.users().stream().noneMatch(row -> String.valueOf(row).contains("not-for-admin-views")));
+        assertTrue(page.users().stream().noneMatch(row -> String.valueOf(row).contains("sub-123")));
+        verify(userRepository, org.mockito.Mockito.atLeastOnce()).findAllByOrderByCreatedAtDesc();
+    }
+
+    @Test
+    void adminCanFilterToProOnly() {
+        User admin = new User();
+        admin.setId(adminId);
+        admin.setAdmin(true);
+        admin.setEmail("barry@zerve.io");
+        admin.setDisplayName("Barry");
+        admin.setProLicensed(true);
+        User member = new User();
+        member.setId(memberId);
+        member.setEmail("student@example.com");
+        member.setDisplayName("Student");
+        member.setProLicensed(false);
+        when(userRepository.findById(adminId)).thenReturn(Optional.of(admin));
+        when(userRepository.findAllByOrderByCreatedAtDesc()).thenReturn(List.of(admin, member));
+        when(subscriptionRepository.findAll()).thenReturn(List.of());
+
+        AdminUsersPageResponse page = adminService.listUsers(adminId, null, true);
+        assertEquals(1, page.users().size());
+        assertEquals(adminId, page.users().get(0).id());
+        assertEquals(2, page.totalUsers());
+        assertEquals(1, page.totalPro());
     }
 
     @Test
@@ -173,5 +199,50 @@ class AdminServiceTest {
         ApiException ex = assertThrows(ApiException.class, () -> adminService.cancelSubscription(memberId, adminId));
         assertEquals(HttpStatus.FORBIDDEN, ex.getStatus());
         verify(billingService, never()).cancelAdminSubscription(any());
+    }
+
+    @Test
+    void adminCanDeleteNonAdminUser() {
+        User admin = new User();
+        admin.setId(adminId);
+        admin.setAdmin(true);
+        User member = new User();
+        member.setId(memberId);
+        member.setAdmin(false);
+        when(userRepository.findById(adminId)).thenReturn(Optional.of(admin));
+        when(userRepository.findById(memberId)).thenReturn(Optional.of(member));
+
+        adminService.deleteUser(adminId, memberId);
+        verify(userRepository).delete(member);
+    }
+
+    @Test
+    void adminCannotDeleteSelf() {
+        User admin = new User();
+        admin.setId(adminId);
+        admin.setAdmin(true);
+        when(userRepository.findById(adminId)).thenReturn(Optional.of(admin));
+
+        ApiException ex = assertThrows(ApiException.class, () -> adminService.deleteUser(adminId, adminId));
+        assertEquals(HttpStatus.BAD_REQUEST, ex.getStatus());
+        assertEquals("Cannot delete your own account", ex.getMessage());
+        verify(userRepository, never()).delete(any());
+    }
+
+    @Test
+    void adminCannotDeleteAnotherAdmin() {
+        User admin = new User();
+        admin.setId(adminId);
+        admin.setAdmin(true);
+        User otherAdmin = new User();
+        otherAdmin.setId(memberId);
+        otherAdmin.setAdmin(true);
+        when(userRepository.findById(adminId)).thenReturn(Optional.of(admin));
+        when(userRepository.findById(memberId)).thenReturn(Optional.of(otherAdmin));
+
+        ApiException ex = assertThrows(ApiException.class, () -> adminService.deleteUser(adminId, memberId));
+        assertEquals(HttpStatus.BAD_REQUEST, ex.getStatus());
+        assertEquals("Cannot delete an admin account", ex.getMessage());
+        verify(userRepository, never()).delete(any());
     }
 }

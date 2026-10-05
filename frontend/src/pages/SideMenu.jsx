@@ -2,6 +2,7 @@ import { Link, NavLink, useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useMenu } from '../menu'
 import { useAuth } from '../AuthContext'
+import { useAiCredits } from '../AiCreditsContext'
 import { isAdmin } from '../admin'
 import { isEmailVerified } from '../email'
 import { isProLicensed } from '../pro'
@@ -11,6 +12,7 @@ import MenuIcon from './MenuIcon'
 export default function SideMenu() {
   const { t } = useTranslation()
   const { user } = useAuth()
+  const { remainingCredits } = useAiCredits()
   const location = useLocation()
   const { close } = useMenu()
   const decksActive = location.pathname === '/' || location.pathname.startsWith('/decks')
@@ -26,6 +28,7 @@ export default function SideMenu() {
   const pro = isProLicensed(user)
   const verified = isEmailVerified(user)
   const badge = t('settings.proBadge')
+  const showAiCredits = remainingCredits != null && (pro || remainingCredits > 0)
 
   return (
     <nav className="side-menu">
@@ -51,8 +54,13 @@ export default function SideMenu() {
           <hr className="side-menu-divider" />
           <NavLink to="/create-with-ai" className={() => menuLinkClass(agentActive)} onClick={close}>
             <MenuIcon name="agent" />
-            <span className="menu-link-text">{t('agent.menu')}</span>
-            <span className="menu-pro-tag">{badge}</span>
+            <span className="menu-link-copy">
+              <span className="menu-link-text">{t('agent.menu')}</span>
+              {showAiCredits ? (
+                <span className="menu-link-sub">{t('pro.balanceLeft', { count: remainingCredits })}</span>
+              ) : null}
+            </span>
+            {!pro ? <span className="menu-pro-tag">{badge}</span> : null}
           </NavLink>
           <NavLink to="/mixes" className={() => menuLinkClass(mixActive)} onClick={close}>
             <MenuIcon name="mix" />

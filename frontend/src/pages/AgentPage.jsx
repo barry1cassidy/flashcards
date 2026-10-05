@@ -3,6 +3,7 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { api } from '../api'
 import { useAuth } from '../AuthContext'
+import { useAiCredits } from '../AiCreditsContext'
 import { completeCheckout, isNativeApp, startCheckout } from '../billing'
 import { isProLicensed } from '../pro'
 import { useResumeExpiredSubscription } from '../useResumeExpiredSubscription'
@@ -25,6 +26,7 @@ const PRESETS = [
 export default function AgentPage() {
   const { t } = useTranslation()
   const { user } = useAuth()
+  const { reportCredits } = useAiCredits()
   useResumeExpiredSubscription()
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
@@ -61,6 +63,12 @@ export default function AgentPage() {
       })
       .catch((err) => setError(err.message))
   }, [user?.proLicensed, user?.proExpiresAt])
+
+  useEffect(() => {
+    if (typeof status?.remainingCredits === 'number') {
+      reportCredits(status.remainingCredits)
+    }
+  }, [status?.remainingCredits, reportCredits])
 
   useEffect(() => {
     const billingParam = searchParams.get('billing')

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '../AuthContext'
+import { useAiCredits } from '../AiCreditsContext'
 import { isAdmin } from '../admin'
 import {
   completeCheckout,
@@ -55,6 +56,7 @@ export default function ProPage() {
 function ProSection({ user, onError, onStub, refresh }) {
   const { t, i18n } = useTranslation()
   const navigate = useNavigate()
+  const { reportCredits } = useAiCredits()
   const [searchParams] = useSearchParams()
   const [billing, setBilling] = useState(null)
   const [busy, setBusy] = useState(false)
@@ -84,6 +86,12 @@ function ProSection({ user, onError, onStub, refresh }) {
       cancelled = true
     }
   }, [user?.proLicensed, user?.proExpiresAt, onError])
+
+  useEffect(() => {
+    if (typeof billing?.remainingCredits === 'number') {
+      reportCredits(billing.remainingCredits)
+    }
+  }, [billing?.remainingCredits, reportCredits])
 
   useEffect(() => {
     if (!ios || !user?.id) {
@@ -360,16 +368,6 @@ function ProSection({ user, onError, onStub, refresh }) {
           </section>
 
           <section className="card-form pro-account-card">
-            <h2 className="section-heading">{t('pro.featuresTitle')}</h2>
-            <ul className="pro-feature-list">
-              <FeatureItem title={t('pro.featureAi')} detail={t('pro.featureAiDetail')} />
-              <FeatureItem title={t('pro.featureRehearse')} detail={t('pro.featureRehearseDetail')} />
-              <FeatureItem title={t('pro.featureMix')} detail={t('pro.featureMixDetail')} />
-              <FeatureItem title={t('pro.featureImages')} detail={t('pro.featureImagesDetail')} />
-            </ul>
-          </section>
-
-          <section className="card-form pro-account-card">
             <h2 className="section-heading">{t('pro.balanceTitle')}</h2>
             <p className="credit-balance-value">
               <span className="credit-balance-count">{billing?.remainingCredits ?? 0}</span>
@@ -439,6 +437,16 @@ function ProSection({ user, onError, onStub, refresh }) {
               </div>
             ) : null}
             {stubButton}
+          </section>
+
+          <section className="card-form pro-account-card">
+            <h2 className="section-heading">{t('pro.featuresTitle')}</h2>
+            <ul className="pro-feature-list">
+              <FeatureItem title={t('pro.featureAi')} detail={t('pro.featureAiDetail')} />
+              <FeatureItem title={t('pro.featureRehearse')} detail={t('pro.featureRehearseDetail')} />
+              <FeatureItem title={t('pro.featureMix')} detail={t('pro.featureMixDetail')} />
+              <FeatureItem title={t('pro.featureImages')} detail={t('pro.featureImagesDetail')} />
+            </ul>
           </section>
         </>
       )}

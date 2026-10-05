@@ -18,6 +18,7 @@ public record AdminUserResponse(
         String stripeCustomerId,
         int includedCredits,
         int addonCredits,
+        int remainingCredits,
         String creditPeriod,
         List<AdminSubscriptionResponse> subscriptions) {
 }

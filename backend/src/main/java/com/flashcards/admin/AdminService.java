@@ -40,19 +40,32 @@ public class AdminService {
     }
 
     @Transactional(readOnly = true)
-    public List<AdminUserResponse> listUsers(UUID actorId, String query) {
+    public AdminUsersPageResponse listUsers(UUID actorId, String query, boolean proOnly) {
         requireAdmin(actorId);
+        List<User> allUsers = userRepository.findAllByOrderByCreatedAtDesc();
+        int totalUsers = allUsers.size();
+        int totalPro = 0;
+        for (User user : allUsers) {
+            if (ProAccess.allowed(user)) {
+                totalPro++;
+            }
+        }
+
         String needle = sanitizeQuery(query);
         List<User> users = needle.isEmpty()
-                ? userRepository.findAllByOrderByCreatedAtDesc()
+                ? allUsers
                 : userRepository.findByEmailContainingIgnoreCaseOrDisplayNameContainingIgnoreCaseOrderByCreatedAtDesc(
                         needle, needle);
         Map<UUID, List<UserSubscription>> byUser = subscriptionsByUser();
-        List<AdminUserResponse> rows = new ArrayList<>(users.size());
+        List<AdminUserResponse> rows = new ArrayList<>();
         for (User user : users) {
-            rows.add(toResponse(user, byUser.getOrDefault(user.getId(), List.of())));
+            AdminUserResponse row = toResponse(user, byUser.getOrDefault(user.getId(), List.of()));
+            if (proOnly && !row.proActive()) {
+                continue;
+            }
+            rows.add(row);
         }
-        return rows;
+        return new AdminUsersPageResponse(rows, totalUsers, totalPro);
     }
 
     @Transactional(readOnly = true)
@@ -83,6 +96,21 @@ public class AdminService {
         return getUser(actorId, userId);
     }
 
+    @Transactional
+    public void deleteUser(UUID actorId, UUID userId) {
+        requireAdmin(actorId);
+        if (actorId.equals(userId)) {
+            throw new ApiException(HttpStatus.BAD_REQUEST, "Cannot delete your own account");
+        }
+        User user = userRepository
+                .findById(userId)
+                .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "User not found"));
+        if (user.isAdmin()) {
+            throw new ApiException(HttpStatus.BAD_REQUEST, "Cannot delete an admin account");
+        }
+        userRepository.delete(user);
+    }
+
     private Map<UUID, List<UserSubscription>> subscriptionsByUser() {
         Map<UUID, List<UserSubscription>> byUser = new LinkedHashMap<>();
         for (UserSubscription subscription : subscriptionRepository.findAll()) {
@@ -97,6 +125,8 @@ public class AdminService {
 
     private AdminUserResponse toResponse(User user, List<UserSubscription> subscriptions) {
         List<AdminSubscriptionResponse> views = subscriptions.stream().map(AdminService::toSubscription).toList();
+        int included = Math.max(0, user.getAgentIncludedCredits());
+        int addon = Math.max(0, user.getAgentAddonCredits());
         return new AdminUserResponse(
                 user.getId(),
                 user.getEmail(),
@@ -109,8 +139,9 @@ public class AdminService {
                 ProAccess.allowed(user),
                 user.getProExpiresAt(),
                 user.getStripeCustomerId(),
-                user.getAgentIncludedCredits(),
-                user.getAgentAddonCredits(),
+                included,
+                addon,
+                included + addon,
                 user.getAgentCreditPeriod(),
                 views);
     }
