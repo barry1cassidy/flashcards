@@ -461,7 +461,7 @@ export default function DeckDetailPage() {
           </h2>
           {editingDeck ? (
             <div className="header-actions deck-detail-actions">
-              <button className="btn" type="button" disabled={busy} onClick={() => commitDeckDetails({}, { exit: true })}>
+              <button className="btn primary" type="button" disabled={busy} onClick={() => commitDeckDetails({}, { exit: true })}>
                 {t('decks.doneEditing')}
               </button>
               <button

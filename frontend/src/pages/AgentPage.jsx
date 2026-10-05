@@ -113,6 +113,12 @@ export default function AgentPage() {
     window.setTimeout(() => promptRef.current?.focus(), 0)
   }
 
+  function clearPrompt() {
+    setPresetId('')
+    setPrompt('')
+    window.setTimeout(() => promptRef.current?.focus(), 0)
+  }
+
   function pickFile(event) {
     const file = event.target.files?.[0]
     event.target.value = ''
@@ -343,9 +349,17 @@ export default function AgentPage() {
               ))}
             </div>
           </div>
-          <label>
-            {t('agent.prompt')}
+          <div className="agent-prompt-field">
+            <div className="agent-prompt-heading">
+              <label htmlFor="agent-prompt">{t('agent.prompt')}</label>
+              {prompt ? (
+                <button className="btn ghost agent-prompt-clear" type="button" disabled={busy} onClick={clearPrompt}>
+                  {t('common.clear')}
+                </button>
+              ) : null}
+            </div>
             <textarea
+              id="agent-prompt"
               ref={promptRef}
               value={prompt}
               onChange={(event) => {
@@ -363,7 +377,7 @@ export default function AgentPage() {
               {t('agent.promptCount', { used: prompt.length, max: MAX_PROMPT_CHARS })}
             </span>
             {promptOverLimit ? <span className="field-error">{t('agent.promptOverLimit', { max: MAX_PROMPT_CHARS })}</span> : null}
-          </label>
+          </div>
           <div className="agent-file">
             <span className="agent-file-label">{t('agent.upload')}</span>
             <p className="muted">{t('agent.uploadHint')}</p>

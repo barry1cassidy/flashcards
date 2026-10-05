@@ -2334,6 +2334,31 @@ html[data-theme='light'] .pro-benefit-item {
   text-align: right;
 }
 
+.agent-prompt-field {
+  display: grid;
+  gap: 8px;
+}
+
+.agent-prompt-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 44px;
+}
+
+.agent-prompt-heading label {
+  margin: 0;
+}
+
+.agent-prompt-clear {
+  flex-shrink: 0;
+  padding: 8px 12px;
+  color: var(--muted);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 .prompt-count.over,
 .field-error,
 .credit-remaining.is-empty {
@@ -2790,11 +2815,11 @@ button.agent-preset:disabled {
 
   .deck-detail-actions {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
   }
 
   .deck-detail-actions .btn.danger {
-    grid-column: 1 / -1;
+    grid-column: auto;
   }
 
   .card-row-body,
