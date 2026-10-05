@@ -45,7 +45,7 @@ public class AgentService {
     private final GroupService groupService;
     private final DeckService deckService;
     private final CardService cardService;
-    private final PdfTextExtractor pdfTextExtractor;
+    private final DocumentTextExtractor documentTextExtractor;
     private final AgentJobStore jobStore;
     private final ExpiredStoreSubscriptionRefresh expiredStoreSubscriptionRefresh;
     private final ChatClient chatClient;
@@ -64,7 +64,7 @@ public class AgentService {
             GroupService groupService,
             DeckService deckService,
             CardService cardService,
-            PdfTextExtractor pdfTextExtractor,
+            DocumentTextExtractor documentTextExtractor,
             AgentJobStore jobStore,
             ExpiredStoreSubscriptionRefresh expiredStoreSubscriptionRefresh) {
         this.properties = properties;
@@ -74,7 +74,7 @@ public class AgentService {
         this.groupService = groupService;
         this.deckService = deckService;
         this.cardService = cardService;
-        this.pdfTextExtractor = pdfTextExtractor;
+        this.documentTextExtractor = documentTextExtractor;
         this.jobStore = jobStore;
         this.expiredStoreSubscriptionRefresh = expiredStoreSubscriptionRefresh;
         this.chatClient = properties.configured() ? ChatClient.create(openAiChatModel()) : null;
@@ -112,9 +112,9 @@ public class AgentService {
         if (prompt.length() > properties.maxPromptChars()) {
             throw new ApiException(HttpStatus.BAD_REQUEST, "Prompt is over the 2000 character limit");
         }
-        PdfExtractedText pdf = pdfTextExtractor.extract(file);
+        PdfExtractedText pdf = documentTextExtractor.extract(file);
         if (prompt.isEmpty() && pdf == null) {
-            throw new ApiException(HttpStatus.BAD_REQUEST, "Describe a deck or upload a PDF");
+            throw new ApiException(HttpStatus.BAD_REQUEST, "Describe a deck or upload a file");
         }
         String lockedFront = lockedLanguage(request.frontLanguage());
         String lockedBack = lockedLanguage(request.backLanguage());
@@ -202,7 +202,7 @@ public class AgentService {
                 lockedBack);
         try {
             if (pdf != null) {
-                job.step("readingPdf", pdf.filename());
+                job.step("readingDocument", pdf.filename());
             }
             for (int attempt = 1; attempt <= AgentModelErrors.MAX_ATTEMPTS; attempt++) {
                 if (attempt > 1) {

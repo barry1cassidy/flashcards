@@ -109,7 +109,7 @@ export default function StudyPage() {
   }, [index, id])
 
   useEffect(() => {
-    if ((normalizedMode !== 'flip' && normalizedMode !== 'audio') || revealed || done || !current || busy) {
+    if ((normalizedMode !== 'flip' && normalizedMode !== 'audio' && normalizedMode !== 'rehearse') || revealed || done || !current || busy) {
       return undefined
     }
     function onKeyDown(event) {
@@ -152,6 +152,35 @@ export default function StudyPage() {
       setCorrectCount((count) => count + 1)
     }
     setReviewed((count) => count + 1)
+  }
+
+  async function advanceRehearse() {
+    if (!current || busy) {
+      return
+    }
+    setBusy(true)
+    setError('')
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (!reduceMotion) {
+      setExitKind('good')
+    }
+    try {
+      setReviewed((count) => count + 1)
+      const nextIndex = index + 1
+      if (!reduceMotion) {
+        await new Promise((resolve) => setTimeout(resolve, 380))
+      }
+      if (nextIndex >= cards.length) {
+        setPendingAdvance(null)
+        setDone(true)
+        setExitKind('')
+      } else {
+        setIndex(nextIndex)
+        resetCardState()
+      }
+    } finally {
+      setBusy(false)
+    }
   }
 
   async function submitRating(rating, pauseMs = 0, { waitForContinue = false } = {}) {
@@ -268,7 +297,13 @@ export default function StudyPage() {
   }
 
   function modeLabel() {
-    if (normalizedMode === 'quiz' || normalizedMode === 'write' || normalizedMode === 'match' || normalizedMode === 'audio') {
+    if (
+      normalizedMode === 'quiz' ||
+      normalizedMode === 'write' ||
+      normalizedMode === 'match' ||
+      normalizedMode === 'audio' ||
+      normalizedMode === 'rehearse'
+    ) {
       return t(`study.${normalizedMode}`)
     }
     return t('study.flip')
@@ -281,6 +316,12 @@ export default function StudyPage() {
   }
 
   function doneMessage() {
+    if (normalizedMode === 'rehearse') {
+      if (reviewed === 0) {
+        return cardCount === 0 ? t('study.emptyDeck') : t('study.rehearseEmpty')
+      }
+      return t('study.rehearseDone', { count: reviewed })
+    }
     if (reviewed === 0) {
       if (cardCount === 0) {
         return t('study.emptyDeck')
@@ -393,7 +434,7 @@ export default function StudyPage() {
       {done ? (
         <div className="study-card done-card">
           <h2>{reviewed === 0 ? t('study.caughtUp') : t('study.niceWork')}</h2>
-          {reviewed > 0 ? (
+          {reviewed > 0 && normalizedMode !== 'rehearse' ? (
             <div className={`study-results${normalizedMode === 'flip' || normalizedMode === 'audio' ? ' study-results-3' : ''}`}>
               <div className="study-result">
                 <strong>{correctCount}</strong>
@@ -413,7 +454,7 @@ export default function StudyPage() {
           ) : null}
           <p>{doneMessage()}</p>
           <div className="done-actions">
-            {dueCount > 0 || waitingCount > 0 ? (
+            {normalizedMode === 'rehearse' ? null : dueCount > 0 || waitingCount > 0 ? (
               <div className="done-action">
                 <button className="btn primary" type="button" disabled={busy} onClick={continueThisDeck}>
                   {isMix ? t('mix.continue') : t('study.continueDeck')}
@@ -421,7 +462,7 @@ export default function StudyPage() {
                 <p className="muted">{isMix ? t('mix.continueHint') : t('study.continueDeckHint')}</p>
               </div>
             ) : null}
-            {cardCount > 0 ? (
+            {normalizedMode === 'rehearse' ? null : cardCount > 0 ? (
               <div className="done-action">
                 <button
                   className={dueCount > 0 || waitingCount > 0 ? 'btn' : 'btn primary'}
@@ -489,12 +530,15 @@ export default function StudyPage() {
           onReveal={() => setRevealed(true)}
           onRate={(rating) => submitRating(rating)}
         />
-      ) : current && normalizedMode === 'flip' ? (
+      ) : current && (normalizedMode === 'flip' || normalizedMode === 'rehearse') ? (
         <>
           <div
             key={`${current.id}-${index}`}
             className={`flip-stage${exitKind ? ` is-leaving is-leaving-${exitKind}` : ''}`}
           >
+            {normalizedMode === 'rehearse' ? (
+              <p className="muted study-rehearse-note">{t('study.rehearseNote')}</p>
+            ) : null}
             <div className="flip-toolbar">
               <div className="card-heading">
                 <div className="eyebrow">{revealed ? t('study.answer') : t('study.question')}</div>
@@ -539,13 +583,21 @@ export default function StudyPage() {
             </div>
           </div>
           {revealed ? (
-            <RatingRow
-              card={current}
-              hideMissed={hideAgain}
-              busy={busy}
-              dueToday={dueToday}
-              onRate={(rating) => submitRating(rating)}
-            />
+            normalizedMode === 'rehearse' ? (
+              <div className="header-actions">
+                <button className="btn primary" type="button" disabled={busy} onClick={advanceRehearse}>
+                  {index + 1 >= cards.length ? t('study.rehearseFinish') : t('study.rehearseNext')}
+                </button>
+              </div>
+            ) : (
+              <RatingRow
+                card={current}
+                hideMissed={hideAgain}
+                busy={busy}
+                dueToday={dueToday}
+                onRate={(rating) => submitRating(rating)}
+              />
+            )
           ) : null}
         </>
       ) : current ? (

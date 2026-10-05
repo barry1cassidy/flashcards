@@ -8,11 +8,19 @@ import { isProLicensed } from '../pro'
 import { useResumeExpiredSubscription } from '../useResumeExpiredSubscription'
 import { translateError } from '../i18n/errors'
 import LanguageSelect from './LanguageSelect'
+import MenuIcon from './MenuIcon'
 
 const POLL_MS = 500
 const MAX_WAIT_MS = 5 * 60 * 1000
 const MAX_PROMPT_CHARS = 2000
-const MAX_PDF_BYTES = 8 * 1024 * 1024
+const MAX_FILE_BYTES = 8 * 1024 * 1024
+const ACCEPTED_EXTENSIONS = ['.pdf', '.docx', '.txt', '.text']
+const FILE_ACCEPT = '.pdf,.docx,.txt,.text,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain'
+const PRESETS = [
+  { id: 'speech', icon: 'speech' },
+  { id: 'script', icon: 'script' },
+  { id: 'cloze', icon: 'cloze' },
+]
 
 export default function AgentPage() {
   const { t } = useTranslation()
@@ -23,10 +31,11 @@ export default function AgentPage() {
   const [status, setStatus] = useState(null)
   const [groups, setGroups] = useState([])
   const [prompt, setPrompt] = useState('')
+  const [presetId, setPresetId] = useState('')
   const [setId, setSetId] = useState('')
   const [frontLanguage, setFrontLanguage] = useState('')
   const [backLanguage, setBackLanguage] = useState('')
-  const [pdf, setPdf] = useState(null)
+  const [upload, setUpload] = useState(null)
   const [fileError, setFileError] = useState('')
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
@@ -35,6 +44,7 @@ export default function AgentPage() {
   const [now, setNow] = useState(() => Date.now())
   const cancelled = useRef(false)
   const fileRef = useRef(null)
+  const promptRef = useRef(null)
 
   useEffect(() => {
     cancelled.current = false
@@ -96,29 +106,37 @@ export default function AgentPage() {
 
   const promptOverLimit = prompt.length > MAX_PROMPT_CHARS
 
-  function pickPdf(event) {
+  function applyPreset(id) {
+    const next = t(`agent.presets.${id}.prompt`)
+    setPresetId(id)
+    setPrompt(next)
+    window.setTimeout(() => promptRef.current?.focus(), 0)
+  }
+
+  function pickFile(event) {
     const file = event.target.files?.[0]
     event.target.value = ''
     setFileError('')
     if (!file) {
       return
     }
-    if (!file.name.toLowerCase().endsWith('.pdf')) {
-      setPdf(null)
-      setFileError(t('errors.pdfType'))
+    const lower = file.name.toLowerCase()
+    if (!ACCEPTED_EXTENSIONS.some((ext) => lower.endsWith(ext))) {
+      setUpload(null)
+      setFileError(t('errors.uploadType'))
       return
     }
-    if (file.size > MAX_PDF_BYTES) {
-      setPdf(null)
-      setFileError(t('errors.pdfTooLarge'))
+    if (file.size > MAX_FILE_BYTES) {
+      setUpload(null)
+      setFileError(t('errors.uploadTooLarge'))
       return
     }
-    setPdf(file)
+    setUpload(file)
   }
 
   async function generate(event) {
     event.preventDefault()
-    if (promptOverLimit || (!prompt.trim() && !pdf)) {
+    if (promptOverLimit || (!prompt.trim() && !upload)) {
       return
     }
     setError('')
@@ -144,8 +162,8 @@ export default function AgentPage() {
       if (backLanguage) {
         body.append('backLanguage', backLanguage)
       }
-      if (pdf) {
-        body.append('file', pdf)
+      if (upload) {
+        body.append('file', upload)
       }
       const started = await api('/api/agent/decks', {
         method: 'POST',
@@ -222,7 +240,7 @@ export default function AgentPage() {
   const native = isNativeApp()
   const canBuyAddon = Boolean(status?.addonCheckoutEnabled) && !native
   const canSubmit =
-    !busy && remaining > 0 && !promptOverLimit && !fileError && Boolean(prompt.trim() || pdf)
+    !busy && remaining > 0 && !promptOverLimit && !fileError && Boolean(prompt.trim() || upload)
 
   return (
     <div className="page">
@@ -235,9 +253,22 @@ export default function AgentPage() {
       {error ? <div className="error">{translateError(t, error)}</div> : null}
 
       {status && !canUseAi ? (
-        <section className="card-form">
+        <section className="card-form agent-locked">
           <p>{t('agent.proRequired')}</p>
           <p>{t('agent.proWhy')}</p>
+          <div className="agent-presets is-locked" aria-label={t('agent.presetsHeading')}>
+            {PRESETS.map((preset) => (
+              <div key={preset.id} className={`agent-preset agent-preset-${preset.id}`}>
+                <span className="agent-preset-icon" aria-hidden="true">
+                  <MenuIcon name={preset.icon} />
+                </span>
+                <div>
+                  <strong>{t(`agent.presets.${preset.id}.title`)}</strong>
+                  <p className="muted">{t(`agent.presets.${preset.id}.blurb`)}</p>
+                </div>
+              </div>
+            ))}
+          </div>
           <ul className="pro-feature-list">
             <li>{t('agent.proExample1')}</li>
             <li>{t('agent.proExample2')}</li>
@@ -288,12 +319,40 @@ export default function AgentPage() {
               )}
             </div>
           ) : null}
+          <div className="agent-presets-block">
+            <h2 className="section-heading">{t('agent.presetsHeading')}</h2>
+            <p className="muted">{t('agent.presetsHint')}</p>
+            <div className="agent-presets" role="group" aria-label={t('agent.presetsHeading')}>
+              {PRESETS.map((preset) => (
+                <button
+                  key={preset.id}
+                  type="button"
+                  className={`agent-preset agent-preset-${preset.id}${presetId === preset.id ? ' selected' : ''}`}
+                  disabled={busy}
+                  aria-pressed={presetId === preset.id}
+                  onClick={() => applyPreset(preset.id)}
+                >
+                  <span className="agent-preset-icon" aria-hidden="true">
+                    <MenuIcon name={preset.icon} />
+                  </span>
+                  <span className="agent-preset-copy">
+                    <strong>{t(`agent.presets.${preset.id}.title`)}</strong>
+                    <span className="muted">{t(`agent.presets.${preset.id}.blurb`)}</span>
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
           <label>
             {t('agent.prompt')}
             <textarea
+              ref={promptRef}
               value={prompt}
-              onChange={(event) => setPrompt(event.target.value)}
-              rows={6}
+              onChange={(event) => {
+                setPrompt(event.target.value)
+                setPresetId('')
+              }}
+              rows={8}
               placeholder={t('agent.promptPlaceholder')}
               disabled={busy}
               className={promptOverLimit ? 'over-limit' : ''}
@@ -306,34 +365,34 @@ export default function AgentPage() {
             {promptOverLimit ? <span className="field-error">{t('agent.promptOverLimit', { max: MAX_PROMPT_CHARS })}</span> : null}
           </label>
           <div className="agent-file">
-            <span className="agent-file-label">{t('agent.pdf')}</span>
-            <p className="muted">{t('agent.pdfHint')}</p>
+            <span className="agent-file-label">{t('agent.upload')}</span>
+            <p className="muted">{t('agent.uploadHint')}</p>
             <div className="agent-file-row">
               <button className="btn" type="button" disabled={busy} onClick={() => fileRef.current?.click()}>
-                {t('agent.choosePdf')}
+                {t('agent.chooseFile')}
               </button>
               <input
                 ref={fileRef}
                 type="file"
-                accept="application/pdf,.pdf"
+                accept={FILE_ACCEPT}
                 hidden
-                onChange={pickPdf}
+                onChange={pickFile}
               />
-              {pdf ? (
+              {upload ? (
                 <>
                   <span className="agent-file-name">
-                    {pdf.name} · {formatBytes(pdf.size)}
+                    {upload.name} · {formatBytes(upload.size)}
                   </span>
                   <button
                     className="btn ghost"
                     type="button"
                     disabled={busy}
                     onClick={() => {
-                      setPdf(null)
+                      setUpload(null)
                       setFileError('')
                     }}
                   >
-                    {t('agent.removePdf')}
+                    {t('agent.removeFile')}
                   </button>
                 </>
               ) : null}

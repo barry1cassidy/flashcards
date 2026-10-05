@@ -6,43 +6,80 @@
     <link rel="apple-touch-icon" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="theme-color" content="#0b0e17" />
+    <meta name="robots" content="index,follow,max-image-preview:large" />
+    <meta name="author" content="Zipdeck" />
     <meta
       name="description"
-      content="Zipdeck turns any pair of things — a word and its translation, a term and its definition — into a deck you can flip, quiz, write, match, and listen through until it sticks."
+      content="Zipdeck is a free flashcard app at zipdeck.app for language learning, exam prep, and memorization. Study with flip, quiz, write, match, and audio — plus spaced repetition and Create with AI."
     />
     <link rel="canonical" href="https://zipdeck.app/" />
     <meta property="og:type" content="website" />
+    <meta property="og:locale" content="en_US" />
     <meta property="og:site_name" content="Zipdeck" />
     <meta property="og:url" content="https://zipdeck.app/" />
-    <meta property="og:title" content="Zipdeck — flashcards for anything you're learning" />
+    <meta property="og:title" content="Zipdeck — Flashcards for language learning &amp; exam study" />
     <meta
       property="og:description"
-      content="Turn any pair of things into a deck you can flip, quiz, write, match, and listen through until it sticks."
+      content="Make flashcards for Chinese, Spanish, MCAT, bar prep, and more. Flip, quiz, write, match, and listen — with spaced repetition and AI deck creation on zipdeck.app."
     />
-    <meta property="og:image" content="https://zipdeck.app/og.svg" />
+    <meta property="og:image" content="https://zipdeck.app/og.png" />
+    <meta property="og:image:type" content="image/png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Zipdeck — flashcards for anything you're learning" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Zipdeck — flashcards for anything you're learning" />
+    <meta name="twitter:title" content="Zipdeck — Flashcards for language learning &amp; exam study" />
     <meta
       name="twitter:description"
-      content="Turn any pair of things into a deck you can flip, quiz, write, match, and listen through until it sticks."
+      content="Make flashcards for Chinese, Spanish, MCAT, bar prep, and more. Flip, quiz, write, match, and listen — with spaced repetition and AI deck creation on zipdeck.app."
     />
-    <meta name="twitter:image" content="https://zipdeck.app/og.svg" />
+    <meta name="twitter:image" content="https://zipdeck.app/og.png" />
+    <meta name="twitter:image:alt" content="Zipdeck — flashcards for anything you're learning" />
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": "WebApplication",
-        "name": "Zipdeck",
-        "url": "https://zipdeck.app/",
-        "applicationCategory": "EducationalApplication",
-        "operatingSystem": "Web",
-        "description": "Zipdeck turns any pair of things into a deck you can flip, quiz, write, match, and listen through until it sticks.",
-        "offers": {
-          "@type": "Offer",
-          "price": "0",
-          "priceCurrency": "USD"
-        }
+        "@graph": [
+          {
+            "@type": "Organization",
+            "@id": "https://zipdeck.app/#organization",
+            "name": "Zipdeck",
+            "url": "https://zipdeck.app/",
+            "logo": "https://zipdeck.app/favicon.svg",
+            "email": "support@zipdeck.app"
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://zipdeck.app/#website",
+            "name": "Zipdeck",
+            "url": "https://zipdeck.app/",
+            "description": "Flashcard study app for language learning, exam prep, and memorization.",
+            "publisher": { "@id": "https://zipdeck.app/#organization" },
+            "inLanguage": "en"
+          },
+          {
+            "@type": "SoftwareApplication",
+            "@id": "https://zipdeck.app/#app",
+            "name": "Zipdeck",
+            "url": "https://zipdeck.app/",
+            "applicationCategory": "EducationalApplication",
+            "operatingSystem": "Web, Android, iOS",
+            "description": "Zipdeck turns vocabulary, definitions, speeches, and notes into flashcard decks you can flip, quiz, write, match, and listen through — with spaced repetition and Create with AI.",
+            "offers": {
+              "@type": "Offer",
+              "price": "0",
+              "priceCurrency": "USD"
+            },
+            "featureList": [
+              "Flashcards for language learning and exam study",
+              "Flip, quiz, write, match, and audio study modes",
+              "Spaced repetition scheduling",
+              "Create decks with AI from a prompt or file",
+              "Speech and script memorization presets",
+              "Study mixes across decks"
+            ],
+            "publisher": { "@id": "https://zipdeck.app/#organization" }
+          }
+        ]
       }
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -51,10 +88,28 @@
       href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap"
       rel="stylesheet"
     />
-    <title>Zipdeck — flashcards for anything you're learning</title>
+    <title>Zipdeck — Flashcards for language learning &amp; exam study</title>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <main class="marketing seo-shell">
+        <h1>Zipdeck — Flashcards for language learning and exam study</h1>
+        <p>
+          Zipdeck at zipdeck.app turns any pair of things — a word and its translation, a term and its
+          definition — into a flashcard deck you can flip, quiz, write, match, and listen through until
+          it sticks. Built for Chinese and Spanish lessons, MCAT and bar prep, and anything else you’re
+          learning.
+        </p>
+        <h2>Study modes</h2>
+        <p>Flip to check yourself. Quiz to recognize. Write to produce. Match to move fast. Listen when your eyes are busy. Spaced repetition times every review for faster recall.</p>
+        <h2>Create with AI</h2>
+        <p>
+          Pro turns notes, a wedding toast, a keynote, or a script into a deck you can edit and rehearse —
+          including speech, line-learning, and cloze presets.
+        </p>
+        <p><a href="/register">Create your first deck</a> · <a href="/privacy">Privacy</a> · <a href="/help">Help</a></p>
+      </main>
+    </div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

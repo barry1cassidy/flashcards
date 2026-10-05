@@ -20,6 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.flashcards.billing.ProAccess;
 import com.flashcards.card.Card;
 import com.flashcards.card.CardImageService;
 import com.flashcards.card.CardRepository;
@@ -41,7 +42,8 @@ import com.flashcards.user.UserRepository;
 public class StudyService {
 
     public static final int SESSION_SIZE = 20;
-    private static final Set<String> MODES = Set.of("FLIP", "QUIZ", "WRITE", "MATCH", "AUDIO");
+    private static final Set<String> MODES = Set.of("FLIP", "QUIZ", "WRITE", "MATCH", "AUDIO", "REHEARSE");
+    private static final int REHEARSE_MAX_CARDS = 200;
 
     private final DeckService deckService;
     private final CardService cardService;
@@ -82,24 +84,38 @@ public class StudyService {
         String normalized = normalizeMode(mode);
         String normalizedFilter = normalizeFilter(filter);
         User user = requireUser(userId);
-        StudyOrder order = orderOverride != null
-                ? orderOverride
-                : (user.getStudyOrder() == null ? StudyOrder.POSITION : user.getStudyOrder());
+        if ("REHEARSE".equals(normalized)) {
+            ProAccess.require(user);
+            normalizedFilter = "ALL";
+        }
+        StudyOrder order = "REHEARSE".equals(normalized)
+                ? StudyOrder.POSITION
+                : orderOverride != null
+                        ? orderOverride
+                        : (user.getStudyOrder() == null ? StudyOrder.POSITION : user.getStudyOrder());
         LocalDate today = LocalDate.now();
         List<Card> queue = new ArrayList<>();
         if (!deckIds.isEmpty()) {
             deckService.requireOwned(userId, deckIds);
-            Pageable page = mixSession ? Pageable.unpaged() : PageRequest.of(0, SESSION_SIZE);
-            if ("HARD".equals(normalizedFilter) || "AGAIN".equals(normalizedFilter)) {
-                ReviewRating rating = "AGAIN".equals(normalizedFilter) ? ReviewRating.AGAIN : ReviewRating.HARD;
-                queue.addAll(cardRepository.findHardQueueIn(deckIds, rating, page));
+            if ("REHEARSE".equals(normalized)) {
+                queue.addAll(cardRepository.findByDeck_IdIn(deckIds));
+                applyOrder(queue, StudyOrder.POSITION, deckIds);
+                if (queue.size() > REHEARSE_MAX_CARDS) {
+                    queue.subList(REHEARSE_MAX_CARDS, queue.size()).clear();
+                }
             } else {
-                queue.addAll(cardRepository.findStudyQueueIn(deckIds, today, page));
+                Pageable page = mixSession ? Pageable.unpaged() : PageRequest.of(0, SESSION_SIZE);
+                if ("HARD".equals(normalizedFilter) || "AGAIN".equals(normalizedFilter)) {
+                    ReviewRating rating = "AGAIN".equals(normalizedFilter) ? ReviewRating.AGAIN : ReviewRating.HARD;
+                    queue.addAll(cardRepository.findHardQueueIn(deckIds, rating, page));
+                } else {
+                    queue.addAll(cardRepository.findStudyQueueIn(deckIds, today, page));
+                }
+                applyOrder(queue, order, deckIds);
+                if (queue.size() > SESSION_SIZE) {
+                    queue.subList(SESSION_SIZE, queue.size()).clear();
+                }
             }
-        }
-        applyOrder(queue, order, deckIds);
-        if (queue.size() > SESSION_SIZE) {
-            queue.subList(SESSION_SIZE, queue.size()).clear();
         }
         Map<UUID, CardReview> reviews = queue.isEmpty()
                 ? Map.of()
@@ -270,6 +286,9 @@ public class StudyService {
         }
         if ("AGAIN".equals(value)) {
             return "AGAIN";
+        }
+        if ("ALL".equals(value)) {
+            return "ALL";
         }
         throw new ApiException(HttpStatus.BAD_REQUEST, "Unknown study filter");
     }

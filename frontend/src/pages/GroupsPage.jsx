@@ -5,6 +5,9 @@ import { api } from '../api'
 import { PRESET_COLORS } from '../colors'
 import { translateError } from '../i18n/errors'
 import { GroupBadge } from './ColorPicker'
+import ConfirmModal from './ConfirmModal'
+import ShareModal from './ShareModal'
+import ListingActions from './ListingActions'
 import GroupForm from './GroupForm'
 
 export default function GroupsPage() {
@@ -13,6 +16,8 @@ export default function GroupsPage() {
   const [searchParams, setSearchParams] = useSearchParams()
   const [groups, setGroups] = useState([])
   const [error, setError] = useState('')
+  const [shareTarget, setShareTarget] = useState(null)
+  const [deleteTarget, setDeleteTarget] = useState(null)
   const creating = searchParams.get('new') === '1'
 
   async function load() {
@@ -22,6 +27,18 @@ export default function GroupsPage() {
   useEffect(() => {
     load().catch((err) => setError(err.message))
   }, [])
+
+  async function deleteGroup() {
+    const group = deleteTarget
+    setDeleteTarget(null)
+    setError('')
+    try {
+      await api(`/api/groups/${group.id}`, { method: 'DELETE' })
+      await load()
+    } catch (err) {
+      setError(err.message)
+    }
+  }
 
   async function createGroup({ name, color }) {
     const group = await api('/api/groups', {
@@ -49,14 +66,41 @@ export default function GroupsPage() {
       ) : (
         <div className="deck-grid">
           {groups.map((group) => (
-            <Link key={group.id} to={`/sets/${group.id}`} className="deck-card">
-              <GroupBadge group={group} />
-              <h2>{group.name}</h2>
-              <p className="muted">{t('groups.decks', { count: group.deckCount })}</p>
-            </Link>
+            <div key={group.id} className="deck-card">
+              <ListingActions
+                name={group.name}
+                onShare={() => setShareTarget(group)}
+                onDelete={() => setDeleteTarget(group)}
+              />
+              <Link to={`/sets/${group.id}`} className="deck-card-main">
+                <div className="deck-card-lead">
+                  <GroupBadge group={group} />
+                </div>
+                <h2>{group.name}</h2>
+                <p className="muted">{t('groups.decks', { count: group.deckCount })}</p>
+              </Link>
+            </div>
           ))}
         </div>
       )}
+      {shareTarget ? (
+        <ShareModal
+          kind="SET"
+          targetId={shareTarget.id}
+          name={shareTarget.name}
+          onClose={() => setShareTarget(null)}
+        />
+      ) : null}
+      {deleteTarget ? (
+        <ConfirmModal
+          title={t('groups.deleteGroupTitle')}
+          message={t('groups.deleteGroupMessage')}
+          confirmLabel={t('groups.deleteGroup')}
+          danger
+          onConfirm={deleteGroup}
+          onCancel={() => setDeleteTarget(null)}
+        />
+      ) : null}
       {creating ? (
         <div className="modal-backdrop" onClick={() => setSearchParams({})}>
           <div className="modal" onClick={(event) => event.stopPropagation()}>

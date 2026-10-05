@@ -39,6 +39,61 @@ const ICONS = {
       <path d="M16 3.13a4 4 0 0 1 0 7.75" />
     </>
   ),
+  teacher: (
+    <>
+      <path d="M4 19h16" />
+      <path d="M4 19V7l8-3 8 3v12" />
+      <path d="M9 19v-5h6v5" />
+      <path d="M12 10v.01" />
+    </>
+  ),
+  student: (
+    <>
+      <path d="M4 10l8-4 8 4-8 4-8-4z" />
+      <path d="M20 10v5" />
+      <path d="M6 12.5V16c0 1.5 2.7 3 6 3s6-1.5 6-3v-3.5" />
+    </>
+  ),
+  speech: (
+    <>
+      <path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3z" />
+      <path d="M5 11a7 7 0 0 0 14 0" />
+      <path d="M12 18v3" />
+      <path d="M8 21h8" />
+    </>
+  ),
+  script: (
+    <>
+      <path d="M7 3h8l4 4v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z" />
+      <path d="M15 3v4h4" />
+      <path d="M8 12h8" />
+      <path d="M8 16h5" />
+      <path d="M8 8h3" />
+    </>
+  ),
+  cloze: (
+    <>
+      <path d="M4 8h6" />
+      <path d="M14 8h6" />
+      <path d="M4 12h16" />
+      <path d="M4 16h10" />
+      <path d="M10.5 6.5h3" strokeDasharray="1.2 1.6" />
+    </>
+  ),
+  joinCode: (
+    <>
+      <rect x="3" y="7" width="18" height="12" rx="2" />
+      <path d="M7 11h4" />
+      <path d="M7 15h10" />
+      <path d="M15 11h2" />
+    </>
+  ),
+  deckCopy: (
+    <>
+      <rect x="8" y="4" width="12" height="14" rx="2" />
+      <path d="M6 8H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-1" />
+    </>
+  ),
   pro: (
     <>
       <path d="M12 3l2.4 4.9 5.4.8-3.9 3.8.9 5.4L12 15.8 6.2 17.9l.9-5.4L3.2 8.7l5.4-.8L12 3z" />
@@ -57,6 +112,15 @@ const ICONS = {
       <circle cx="18" cy="19" r="3" />
       <path d="M8.59 13.51l6.83 3.98" />
       <path d="M15.41 6.51l-6.82 3.98" />
+    </>
+  ),
+  trash: (
+    <>
+      <path d="M4 7h16" />
+      <path d="M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
+      <path d="M6 7l1 13h10l1-13" />
+      <path d="M10 11v6" />
+      <path d="M14 11v6" />
     </>
   ),
   help: (

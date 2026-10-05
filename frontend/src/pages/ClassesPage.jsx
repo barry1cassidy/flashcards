@@ -5,7 +5,7 @@ import { api } from '../api'
 import { useAuth } from '../AuthContext'
 import { translateError } from '../i18n/errors'
 import { isTeacherMode } from '../teacher'
-import { isAdmin } from '../admin'
+import MenuIcon from './MenuIcon'
 
 export default function ClassesPage() {
   const { t } = useTranslation()
@@ -19,7 +19,6 @@ export default function ClassesPage() {
   const [busy, setBusy] = useState(false)
   const creating = searchParams.get('new') === '1'
   const teacher = isTeacherMode(user)
-  const admin = isAdmin(user)
   const empty = data.teaching.length === 0 && data.joined.length === 0
 
   async function load() {
@@ -66,6 +65,15 @@ export default function ClassesPage() {
     }
   }
 
+  async function changeTeacherMode(next) {
+    setError('')
+    try {
+      await setTeacherMode(next)
+    } catch (err) {
+      setError(err.message)
+    }
+  }
+
   return (
     <div className="page">
       <div className="page-title">
@@ -74,68 +82,145 @@ export default function ClassesPage() {
           <p className="muted">{t('classes.subtitle')}</p>
         </div>
         {teacher ? (
-          <button className="btn primary" type="button" onClick={() => {
-            setError('')
-            setName('')
-            setSearchParams({ new: '1' })
-          }}>
+          <button
+            className="btn primary"
+            type="button"
+            onClick={() => {
+              setError('')
+              setName('')
+              setSearchParams({ new: '1' })
+            }}
+          >
             {t('classes.newClass')}
           </button>
         ) : null}
       </div>
       {error && !creating ? <div className="error">{translateError(t, error)}</div> : null}
 
-      {admin ? (
-        <section className="card-form">
-          <h2 className="section-heading">{t('settings.teacherMode')}</h2>
-          <p className="muted">{t('settings.teacherModeHint')}</p>
-          <div className="radio-list" role="radiogroup" aria-label={t('settings.teacherMode')}>
-            <label className={`radio-row ${teacher ? 'selected' : ''}`}>
-              <input
-                type="radio"
-                name="teacherMode"
-                value="on"
-                checked={teacher}
-                onChange={() => setTeacherMode(true).catch((err) => setError(err.message))}
-              />
-              {t('settings.teacherModeOn')}
-            </label>
-            <label className={`radio-row ${teacher ? '' : 'selected'}`}>
-              <input
-                type="radio"
-                name="teacherMode"
-                value="off"
-                checked={!teacher}
-                onChange={() => setTeacherMode(false).catch((err) => setError(err.message))}
-              />
-              {t('settings.teacherModeOff')}
-            </label>
-          </div>
-        </section>
-      ) : null}
+      <ol className="class-how-strip" aria-label={t('classes.howHeading')}>
+        <li className="class-how-step">
+          <span className="class-how-icon" aria-hidden="true">
+            <MenuIcon name="teacher" />
+          </span>
+          <span className="class-how-copy">
+            <strong>{t('classes.howStep1Title')}</strong>
+            <span className="muted">{t('classes.howStep1Body')}</span>
+          </span>
+        </li>
+        <li className="class-how-step">
+          <span className="class-how-icon" aria-hidden="true">
+            <MenuIcon name="joinCode" />
+          </span>
+          <span className="class-how-copy">
+            <strong>{t('classes.howStep2Title')}</strong>
+            <span className="muted">{t('classes.howStep2Body')}</span>
+          </span>
+        </li>
+        <li className="class-how-step">
+          <span className="class-how-icon" aria-hidden="true">
+            <MenuIcon name="deckCopy" />
+          </span>
+          <span className="class-how-copy">
+            <strong>{t('classes.howStep3Title')}</strong>
+            <span className="muted">{t('classes.howStep3Body')}</span>
+          </span>
+        </li>
+      </ol>
 
-      <section className="card-form">
-        <h2 className="section-heading">{t('classes.joinHeading')}</h2>
-        <p className="muted">{t('classes.joinHint')}</p>
-        <form className="create-row" onSubmit={joinClass}>
-          <input
-            value={joinCode}
-            onChange={(event) => setJoinCode(event.target.value.toUpperCase())}
-            maxLength={6}
-            autoCapitalize="characters"
-            autoComplete="off"
-            spellCheck={false}
-            placeholder={t('classes.joinPlaceholder')}
-            aria-label={t('classes.joinPlaceholder')}
-          />
-          <button className="btn primary" type="submit" disabled={busy || joinCode.trim().length < 6}>
-            {t('classes.joinButton')}
-          </button>
-        </form>
-      </section>
+      <div className="class-paths">
+        <section className="class-path class-path-student" aria-labelledby="class-path-student-title">
+          <div className="class-path-head">
+            <span className="class-path-icon" aria-hidden="true">
+              <MenuIcon name="student" />
+            </span>
+            <div>
+              <h2 id="class-path-student-title" className="section-heading">
+                {t('classes.studentPathTitle')}
+              </h2>
+              <p className="muted">{t('classes.studentPathHint')}</p>
+            </div>
+          </div>
+          <form className="create-row class-join-form" onSubmit={joinClass}>
+            <input
+              value={joinCode}
+              onChange={(event) => setJoinCode(event.target.value.toUpperCase())}
+              maxLength={6}
+              autoCapitalize="characters"
+              autoComplete="off"
+              spellCheck={false}
+              placeholder={t('classes.joinPlaceholder')}
+              aria-label={t('classes.joinPlaceholder')}
+              className="class-join-input"
+            />
+            <button className="btn primary" type="submit" disabled={busy || joinCode.trim().length < 6}>
+              {t('classes.joinButton')}
+            </button>
+          </form>
+        </section>
+
+        <section className="class-path class-path-teacher" aria-labelledby="class-path-teacher-title">
+          <div className="class-path-head">
+            <span className="class-path-icon" aria-hidden="true">
+              <MenuIcon name="teacher" />
+            </span>
+            <div>
+              <h2 id="class-path-teacher-title" className="section-heading">
+                {t('classes.teacherPathTitle')}
+              </h2>
+              <p className="muted">{t('classes.teacherPathHint')}</p>
+            </div>
+          </div>
+          <div
+            className="class-mode-toggle"
+            role="radiogroup"
+            aria-label={t('settings.teacherMode')}
+          >
+            <button
+              type="button"
+              role="radio"
+              aria-checked={!teacher}
+              className={`class-mode-option ${teacher ? '' : 'selected'}`}
+              onClick={() => changeTeacherMode(false)}
+            >
+              <MenuIcon name="student" />
+              <span>{t('classes.modeStudent')}</span>
+            </button>
+            <button
+              type="button"
+              role="radio"
+              aria-checked={teacher}
+              className={`class-mode-option ${teacher ? 'selected' : ''}`}
+              onClick={() => changeTeacherMode(true)}
+            >
+              <MenuIcon name="teacher" />
+              <span>{t('classes.modeTeacher')}</span>
+            </button>
+          </div>
+          {teacher ? (
+            <div className="class-teacher-actions">
+              <p className="muted">{t('classes.teacherModeReady')}</p>
+              <button
+                className="btn primary"
+                type="button"
+                onClick={() => {
+                  setError('')
+                  setName('')
+                  setSearchParams({ new: '1' })
+                }}
+              >
+                {t('classes.createClass')}
+              </button>
+            </div>
+          ) : (
+            <p className="muted class-teacher-locked">{t('classes.teacherModeLocked')}</p>
+          )}
+        </section>
+      </div>
 
       {empty ? (
-        <div className="empty">{teacher ? t('classes.emptyTeacher') : t('classes.emptyStudent')}</div>
+        <div className="empty class-empty">
+          {teacher ? t('classes.emptyTeacher') : t('classes.emptyStudent')}
+        </div>
       ) : null}
 
       {data.teaching.length > 0 ? (
@@ -195,11 +280,18 @@ export default function ClassesPage() {
 
 function ClassCard({ item }) {
   const { t } = useTranslation()
+  const teaching = item.role === 'TEACHER'
   return (
-    <Link to={`/classes/${item.id}`} className="deck-card">
+    <Link to={`/classes/${item.id}`} className={`deck-card class-card ${teaching ? 'is-teacher' : 'is-student'}`}>
+      <div className="class-card-top">
+        <span className={`class-role-badge ${teaching ? 'teacher' : 'student'}`}>
+          <MenuIcon name={teaching ? 'teacher' : 'student'} />
+          {teaching ? t('classes.roleTeacher') : t('classes.roleStudent')}
+        </span>
+      </div>
       <h2>{item.name}</h2>
       <p className="muted">
-        {item.role === 'TEACHER'
+        {teaching
           ? t('classes.teacherMeta', { members: item.memberCount, decks: item.deckCount })
           : t('classes.studentMeta', { teacher: item.teacherName, decks: item.deckCount })}
       </p>

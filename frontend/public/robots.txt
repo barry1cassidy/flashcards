@@ -1,4 +1,22 @@
 User-agent: *
 Allow: /
+Allow: /privacy
+Allow: /help
+Allow: /login
+Allow: /register
+
+Disallow: /admin
+Disallow: /settings
+Disallow: /decks/
+Disallow: /sets/
+Disallow: /groups/
+Disallow: /mixes/
+Disallow: /classes/
+Disallow: /create-with-ai
+Disallow: /library/
+Disallow: /verify
+Disallow: /pro
+Disallow: /join/
+Disallow: /share/
 
 Sitemap: https://zipdeck.app/sitemap.xml

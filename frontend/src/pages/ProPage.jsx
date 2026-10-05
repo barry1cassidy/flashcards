@@ -311,6 +311,7 @@ function ProSection({ user, onError, onStub, refresh }) {
             <h2 className="pro-benefits-heading">{t('pro.benefitsHeading')}</h2>
             <ul className="pro-benefit-list">
               <BenefitItem tone="ai" title={t('pro.featureAi')} detail={t('pro.featureAiDetail')} />
+              <BenefitItem tone="rehearse" title={t('pro.featureRehearse')} detail={t('pro.featureRehearseDetail')} />
               <BenefitItem tone="mix" title={t('pro.featureMix')} detail={t('pro.featureMixDetail')} />
               <BenefitItem tone="images" title={t('pro.featureImages')} detail={t('pro.featureImagesDetail')} />
               <BenefitItem
@@ -362,6 +363,7 @@ function ProSection({ user, onError, onStub, refresh }) {
             <h2 className="section-heading">{t('pro.featuresTitle')}</h2>
             <ul className="pro-feature-list">
               <FeatureItem title={t('pro.featureAi')} detail={t('pro.featureAiDetail')} />
+              <FeatureItem title={t('pro.featureRehearse')} detail={t('pro.featureRehearseDetail')} />
               <FeatureItem title={t('pro.featureMix')} detail={t('pro.featureMixDetail')} />
               <FeatureItem title={t('pro.featureImages')} detail={t('pro.featureImagesDetail')} />
             </ul>
@@ -474,6 +476,14 @@ function BenefitItem({ tone, title, detail }) {
 }
 
 function benefitIcon(tone) {
+  if (tone === 'rehearse') {
+    return (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+        <path d="M5 6h14M5 12h10M5 18h14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+        <path d="M17 10l3 2-3 2v-4z" fill="currentColor" />
+      </svg>
+    )
+  }
   if (tone === 'mix') {
     return (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none">

@@ -5,13 +5,19 @@ import MarketingHeader, { MarketingFooter } from './MarketingHeader'
 
 const MODE_KEYS = ['flip', 'quiz', 'write', 'match', 'audio']
 
+const AI_CASES = [
+  { key: 'speech', titleKey: 'marketing.aiSpeechTitle', bodyKey: 'marketing.aiSpeechBody' },
+  { key: 'script', titleKey: 'marketing.aiScriptTitle', bodyKey: 'marketing.aiScriptBody' },
+  { key: 'cloze', titleKey: 'marketing.aiClozeTitle', bodyKey: 'marketing.aiClozeBody' },
+]
+
 export default function LoginPage() {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const [mode, setMode] = useState('flip')
 
   return (
-    <div className="marketing">
+    <main className="marketing">
       <MarketingHeader showLoginForm />
 
       <section className="hero">
@@ -83,6 +89,27 @@ export default function LoginPage() {
         </div>
       </section>
 
+      <section className="ai-cases" id="ai">
+        <div className="marketing-wrap">
+          <h2>{t('marketing.aiTitle')}</h2>
+          <p className="sub">{t('marketing.aiSub')}</p>
+          <div className="ai-case-grid">
+            {AI_CASES.map((item) => (
+              <article key={item.key} className={`ai-case ai-case-${item.key}`}>
+                <h3>{t(item.titleKey)}</h3>
+                <p>{t(item.bodyKey)}</p>
+              </article>
+            ))}
+          </div>
+          <div className="ai-case-cta">
+            <button className="btn primary" type="button" onClick={() => navigate('/register')}>
+              {t('marketing.aiCta')}
+            </button>
+            <span className="hero-note">{t('marketing.aiNote')}</span>
+          </div>
+        </div>
+      </section>
+
       <section className="library" id="library">
         <div className="marketing-wrap">
           <h2>{t('marketing.libraryTitle')}</h2>
@@ -131,7 +158,7 @@ export default function LoginPage() {
       </section>
 
       <MarketingFooter />
-    </div>
+    </main>
   )
 }
 

@@ -129,7 +129,7 @@ public class AuthService {
         if (request.restudyWait() != null) {
             user.setRestudyWait(request.restudyWait());
         }
-        if (request.teacherMode() != null && user.isAdmin()) {
+        if (request.teacherMode() != null) {
             user.setTeacherMode(request.teacherMode());
         }
         return toUserResponse(user);

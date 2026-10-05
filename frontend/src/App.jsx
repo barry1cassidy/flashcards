@@ -64,6 +64,34 @@ function DocumentLang() {
             : t('app.name')
     document.documentElement.lang = currentLocale()
     document.documentElement.dir = currentLocale() === 'ar' ? 'rtl' : 'ltr'
+
+    const description = splash
+      ? t('marketing.seoDescription')
+      : privacy
+        ? t('privacy.intro')
+        : help
+          ? t('help.subtitle')
+          : null
+    let meta = document.querySelector('meta[name="description"]')
+    if (description) {
+      if (!meta) {
+        meta = document.createElement('meta')
+        meta.setAttribute('name', 'description')
+        document.head.appendChild(meta)
+      }
+      meta.setAttribute('content', description)
+    }
+
+    const canonicalPath = privacy ? '/privacy' : help ? '/help' : splash ? '/' : null
+    let canonical = document.querySelector('link[rel="canonical"]')
+    if (canonicalPath) {
+      if (!canonical) {
+        canonical = document.createElement('link')
+        canonical.setAttribute('rel', 'canonical')
+        document.head.appendChild(canonical)
+      }
+      canonical.setAttribute('href', `https://zipdeck.app${canonicalPath}`)
+    }
   }, [t, i18n.resolvedLanguage, pathname, user])
   return null
 }

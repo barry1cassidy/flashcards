@@ -5,6 +5,9 @@ import { api } from '../api'
 import { formatDate } from '../i18n/format'
 import { translateError } from '../i18n/errors'
 import { GroupBadge } from './ColorPicker'
+import ConfirmModal from './ConfirmModal'
+import ShareModal from './ShareModal'
+import ListingActions from './ListingActions'
 import { useAuth } from '../AuthContext'
 import { isAdmin } from '../admin'
 import { sortDecks } from '../deckSort'
@@ -44,6 +47,8 @@ export default function DecksPage() {
   const [description, setDescription] = useState('')
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
+  const [shareTarget, setShareTarget] = useState(null)
+  const [deleteTarget, setDeleteTarget] = useState(null)
 
   async function load() {
     const [deckData, groupData] = await Promise.all([api('/api/decks'), api('/api/groups')])
@@ -86,6 +91,18 @@ export default function DecksPage() {
     setName('')
     setDescription('')
     setError('')
+  }
+
+  async function deleteDeck() {
+    const deck = deleteTarget
+    setDeleteTarget(null)
+    setError('')
+    try {
+      await api(`/api/decks/${deck.id}`, { method: 'DELETE' })
+      await load()
+    } catch (err) {
+      setError(err.message)
+    }
   }
 
   async function createDeck(event) {
@@ -168,26 +185,55 @@ export default function DecksPage() {
           ) : (
             <div className="deck-grid">
               {visibleDecks.map((deck) => (
-                <Link key={deck.id} to={`/decks/${deck.id}`} className="deck-card">
-                  <GroupBadge group={deck.group} />
-                  <h2>{deck.name}</h2>
-                  <p className="muted">{deck.description || t('decks.noDescription')}</p>
-                  <div className="stat-row">
-                    <span>{t('decks.cards', { count: deck.cardCount })}</span>
-                    <span className="due-badge">{t('decks.due', { count: deck.dueCount })}</span>
-                    <span>{t('decks.learned', { count: deck.learnedCount })}</span>
-                  </div>
-                  {deck.lastStudiedAt ? (
-                    <p className="muted small">{t('decks.lastStudied', { date: formatDate(deck.lastStudiedAt) })}</p>
-                  ) : (
-                    <p className="muted small">{t('decks.notStudied')}</p>
-                  )}
-                </Link>
+                <div key={deck.id} className="deck-card">
+                  <ListingActions
+                    name={deck.name}
+                    onShare={() => setShareTarget(deck)}
+                    onDelete={() => setDeleteTarget(deck)}
+                  />
+                  <Link to={`/decks/${deck.id}`} className="deck-card-main">
+                    {deck.group ? (
+                      <div className="deck-card-lead">
+                        <GroupBadge group={deck.group} />
+                      </div>
+                    ) : null}
+                    <h2 className={deck.group ? undefined : 'deck-card-title'}>{deck.name}</h2>
+                    <p className="muted">{deck.description || t('decks.noDescription')}</p>
+                    <div className="stat-row">
+                      <span>{t('decks.cards', { count: deck.cardCount })}</span>
+                      <span className="due-badge">{t('decks.due', { count: deck.dueCount })}</span>
+                      <span>{t('decks.learned', { count: deck.learnedCount })}</span>
+                    </div>
+                    {deck.lastStudiedAt ? (
+                      <p className="muted small">{t('decks.lastStudied', { date: formatDate(deck.lastStudiedAt) })}</p>
+                    ) : (
+                      <p className="muted small">{t('decks.notStudied')}</p>
+                    )}
+                  </Link>
+                </div>
               ))}
             </div>
           )}
         </>
       )}
+      {shareTarget ? (
+        <ShareModal
+          kind="DECK"
+          targetId={shareTarget.id}
+          name={shareTarget.name}
+          onClose={() => setShareTarget(null)}
+        />
+      ) : null}
+      {deleteTarget ? (
+        <ConfirmModal
+          title={t('decks.deleteDeckTitle')}
+          message={t('decks.deleteDeckMessage')}
+          confirmLabel={t('decks.deleteDeckConfirm')}
+          danger
+          onConfirm={deleteDeck}
+          onCancel={() => setDeleteTarget(null)}
+        />
+      ) : null}
       {creating ? (
         <div className="modal-backdrop" onClick={closeCreate}>
           <form className="modal" onClick={(event) => event.stopPropagation()} onSubmit={createDeck}>

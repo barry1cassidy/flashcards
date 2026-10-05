@@ -21,6 +21,7 @@ export default function MarketingHeader({ showLoginForm = false, loginOpen, onLo
   const authRef = useRef(null)
   const onSplash = location.pathname === '/login' || location.pathname === '/'
   const modesHref = onSplash ? '#modes' : '/login#modes'
+  const aiHref = onSplash ? '#ai' : '/login#ai'
   const libraryHref = onSplash ? '#library' : '/login#library'
   const whyHref = onSplash ? '#stat' : '/login#stat'
 
@@ -51,6 +52,7 @@ export default function MarketingHeader({ showLoginForm = false, loginOpen, onLo
         </Link>
         <div className="marketing-links">
           <a href={modesHref}>{t('marketing.studyModes')}</a>
+          <a href={aiHref}>{t('marketing.aiNav')}</a>
           <a href={libraryHref}>{t('library.title')}</a>
           <a href={whyHref}>{t('marketing.whyItWorks')}</a>
         </div>

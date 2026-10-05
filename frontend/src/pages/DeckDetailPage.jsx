@@ -40,6 +40,8 @@ export default function DeckDetailPage() {
   const fileRef = useRef(null)
   const listRef = useRef(null)
   const cardsRef = useRef([])
+  const deckRef = useRef(null)
+  const deckSave = useRef(Promise.resolve())
   const drag = useRef(null)
   const [deck, setDeck] = useState(null)
   const [cards, setCards] = useState([])
@@ -67,6 +69,7 @@ export default function DeckDetailPage() {
   const [removeBackImage, setRemoveBackImage] = useState(false)
   const [proModal, setProModal] = useState(false)
   cardsRef.current = cards
+  deckRef.current = deck
 
   async function load() {
     const [deckData, cardData, groupData] = await Promise.all([
@@ -140,8 +143,9 @@ export default function DeckDetailPage() {
   async function saveDeck(overrides) {
     const updated = await api(`/api/decks/${id}`, {
       method: 'PUT',
-      body: JSON.stringify(deckUpdateBody(deck, overrides)),
+      body: JSON.stringify(deckUpdateBody(deckRef.current, overrides)),
     })
+    deckRef.current = updated
     setDeck(updated)
     return updated
   }
@@ -166,22 +170,42 @@ export default function DeckDetailPage() {
     resetCardForm()
   }
 
-  async function finishEdit(event) {
-    event.preventDefault()
-    const nextName = editName.trim()
-    const nextDescription = editDescription.trim()
+  function commitDeckDetails(overrides = {}, { exit = false } = {}) {
+    const snapshot = {
+      name: overrides.name ?? editName,
+      description: overrides.description ?? editDescription,
+      groupId: Object.hasOwn(overrides, 'groupId') ? overrides.groupId : (editGroupId || null),
+      frontLanguage: overrides.frontLanguage ?? editFrontLanguage,
+      backLanguage: overrides.backLanguage ?? editBackLanguage,
+      exit,
+    }
+    const run = deckSave.current.then(() => applyDeckDetails(snapshot))
+    deckSave.current = run.catch(() => {})
+    return run
+  }
+
+  async function applyDeckDetails(snapshot) {
+    const current = deckRef.current
+    const nextName = snapshot.name.trim()
+    const nextDescription = snapshot.description.trim()
+    const nextGroupId = snapshot.groupId || null
     if (!nextName) {
+      setEditName(current.name)
+      if (snapshot.exit) {
+        leaveEditMode()
+      }
       return
     }
-    const nextGroupId = editGroupId || null
     const unchanged =
-      nextName === deck.name &&
-      nextDescription === (deck.description || '').trim() &&
-      nextGroupId === (deck.group?.id ?? null) &&
-      editFrontLanguage === normalizeSpeechLanguage(deck.frontLanguage, 'en-US') &&
-      editBackLanguage === normalizeSpeechLanguage(deck.backLanguage, 'en-US')
+      nextName === current.name &&
+      nextDescription === (current.description || '').trim() &&
+      nextGroupId === (current.group?.id ?? null) &&
+      snapshot.frontLanguage === normalizeSpeechLanguage(current.frontLanguage, 'en-US') &&
+      snapshot.backLanguage === normalizeSpeechLanguage(current.backLanguage, 'en-US')
     if (unchanged) {
-      leaveEditMode()
+      if (snapshot.exit) {
+        leaveEditMode()
+      }
       return
     }
     setError('')
@@ -191,10 +215,14 @@ export default function DeckDetailPage() {
         name: nextName,
         description: nextDescription,
         groupId: nextGroupId,
-        frontLanguage: editFrontLanguage,
-        backLanguage: editBackLanguage,
+        frontLanguage: snapshot.frontLanguage,
+        backLanguage: snapshot.backLanguage,
       })
-      leaveEditMode()
+      setEditName(nextName)
+      setEditDescription(nextDescription)
+      if (snapshot.exit) {
+        leaveEditMode()
+      }
     } catch (err) {
       setError(err.message)
     } finally {
@@ -433,11 +461,8 @@ export default function DeckDetailPage() {
           </h2>
           {editingDeck ? (
             <div className="header-actions deck-detail-actions">
-              <button className="btn primary" type="submit" form="deck-details-form" disabled={busy}>
-                {t('decks.saveChanges')}
-              </button>
-              <button className="btn" type="button" disabled={busy} onClick={leaveEditMode}>
-                {t('common.cancel')}
+              <button className="btn" type="button" disabled={busy} onClick={() => commitDeckDetails({}, { exit: true })}>
+                {t('decks.doneEditing')}
               </button>
               <button
                 className="btn danger"
@@ -457,10 +482,19 @@ export default function DeckDetailPage() {
           ) : null}
         </div>
         {editingDeck ? (
-          <form id="deck-details-form" className="card-form" onSubmit={finishEdit}>
+          <form id="deck-details-form" className="card-form" onSubmit={(event) => {
+            event.preventDefault()
+            commitDeckDetails()
+          }}>
             <label>
               {t('decks.deckName')}
-              <input value={editName} onChange={(event) => setEditName(event.target.value)} required autoFocus />
+              <input
+                value={editName}
+                onChange={(event) => setEditName(event.target.value)}
+                onBlur={() => commitDeckDetails()}
+                required
+                autoFocus
+              />
             </label>
             <label>
               {t('decks.description')}
@@ -468,11 +502,19 @@ export default function DeckDetailPage() {
                 value={editDescription}
                 maxLength={2000}
                 onChange={(event) => setEditDescription(event.target.value)}
+                onBlur={() => commitDeckDetails()}
               />
             </label>
             <label className="group-select-label">
               {t('decks.deckGroup')}
-              <select value={editGroupId} onChange={(event) => setEditGroupId(event.target.value)}>
+              <select
+                value={editGroupId}
+                onChange={(event) => {
+                  const groupId = event.target.value
+                  setEditGroupId(groupId)
+                  commitDeckDetails({ groupId: groupId || null })
+                }}
+              >
                 <option value="">{t('decks.noGroup')}</option>
                 {groups.map((group) => (
                   <option key={group.id} value={group.id}>
@@ -486,13 +528,19 @@ export default function DeckDetailPage() {
                 id="deck-front-language"
                 label={t('decks.frontLanguage')}
                 value={editFrontLanguage}
-                onChange={setEditFrontLanguage}
+                onChange={(value) => {
+                  setEditFrontLanguage(value)
+                  commitDeckDetails({ frontLanguage: value })
+                }}
               />
               <LanguageSelect
                 id="deck-back-language"
                 label={t('decks.backLanguage')}
                 value={editBackLanguage}
-                onChange={setEditBackLanguage}
+                onChange={(value) => {
+                  setEditBackLanguage(value)
+                  commitDeckDetails({ backLanguage: value })
+                }}
               />
             </div>
           </form>

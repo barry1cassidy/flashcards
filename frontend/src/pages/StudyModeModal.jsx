@@ -1,5 +1,8 @@
 import { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { useAuth } from '../AuthContext'
+import { isProLicensed } from '../pro'
 
 const MODES = [
   { id: 'flip', titleKey: 'study.flip', hintKey: 'study.flipHint' },
@@ -7,10 +10,14 @@ const MODES = [
   { id: 'write', titleKey: 'study.write', hintKey: 'study.writeHint' },
   { id: 'match', titleKey: 'study.match', hintKey: 'study.matchHint' },
   { id: 'audio', titleKey: 'study.audio', hintKey: 'study.audioHint' },
+  { id: 'rehearse', titleKey: 'study.rehearse', hintKey: 'study.rehearseHint', pro: true },
 ]
 
 export default function StudyModeModal({ onSelect, onCancel, hint, hardCount = 0, againCount = 0 }) {
   const { t } = useTranslation()
+  const { user } = useAuth()
+  const navigate = useNavigate()
+  const pro = isProLicensed(user)
 
   useEffect(() => {
     function onKeyDown(event) {
@@ -21,6 +28,15 @@ export default function StudyModeModal({ onSelect, onCancel, hint, hardCount = 0
     document.addEventListener('keydown', onKeyDown)
     return () => document.removeEventListener('keydown', onKeyDown)
   }, [onCancel])
+
+  function pickMode(mode, filter) {
+    if (mode === 'rehearse' && !pro) {
+      onCancel()
+      navigate('/pro')
+      return
+    }
+    onSelect(mode, filter)
+  }
 
   return (
     <div className="modal-backdrop" onClick={onCancel}>
@@ -40,10 +56,13 @@ export default function StudyModeModal({ onSelect, onCancel, hint, hardCount = 0
         {hint ? <p className="muted">{hint}</p> : null}
         <div className="study-mode-list">
           {MODES.map((mode) => (
-            <button key={mode.id} className="study-mode-item" type="button" onClick={() => onSelect(mode.id)}>
+            <button key={mode.id} className="study-mode-item" type="button" onClick={() => pickMode(mode.id)}>
               <ModeIcon name={mode.id} />
               <span className="study-mode-copy">
-                <strong>{t(mode.titleKey)}</strong>
+                <strong>
+                  {t(mode.titleKey)}
+                  {mode.pro ? <span className="study-mode-pro">{t('settings.proBadge')}</span> : null}
+                </strong>
                 <span>{t(mode.hintKey)}</span>
               </span>
               <span className="study-mode-chevron" aria-hidden="true">
@@ -55,7 +74,7 @@ export default function StudyModeModal({ onSelect, onCancel, hint, hardCount = 0
             <button
               className="study-mode-item study-extra-item study-again-item"
               type="button"
-              onClick={() => onSelect('flip', 'again')}
+              onClick={() => pickMode('flip', 'again')}
             >
               <ModeIcon name="again" />
               <span className="study-mode-copy">
@@ -71,7 +90,7 @@ export default function StudyModeModal({ onSelect, onCancel, hint, hardCount = 0
             <button
               className={`study-mode-item study-extra-item study-hard-item${againCount > 0 ? ' is-follow-on' : ''}`}
               type="button"
-              onClick={() => onSelect('flip', 'hard')}
+              onClick={() => pickMode('flip', 'hard')}
             >
               <ModeIcon name="hard" />
               <span className="study-mode-copy">
@@ -109,6 +128,13 @@ function ModeIcon({ name }) {
           <path d="M5 13a7 7 0 0 1 14 0" />
           <rect x="3.5" y="13" width="4" height="7" rx="1.5" />
           <rect x="16.5" y="13" width="4" height="7" rx="1.5" />
+        </>
+      ) : name === 'rehearse' ? (
+        <>
+          <path d="M5 6h14" />
+          <path d="M5 12h10" />
+          <path d="M5 18h14" />
+          <path d="M17 10l3 2-3 2v-4z" />
         </>
       ) : name === 'again' ? (
         <path d="M7 7H3v4M3.5 11A8 8 0 1 0 7 5.3" />
