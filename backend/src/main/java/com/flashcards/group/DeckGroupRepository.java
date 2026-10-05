@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 public interface DeckGroupRepository extends JpaRepository<DeckGroup, UUID> {
 
@@ -22,4 +23,9 @@ public interface DeckGroupRepository extends JpaRepository<DeckGroup, UUID> {
     List<DeckGroup> findByIdInAndUser_Id(Collection<UUID> ids, UUID userId);
 
     Optional<DeckGroup> findByUser_IdAndSourceShareId(UUID userId, UUID sourceShareId);
+
+    long countByUser_Id(UUID userId);
+
+    @Query("SELECT g.user.id, COUNT(g) FROM DeckGroup g GROUP BY g.user.id")
+    List<Object[]> countGroupedByUser();
 }

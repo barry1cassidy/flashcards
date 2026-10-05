@@ -23,6 +23,12 @@ public interface CardRepository extends JpaRepository<Card, UUID> {
 
     int countByDeck_IdIn(Collection<UUID> deckIds);
 
+    @Query("SELECT COUNT(c) FROM Card c WHERE c.deck.user.id = :userId")
+    long countByUserId(@Param("userId") UUID userId);
+
+    @Query("SELECT c.deck.user.id, COUNT(c) FROM Card c GROUP BY c.deck.user.id")
+    List<Object[]> countGroupedByUser();
+
     List<Card> findByDeck_IdIn(Collection<UUID> deckIds);
 
     @Query("""

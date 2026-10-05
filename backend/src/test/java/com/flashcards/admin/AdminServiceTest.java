@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -22,7 +23,10 @@ import org.springframework.http.HttpStatus;
 import com.flashcards.billing.BillingPlan;
 import com.flashcards.billing.BillingService;
 import com.flashcards.billing.UserSubscriptionRepository;
+import com.flashcards.card.CardRepository;
 import com.flashcards.common.ApiException;
+import com.flashcards.deck.DeckRepository;
+import com.flashcards.group.DeckGroupRepository;
 import com.flashcards.user.User;
 import com.flashcards.user.UserRepository;
 
@@ -34,6 +38,12 @@ class AdminServiceTest {
     @Mock
     private UserSubscriptionRepository subscriptionRepository;
     @Mock
+    private DeckGroupRepository groupRepository;
+    @Mock
+    private DeckRepository deckRepository;
+    @Mock
+    private CardRepository cardRepository;
+    @Mock
     private BillingService billingService;
 
     private AdminService adminService;
@@ -42,7 +52,19 @@ class AdminServiceTest {
 
     @BeforeEach
     void setUp() {
-        adminService = new AdminService(userRepository, subscriptionRepository, billingService);
+        adminService = new AdminService(
+                userRepository,
+                subscriptionRepository,
+                groupRepository,
+                deckRepository,
+                cardRepository,
+                billingService);
+        lenient().when(groupRepository.countGroupedByUser()).thenReturn(List.of());
+        lenient().when(deckRepository.countGroupedByUser()).thenReturn(List.of());
+        lenient().when(cardRepository.countGroupedByUser()).thenReturn(List.of());
+        lenient().when(groupRepository.countByUser_Id(any())).thenReturn(0L);
+        lenient().when(deckRepository.countByUser_Id(any())).thenReturn(0L);
+        lenient().when(cardRepository.countByUserId(any())).thenReturn(0L);
     }
 
     @Test

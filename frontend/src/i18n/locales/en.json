@@ -67,6 +67,8 @@
     "no": "No",
     "userId": "User ID",
     "created": "Created",
+    "content": "Content",
+    "contentSummary": "{{sets}} sets · {{decks}} decks · {{cards}} cards",
     "signIn": "Sign-in",
     "stripeCustomer": "Stripe customer",
     "creditPeriod": "Credit period",

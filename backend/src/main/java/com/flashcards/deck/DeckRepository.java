@@ -53,4 +53,9 @@ public interface DeckRepository extends JpaRepository<Deck, UUID> {
     List<Deck> findByUser_IdAndClassSourceDeckIdIn(UUID userId, Collection<UUID> classSourceDeckIds);
 
     long countByGroupId(UUID groupId);
+
+    long countByUser_Id(UUID userId);
+
+    @Query("SELECT d.user.id, COUNT(d) FROM Deck d GROUP BY d.user.id")
+    List<Object[]> countGroupedByUser();
 }

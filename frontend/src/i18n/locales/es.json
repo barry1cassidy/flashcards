@@ -67,6 +67,8 @@
     "no": "No",
     "userId": "ID de usuario",
     "created": "Creado",
+    "content": "Contenido",
+    "contentSummary": "{{sets}} conjuntos · {{decks}} mazos · {{cards}} tarjetas",
     "signIn": "Inicio de sesión",
     "stripeCustomer": "Cliente de Stripe",
     "creditPeriod": "Periodo de créditos",

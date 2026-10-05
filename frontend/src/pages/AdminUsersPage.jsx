@@ -258,6 +258,16 @@ function FragmentRow({ user, sub, open, onToggle, pending, acting, onAsk, onConf
                 <dd>{formatStamp(user.createdAt)}</dd>
               </div>
               <div>
+                <dt>{t('admin.content')}</dt>
+                <dd>
+                  {t('admin.contentSummary', {
+                    sets: user.setCount ?? 0,
+                    decks: user.deckCount ?? 0,
+                    cards: user.cardCount ?? 0,
+                  })}
+                </dd>
+              </div>
+              <div>
                 <dt>{t('admin.signIn')}</dt>
                 <dd>{user.signIn}</dd>
               </div>

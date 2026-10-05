@@ -20,5 +20,8 @@ public record AdminUserResponse(
         int addonCredits,
         int remainingCredits,
         String creditPeriod,
+        int setCount,
+        int deckCount,
+        int cardCount,
         List<AdminSubscriptionResponse> subscriptions) {
 }

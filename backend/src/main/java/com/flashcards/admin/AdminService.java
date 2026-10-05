@@ -2,6 +2,7 @@ package com.flashcards.admin;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -17,7 +18,10 @@ import com.flashcards.billing.BillingService;
 import com.flashcards.billing.ProAccess;
 import com.flashcards.billing.UserSubscription;
 import com.flashcards.billing.UserSubscriptionRepository;
+import com.flashcards.card.CardRepository;
 import com.flashcards.common.ApiException;
+import com.flashcards.deck.DeckRepository;
+import com.flashcards.group.DeckGroupRepository;
 import com.flashcards.security.AdminAccess;
 import com.flashcards.security.SubscriptionAccess;
 import com.flashcards.user.User;
@@ -28,14 +32,23 @@ public class AdminService {
 
     private final UserRepository userRepository;
     private final UserSubscriptionRepository subscriptionRepository;
+    private final DeckGroupRepository groupRepository;
+    private final DeckRepository deckRepository;
+    private final CardRepository cardRepository;
     private final BillingService billingService;
 
     public AdminService(
             UserRepository userRepository,
             UserSubscriptionRepository subscriptionRepository,
+            DeckGroupRepository groupRepository,
+            DeckRepository deckRepository,
+            CardRepository cardRepository,
             BillingService billingService) {
         this.userRepository = userRepository;
         this.subscriptionRepository = subscriptionRepository;
+        this.groupRepository = groupRepository;
+        this.deckRepository = deckRepository;
+        this.cardRepository = cardRepository;
         this.billingService = billingService;
     }
 
@@ -57,9 +70,13 @@ public class AdminService {
                 : userRepository.findByEmailContainingIgnoreCaseOrDisplayNameContainingIgnoreCaseOrderByCreatedAtDesc(
                         needle, needle);
         Map<UUID, List<UserSubscription>> byUser = subscriptionsByUser();
+        Map<UUID, ContentCounts> contentByUser = contentCountsByUser();
         List<AdminUserResponse> rows = new ArrayList<>();
         for (User user : users) {
-            AdminUserResponse row = toResponse(user, byUser.getOrDefault(user.getId(), List.of()));
+            AdminUserResponse row = toResponse(
+                    user,
+                    byUser.getOrDefault(user.getId(), List.of()),
+                    contentByUser.getOrDefault(user.getId(), ContentCounts.EMPTY));
             if (proOnly && !row.proActive()) {
                 continue;
             }
@@ -79,7 +96,7 @@ public class AdminService {
                         .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "User not found"));
         List<UserSubscription> subscriptions = new ArrayList<>(subscriptionRepository.findByUser_Id(user.getId()));
         subscriptions.sort(Comparator.comparing(UserSubscription::getUpdatedAt).reversed());
-        return toResponse(user, subscriptions);
+        return toResponse(user, subscriptions, contentCountsForUser(user.getId()));
     }
 
     @Transactional
@@ -123,7 +140,37 @@ public class AdminService {
         return byUser;
     }
 
-    private AdminUserResponse toResponse(User user, List<UserSubscription> subscriptions) {
+    private Map<UUID, ContentCounts> contentCountsByUser() {
+        Map<UUID, ContentCounts> counts = new HashMap<>();
+        for (Object[] row : groupRepository.countGroupedByUser()) {
+            UUID userId = (UUID) row[0];
+            int sets = ((Number) row[1]).intValue();
+            counts.put(userId, new ContentCounts(sets, 0, 0));
+        }
+        for (Object[] row : deckRepository.countGroupedByUser()) {
+            UUID userId = (UUID) row[0];
+            int decks = ((Number) row[1]).intValue();
+            ContentCounts current = counts.getOrDefault(userId, ContentCounts.EMPTY);
+            counts.put(userId, new ContentCounts(current.setCount(), decks, current.cardCount()));
+        }
+        for (Object[] row : cardRepository.countGroupedByUser()) {
+            UUID userId = (UUID) row[0];
+            int cards = ((Number) row[1]).intValue();
+            ContentCounts current = counts.getOrDefault(userId, ContentCounts.EMPTY);
+            counts.put(userId, new ContentCounts(current.setCount(), current.deckCount(), cards));
+        }
+        return counts;
+    }
+
+    private ContentCounts contentCountsForUser(UUID userId) {
+        return new ContentCounts(
+                (int) groupRepository.countByUser_Id(userId),
+                (int) deckRepository.countByUser_Id(userId),
+                (int) cardRepository.countByUserId(userId));
+    }
+
+    private AdminUserResponse toResponse(
+            User user, List<UserSubscription> subscriptions, ContentCounts content) {
         List<AdminSubscriptionResponse> views = subscriptions.stream().map(AdminService::toSubscription).toList();
         int included = Math.max(0, user.getAgentIncludedCredits());
         int addon = Math.max(0, user.getAgentAddonCredits());
@@ -143,6 +190,9 @@ public class AdminService {
                 addon,
                 included + addon,
                 user.getAgentCreditPeriod(),
+                content.setCount(),
+                content.deckCount(),
+                content.cardCount(),
                 views);
     }
 
@@ -179,5 +229,9 @@ public class AdminService {
         return userRepository
                 .findById(actorId)
                 .orElseThrow(() -> new ApiException(HttpStatus.UNAUTHORIZED, "Not authenticated"));
+    }
+
+    private record ContentCounts(int setCount, int deckCount, int cardCount) {
+        private static final ContentCounts EMPTY = new ContentCounts(0, 0, 0);
     }
 }
