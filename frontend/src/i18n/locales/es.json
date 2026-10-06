@@ -337,6 +337,7 @@
   },
   "decks": {
     "title": "Mis Mazos",
+    "back": "Volver a Mis Mazos",
     "subtitle": "Crea un mazo y elige cómo quieres estudiar.",
     "deckName": "Nombre",
     "createDeck": "Crear Mazo",
@@ -509,6 +510,7 @@
   },
   "groups": {
     "title": "Gestionar Conjuntos",
+    "back": "Volver a Gestionar Conjuntos",
     "pageSubtitle": "Crea un conjunto, elige un color y luego añade mazos.",
     "manage": "Gestionar Conjuntos",
     "all": "Todos",

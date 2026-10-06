@@ -428,6 +428,9 @@ export default function DeckDetailPage() {
     <div className="page">
       <div className="page-title">
         <div className="deck-hero">
+          <Link className="page-back" to="/">
+            {t('decks.back')}
+          </Link>
           <GroupBadge group={deck.group} />
           <h1>{deck.name}</h1>
           {deck.description ? <p>{deck.description}</p> : null}

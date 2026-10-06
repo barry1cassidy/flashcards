@@ -38,7 +38,7 @@ export default function AudioReviewStudy({
   }, [card, revealed, speechOk])
 
   return (
-    <>
+    <div className="study-session">
       <div className={`audio-stage${exitKind ? ` is-leaving is-leaving-${exitKind}` : ''}`}>
         <div className="audio-card">
           {speechOk ? (
@@ -83,7 +83,7 @@ export default function AudioReviewStudy({
       {revealed ? (
         <RatingRow card={card} hideMissed={hideMissed} busy={busy} dueToday={dueToday} onRate={onRate} />
       ) : null}
-    </>
+    </div>
   )
 }
 

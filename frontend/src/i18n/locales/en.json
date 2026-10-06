@@ -337,6 +337,7 @@
   },
   "decks": {
     "title": "My Decks",
+    "back": "Back to My Decks",
     "subtitle": "Create a deck, then pick how you want to study.",
     "deckName": "Name",
     "createDeck": "Create Deck",
@@ -511,6 +512,7 @@
   },
   "groups": {
     "title": "Manage Sets",
+    "back": "Back to Manage Sets",
     "pageSubtitle": "Create a set, pick a color, then add decks to it.",
     "manage": "Manage Sets",
     "all": "All",

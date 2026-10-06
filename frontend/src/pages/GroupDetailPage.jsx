@@ -87,6 +87,9 @@ export default function GroupDetailPage() {
     <div className="page">
       <div className="page-title">
         <div className="deck-hero">
+          <Link className="page-back" to="/sets">
+            {t('groups.back')}
+          </Link>
           <GroupBadge group={group} />
           <h1>{group.name}</h1>
           <p className="muted">{t('groups.decks', { count: group.deckCount })}</p>

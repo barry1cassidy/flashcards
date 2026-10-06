@@ -531,7 +531,7 @@ export default function StudyPage() {
           onRate={(rating) => submitRating(rating)}
         />
       ) : current && (normalizedMode === 'flip' || normalizedMode === 'rehearse') ? (
-        <>
+        <div className="study-session">
           <div
             key={`${current.id}-${index}`}
             className={`flip-stage${exitKind ? ` is-leaving is-leaving-${exitKind}` : ''}`}
@@ -584,7 +584,7 @@ export default function StudyPage() {
           </div>
           {revealed ? (
             normalizedMode === 'rehearse' ? (
-              <div className="header-actions">
+              <div className="study-session-actions header-actions">
                 <button className="btn primary" type="button" disabled={busy} onClick={advanceRehearse}>
                   {index + 1 >= cards.length ? t('study.rehearseFinish') : t('study.rehearseNext')}
                 </button>
@@ -599,7 +599,7 @@ export default function StudyPage() {
               />
             )
           ) : null}
-        </>
+        </div>
       ) : current ? (
         <div className="study-card">
           <div className="card-heading">
