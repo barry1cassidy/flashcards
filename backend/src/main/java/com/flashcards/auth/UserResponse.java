@@ -23,5 +23,6 @@ public record UserResponse(
         Instant proExpiresAt,
         boolean admin,
         boolean teacherMode,
-        boolean emailVerified) {
+        boolean emailVerified,
+        boolean hasPassword) {
 }

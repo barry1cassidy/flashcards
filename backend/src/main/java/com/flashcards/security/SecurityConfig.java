@@ -46,6 +46,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, "/api/auth/register", "/api/auth/login", "/api/auth/google")
                                 .permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/auth/forgot-password", "/api/auth/reset-password")
+                                .permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/join/*").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/shares/*").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/billing/stripe/webhook").permitAll()

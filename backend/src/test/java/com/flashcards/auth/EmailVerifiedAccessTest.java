@@ -13,6 +13,8 @@ class EmailVerifiedAccessTest {
         assertTrue(EmailVerifiedAccess.allowedWhileUnverified("PATCH", "/api/auth/me"));
         assertTrue(EmailVerifiedAccess.allowedWhileUnverified("POST", "/api/auth/verify-email"));
         assertTrue(EmailVerifiedAccess.allowedWhileUnverified("POST", "/api/auth/resend-verification"));
+        assertTrue(EmailVerifiedAccess.allowedWhileUnverified("POST", "/api/auth/forgot-password"));
+        assertTrue(EmailVerifiedAccess.allowedWhileUnverified("POST", "/api/auth/reset-password"));
         assertTrue(EmailVerifiedAccess.allowedWhileUnverified("GET", "/api/library"));
         assertTrue(EmailVerifiedAccess.allowedWhileUnverified("GET", "/api/library/decks/1"));
         assertTrue(EmailVerifiedAccess.allowedWhileUnverified("GET", "/api/billing/status"));
@@ -27,6 +29,9 @@ class EmailVerifiedAccessTest {
         assertFalse(EmailVerifiedAccess.allowedWhileUnverified("POST", "/api/library/decks/1/add"));
         assertFalse(EmailVerifiedAccess.allowedWhileUnverified("POST", "/api/billing/checkout"));
         assertFalse(EmailVerifiedAccess.allowedWhileUnverified("POST", "/api/agent/jobs"));
+        assertFalse(EmailVerifiedAccess.allowedWhileUnverified("POST", "/api/auth/password"));
+        assertFalse(EmailVerifiedAccess.allowedWhileUnverified("POST", "/api/auth/email/request"));
+        assertFalse(EmailVerifiedAccess.allowedWhileUnverified("POST", "/api/auth/account/delete"));
         assertFalse(EmailVerifiedAccess.allowedWhileUnverified("GET", "/api/mixes"));
         assertFalse(EmailVerifiedAccess.allowedWhileUnverified("POST", "/api/shares/K7M2QX/copy"));
     }

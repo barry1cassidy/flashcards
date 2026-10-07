@@ -600,4 +600,67 @@ public class BillingService {
                 .findById(userId)
                 .orElseThrow(() -> new ApiException(HttpStatus.UNAUTHORIZED, "Not authenticated"));
     }
+
+    @Transactional
+    public AccountDeletionStatus deletionStatus(UUID userId) {
+        refreshStoreSubscriptions(userId);
+        Instant now = Instant.now();
+        UserSubscription blocking = subscriptionRepository.findByUser_Id(userId).stream()
+                .filter(row -> blocksAccountDeletion(row, now))
+                .max(Comparator.comparing(UserSubscription::getCurrentPeriodEnd, Comparator.nullsLast(Comparator.naturalOrder())))
+                .orElse(null);
+        if (blocking == null) {
+            return AccountDeletionStatus.permitted();
+        }
+        return new AccountDeletionStatus(
+                false,
+                blocking.getProvider(),
+                blocking.isCancelAtPeriodEnd(),
+                blocking.getCurrentPeriodEnd());
+    }
+
+    static boolean blocksAccountDeletion(UserSubscription row, Instant now) {
+        if (row == null || row.getPlan() == BillingPlan.ADDON || row.getProvider() == BillingProvider.ADMIN) {
+            return false;
+        }
+        boolean store = row.getProvider() == BillingProvider.STRIPE
+                || row.getProvider() == BillingProvider.GOOGLE
+                || row.getProvider() == BillingProvider.APPLE;
+        return store && row.grantsAccess(now);
+    }
+
+    private void refreshStoreSubscriptions(UUID userId) {
+        User user = requireUser(userId);
+        for (UserSubscription row : subscriptionRepository.findByUser_Id(userId)) {
+            if (row.getPlan() == BillingPlan.ADDON || row.getProvider() == BillingProvider.ADMIN) {
+                continue;
+            }
+            try {
+                if (row.getProvider() == BillingProvider.STRIPE) {
+                    applySnapshot(stripeGateway.retrieveSubscription(row.getProviderSubscriptionId()));
+                } else if (row.getProvider() == BillingProvider.GOOGLE && playBillingGateway.enabled()) {
+                    String productId = googleProductFor(row.getPlan());
+                    if (productId == null) {
+                        continue;
+                    }
+                    PlayPurchaseRecord record = playBillingGateway.verifySubscription(productId, row.getProviderSubscriptionId());
+                    applyGoogleSubscription(user, record, row.getPlan(), record.orderId());
+                }
+            } catch (ApiException ex) {
+                log.warn("Subscription refresh before account deletion failed: {}", ex.getStatus());
+            }
+        }
+    }
+
+    private String googleProductFor(BillingPlan plan) {
+        BillingProperties.Google google = properties.google();
+        if (google == null || plan == null) {
+            return null;
+        }
+        return switch (plan) {
+            case YEARLY -> google.productYearly();
+            case MONTHLY -> google.productMonthly();
+            default -> null;
+        };
+    }
 }

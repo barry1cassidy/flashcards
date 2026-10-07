@@ -101,6 +101,19 @@ export function UserMenu() {
             </button>
           ) : null}
           {admin ? <div className="user-menu-divider" /> : null}
+          {isEmailVerified(user) ? (
+            <button
+              className="user-menu-item"
+              type="button"
+              role="menuitem"
+              onClick={() => {
+                setOpen(false)
+                navigate('/account')
+              }}
+            >
+              {t('nav.accountSettings')}
+            </button>
+          ) : null}
           <button
             className="user-menu-item"
             type="button"

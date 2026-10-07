@@ -53,7 +53,7 @@ class AuthServiceUpdateMeTest {
 
         UserResponse response = authService.updateMe(
                 USER_ID,
-                new UpdateMeRequest(null, null, null, null, null, null, true));
+                new UpdateMeRequest(null, null, null, null, null, null, true, null));
 
         assertTrue(user.isTeacherMode());
         assertTrue(response.teacherMode());

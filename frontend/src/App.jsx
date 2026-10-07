@@ -12,12 +12,14 @@ import DecksPage from './pages/DecksPage'
 import GroupDetailPage from './pages/GroupDetailPage'
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
+import ForgotPasswordPage from './pages/ForgotPasswordPage'
 import StudyPage from './pages/StudyPage'
 import AppLayout from './pages/AppLayout'
 import AdminLayout from './pages/AdminLayout'
 import AdminUsersPage from './pages/AdminUsersPage'
 import GroupsPage from './pages/GroupsPage'
 import SettingsPage from './pages/SettingsPage'
+import AccountSettings from './pages/AccountSettings'
 import ProPage from './pages/ProPage'
 import HelpPage from './pages/HelpPage'
 import AgentPage from './pages/AgentPage'
@@ -221,6 +223,14 @@ export default function App() {
             </GuestOnly>
           }
         />
+        <Route
+          path="/forgot-password"
+          element={
+            <GuestOnly>
+              <ForgotPasswordPage />
+            </GuestOnly>
+          }
+        />
         <Route path="/privacy" element={<PrivacyPage />} />
         <Route path="/join/:code" element={<JoinClassPage />} />
         <Route path="/share/:code" element={<SharePage />} />
@@ -241,6 +251,7 @@ export default function App() {
           <Route path="/verify" element={<VerifyEmailPage />} />
           <Route path="/help" element={<HelpPage />} />
           <Route path="/settings" element={<SettingsPage />} />
+          <Route path="/account" element={<AccountSettings />} />
           <Route path="/library" element={<LibraryPage />} />
           <Route path="/library/groups/:id" element={<LibraryGroupPage />} />
           <Route path="/library/decks/:id" element={<LibraryDeckPage />} />

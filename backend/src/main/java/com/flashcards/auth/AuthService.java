@@ -132,6 +132,13 @@ public class AuthService {
         if (request.teacherMode() != null) {
             user.setTeacherMode(request.teacherMode());
         }
+        if (request.displayName() != null) {
+            String name = request.displayName().trim();
+            if (name.isEmpty()) {
+                throw new ApiException(HttpStatus.BAD_REQUEST, "Validation failed");
+            }
+            user.setDisplayName(name);
+        }
         return toUserResponse(user);
     }
 
@@ -178,7 +185,8 @@ public class AuthService {
                 user.getProExpiresAt(),
                 user.isAdmin(),
                 user.isTeacherMode(),
-                user.isEmailVerified());
+                user.isEmailVerified(),
+                AccountService.hasPassword(user));
     }
 
     private static String displayNameFrom(GoogleTokenService.GoogleProfile profile, String email) {

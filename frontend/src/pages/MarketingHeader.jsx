@@ -169,6 +169,9 @@ function LoginFields() {
           {busy ? t('auth.signingIn') : t('auth.continue')}
         </button>
       </form>
+      <Link className="login-alt" to="/forgot-password">
+        {t('auth.forgotPassword')}
+      </Link>
       <Link className="login-alt" to="/register" state={inviteAuthState(location)}>
         {t('auth.newHere')} {t('auth.createFreeAccount')}
       </Link>

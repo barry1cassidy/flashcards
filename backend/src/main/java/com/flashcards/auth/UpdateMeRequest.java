@@ -8,6 +8,7 @@ import com.flashcards.user.StudyScope;
 import com.flashcards.user.Theme;
 
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 public record UpdateMeRequest(
         Theme theme,
@@ -16,5 +17,6 @@ public record UpdateMeRequest(
         StudyOrder studyOrder,
         StudyScope studyScope,
         RestudyWait restudyWait,
-        Boolean teacherMode) {
+        Boolean teacherMode,
+        @Size(max = 100) String displayName) {
 }
