@@ -763,6 +763,7 @@
     "saveName": "Save name",
     "nameSaved": "Name saved.",
     "changeEmail": "Email",
+    "currentEmail": "Current email",
     "changeEmailHint": "We email a code to the new address. The login changes only after you enter that code.",
     "newEmail": "New email",
     "currentPassword": "Current password",

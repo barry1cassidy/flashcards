@@ -169,6 +169,8 @@ export default function AccountSettings() {
       <section className="card-form">
         <h2 className="section-heading">{t('settings.changeEmail')}</h2>
         <CardMessage section="email" feedback={feedback} />
+        <p className="muted">{t('settings.currentEmail')}</p>
+        <p>{user?.email}</p>
         {hasPassword ? (
           <form className="stack" onSubmit={emailPending ? confirmEmail : requestEmail}>
             <p className="muted">{t('settings.changeEmailHint')}</p>
