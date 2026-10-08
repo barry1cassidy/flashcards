@@ -322,6 +322,7 @@ function ProSection({ user, onError, onStub, refresh }) {
               <BenefitItem tone="rehearse" title={t('pro.featureRehearse')} detail={t('pro.featureRehearseDetail')} />
               <BenefitItem tone="mix" title={t('pro.featureMix')} detail={t('pro.featureMixDetail')} />
               <BenefitItem tone="images" title={t('pro.featureImages')} detail={t('pro.featureImagesDetail')} />
+              <BenefitItem tone="offline" title={t('pro.featureOffline')} detail={t('pro.featureOfflineDetail')} />
               <BenefitItem
                 tone="credits"
                 title={t('pro.featureCredits', { count: billing?.monthlyAllowance || 10 })}
@@ -446,6 +447,7 @@ function ProSection({ user, onError, onStub, refresh }) {
               <FeatureItem title={t('pro.featureRehearse')} detail={t('pro.featureRehearseDetail')} />
               <FeatureItem title={t('pro.featureMix')} detail={t('pro.featureMixDetail')} />
               <FeatureItem title={t('pro.featureImages')} detail={t('pro.featureImagesDetail')} />
+              <FeatureItem title={t('pro.featureOffline')} detail={t('pro.featureOfflineDetail')} />
             </ul>
           </section>
         </>
@@ -512,6 +514,15 @@ function benefitIcon(tone) {
     return (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
         <path d="M13 3L6 14h6l-1 7 7-11h-6l1-7z" fill="currentColor" />
+      </svg>
+    )
+  }
+  if (tone === 'offline') {
+    return (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+        <path d="M12 3v11" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+        <path d="M8 10l4 4 4-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M5 19h14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
       </svg>
     )
   }

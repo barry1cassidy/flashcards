@@ -17,6 +17,7 @@ import CardImageField from './CardImageField'
 import AuthImage from './AuthImage'
 import { useAuth } from '../AuthContext'
 import { isProLicensed } from '../pro'
+import { getOfflinePack, removeOfflinePack, saveOfflinePack } from '../offlinePacks'
 import { useResumeExpiredSubscription } from '../useResumeExpiredSubscription'
 
 function deckUpdateBody(deck, overrides = {}) {
@@ -68,6 +69,10 @@ export default function DeckDetailPage() {
   const [removeFrontImage, setRemoveFrontImage] = useState(false)
   const [removeBackImage, setRemoveBackImage] = useState(false)
   const [proModal, setProModal] = useState(false)
+  const [offlinePack, setOfflinePack] = useState(null)
+  const [offlineBusy, setOfflineBusy] = useState(false)
+  const [offlineError, setOfflineError] = useState('')
+  const [offlineNotice, setOfflineNotice] = useState('')
   cardsRef.current = cards
   deckRef.current = deck
 
@@ -85,6 +90,58 @@ export default function DeckDetailPage() {
   useEffect(() => {
     load().catch((err) => setError(err.message))
   }, [id])
+
+  useEffect(() => {
+    let cancelled = false
+    getOfflinePack(id)
+      .then((pack) => {
+        if (!cancelled) {
+          setOfflinePack(pack)
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setOfflinePack(null)
+        }
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [id])
+
+  async function downloadOffline() {
+    setOfflineError('')
+    setOfflineNotice('')
+    setOfflineBusy(true)
+    try {
+      const snapshot = await api(`/api/decks/${id}/offline`)
+      const saved = await saveOfflinePack(snapshot)
+      if (!saved) {
+        setOfflineError(t('offline.noText'))
+        return
+      }
+      setOfflinePack(saved)
+      setOfflineNotice(t('offline.saved'))
+    } catch (err) {
+      setOfflineError(err.message)
+    } finally {
+      setOfflineBusy(false)
+    }
+  }
+
+  function askRemoveOffline() {
+    setConfirm({
+      title: t('offline.removeTitle'),
+      message: t('offline.removeMessage', { name: deck.name }),
+      confirmLabel: t('offline.remove'),
+      onConfirm: async () => {
+        await removeOfflinePack(id)
+        setOfflinePack(null)
+        setOfflineNotice(t('offline.removed'))
+        setConfirm(null)
+      },
+    })
+  }
 
   async function saveCard(event) {
     event.preventDefault()
@@ -455,6 +512,40 @@ export default function DeckDetailPage() {
           </div>
         )}
       </div>
+      <section className="deck-section" aria-labelledby="deck-offline-heading">
+        <div className="deck-section-header">
+          <h2 id="deck-offline-heading" className="section-heading">
+            {t('offline.section')}
+          </h2>
+        </div>
+        <p className="muted">{t('offline.sectionHint')}</p>
+        {offlineError ? <div className="error">{translateError(t, offlineError)}</div> : null}
+        {offlineNotice ? <p className="ok">{offlineNotice}</p> : null}
+        {offlinePack ? (
+          <p className="muted">{t('offline.savedOn', { date: formatDate(offlinePack.downloadedAt) })}</p>
+        ) : null}
+        <div className="header-actions">
+          {pro ? (
+            <button className="btn primary" type="button" disabled={offlineBusy} onClick={downloadOffline}>
+              {offlinePack ? t('offline.update') : t('offline.download')}
+            </button>
+          ) : (
+            <button className="btn primary" type="button" onClick={() => navigate('/pro')}>
+              {t('offline.upgrade')}
+            </button>
+          )}
+          {offlinePack ? (
+            <Link className="btn" to={`/offline/${id}`}>
+              {t('offline.study')}
+            </Link>
+          ) : null}
+          {offlinePack ? (
+            <button className="btn danger" type="button" onClick={askRemoveOffline}>
+              {t('offline.remove')}
+            </button>
+          ) : null}
+        </div>
+      </section>
       {error ? <div className="error">{translateError(t, error)}</div> : null}
 
       <section className="deck-section" aria-labelledby="deck-details-heading">

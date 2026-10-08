@@ -9,12 +9,14 @@ import GoogleSignInButton, { getGoogleClientId } from './GoogleSignInButton'
 import Brand from './Brand'
 import { goAfterAuth, inviteAuthState, clearJoinInvite } from '../authRedirect'
 import { SUPPORT_MAILTO } from '../support'
+import { listOfflinePacks } from '../offlinePacks'
 
 export default function MarketingHeader({ showLoginForm = false, loginOpen, onLoginOpenChange }) {
   const { t } = useTranslation()
   const { user } = useAuth()
   const location = useLocation()
   const [internalOpen, setInternalOpen] = useState(() => location.pathname === '/login')
+  const [hasOffline, setHasOffline] = useState(false)
   const controlled = typeof onLoginOpenChange === 'function'
   const open = controlled ? Boolean(loginOpen) : internalOpen
   const setOpen = controlled ? onLoginOpenChange : setInternalOpen
@@ -24,6 +26,24 @@ export default function MarketingHeader({ showLoginForm = false, loginOpen, onLo
   const aiHref = onSplash ? '#ai' : '/login#ai'
   const libraryHref = onSplash ? '#library' : '/login#library'
   const whyHref = onSplash ? '#stat' : '/login#stat'
+
+  useEffect(() => {
+    if (user) {
+      setHasOffline(false)
+      return undefined
+    }
+    let cancelled = false
+    listOfflinePacks()
+      .then((packs) => {
+        if (!cancelled) {
+          setHasOffline(packs.length > 0)
+        }
+      })
+      .catch(() => {})
+    return () => {
+      cancelled = true
+    }
+  }, [user])
 
   useEffect(() => {
     function onPointerDown(event) {
@@ -57,6 +77,11 @@ export default function MarketingHeader({ showLoginForm = false, loginOpen, onLo
           <a href={whyHref}>{t('marketing.whyItWorks')}</a>
         </div>
         <div className="marketing-auth" ref={authRef}>
+          {!user && hasOffline ? (
+            <Link className="offline-nav-btn" to="/offline">
+              {t('offline.landing')}
+            </Link>
+          ) : null}
           {user ? (
             <Link className="btn login-btn" to="/" onClick={clearJoinInvite}>
               {t('nav.allDecks')}

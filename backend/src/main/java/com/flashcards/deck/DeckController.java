@@ -27,10 +27,12 @@ public class DeckController {
 
     private final DeckService deckService;
     private final ShareService shareService;
+    private final OfflinePackService offlinePackService;
 
-    public DeckController(DeckService deckService, ShareService shareService) {
+    public DeckController(DeckService deckService, ShareService shareService, OfflinePackService offlinePackService) {
         this.deckService = deckService;
         this.shareService = shareService;
+        this.offlinePackService = offlinePackService;
     }
 
     @GetMapping
@@ -47,6 +49,11 @@ public class DeckController {
     @GetMapping("/{id}")
     public DeckResponse get(Authentication authentication, @PathVariable UUID id) {
         return deckService.get(AuthSupport.requireUser(authentication).id(), id);
+    }
+
+    @GetMapping("/{id}/offline")
+    public OfflinePackResponse offline(Authentication authentication, @PathVariable UUID id) {
+        return offlinePackService.snapshot(AuthSupport.requireUser(authentication).id(), id);
     }
 
     @PutMapping("/{id}")

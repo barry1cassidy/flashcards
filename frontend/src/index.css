@@ -613,6 +613,34 @@ textarea {
   touch-action: manipulation;
 }
 
+a.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  text-decoration: none;
+}
+
+.offline-list {
+  display: grid;
+  gap: 16px;
+}
+
+.marketing .offline-study.study-content,
+.marketing .offline-study.study-content:has(.study-session) {
+  overflow: visible;
+}
+
+.marketing .offline-study .study-session {
+  flex: none;
+  min-height: auto;
+  margin-bottom: 48px;
+}
+
+.marketing .offline-study .flip-inner {
+  min-height: 220px;
+}
+
 .btn.primary {
   background: var(--cobalt);
   color: #fff;
@@ -905,6 +933,10 @@ textarea {
 
 .pro-benefit-item-images .pro-benefit-icon {
   background: linear-gradient(160deg, var(--gold), var(--coral));
+}
+
+.pro-benefit-item-offline .pro-benefit-icon {
+  background: linear-gradient(160deg, #3d4fd4, var(--cobalt));
 }
 
 .pro-benefit-item-credits .pro-benefit-icon {
@@ -3041,6 +3073,41 @@ button.agent-preset:disabled {
 .login-btn:hover {
   border-color: color-mix(in srgb, var(--text) 48%, transparent);
   background: color-mix(in srgb, var(--text) 6%, transparent);
+}
+
+.offline-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: var(--cobalt);
+  color: #fff;
+  font-family: var(--font-display);
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.offline-nav-btn:hover {
+  background: var(--cobalt-dark);
+}
+
+@media (max-width: 420px) {
+  .marketing-nav:has(.offline-nav-btn) .brand-word {
+    display: none;
+  }
+
+  .marketing-nav:has(.offline-nav-btn) {
+    gap: 8px;
+  }
+
+  .offline-nav-btn,
+  .marketing-nav:has(.offline-nav-btn) .login-btn {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
 }
 
 .login-drop {
