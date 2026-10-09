@@ -1220,6 +1220,52 @@ html[data-theme='light'] .pro-benefit-item {
   line-height: 1;
 }
 
+.offline-download-btn.is-saved {
+  color: var(--cobalt);
+  background: var(--due-bg);
+}
+
+.offline-icon-sample {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  flex: 0 0 44px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--text);
+}
+
+.offline-icon-sample.is-focus {
+  color: var(--cobalt);
+  border-color: var(--cobalt);
+  background: var(--due-bg);
+}
+
+.offline-how-row {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.help-offline-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+}
+
+.help-offline-name {
+  flex: 1;
+  min-width: 0;
+  font-weight: 700;
+}
+
 .settings-subhead {
   font-size: 1rem;
   font-weight: 700;

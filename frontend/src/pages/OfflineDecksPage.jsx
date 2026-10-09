@@ -5,6 +5,7 @@ import { formatDate } from '../i18n/format'
 import { useAuth } from '../AuthContext'
 import { isProLicensed } from '../pro'
 import ConfirmModal from './ConfirmModal'
+import MenuIcon from './MenuIcon'
 import { listOfflinePacks, removeOfflinePack } from '../offlinePacks'
 
 export default function OfflineDecksPage() {
@@ -44,6 +45,17 @@ export default function OfflineDecksPage() {
         <h1>{t('offline.title')}</h1>
       </div>
       <p className="muted">{t('offline.intro')}</p>
+      <section className="card-form offline-how">
+        <div className="offline-how-row">
+          <span className="offline-icon-sample is-focus" aria-hidden="true">
+            <MenuIcon name="offline" />
+          </span>
+          <div>
+            <h2 className="section-heading">{t('offline.howTitle')}</h2>
+            <p className="muted">{t('offline.howBody')}</p>
+          </div>
+        </div>
+      </section>
       {packs === null ? <p>{t('app.loading')}</p> : null}
       {user && !pro ? (
         <section className="card-form">
@@ -59,12 +71,7 @@ export default function OfflineDecksPage() {
           </Link>
         </section>
       ) : null}
-      {packs && packs.length === 0 && (!user || pro) ? (
-        <section className="card-form">
-          <p>{t('offline.empty')}</p>
-          <p className="muted">{t('offline.emptyPro')}</p>
-        </section>
-      ) : null}
+      {packs && packs.length === 0 && (!user || pro) ? <p className="muted">{t('offline.empty')}</p> : null}
       {packs && packs.length > 0 ? (
         <div className="offline-list">
           {packs.map((pack) => (

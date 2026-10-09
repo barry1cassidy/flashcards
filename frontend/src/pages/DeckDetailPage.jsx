@@ -17,7 +17,7 @@ import CardImageField from './CardImageField'
 import AuthImage from './AuthImage'
 import { useAuth } from '../AuthContext'
 import { isProLicensed } from '../pro'
-import { getOfflinePack, removeOfflinePack, saveOfflinePack } from '../offlinePacks'
+import { getOfflinePack, saveOfflinePack } from '../offlinePacks'
 import { useResumeExpiredSubscription } from '../useResumeExpiredSubscription'
 
 function deckUpdateBody(deck, overrides = {}) {
@@ -72,7 +72,7 @@ export default function DeckDetailPage() {
   const [offlinePack, setOfflinePack] = useState(null)
   const [offlineBusy, setOfflineBusy] = useState(false)
   const [offlineError, setOfflineError] = useState('')
-  const [offlineNotice, setOfflineNotice] = useState('')
+  const [offlineProOpen, setOfflineProOpen] = useState(false)
   cardsRef.current = cards
   deckRef.current = deck
 
@@ -109,38 +109,24 @@ export default function DeckDetailPage() {
     }
   }, [id])
 
-  async function downloadOffline() {
-    setOfflineError('')
-    setOfflineNotice('')
-    setOfflineBusy(true)
-    try {
-      const snapshot = await api(`/api/decks/${id}/offline`)
-      const saved = await saveOfflinePack(snapshot)
-      if (!saved) {
-        setOfflineError(t('offline.noText'))
-        return
-      }
-      setOfflinePack(saved)
-      setOfflineNotice(t('offline.saved'))
-    } catch (err) {
-      setOfflineError(err.message)
-    } finally {
-      setOfflineBusy(false)
+  function downloadOffline() {
+    if (!pro) {
+      setOfflineProOpen(true)
+      return
     }
-  }
-
-  function askRemoveOffline() {
-    setConfirm({
-      title: t('offline.removeTitle'),
-      message: t('offline.removeMessage', { name: deck.name }),
-      confirmLabel: t('offline.remove'),
-      onConfirm: async () => {
-        await removeOfflinePack(id)
-        setOfflinePack(null)
-        setOfflineNotice(t('offline.removed'))
-        setConfirm(null)
-      },
-    })
+    setOfflineError('')
+    setOfflineBusy(true)
+    api(`/api/decks/${id}/offline`)
+      .then(async (snapshot) => {
+        const saved = await saveOfflinePack(snapshot)
+        if (!saved) {
+          setOfflineError(t('offline.noText'))
+          return
+        }
+        setOfflinePack(saved)
+      })
+      .catch((err) => setOfflineError(err.message))
+      .finally(() => setOfflineBusy(false))
   }
 
   async function saveCard(event) {
@@ -496,6 +482,21 @@ export default function DeckDetailPage() {
         {editingDeck ? null : (
           <div className="header-actions">
             <button
+              className={`btn ghost icon-btn offline-download-btn${offlinePack ? ' is-saved' : ''}`}
+              type="button"
+              disabled={offlineBusy}
+              aria-pressed={Boolean(offlinePack)}
+              aria-label={offlinePack ? t('offline.iconUpdate') : t('offline.iconDownload')}
+              title={
+                offlinePack
+                  ? t('offline.savedOn', { date: formatDate(offlinePack.downloadedAt) })
+                  : t('offline.iconDownload')
+              }
+              onClick={downloadOffline}
+            >
+              <MenuIcon name="offline" />
+            </button>
+            <button
               className="btn ghost icon-btn"
               type="button"
               onClick={() => setShareOpen(true)}
@@ -512,40 +513,7 @@ export default function DeckDetailPage() {
           </div>
         )}
       </div>
-      <section className="deck-section" aria-labelledby="deck-offline-heading">
-        <div className="deck-section-header">
-          <h2 id="deck-offline-heading" className="section-heading">
-            {t('offline.section')}
-          </h2>
-        </div>
-        <p className="muted">{t('offline.sectionHint')}</p>
-        {offlineError ? <div className="error">{translateError(t, offlineError)}</div> : null}
-        {offlineNotice ? <p className="ok">{offlineNotice}</p> : null}
-        {offlinePack ? (
-          <p className="muted">{t('offline.savedOn', { date: formatDate(offlinePack.downloadedAt) })}</p>
-        ) : null}
-        <div className="header-actions">
-          {pro ? (
-            <button className="btn primary" type="button" disabled={offlineBusy} onClick={downloadOffline}>
-              {offlinePack ? t('offline.update') : t('offline.download')}
-            </button>
-          ) : (
-            <button className="btn primary" type="button" onClick={() => navigate('/pro')}>
-              {t('offline.upgrade')}
-            </button>
-          )}
-          {offlinePack ? (
-            <Link className="btn" to={`/offline/${id}`}>
-              {t('offline.study')}
-            </Link>
-          ) : null}
-          {offlinePack ? (
-            <button className="btn danger" type="button" onClick={askRemoveOffline}>
-              {t('offline.remove')}
-            </button>
-          ) : null}
-        </div>
-      </section>
+      {offlineError ? <div className="error">{translateError(t, offlineError)}</div> : null}
       {error ? <div className="error">{translateError(t, error)}</div> : null}
 
       <section className="deck-section" aria-labelledby="deck-details-heading">
@@ -864,6 +832,28 @@ export default function DeckDetailPage() {
           name={deck.name}
           onClose={() => setShareOpen(false)}
         />
+      ) : null}
+      {offlineProOpen ? (
+        <div className="modal-backdrop" onClick={() => setOfflineProOpen(false)}>
+          <div
+            className="modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="offline-pro-title"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <h2 id="offline-pro-title">{t('offline.proGateTitle')}</h2>
+            <p>{t('offline.proGateBody')}</p>
+            <div className="header-actions">
+              <Link className="btn primary" to="/pro">
+                {t('pro.goToPro')}
+              </Link>
+              <button className="btn ghost" type="button" onClick={() => setOfflineProOpen(false)}>
+                {t('common.close')}
+              </button>
+            </div>
+          </div>
+        </div>
       ) : null}
       {studyOpen ? (
         <StudyModeModal

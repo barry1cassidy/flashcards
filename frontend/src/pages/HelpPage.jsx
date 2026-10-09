@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { SUPPORT_EMAIL, SUPPORT_MAILTO } from '../support'
+import MenuIcon from './MenuIcon'
 
 const CSV_EXAMPLE = `front,back,hint
 photosynthesis,process plants use to make food
@@ -16,6 +17,7 @@ const SECTIONS = [
   { id: 'help-library', titleKey: 'help.libraryTitle' },
   { id: 'help-ai', titleKey: 'help.aiTitle' },
   { id: 'help-mix', titleKey: 'help.mixTitle' },
+  { id: 'help-offline', titleKey: 'help.offlineTitle' },
   { id: 'help-pro', titleKey: 'help.proTitle' },
   { id: 'help-settings', titleKey: 'help.settingsTitle' },
   { id: 'help-share', titleKey: 'help.shareTitle' },
@@ -187,11 +189,37 @@ export default function HelpPage() {
         </p>
       </HelpSection>
 
+      <HelpSection id="help-offline" title={t('help.offlineTitle')}>
+        <p>{t('help.offlineIntro')}</p>
+        <div className="help-demo">
+          <p className="help-demo-label">{t('help.offlineDemo')}</p>
+          <div className="help-offline-bar" aria-hidden="true">
+            <span className="help-offline-name">{t('help.offlineDemoDeck')}</span>
+            <span className="offline-icon-sample">
+              <MenuIcon name="share" />
+            </span>
+            <span className="offline-icon-sample is-focus">
+              <MenuIcon name="offline" />
+            </span>
+          </div>
+          <p className="muted">{t('help.offlineWhere')}</p>
+        </div>
+        <ol className="help-steps">
+          <li>{t('help.offlineStep1')}</li>
+          <li>{t('help.offlineStep2')}</li>
+          <li>{t('help.offlineStep3')}</li>
+        </ol>
+        <p>
+          <Link to="/offline">{t('offline.menu')}</Link>
+        </p>
+      </HelpSection>
+
       <HelpSection id="help-pro" title={t('help.proTitle')}>
         <p>{t('help.proIntro')}</p>
         <ul className="help-list">
           <li>{t('help.proItemAi')}</li>
           <li>{t('help.proItemMix')}</li>
+          <li>{t('help.proItemOffline')}</li>
           <li>{t('help.proItemImages')}</li>
           <li>{t('help.proItemSync')}</li>
         </ul>
