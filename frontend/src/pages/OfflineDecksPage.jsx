@@ -8,11 +8,14 @@ import ConfirmModal from './ConfirmModal'
 import MenuIcon from './MenuIcon'
 import { listOfflinePacks, removeOfflinePack } from '../offlinePacks'
 
+const PAGE_SIZE = 5
+
 export default function OfflineDecksPage() {
   const { t } = useTranslation()
   const { user } = useAuth()
   const pro = isProLicensed(user)
   const [packs, setPacks] = useState(null)
+  const [page, setPage] = useState(1)
   const [confirm, setConfirm] = useState(null)
 
   useEffect(() => {
@@ -39,8 +42,12 @@ export default function OfflineDecksPage() {
     setConfirm(null)
   }
 
+  const totalPages = Math.max(1, Math.ceil((packs?.length || 0) / PAGE_SIZE))
+  const currentPage = Math.min(page, totalPages)
+  const visiblePacks = (packs || []).slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE)
+
   return (
-    <div className="page">
+    <div className="page offline-decks">
       <div className="page-title">
         <h1>{t('offline.title')}</h1>
       </div>
@@ -74,7 +81,7 @@ export default function OfflineDecksPage() {
       {packs && packs.length === 0 && (!user || pro) ? <p className="muted">{t('offline.empty')}</p> : null}
       {packs && packs.length > 0 ? (
         <div className="offline-list">
-          {packs.map((pack) => (
+          {visiblePacks.map((pack) => (
             <section className="card-form" key={pack.id}>
               <h2 className="section-heading">{pack.name}</h2>
               <p className="muted">
@@ -103,6 +110,21 @@ export default function OfflineDecksPage() {
               </div>
             </section>
           ))}
+        </div>
+      ) : null}
+      {packs && totalPages > 1 ? (
+        <div className="library-pager">
+          {currentPage > 1 ? (
+            <button className="btn" type="button" onClick={() => setPage(currentPage - 1)}>
+              {t('offline.previous')}
+            </button>
+          ) : null}
+          <p className="muted">{t('offline.pageStatus', { page: currentPage, total: totalPages })}</p>
+          {currentPage < totalPages ? (
+            <button className="btn" type="button" onClick={() => setPage(currentPage + 1)}>
+              {t('offline.next')}
+            </button>
+          ) : null}
         </div>
       ) : null}
       {confirm ? (

@@ -73,6 +73,8 @@ export default function DeckDetailPage() {
   const [offlineBusy, setOfflineBusy] = useState(false)
   const [offlineError, setOfflineError] = useState('')
   const [offlineProOpen, setOfflineProOpen] = useState(false)
+  const [offlineToast, setOfflineToast] = useState('')
+  const offlineToastTimer = useRef(null)
   cardsRef.current = cards
   deckRef.current = deck
 
@@ -109,12 +111,22 @@ export default function DeckDetailPage() {
     }
   }, [id])
 
+  useEffect(() => () => window.clearTimeout(offlineToastTimer.current), [])
+
+  function showOfflineSaved() {
+    setOfflineToast(t('offline.saved'))
+    window.clearTimeout(offlineToastTimer.current)
+    offlineToastTimer.current = window.setTimeout(() => setOfflineToast(''), 2000)
+  }
+
   function downloadOffline() {
     if (!pro) {
       setOfflineProOpen(true)
       return
     }
     setOfflineError('')
+    setOfflineToast('')
+    window.clearTimeout(offlineToastTimer.current)
     setOfflineBusy(true)
     api(`/api/decks/${id}/offline`)
       .then(async (snapshot) => {
@@ -124,6 +136,7 @@ export default function DeckDetailPage() {
           return
         }
         setOfflinePack(saved)
+        showOfflineSaved()
       })
       .catch((err) => setOfflineError(err.message))
       .finally(() => setOfflineBusy(false))
@@ -885,6 +898,12 @@ export default function DeckDetailPage() {
           onConfirm={confirm.onConfirm}
           onCancel={() => setConfirm(null)}
         />
+      ) : null}
+      {offlineToast ? (
+        <div className="toast" role="status">
+          <MenuIcon name="offline" />
+          <span>{offlineToast}</span>
+        </div>
       ) : null}
     </div>
   )
