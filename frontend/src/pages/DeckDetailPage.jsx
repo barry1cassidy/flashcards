@@ -493,7 +493,7 @@ export default function DeckDetailPage() {
           <p className="muted">{stats.join(' · ')}</p>
         </div>
         {editingDeck ? null : (
-          <div className="header-actions">
+          <div className="header-actions deck-hero-actions">
             <button
               className={`btn ghost icon-btn offline-download-btn${offlinePack ? ' is-saved' : ''}`}
               type="button"

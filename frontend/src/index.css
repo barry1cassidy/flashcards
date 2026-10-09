@@ -388,6 +388,21 @@ h1 {
   align-items: center;
 }
 
+@media (max-width: 389px) {
+  .deck-hero-actions {
+    flex-wrap: nowrap;
+    gap: 4px;
+  }
+
+  .deck-hero-actions .btn:not(.icon-btn) {
+    flex: 0 0 auto;
+    padding-left: 8px;
+    padding-right: 8px;
+    font-size: 0.85rem;
+    white-space: nowrap;
+  }
+}
+
 .brand {
   display: flex;
   align-items: center;
