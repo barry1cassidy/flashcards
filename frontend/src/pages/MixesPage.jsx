@@ -65,7 +65,7 @@ export default function MixesPage() {
           {mixes.map((mix) => (
             <article key={mix.id} className="deck-card mix-card">
               <Link to={`/mixes/${mix.id}`} className="deck-card-main">
-                <h2>{mix.name}</h2>
+                <h2 title={mix.name}>{mix.name}</h2>
                 <p className="muted">{summary(t, mix)}</p>
                 <p className="muted">{t('mix.dueCount', { count: mix.dueCount })}</p>
               </Link>
