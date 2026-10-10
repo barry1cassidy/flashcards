@@ -360,6 +360,7 @@
     "editDeck": "Editar Mazo",
     "editDeckTitle": "Editar Mazo",
     "doneEditing": "Listo",
+    "saveChanges": "Guardar cambios",
     "importCsv": "Importar CSV",
     "importing": "Importando…",
     "exportCsv": "Exportar CSV",
@@ -407,6 +408,7 @@
     "filterGroup": "Conjunto",
     "studySection": "Estudiar",
     "study": "Estudiar",
+    "studyDeck": "Estudiar mazo",
     "detailsSection": "Detalles del Mazo",
     "cardsSection": "Tarjetas"
   },
@@ -980,6 +982,7 @@
     "stripeWebhookNotConfigured": "El webhook de Stripe no está configurado",
     "invalidStripeSignature": "Firma de Stripe no válida",
     "paymentFailed": "El pago falló",
+    "subscriptionUnavailable": "Esta suscripción aún no está disponible en el App Store. Añade una cuenta de Sandbox en Ajustes, dentro de App Store, y vuelve a intentarlo.",
     "noStripeCustomer": "No hay un cliente de Stripe",
     "proRequired": "Se necesita una licencia Pro",
     "aiNotConfigured": "La IA no está configurada",
