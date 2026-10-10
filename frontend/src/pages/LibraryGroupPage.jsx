@@ -72,7 +72,7 @@ export default function LibraryGroupPage() {
             {group.decks.map((deck) => (
               <article key={deck.id} className="deck-card library-card">
                 <Link to={`/library/decks/${deck.id}`} className="deck-card-main">
-                  <h2>{deck.name}</h2>
+                  <h2 title={deck.name}>{deck.name}</h2>
                   {deck.description ? <p>{deck.description}</p> : null}
                   <p className="muted">{t('decks.cards', { count: deck.cardCount })}</p>
                 </Link>

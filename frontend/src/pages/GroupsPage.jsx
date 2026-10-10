@@ -76,7 +76,7 @@ export default function GroupsPage() {
                 <div className="deck-card-lead">
                   <GroupBadge group={group} />
                 </div>
-                <h2>{group.name}</h2>
+                <h2 title={group.name}>{group.name}</h2>
                 <p className="muted">{t('groups.decks', { count: group.deckCount })}</p>
               </Link>
             </div>

@@ -17,6 +17,7 @@ import CardImageField from './CardImageField'
 import AuthImage from './AuthImage'
 import { useAuth } from '../AuthContext'
 import { isProLicensed } from '../pro'
+import { getOfflinePack, saveOfflinePack } from '../offlinePacks'
 import { useResumeExpiredSubscription } from '../useResumeExpiredSubscription'
 
 function deckUpdateBody(deck, overrides = {}) {
@@ -68,6 +69,12 @@ export default function DeckDetailPage() {
   const [removeFrontImage, setRemoveFrontImage] = useState(false)
   const [removeBackImage, setRemoveBackImage] = useState(false)
   const [proModal, setProModal] = useState(false)
+  const [offlinePack, setOfflinePack] = useState(null)
+  const [offlineBusy, setOfflineBusy] = useState(false)
+  const [offlineError, setOfflineError] = useState('')
+  const [offlineProOpen, setOfflineProOpen] = useState(false)
+  const [offlineToast, setOfflineToast] = useState('')
+  const offlineToastTimer = useRef(null)
   cardsRef.current = cards
   deckRef.current = deck
 
@@ -85,6 +92,55 @@ export default function DeckDetailPage() {
   useEffect(() => {
     load().catch((err) => setError(err.message))
   }, [id])
+
+  useEffect(() => {
+    let cancelled = false
+    getOfflinePack(id)
+      .then((pack) => {
+        if (!cancelled) {
+          setOfflinePack(pack)
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setOfflinePack(null)
+        }
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [id])
+
+  useEffect(() => () => window.clearTimeout(offlineToastTimer.current), [])
+
+  function showOfflineSaved() {
+    setOfflineToast(t('offline.saved'))
+    window.clearTimeout(offlineToastTimer.current)
+    offlineToastTimer.current = window.setTimeout(() => setOfflineToast(''), 2000)
+  }
+
+  function downloadOffline() {
+    if (!pro) {
+      setOfflineProOpen(true)
+      return
+    }
+    setOfflineError('')
+    setOfflineToast('')
+    window.clearTimeout(offlineToastTimer.current)
+    setOfflineBusy(true)
+    api(`/api/decks/${id}/offline`)
+      .then(async (snapshot) => {
+        const saved = await saveOfflinePack(snapshot)
+        if (!saved) {
+          setOfflineError(t('offline.noText'))
+          return
+        }
+        setOfflinePack(saved)
+        showOfflineSaved()
+      })
+      .catch((err) => setOfflineError(err.message))
+      .finally(() => setOfflineBusy(false))
+  }
 
   async function saveCard(event) {
     event.preventDefault()
@@ -437,7 +493,22 @@ export default function DeckDetailPage() {
           <p className="muted">{stats.join(' · ')}</p>
         </div>
         {editingDeck ? null : (
-          <div className="header-actions">
+          <div className="header-actions deck-hero-actions">
+            <button
+              className={`btn ghost icon-btn offline-download-btn${offlinePack ? ' is-saved' : ''}`}
+              type="button"
+              disabled={offlineBusy}
+              aria-pressed={Boolean(offlinePack)}
+              aria-label={offlinePack ? t('offline.iconUpdate') : t('offline.iconDownload')}
+              title={
+                offlinePack
+                  ? t('offline.savedOn', { date: formatDate(offlinePack.downloadedAt) })
+                  : t('offline.iconDownload')
+              }
+              onClick={downloadOffline}
+            >
+              <MenuIcon name="offline" />
+            </button>
             <button
               className="btn ghost icon-btn"
               type="button"
@@ -455,6 +526,7 @@ export default function DeckDetailPage() {
           </div>
         )}
       </div>
+      {offlineError ? <div className="error">{translateError(t, offlineError)}</div> : null}
       {error ? <div className="error">{translateError(t, error)}</div> : null}
 
       <section className="deck-section" aria-labelledby="deck-details-heading">
@@ -774,6 +846,28 @@ export default function DeckDetailPage() {
           onClose={() => setShareOpen(false)}
         />
       ) : null}
+      {offlineProOpen ? (
+        <div className="modal-backdrop" onClick={() => setOfflineProOpen(false)}>
+          <div
+            className="modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="offline-pro-title"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <h2 id="offline-pro-title">{t('offline.proGateTitle')}</h2>
+            <p>{t('offline.proGateBody')}</p>
+            <div className="header-actions">
+              <Link className="btn primary" to="/pro">
+                {t('pro.goToPro')}
+              </Link>
+              <button className="btn ghost" type="button" onClick={() => setOfflineProOpen(false)}>
+                {t('common.close')}
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : null}
       {studyOpen ? (
         <StudyModeModal
           hardCount={deck.hardCount || 0}
@@ -804,6 +898,12 @@ export default function DeckDetailPage() {
           onConfirm={confirm.onConfirm}
           onCancel={() => setConfirm(null)}
         />
+      ) : null}
+      {offlineToast ? (
+        <div className="toast" role="status">
+          <MenuIcon name="offline" />
+          <span>{offlineToast}</span>
+        </div>
       ) : null}
     </div>
   )

@@ -16,6 +16,7 @@ export default function SideMenu() {
   const location = useLocation()
   const { close } = useMenu()
   const decksActive = location.pathname === '/' || location.pathname.startsWith('/decks')
+  const offlineActive = location.pathname.startsWith('/offline')
   const agentActive = location.pathname.startsWith('/create-with-ai')
   const mixActive = location.pathname.startsWith('/mixes')
   const libraryActive = location.pathname.startsWith('/library')
@@ -46,6 +47,11 @@ export default function SideMenu() {
           <NavLink to="/" end className={() => menuLinkClass(decksActive)} onClick={close}>
             <MenuIcon name="decks" />
             <span className="menu-link-text">{t('decks.title')}</span>
+          </NavLink>
+          <NavLink to="/offline" className={() => menuLinkClass(offlineActive)} onClick={close}>
+            <MenuIcon name="offline" />
+            <span className="menu-link-text">{t('offline.menu')}</span>
+            {!pro ? <span className="menu-pro-tag">{badge}</span> : null}
           </NavLink>
           <NavLink to="/sets" className={() => menuLinkClass(setsActive)} onClick={close}>
             <MenuIcon name="groups" />

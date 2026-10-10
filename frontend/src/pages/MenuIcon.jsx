@@ -123,6 +123,13 @@ const ICONS = {
       <path d="M14 11v6" />
     </>
   ),
+  offline: (
+    <>
+      <path d="M12 4v10" />
+      <path d="M8 10l4 4 4-4" />
+      <path d="M5 18h14" />
+    </>
+  ),
   help: (
     <>
       <circle cx="12" cy="12" r="9" />

@@ -89,7 +89,7 @@ export default function LibraryPage() {
             {pageGroups.map((group) => (
               <Link key={group.id} to={`/library/groups/${group.id}`} className="deck-card library-card">
                 <GroupBadge group={group} />
-                <h2>{group.name}</h2>
+                <h2 title={group.name}>{group.name}</h2>
                 {isLanguageLibraryGroup(group) ? <p className="muted">{t('library.fromEnglish')}</p> : null}
                 <p className="muted">
                   {t('library.decks', { count: group.deckCount })} · {t('decks.cards', { count: group.cardCount })}

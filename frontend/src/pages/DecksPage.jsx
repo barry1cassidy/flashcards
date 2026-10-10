@@ -197,7 +197,7 @@ export default function DecksPage() {
                         <GroupBadge group={deck.group} />
                       </div>
                     ) : null}
-                    <h2 className={deck.group ? undefined : 'deck-card-title'}>{deck.name}</h2>
+                    <h2 className={deck.group ? undefined : 'deck-card-title'} title={deck.name}>{deck.name}</h2>
                     <p className="muted">{deck.description || t('decks.noDescription')}</p>
                     <div className="stat-row">
                       <span>{t('decks.cards', { count: deck.cardCount })}</span>

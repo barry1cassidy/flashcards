@@ -36,7 +36,7 @@ export function GroupBadge({ group }) {
   }
   const background = normalizeHex(group.color)
   return (
-    <span className="group-badge" style={{ background, color: contrastText(background) }}>
+    <span className="group-badge" style={{ background, color: contrastText(background) }} title={group.name}>
       {group.name}
     </span>
   )

@@ -35,6 +35,8 @@ import ClassDetailPage from './pages/ClassDetailPage'
 import JoinClassPage from './pages/JoinClassPage'
 import SharePage from './pages/SharePage'
 import VerifyEmailPage from './pages/VerifyEmailPage'
+import OfflineDecksPage from './pages/OfflineDecksPage'
+import OfflineStudyPage from './pages/OfflineStudyPage'
 import SavingIndicator from './pages/SavingIndicator'
 import { pathAfterAuth, peekJoinInvite, shouldResumeJoinInvite } from './authRedirect'
 
@@ -175,6 +177,25 @@ function SetsIdRedirect() {
   return <Navigate to={`/sets/${id}`} replace />
 }
 
+function OfflineGate() {
+  const { user, ready } = useAuth()
+  if (!ready) {
+    return <LoadingScreen />
+  }
+  if (user) {
+    return <AppLayout />
+  }
+  return (
+    <div className="marketing">
+      <MarketingHeader />
+      <div className="marketing-wrap">
+        <Outlet />
+      </div>
+      <MarketingFooter />
+    </div>
+  )
+}
+
 function GuestOnly({ children }) {
   const { user, ready } = useAuth()
   const location = useLocation()
@@ -232,6 +253,10 @@ export default function App() {
           }
         />
         <Route path="/privacy" element={<PrivacyPage />} />
+        <Route element={<OfflineGate />}>
+          <Route path="/offline" element={<OfflineDecksPage />} />
+          <Route path="/offline/:deckId" element={<OfflineStudyPage />} />
+        </Route>
         <Route path="/join/:code" element={<JoinClassPage />} />
         <Route path="/share/:code" element={<SharePage />} />
         <Route element={<ProtectedLayout />}>
