@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next'
 import { useMenu } from '../menu'
 import { useAuth } from '../AuthContext'
 import { useAiCredits } from '../AiCreditsContext'
-import { isAdmin } from '../admin'
 import { isEmailVerified } from '../email'
 import { isProLicensed } from '../pro'
 import Brand from './Brand'
@@ -25,7 +24,6 @@ export default function SideMenu() {
   const proActive = location.pathname.startsWith('/pro')
   const settingsActive = location.pathname.startsWith('/settings')
   const helpActive = location.pathname.startsWith('/help')
-  const admin = isAdmin(user)
   const pro = isProLicensed(user)
   const verified = isEmailVerified(user)
   const badge = t('settings.proBadge')
@@ -84,7 +82,7 @@ export default function SideMenu() {
         <MenuIcon name="library" />
         <span className="menu-link-text">{t('library.title')}</span>
       </NavLink>
-      {admin && verified ? (
+      {verified ? (
         <NavLink to="/classes" className={() => menuLinkClass(classesActive)} onClick={close}>
           <MenuIcon name="classes" />
           <span className="menu-link-text">{t('classes.title')}</span>

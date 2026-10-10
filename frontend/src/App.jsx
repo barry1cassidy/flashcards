@@ -212,14 +212,6 @@ function GuestOnly({ children }) {
   return children
 }
 
-function AdminOnly({ children }) {
-  const { user } = useAuth()
-  if (!isAdmin(user)) {
-    return <Navigate to="/" replace />
-  }
-  return children
-}
-
 export default function App() {
   return (
     <AuthProvider>
@@ -280,7 +272,7 @@ export default function App() {
           <Route path="/library" element={<LibraryPage />} />
           <Route path="/library/groups/:id" element={<LibraryGroupPage />} />
           <Route path="/library/decks/:id" element={<LibraryDeckPage />} />
-          <Route path="/classes" element={<AdminOnly><ClassesPage /></AdminOnly>} />
+          <Route path="/classes" element={<ClassesPage />} />
           <Route path="/classes/:id" element={<ClassDetailPage />} />
           <Route path="/admin" element={<AdminUsersPage />} />
         </Route>

@@ -51,18 +51,22 @@ export default function OfflineDecksPage() {
       <div className="page-title">
         <h1>{t('offline.title')}</h1>
       </div>
-      <p className="muted">{t('offline.intro')}</p>
-      <section className="card-form offline-how">
-        <div className="offline-how-row">
-          <span className="offline-icon-sample is-focus" aria-hidden="true">
-            <MenuIcon name="offline" />
-          </span>
-          <div>
-            <h2 className="section-heading">{t('offline.howTitle')}</h2>
-            <p className="muted">{t('offline.howBody')}</p>
-          </div>
-        </div>
-      </section>
+      {user ? (
+        <>
+          <p className="muted">{t('offline.intro')}</p>
+          <section className="card-form offline-how">
+            <div className="offline-how-row">
+              <span className="offline-icon-sample is-focus" aria-hidden="true">
+                <MenuIcon name="offline" />
+              </span>
+              <div>
+                <h2 className="section-heading">{t('offline.howTitle')}</h2>
+                <p className="muted">{t('offline.howBody')}</p>
+              </div>
+            </div>
+          </section>
+        </>
+      ) : null}
       {packs === null ? <p>{t('app.loading')}</p> : null}
       {user && !pro ? (
         <section className="card-form">
