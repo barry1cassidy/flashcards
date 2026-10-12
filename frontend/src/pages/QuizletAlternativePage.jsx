@@ -19,11 +19,6 @@ function Source({ href, children }) {
 
 const ROWS = [
   {
-    name: 'Flashcards',
-    zipdeck: 'Flip for as long as you want.',
-    quizlet: 'Free.',
-  },
-  {
     name: 'Quiz',
     zipdeck: 'Unlimited. There is no round limit.',
     quizlet: (
@@ -42,11 +37,6 @@ const ROWS = [
         <Source href={QUIZLET_STUDY}>Source: Quizlet Help</Source>
       </>
     ),
-  },
-  {
-    name: 'Match and audio',
-    zipdeck: 'Match and Audio Review are free, with no round cap.',
-    quizlet: 'Match is free.',
   },
   {
     name: 'Spaced repetition',
@@ -171,18 +161,18 @@ export default function QuizletAlternativePage() {
         <div className="compare-table">
           <div className="compare-head" aria-hidden="true">
             <span> </span>
-            <span>Zipdeck, free</span>
-            <span>Quizlet, free</span>
+            <span>Zipdeck</span>
+            <span>Quizlet</span>
           </div>
           {ROWS.map((row) => (
             <div key={row.name} className="compare-row">
               <h3>{row.name}</h3>
               <p>
-                <span className="compare-label">Zipdeck, free</span>
+                <span className="compare-label">Zipdeck</span>
                 {row.zipdeck}
               </p>
               <p>
-                <span className="compare-label">Quizlet, free</span>
+                <span className="compare-label">Quizlet</span>
                 {row.quizlet}
               </p>
             </div>
