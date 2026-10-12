@@ -1,5 +1,5 @@
 import { Navigate, Outlet, Route, Routes, useLocation, useNavigate, useParams } from 'react-router-dom'
-import { useEffect } from 'react'
+import { lazy, Suspense, useEffect, useLayoutEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AuthProvider, useAuth } from './AuthContext'
 import { AiCreditsProvider } from './AiCreditsContext'
@@ -38,13 +38,30 @@ import VerifyEmailPage from './pages/VerifyEmailPage'
 import OfflineDecksPage from './pages/OfflineDecksPage'
 import OfflineStudyPage from './pages/OfflineStudyPage'
 import SavingIndicator from './pages/SavingIndicator'
-import { pathAfterAuth, peekJoinInvite, shouldResumeJoinInvite } from './authRedirect'
+import { clearLibraryReturn, pathAfterAuth, peekJoinInvite, shouldResumeJoinInvite } from './authRedirect'
+import { webMarketing } from './webOnly'
+
+const RememberPages = webMarketing ? lazy(() => import('./pages/remember/RememberPages.jsx')) : null
+const QuizletAlternativePage = webMarketing ? lazy(() => import('./pages/QuizletAlternativePage.jsx')) : null
+
+function ScrollToTop() {
+  const { pathname, hash } = useLocation()
+  useLayoutEffect(() => {
+    if (hash) {
+      return
+    }
+    window.scrollTo(0, 0)
+  }, [pathname, hash])
+  return null
+}
 
 function DocumentLang() {
   const { t, i18n } = useTranslation()
   const { pathname } = useLocation()
   const { user } = useAuth()
   useEffect(() => {
+    const library = pathname.startsWith('/library')
+    const remember = pathname.startsWith('/memorize') || pathname === '/quizlet-alternative'
     const splash = !user && (pathname === '/' || pathname === '/login' || pathname === '/register')
     const privacy = pathname === '/privacy'
     const join = pathname.startsWith('/join/')
@@ -52,6 +69,16 @@ function DocumentLang() {
     const billing = pathname.startsWith('/pro')
     const help = pathname.startsWith('/help')
     const verify = pathname.startsWith('/verify')
+    if (remember) {
+      document.documentElement.lang = 'en'
+      document.documentElement.dir = 'ltr'
+      return
+    }
+    if (library) {
+      document.documentElement.lang = currentLocale()
+      document.documentElement.dir = currentLocale() === 'ar' ? 'rtl' : 'ltr'
+      return
+    }
     document.title = privacy
       ? `${t('privacy.title')} — ${t('app.name')}`
       : verify
@@ -69,6 +96,14 @@ function DocumentLang() {
             : t('app.name')
     document.documentElement.lang = currentLocale()
     document.documentElement.dir = currentLocale() === 'ar' ? 'rtl' : 'ltr'
+    const publicPage = splash || privacy || help
+    let robots = document.querySelector('meta[name="robots"]')
+    if (!robots) {
+      robots = document.createElement('meta')
+      robots.setAttribute('name', 'robots')
+      document.head.appendChild(robots)
+    }
+    robots.setAttribute('content', publicPage ? 'index,follow,max-image-preview:large' : 'noindex,follow')
 
     const description = splash
       ? t('marketing.seoDescription')
@@ -177,6 +212,47 @@ function SetsIdRedirect() {
   return <Navigate to={`/sets/${id}`} replace />
 }
 
+function LibraryGate() {
+  const { user, ready } = useAuth()
+  useEffect(() => {
+    if (user && isEmailVerified(user)) {
+      clearLibraryReturn()
+    }
+  }, [user])
+  if (!ready) {
+    return <LoadingScreen />
+  }
+  if (user) {
+    return <AppLayout />
+  }
+  if (!webMarketing) {
+    return <Navigate to="/login" replace />
+  }
+  return (
+    <div className="marketing">
+      <MarketingHeader />
+      <div className="marketing-wrap">
+        <Outlet />
+      </div>
+      <MarketingFooter />
+    </div>
+  )
+}
+
+function WebArticleGate({ children }) {
+  return (
+    <div className="marketing">
+      <MarketingHeader />
+      <div className="marketing-wrap">
+        <Suspense fallback={<LoadingScreen />}>
+          {children}
+        </Suspense>
+      </div>
+      <MarketingFooter />
+    </div>
+  )
+}
+
 function OfflineGate() {
   const { user, ready } = useAuth()
   if (!ready) {
@@ -216,6 +292,7 @@ export default function App() {
   return (
     <AuthProvider>
       <AiCreditsProvider>
+        <ScrollToTop />
         <DocumentLang />
         <SavingIndicator />
         <InviteResume />
@@ -251,6 +328,15 @@ export default function App() {
         </Route>
         <Route path="/join/:code" element={<JoinClassPage />} />
         <Route path="/share/:code" element={<SharePage />} />
+        {webMarketing ? <Route path="/memorize/*" element={<WebArticleGate>{RememberPages ? <RememberPages /> : null}</WebArticleGate>} /> : null}
+        {webMarketing ? <Route path="/quizlet-alternative" element={<WebArticleGate>{QuizletAlternativePage ? <QuizletAlternativePage /> : null}</WebArticleGate>} /> : null}
+        <Route element={<LibraryGate />}>
+          <Route path="/library" element={<LibraryPage />} />
+          <Route path="/library/groups/:id" element={<LibraryGroupPage />} />
+          <Route path="/library/decks/:id" element={<LibraryDeckPage />} />
+          <Route path="/library/:groupSlug/:deckSlug" element={<LibraryDeckPage />} />
+          <Route path="/library/:groupSlug" element={<LibraryGroupPage />} />
+        </Route>
         <Route element={<ProtectedLayout />}>
           <Route path="/" element={<DecksPage />} />
           <Route path="/sets" element={<GroupsPage />} />
@@ -269,9 +355,6 @@ export default function App() {
           <Route path="/help" element={<HelpPage />} />
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="/account" element={<AccountSettings />} />
-          <Route path="/library" element={<LibraryPage />} />
-          <Route path="/library/groups/:id" element={<LibraryGroupPage />} />
-          <Route path="/library/decks/:id" element={<LibraryDeckPage />} />
           <Route path="/classes" element={<ClassesPage />} />
           <Route path="/classes/:id" element={<ClassDetailPage />} />
           <Route path="/admin" element={<AdminUsersPage />} />

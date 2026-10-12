@@ -1,7 +1,15 @@
-import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import MarketingHeader, { MarketingFooter } from './MarketingHeader'
+import { webMarketing } from '../webOnly'
+
+const REMEMBER = [
+  { slug: 'chinese-flashcards', titleKey: 'marketing.rememberChineseTitle', bodyKey: 'marketing.rememberChineseBody', face: '谢谢', accent: '#4c6fff' },
+  { slug: 'wedding-speech', titleKey: 'marketing.rememberWeddingTitle', bodyKey: 'marketing.rememberWeddingBody', face: 'Raise a glass', accent: '#ff6b57' },
+  { slug: 'business-presentation', titleKey: 'marketing.rememberTalkTitle', bodyKey: 'marketing.rememberTalkBody', face: 'The ask', accent: '#f2b84b' },
+  { slug: 'script-lines', titleKey: 'marketing.rememberScriptTitle', bodyKey: 'marketing.rememberScriptBody', face: 'Your cue', accent: '#3fcf8e' },
+]
 
 const MODE_KEYS = ['flip', 'quiz', 'write', 'match', 'audio']
 
@@ -14,7 +22,16 @@ const AI_CASES = [
 export default function LoginPage() {
   const { t } = useTranslation()
   const navigate = useNavigate()
+  const { hash } = useLocation()
   const [mode, setMode] = useState('flip')
+
+  useEffect(() => {
+    const id = hash.replace(/^#/, '')
+    if (!id) {
+      return
+    }
+    document.getElementById(id)?.scrollIntoView({ block: 'start' })
+  }, [hash])
 
   return (
     <main className="marketing">
@@ -57,6 +74,36 @@ export default function LoginPage() {
           </div>
         </div>
       </section>
+
+      {webMarketing ? (
+        <section className="remember-band" id="remember">
+          <div className="marketing-wrap">
+            <p className="kicker">{t('marketing.rememberKicker')}</p>
+            <h2>{t('marketing.rememberTitle')}</h2>
+            <p className="sub">{t('marketing.rememberSub')}</p>
+            <div className="remember-grid">
+              {REMEMBER.map((item) => (
+                <Link
+                  key={item.slug}
+                  to={`/memorize/${item.slug}`}
+                  className="remember-card"
+                  style={{ '--guide-accent': item.accent }}
+                >
+                  <span className="remember-mini" aria-hidden="true">
+                    <span>{item.face}</span>
+                  </span>
+                  <span className="remember-card-title">{t(item.titleKey)}</span>
+                  <span className="remember-card-body">{t(item.bodyKey)}</span>
+                </Link>
+              ))}
+            </div>
+            <Link className="quizlet-home" to="/quizlet-alternative">
+              <span className="remember-card-title">{t('marketing.quizletHomeTitle')}</span>
+              <span className="remember-card-body">{t('marketing.quizletHomeBody')}</span>
+            </Link>
+          </div>
+        </section>
+      ) : null}
 
       <section className="modes" id="modes">
         <div className="marketing-wrap">

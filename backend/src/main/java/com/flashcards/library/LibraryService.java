@@ -104,6 +104,13 @@ public class LibraryService {
     }
 
     @Transactional(readOnly = true)
+    public LibraryGroupResponse getGroupBySlug(UUID userId, String slug) {
+        LibraryGroup group = groupRepository.findBySlug(slug)
+                .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Library group not found"));
+        return getGroup(userId, group.getId());
+    }
+
+    @Transactional(readOnly = true)
     public LibraryDeckResponse getDeck(UUID userId, UUID deckId) {
         LibraryDeck deck = deckRepository.findWithGroupById(deckId)
                 .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Library deck not found"));
@@ -117,7 +124,7 @@ public class LibraryService {
                         false,
                         false))
                 .toList();
-        UUID copiedId = userDeckRepository.findByUser_IdAndLibraryDeckId(userId, deckId).map(Deck::getId).orElse(null);
+        UUID copiedId = copiedDeckId(userId, deckId);
         LibraryGroup group = deck.getGroup();
         return new LibraryDeckResponse(
                 deck.getId(),
@@ -130,6 +137,13 @@ public class LibraryService {
                 new LibraryGroupRef(group.getId(), group.getSlug(), group.getName(), group.getColor()),
                 copiedId,
                 cards);
+    }
+
+    @Transactional(readOnly = true)
+    public LibraryDeckResponse getDeckBySlug(UUID userId, String groupSlug, String deckSlug) {
+        LibraryDeck deck = deckRepository.findWithGroupBySlugs(groupSlug, deckSlug)
+                .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Library deck not found"));
+        return getDeck(userId, deck.getId());
     }
 
     @Transactional
@@ -179,6 +193,13 @@ public class LibraryService {
         }
         userCardRepository.saveAll(cards);
         return deckService.toResponse(deck, deckService.statsFor(deck));
+    }
+
+    private UUID copiedDeckId(UUID userId, UUID libraryDeckId) {
+        if (userId == null) {
+            return null;
+        }
+        return userDeckRepository.findByUser_IdAndLibraryDeckId(userId, libraryDeckId).map(Deck::getId).orElse(null);
     }
 
     private Map<UUID, UUID> copiesFor(UUID userId, List<UUID> libraryDeckIds) {

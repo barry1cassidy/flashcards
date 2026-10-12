@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useAuth } from '../AuthContext'
 import { currentLocale } from '../i18n'
 import { translateError } from '../i18n/errors'
-import { goAfterAuth, inviteAuthState } from '../authRedirect'
+import { goAfterAuth, inviteAuthState, rememberLibraryReturn } from '../authRedirect'
 import { isEmailVerified } from '../email'
 import MarketingHeader, { MarketingFooter } from './MarketingHeader'
 import GoogleSignInButton, { getGoogleClientId } from './GoogleSignInButton'
@@ -27,6 +27,9 @@ export default function RegisterPage() {
     try {
       const created = await work()
       if (created && !isEmailVerified(created)) {
+        if (typeof location.state?.from === 'string') {
+          rememberLibraryReturn(location.state.from)
+        }
         navigate('/verify', { replace: true })
         return
       }

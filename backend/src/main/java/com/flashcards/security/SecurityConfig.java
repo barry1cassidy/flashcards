@@ -50,6 +50,7 @@ public class SecurityConfig {
                                 .permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/join/*").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/shares/*").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/library", "/api/library/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/billing/stripe/webhook").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .anyRequest().authenticated())

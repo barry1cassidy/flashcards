@@ -10,6 +10,7 @@ import Brand from './Brand'
 import { goAfterAuth, inviteAuthState, clearJoinInvite } from '../authRedirect'
 import { SUPPORT_MAILTO } from '../support'
 import { listOfflinePacks } from '../offlinePacks'
+import { webMarketing } from '../webOnly'
 
 export default function MarketingHeader({ showLoginForm = false, loginOpen, onLoginOpenChange }) {
   const { t } = useTranslation()
@@ -21,11 +22,6 @@ export default function MarketingHeader({ showLoginForm = false, loginOpen, onLo
   const open = controlled ? Boolean(loginOpen) : internalOpen
   const setOpen = controlled ? onLoginOpenChange : setInternalOpen
   const authRef = useRef(null)
-  const onSplash = location.pathname === '/login' || location.pathname === '/'
-  const modesHref = onSplash ? '#modes' : '/login#modes'
-  const aiHref = onSplash ? '#ai' : '/login#ai'
-  const libraryHref = onSplash ? '#library' : '/login#library'
-  const whyHref = onSplash ? '#stat' : '/login#stat'
 
   useEffect(() => {
     if (user) {
@@ -71,10 +67,11 @@ export default function MarketingHeader({ showLoginForm = false, loginOpen, onLo
           <Brand />
         </Link>
         <div className="marketing-links">
-          <a href={modesHref}>{t('marketing.studyModes')}</a>
-          <a href={aiHref}>{t('marketing.aiNav')}</a>
-          <a href={libraryHref}>{t('library.title')}</a>
-          <a href={whyHref}>{t('marketing.whyItWorks')}</a>
+          <Link to="/#modes">{t('marketing.studyModes')}</Link>
+          {webMarketing ? <Link to="/memorize">{t('marketing.rememberNav')}</Link> : null}
+          {webMarketing ? <Link to="/library">{t('library.title')}</Link> : null}
+          <Link to="/#ai">{t('marketing.aiNav')}</Link>
+          <Link to="/#stat">{t('marketing.whyItWorks')}</Link>
         </div>
         <div className="marketing-auth" ref={authRef}>
           {!user && hasOffline ? (
@@ -215,6 +212,11 @@ export function MarketingFooter() {
         <a className="site-end-link" href={SUPPORT_MAILTO}>
           {t('nav.support')}
         </a>
+        {webMarketing ? (
+          <Link className="site-end-link" to="/quizlet-alternative">
+            {t('marketing.quizletHomeTitle')}
+          </Link>
+        ) : null}
         <Link className="site-end-link" to="/privacy">
           {t('privacy.title')}
         </Link>

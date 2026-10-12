@@ -43,18 +43,56 @@ export async function api(path, options = {}) {
   }
 }
 
+function isPublicLibraryGet(path, options) {
+  const method = String(options.method || 'GET').toUpperCase()
+  const pathname = path.split('?')[0]
+  return method === 'GET' && (pathname === '/api/library' || pathname.startsWith('/api/library/'))
+}
+
+async function devLibrary(path, options) {
+  if (!import.meta.env.DEV || !isPublicLibraryGet(path, options)) {
+    return null
+  }
+  try {
+    const response = await fetch(`http://localhost:8081${path}`)
+    if (!response.ok) {
+      return null
+    }
+    return response.json()
+  } catch {
+    return null
+  }
+}
+
 async function send(path, options) {
-  const response = await fetch(apiUrl(path), options)
+  let response
+  try {
+    response = await fetch(apiUrl(path), options)
+  } catch (error) {
+    return (await devLibrary(path, options)) ?? Promise.reject(error)
+  }
   if (response.status === 401) {
     setToken(null)
-    const publicApi = path.startsWith('/api/auth/') || /^\/api\/join\/[^/?]+/.test(path)
+    const pathname = path.split('?')[0]
+    const publicApi =
+      pathname.startsWith('/api/auth/') ||
+      /^\/api\/join\/[^/]+$/.test(pathname) ||
+      /^\/api\/shares\/[^/]+$/.test(pathname) ||
+      isPublicLibraryGet(path, options)
     if (!publicApi) {
       window.location.assign('/login')
     }
-    const error = await readError(response)
-    throw new Error(error)
+    const fallback = await devLibrary(path, options)
+    if (fallback) {
+      return fallback
+    }
+    throw new Error(await readError(response))
   }
   if (!response.ok) {
+    const fallback = await devLibrary(path, options)
+    if (fallback) {
+      return fallback
+    }
     throw new Error(await readError(response))
   }
   if (response.status === 204) {

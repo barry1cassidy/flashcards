@@ -1,6 +1,8 @@
 const JOIN_PATH = /^\/(join|share)\/[^/]+$/
+const LIBRARY_PATH = /^\/library(\/.*)?$/
 const JOIN_INVITE_KEY = 'flashcards.joinInvite'
 const JOIN_RESUME_KEY = 'flashcards.joinResume'
+const LIBRARY_RETURN_KEY = 'flashcards.libraryReturn'
 
 export function joinInvitePath(location) {
   const from = location?.state?.from
@@ -15,12 +17,44 @@ export function joinInvitePath(location) {
 }
 
 export function pathAfterAuth(location) {
-  return joinInvitePath(location) || '/'
+  return joinInvitePath(location) || libraryReturnPath(location) || '/'
 }
 
 export function inviteAuthState(location) {
   const invite = joinInvitePath(location)
-  return invite ? { from: invite } : undefined
+  if (invite) {
+    return { from: invite }
+  }
+  const library = currentLibraryPath(location) || libraryFromState(location) || peekLibraryReturn()
+  return library ? { from: library } : undefined
+}
+
+export function rememberLibraryReturn(path) {
+  const stored = libraryPathFromRaw(path)
+  if (!stored) {
+    return
+  }
+  try {
+    sessionStorage.setItem(LIBRARY_RETURN_KEY, stored)
+  } catch {
+    // sessionStorage can be unavailable in some WebViews
+  }
+}
+
+export function peekLibraryReturn() {
+  try {
+    return libraryPathFromRaw(sessionStorage.getItem(LIBRARY_RETURN_KEY) || '')
+  } catch {
+    return null
+  }
+}
+
+export function clearLibraryReturn() {
+  try {
+    sessionStorage.removeItem(LIBRARY_RETURN_KEY)
+  } catch {
+    // ignore
+  }
 }
 
 export function goAfterAuth(navigate, location) {
@@ -92,4 +126,29 @@ function isSafePath(path) {
 
 function isJoinPath(path) {
   return isSafePath(path) && JOIN_PATH.test(path)
+}
+
+function libraryReturnPath(location) {
+  return libraryFromState(location) || peekLibraryReturn()
+}
+
+function currentLibraryPath(location) {
+  return libraryPathFromRaw(`${location?.pathname || ''}${location?.search || ''}`)
+}
+
+function libraryFromState(location) {
+  const from = location?.state?.from
+  return typeof from === 'string' ? libraryPathFromRaw(from) : null
+}
+
+function libraryPathFromRaw(path) {
+  if (typeof path !== 'string') {
+    return null
+  }
+  const [pathname, search = ''] = path.split('?')
+  const base = pathnameOnly(pathname)
+  if (!isSafePath(base) || !LIBRARY_PATH.test(base)) {
+    return null
+  }
+  return search ? `${base}?${search}` : base
 }

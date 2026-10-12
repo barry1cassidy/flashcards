@@ -27,21 +27,40 @@ public class LibraryController {
     @GetMapping
     public List<LibraryGroupResponse> list(
             Authentication authentication, @RequestParam(required = false) String q) {
-        return libraryService.list(AuthSupport.requireUser(authentication).id(), q);
+        return libraryService.list(AuthSupport.optionalUserId(authentication), q);
     }
 
     @GetMapping("/groups/{id}")
-    public LibraryGroupResponse getGroup(Authentication authentication, @PathVariable UUID id) {
-        return libraryService.getGroup(AuthSupport.requireUser(authentication).id(), id);
+    public LibraryGroupResponse getGroup(Authentication authentication, @PathVariable String id) {
+        UUID userId = AuthSupport.optionalUserId(authentication);
+        if (isUuid(id)) {
+            return libraryService.getGroup(userId, UUID.fromString(id));
+        }
+        return libraryService.getGroupBySlug(userId, id);
     }
 
     @GetMapping("/decks/{id}")
     public LibraryDeckResponse getDeck(Authentication authentication, @PathVariable UUID id) {
-        return libraryService.getDeck(AuthSupport.requireUser(authentication).id(), id);
+        return libraryService.getDeck(AuthSupport.optionalUserId(authentication), id);
+    }
+
+    @GetMapping("/decks/{groupSlug}/{deckSlug}")
+    public LibraryDeckResponse getDeckBySlug(
+            Authentication authentication, @PathVariable String groupSlug, @PathVariable String deckSlug) {
+        return libraryService.getDeckBySlug(AuthSupport.optionalUserId(authentication), groupSlug, deckSlug);
     }
 
     @PostMapping("/decks/{id}/add")
     public DeckResponse add(Authentication authentication, @PathVariable UUID id) {
         return libraryService.addToMyDecks(AuthSupport.requireUser(authentication).id(), id);
+    }
+
+    private static boolean isUuid(String value) {
+        try {
+            UUID.fromString(value);
+            return true;
+        } catch (IllegalArgumentException ex) {
+            return false;
+        }
     }
 }

@@ -1,5 +1,7 @@
 package com.flashcards.security;
 
+import java.util.UUID;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 
@@ -15,5 +17,12 @@ public final class AuthSupport {
             throw new ApiException(HttpStatus.UNAUTHORIZED, "Not authenticated");
         }
         return principal;
+    }
+
+    public static UUID optionalUserId(Authentication authentication) {
+        if (authentication == null || !(authentication.getPrincipal() instanceof UserPrincipal principal)) {
+            return null;
+        }
+        return principal.id();
     }
 }

@@ -3,21 +3,25 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { api } from '../api'
 import { useAuth } from '../AuthContext'
+import { rememberLibraryReturn } from '../authRedirect'
 import { isEmailVerified } from '../email'
 import { translateError } from '../i18n/errors'
+import { clearPageMeta, setPageMeta } from '../seo'
 import { GroupBadge } from './ColorPicker'
 import SpeakButton from './SpeakButton'
 import ConfirmModal from './ConfirmModal'
 import StudyModeModal from './StudyModeModal'
+import LibraryGuestActions from './LibraryGuestActions'
 import { normalizeSpeechLanguage } from '../speechLanguages'
 
 export default function LibraryDeckPage() {
   const { t } = useTranslation()
-  const { id } = useParams()
+  const { id, groupSlug, deckSlug } = useParams()
   const navigate = useNavigate()
   const { user } = useAuth()
   const verified = isEmailVerified(user)
   const [deck, setDeck] = useState(null)
+  const [loadFailed, setLoadFailed] = useState(false)
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
   const [studyOpen, setStudyOpen] = useState(false)
@@ -26,9 +30,19 @@ export default function LibraryDeckPage() {
   const [againCount, setAgainCount] = useState(0)
 
   useEffect(() => {
-    api(`/api/library/decks/${id}`)
+    const path = groupSlug && deckSlug
+      ? `/api/library/decks/${groupSlug}/${deckSlug}`
+      : `/api/library/decks/${id}`
+    let cancelled = false
+    api(path)
       .then(async (libraryDeck) => {
+        if (cancelled) {
+          return
+        }
         setDeck(libraryDeck)
+        if (id && libraryDeck.group?.slug && libraryDeck.slug) {
+          navigate(`/library/${libraryDeck.group.slug}/${libraryDeck.slug}`, { replace: true })
+        }
         if (!libraryDeck.copiedDeckId) {
           setHardCount(0)
           setAgainCount(0)
@@ -43,8 +57,47 @@ export default function LibraryDeckPage() {
           setAgainCount(0)
         }
       })
-      .catch((err) => setError(err.message))
-  }, [id])
+      .catch(() => {
+        if (!cancelled) {
+          setLoadFailed(true)
+        }
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [deckSlug, groupSlug, id, navigate])
+
+  useEffect(() => {
+    if (!deck?.slug || !deck.group?.slug) {
+      return undefined
+    }
+    const path = `/library/${deck.group.slug}/${deck.slug}`
+    const description = deck.description
+      ? `${deck.name}. ${deck.description}`
+      : t('library.seoDeckDescription', { name: deck.name, count: deck.cards.length })
+    setPageMeta({
+      title: `${t('library.seoDeckTitle', { name: deck.name })} — ${t('app.name')}`,
+      description,
+      path,
+      jsonLd: {
+        '@context': 'https://schema.org',
+        '@type': 'Quiz',
+        name: deck.name,
+        description,
+        url: `https://zipdeck.app${path}`,
+        isAccessibleForFree: true,
+        educationalUse: 'study',
+        inLanguage: deck.sourceLanguage || 'en',
+        provider: { '@id': 'https://zipdeck.app/#organization' },
+        hasPart: deck.cards.slice(0, 40).map((card) => ({
+          '@type': 'Question',
+          name: card.front,
+          acceptedAnswer: { '@type': 'Answer', text: card.back },
+        })),
+      },
+    })
+    return () => clearPageMeta()
+  }, [deck, t])
 
   function onStudyClick() {
     if (deck?.copiedDeckId) {
@@ -59,7 +112,7 @@ export default function LibraryDeckPage() {
     setError('')
     setBusy(true)
     try {
-      const copy = await api(`/api/library/decks/${id}/add`, { method: 'POST' })
+      const copy = await api(`/api/library/decks/${deck.id}/add`, { method: 'POST' })
       setDeck((current) => (current ? { ...current, copiedDeckId: copy.id } : current))
       setHardCount(copy.hardCount || 0)
       setAgainCount(copy.againCount || 0)
@@ -77,7 +130,7 @@ export default function LibraryDeckPage() {
     try {
       let deckId = deck?.copiedDeckId
       if (!deckId) {
-        const copy = await api(`/api/library/decks/${id}/add`, { method: 'POST' })
+        const copy = await api(`/api/library/decks/${deck.id}/add`, { method: 'POST' })
         deckId = copy.id
       }
       const path = `/decks/${deckId}/study/${mode}`
@@ -93,7 +146,7 @@ export default function LibraryDeckPage() {
     setError('')
     setBusy(true)
     try {
-      const copy = await api(`/api/library/decks/${id}/add`, { method: 'POST' })
+      const copy = await api(`/api/library/decks/${deck.id}/add`, { method: 'POST' })
       setDeck((current) => (current ? { ...current, copiedDeckId: copy.id } : current))
       setHardCount(copy.hardCount || 0)
       setAgainCount(copy.againCount || 0)
@@ -104,7 +157,7 @@ export default function LibraryDeckPage() {
     }
   }
 
-  if (!deck && !error) {
+  if (!deck && !loadFailed) {
     return <div className="page-loading">{t('app.loading')}</div>
   }
 
@@ -114,7 +167,7 @@ export default function LibraryDeckPage() {
   return (
     <div className="page">
       {deck ? (
-        <Link to={`/library/groups/${deck.group.id}`} className="page-back">
+        <Link to={`/library/${deck.group.slug}`} className="page-back">
           {t('library.backToGroup', { name: deck.group.name })}
         </Link>
       ) : (
@@ -122,6 +175,7 @@ export default function LibraryDeckPage() {
           {t('library.back')}
         </Link>
       )}
+      {loadFailed && !deck ? <p className="muted">{t('library.loadError')}</p> : null}
       {error ? <div className="error">{translateError(t, error)}</div> : null}
       {deck ? (
         <>
@@ -131,9 +185,12 @@ export default function LibraryDeckPage() {
               <h1>{deck.name}</h1>
               {deck.description ? <p>{deck.description}</p> : null}
               <p className="muted">{t('decks.cards', { count: deck.cards.length })}</p>
+              {!user ? <p className="muted library-public-note">{t('library.publicNote')}</p> : null}
             </div>
             <div className="header-actions">
-              {verified ? (
+              {!user ? (
+                <LibraryGuestActions />
+              ) : verified ? (
                 <>
                   <button className="btn primary" type="button" disabled={busy} onClick={onStudyClick}>
                     {t('decks.study')}
@@ -149,7 +206,11 @@ export default function LibraryDeckPage() {
                   )}
                 </>
               ) : (
-                <Link className="btn primary" to="/verify">
+                <Link
+                  className="btn primary"
+                  to="/verify"
+                  onClick={() => rememberLibraryReturn(`/library/${deck.group.slug}/${deck.slug}`)}
+                >
                   {t('verify.gateCta')}
                 </Link>
               )}

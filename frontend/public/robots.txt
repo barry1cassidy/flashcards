@@ -2,6 +2,11 @@ User-agent: *
 Allow: /
 Allow: /privacy
 Allow: /help
+Allow: /library
+Allow: /library/
+Allow: /memorize
+Allow: /memorize/
+Allow: /quizlet-alternative
 Allow: /login
 Allow: /register
 
@@ -13,7 +18,6 @@ Disallow: /groups/
 Disallow: /mixes/
 Disallow: /classes/
 Disallow: /create-with-ai
-Disallow: /library/
 Disallow: /verify
 Disallow: /pro
 Disallow: /join/

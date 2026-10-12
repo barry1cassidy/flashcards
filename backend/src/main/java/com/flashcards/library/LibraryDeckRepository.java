@@ -24,6 +24,14 @@ public interface LibraryDeckRepository extends JpaRepository<LibraryDeck, UUID> 
 
     @Query("""
             SELECT d FROM LibraryDeck d
+            JOIN FETCH d.group g
+            WHERE g.slug = :groupSlug AND d.slug = :deckSlug
+            """)
+    Optional<LibraryDeck> findWithGroupBySlugs(
+            @Param("groupSlug") String groupSlug, @Param("deckSlug") String deckSlug);
+
+    @Query("""
+            SELECT d FROM LibraryDeck d
             JOIN FETCH d.group
             WHERE d.group.id IN :groupIds
             ORDER BY d.group.name ASC, d.position ASC, d.id ASC
