@@ -1,18 +1,21 @@
-import { readdir, readFile, writeFile } from 'node:fs/promises'
+import { access, readdir, readFile, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-const here = path.dirname(fileURLToPath(import.meta.url))
-const catalogDir = path.resolve(here, '../../backend/src/main/resources/library')
-const sitemapPath = path.resolve(here, '../public/sitemap.xml')
 const origin = 'https://zipdeck.app'
 
-export async function writeLibrarySitemap() {
+export async function writeLibrarySitemap({ root }) {
+  const sitemapPath = path.join(root, 'public', 'sitemap.xml')
+  const catalogDir = await findCatalog(root)
+  if (!catalogDir) {
+    return { skipped: true, groups: 0, urls: 0 }
+  }
+
   const groups = new Map()
   const files = (await readdir(catalogDir)).filter((name) => name.endsWith('.json'))
   for (const file of files) {
-    const root = JSON.parse(await readFile(path.join(catalogDir, file), 'utf8'))
-    for (const group of root.groups || []) {
+    const catalog = JSON.parse(await readFile(path.join(catalogDir, file), 'utf8'))
+    for (const group of catalog.groups || []) {
       if (!group.slug || !Array.isArray(group.decks) || group.decks.length === 0) {
         continue
       }
@@ -61,6 +64,22 @@ ${urls.join('\n')}
   return { groups: groupSlugs.length, urls: urls.length }
 }
 
+async function findCatalog(root) {
+  const candidates = [
+    path.resolve(root, '../backend/src/main/resources/library'),
+    path.resolve(root, 'backend/src/main/resources/library'),
+  ]
+  for (const dir of candidates) {
+    try {
+      await access(dir)
+      return dir
+    } catch {
+      // The web image builds from frontend/ alone, so the catalog is absent there.
+    }
+  }
+  return null
+}
+
 function entry(pathname, changefreq, priority) {
   return `  <url>
     <loc>${origin}${pathname}</loc>
@@ -70,6 +89,11 @@ function entry(pathname, changefreq, priority) {
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
-  const result = await writeLibrarySitemap()
-  console.log(`sitemap ${result.urls} urls, ${result.groups} groups`)
+  const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
+  const result = await writeLibrarySitemap({ root })
+  if (result.skipped) {
+    console.log('sitemap kept; library catalog not found')
+  } else {
+    console.log(`sitemap ${result.urls} urls, ${result.groups} groups`)
+  }
 }

@@ -3,10 +3,18 @@ import react from '@vitejs/plugin-react'
 import { writeLibrarySitemap } from './scripts/librarySitemap.mjs'
 
 function librarySitemap() {
+  let root = process.cwd()
   return {
     name: 'library-sitemap',
+    configResolved(config) {
+      root = config.root
+    },
     async buildStart() {
-      const result = await writeLibrarySitemap()
+      const result = await writeLibrarySitemap({ root })
+      if (result.skipped) {
+        this.info('library sitemap: catalog not in this build; keeping public/sitemap.xml')
+        return
+      }
       this.info(`library sitemap: ${result.urls} urls`)
     },
   }
