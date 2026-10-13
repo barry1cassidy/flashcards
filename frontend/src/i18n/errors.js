@@ -28,6 +28,7 @@ const ERROR_KEYS = {
   'Validation failed': 'errors.validationFailed',
   'Unexpected error': 'errors.unexpected',
   'Request failed': 'errors.requestFailed',
+  'No connection': 'errors.noConnection',
   'Google sign-in is not configured': 'errors.googleNotConfigured',
   'Invalid Google sign-in': 'errors.googleInvalid',
   'Google email is not verified': 'errors.googleEmailUnverified',

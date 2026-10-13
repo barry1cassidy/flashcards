@@ -160,9 +160,10 @@ export default function DecksPage() {
         </div>
       </div>
       {error && !creating ? <div className="error">{translateError(t, error)}</div> : null}
-      {decks.length === 0 ? (
+      {!error && decks.length === 0 ? (
         <div className="empty">{t('decks.empty')}</div>
-      ) : (
+      ) : null}
+      {!error && decks.length > 0 ? (
         <>
           {groups.length > 0 ? (
             <label className="deck-filter">
@@ -215,7 +216,7 @@ export default function DecksPage() {
             </div>
           )}
         </>
-      )}
+      ) : null}
       {shareTarget ? (
         <ShareModal
           kind="DECK"

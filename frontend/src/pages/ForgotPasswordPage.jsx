@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { api } from '../api'
 import { translateError } from '../i18n/errors'
 import MarketingHeader, { MarketingFooter } from './MarketingHeader'
+import PasswordInput from './PasswordInput'
 
 export default function ForgotPasswordPage() {
   const { t } = useTranslation()
@@ -74,8 +75,7 @@ export default function ForgotPasswordPage() {
               </label>
               <label>
                 {t('auth.resetPassword')}
-                <input
-                  type="password"
+                <PasswordInput
                   value={password}
                   onChange={(event) => setPassword(event.target.value)}
                   autoComplete="new-password"

@@ -11,6 +11,7 @@ import { goAfterAuth, inviteAuthState, clearJoinInvite } from '../authRedirect'
 import { SUPPORT_MAILTO } from '../support'
 import { listOfflinePacks } from '../offlinePacks'
 import { webMarketing } from '../webOnly'
+import PasswordInput from './PasswordInput'
 
 export default function MarketingHeader({ showLoginForm = false, loginOpen, onLoginOpenChange }) {
   const { t } = useTranslation()
@@ -176,10 +177,9 @@ function LoginFields() {
         </label>
         <label>
           {t('auth.password')}
-          <input
+          <PasswordInput
             id="login-password"
             name="password"
-            type="password"
             value={password}
             onChange={(event) => setPassword(event.target.value)}
             required

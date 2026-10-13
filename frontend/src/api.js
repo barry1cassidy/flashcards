@@ -1,6 +1,8 @@
 import { beginSaving, endSaving, isWriteRequest } from './saving'
 
 const TOKEN_KEY = 'flashcards.token'
+const USER_KEY = 'flashcards.user'
+export const NO_CONNECTION = 'No connection'
 const API_BASE = String(import.meta.env.VITE_API_BASE || '').replace(/\/$/, '')
 
 function apiUrl(path) {
@@ -16,7 +18,33 @@ export function setToken(token) {
     localStorage.setItem(TOKEN_KEY, token)
   } else {
     localStorage.removeItem(TOKEN_KEY)
+    localStorage.removeItem(USER_KEY)
   }
+}
+
+export function getCachedUser() {
+  try {
+    const raw = localStorage.getItem(USER_KEY)
+    if (!raw) {
+      return null
+    }
+    const user = JSON.parse(raw)
+    return user && typeof user === 'object' ? user : null
+  } catch {
+    return null
+  }
+}
+
+export function setCachedUser(user) {
+  if (!user) {
+    localStorage.removeItem(USER_KEY)
+    return
+  }
+  localStorage.setItem(USER_KEY, JSON.stringify(user))
+}
+
+export function isNetworkError(error) {
+  return Boolean(error?.offline) || error?.message === NO_CONNECTION
 }
 
 export async function api(path, options = {}) {
@@ -69,7 +97,14 @@ async function send(path, options) {
   try {
     response = await fetch(apiUrl(path), options)
   } catch (error) {
-    return (await devLibrary(path, options)) ?? Promise.reject(error)
+    const fallback = await devLibrary(path, options)
+    if (fallback) {
+      return fallback
+    }
+    const offline = new Error(NO_CONNECTION)
+    offline.offline = true
+    offline.cause = error
+    throw offline
   }
   if (response.status === 401) {
     setToken(null)

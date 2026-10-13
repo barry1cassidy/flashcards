@@ -1,4 +1,4 @@
-import { Navigate, Outlet, Route, Routes, useLocation, useNavigate, useParams } from 'react-router-dom'
+import { Link, Navigate, Outlet, Route, Routes, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { lazy, Suspense, useEffect, useLayoutEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AuthProvider, useAuth } from './AuthContext'
@@ -38,8 +38,10 @@ import VerifyEmailPage from './pages/VerifyEmailPage'
 import OfflineDecksPage from './pages/OfflineDecksPage'
 import OfflineStudyPage from './pages/OfflineStudyPage'
 import SavingIndicator from './pages/SavingIndicator'
+import { getToken } from './api'
 import { clearLibraryReturn, pathAfterAuth, peekJoinInvite, shouldResumeJoinInvite } from './authRedirect'
 import { webMarketing } from './webOnly'
+import { BackNavigation } from './backNavigation'
 
 const RememberPages = webMarketing ? lazy(() => import('./pages/remember/RememberPages.jsx')) : null
 const QuizletAlternativePage = webMarketing ? lazy(() => import('./pages/QuizletAlternativePage.jsx')) : null
@@ -163,11 +165,28 @@ function InviteResume() {
   return null
 }
 
+function OfflineHold() {
+  const { t } = useTranslation()
+  return (
+    <div className="page-loading">
+      <div className="card-form stack">
+        <p>{t('offline.held')}</p>
+        <Link className="btn primary" to="/offline">
+          {t('offline.menu')}
+        </Link>
+      </div>
+    </div>
+  )
+}
+
 function ProtectedLayout() {
-  const { user, ready } = useAuth()
+  const { user, ready, offline } = useAuth()
   const location = useLocation()
   if (!ready) {
     return <LoadingScreen />
+  }
+  if (!user && offline && getToken()) {
+    return <OfflineHold />
   }
   if (!user) {
     if (location.pathname === '/') {
@@ -213,7 +232,7 @@ function SetsIdRedirect() {
 }
 
 function LibraryGate() {
-  const { user, ready } = useAuth()
+  const { user, ready, offline } = useAuth()
   useEffect(() => {
     if (user && isEmailVerified(user)) {
       clearLibraryReturn()
@@ -224,6 +243,15 @@ function LibraryGate() {
   }
   if (user) {
     return <AppLayout />
+  }
+  if (offline && getToken()) {
+    return (
+      <div className="marketing">
+        <div className="marketing-wrap">
+          <Outlet />
+        </div>
+      </div>
+    )
   }
   if (!webMarketing) {
     return <Navigate to="/login" replace />
@@ -293,6 +321,7 @@ export default function App() {
     <AuthProvider>
       <AiCreditsProvider>
         <ScrollToTop />
+        <BackNavigation />
         <DocumentLang />
         <SavingIndicator />
         <InviteResume />

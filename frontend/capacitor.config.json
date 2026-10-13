@@ -5,5 +5,10 @@
   "server": {
     "hostname": "zipdeck.app",
     "androidScheme": "https"
+  },
+  "plugins": {
+    "SystemBars": {
+      "style": "DARK"
+    }
   }
 }

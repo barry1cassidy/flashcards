@@ -5,6 +5,7 @@ import { api } from '../api'
 import { useAuth } from '../AuthContext'
 import { openBillingPortal } from '../billing'
 import { translateError } from '../i18n/errors'
+import PasswordInput from './PasswordInput'
 
 export default function AccountSettings() {
   const { t, i18n } = useTranslation()
@@ -157,7 +158,7 @@ export default function AccountSettings() {
         <CardMessage section="name" feedback={feedback} />
         <form className="stack" onSubmit={saveName}>
           <label>
-            {t('settings.displayName')}
+            {t('settings.fullName')}
             <input value={name} onChange={(event) => setName(event.target.value)} maxLength={100} required />
           </label>
           <button className="btn" type="submit" disabled={busy}>
@@ -199,8 +200,7 @@ export default function AccountSettings() {
             ) : (
               <label>
                 {t('settings.currentPassword')}
-                <input
-                  type="password"
+                <PasswordInput
                   value={emailPassword}
                   onChange={(event) => setEmailPassword(event.target.value)}
                   autoComplete="current-password"
@@ -224,8 +224,7 @@ export default function AccountSettings() {
           <form className="stack" onSubmit={savePassword}>
             <label>
               {t('settings.currentPassword')}
-              <input
-                type="password"
+              <PasswordInput
                 value={currentPassword}
                 onChange={(event) => setCurrentPassword(event.target.value)}
                 autoComplete="current-password"
@@ -234,8 +233,7 @@ export default function AccountSettings() {
             </label>
             <label>
               {t('settings.newPassword')}
-              <input
-                type="password"
+              <PasswordInput
                 value={newPassword}
                 onChange={(event) => setNewPassword(event.target.value)}
                 autoComplete="new-password"
@@ -245,8 +243,7 @@ export default function AccountSettings() {
             </label>
             <label>
               {t('settings.confirmPassword')}
-              <input
-                type="password"
+              <PasswordInput
                 value={confirmPassword}
                 onChange={(event) => setConfirmPassword(event.target.value)}
                 autoComplete="new-password"
@@ -297,8 +294,7 @@ export default function AccountSettings() {
               {hasPassword ? (
                 <label>
                   {t('settings.currentPassword')}
-                  <input
-                    type="password"
+                  <PasswordInput
                     value={deletePassword}
                     onChange={(event) => setDeletePassword(event.target.value)}
                     autoComplete="current-password"

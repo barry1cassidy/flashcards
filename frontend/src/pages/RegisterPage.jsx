@@ -8,6 +8,7 @@ import { goAfterAuth, inviteAuthState, rememberLibraryReturn } from '../authRedi
 import { isEmailVerified } from '../email'
 import MarketingHeader, { MarketingFooter } from './MarketingHeader'
 import GoogleSignInButton, { getGoogleClientId } from './GoogleSignInButton'
+import PasswordInput from './PasswordInput'
 
 export default function RegisterPage() {
   const { t } = useTranslation()
@@ -94,10 +95,9 @@ export default function RegisterPage() {
             </label>
             <label>
               {t('auth.password')}
-              <input
+              <PasswordInput
                 id="register-password"
                 name="password"
-                type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required

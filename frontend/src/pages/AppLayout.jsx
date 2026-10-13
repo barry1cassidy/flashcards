@@ -10,7 +10,7 @@ import { SPLIT_PANE_QUERY, useMediaQuery } from '../useMediaQuery'
 
 export default function AppLayout() {
   const { t } = useTranslation()
-  const { user } = useAuth()
+  const { user, offline } = useAuth()
   const location = useLocation()
   const split = useMediaQuery(SPLIT_PANE_QUERY)
   const [open, setOpen] = useState(false)
@@ -65,6 +65,14 @@ export default function AppLayout() {
         </aside>
         <div className="app-pane">
           <AppHeader />
+          {offline ? (
+            <div className="offline-banner" role="status">
+              <p>{t('offline.banner')}</p>
+              <Link className="btn" to="/offline">
+                {t('offline.menu')}
+              </Link>
+            </div>
+          ) : null}
           {!isEmailVerified(user) && !location.pathname.startsWith('/verify') ? (
             <div className="verify-banner" role="status">
               <p>{t('verify.banner')}</p>

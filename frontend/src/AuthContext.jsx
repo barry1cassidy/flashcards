@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import { Capacitor } from '@capacitor/core'
 import { GoogleSignIn } from '@capawesome/capacitor-google-sign-in'
-import { api, getToken, setToken } from './api'
+import { api, getCachedUser, getToken, isNetworkError, setCachedUser, setToken } from './api'
 import { applyLocale, deviceLocale } from './i18n'
 import { applyTheme } from './theme'
 import { clearJoinInvite } from './authRedirect'
@@ -11,7 +11,15 @@ const AuthContext = createContext(null)
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
+  const [offline, setOffline] = useState(false)
   const [ready, setReady] = useState(false)
+
+  function keepUser(next) {
+    setCachedUser(next)
+    setUser(next)
+    setOffline(false)
+    return next
+  }
 
   useEffect(() => {
     applyTheme(user?.theme)
@@ -24,6 +32,8 @@ export function AuthProvider({ children }) {
   }, [user?.locale])
 
   useEffect(() => {
+    let cancelled = false
+
     async function load() {
       if (!getToken()) {
         applyTheme('DARK')
@@ -33,22 +43,68 @@ export function AuthProvider({ children }) {
       }
       try {
         const me = await api('/api/auth/me')
+        if (cancelled) {
+          return
+        }
+        setCachedUser(me)
         setUser(me)
-      } catch {
-        setToken(null)
-        setUser(null)
-        applyTheme('DARK')
-        applyLocale(deviceLocale())
+        setOffline(false)
+      } catch (error) {
+        if (cancelled) {
+          return
+        }
+        if (getToken()) {
+          const cached = getCachedUser()
+          if (cached) {
+            setUser(cached)
+          }
+          setOffline(isNetworkError(error) || navigator.onLine === false)
+        } else {
+          setUser(null)
+          setOffline(false)
+          applyTheme('DARK')
+          applyLocale(deviceLocale())
+        }
       } finally {
-        setReady(true)
+        if (!cancelled) {
+          setReady(true)
+        }
       }
     }
+
+    function onOnline() {
+      if (!getToken()) {
+        return
+      }
+      api('/api/auth/me')
+        .then((me) => {
+          if (cancelled) {
+            return
+          }
+          setCachedUser(me)
+          setUser(me)
+          setOffline(false)
+        })
+        .catch(() => {
+          if (!getToken()) {
+            setUser(null)
+            setOffline(false)
+          }
+        })
+    }
+
     load()
+    window.addEventListener('online', onOnline)
+    return () => {
+      cancelled = true
+      window.removeEventListener('online', onOnline)
+    }
   }, [])
 
   const value = useMemo(
     () => ({
       user,
+      offline,
       ready,
       async login(email, password) {
         const result = await api('/api/auth/login', {
@@ -56,7 +112,7 @@ export function AuthProvider({ children }) {
           body: JSON.stringify({ email, password }),
         })
         setToken(result.token)
-        setUser(result.user)
+        keepUser(result.user)
         await offerSavePassword(email, password)
         return result.user
       },
@@ -66,7 +122,7 @@ export function AuthProvider({ children }) {
           body: JSON.stringify({ idToken, locale }),
         })
         setToken(result.token)
-        setUser(result.user)
+        keepUser(result.user)
         return result.user
       },
       async register(displayName, email, password, locale) {
@@ -75,7 +131,7 @@ export function AuthProvider({ children }) {
           body: JSON.stringify({ displayName, email, password, locale }),
         })
         setToken(result.token)
-        setUser(result.user)
+        keepUser(result.user)
         await offerSavePassword(email, password)
         return result.user
       },
@@ -84,14 +140,14 @@ export function AuthProvider({ children }) {
           method: 'POST',
           body: JSON.stringify({ code }),
         })
-        setUser(updated)
+        keepUser(updated)
         return updated
       },
       async resendVerification() {
         const updated = await api('/api/auth/resend-verification', {
           method: 'POST',
         })
-        setUser(updated)
+        keepUser(updated)
         return updated
       },
       async setTheme(theme) {
@@ -117,6 +173,7 @@ export function AuthProvider({ children }) {
             method: 'POST',
             body: JSON.stringify({ proLicensed }),
           })
+          setCachedUser(updated)
           setUser(updated)
           return updated
         } catch (error) {
@@ -126,8 +183,7 @@ export function AuthProvider({ children }) {
       },
       async refresh() {
         const me = await api('/api/auth/me')
-        setUser(me)
-        return me
+        return keepUser(me)
       },
       async setLocale(locale) {
         await applyLocale(locale)
@@ -141,6 +197,7 @@ export function AuthProvider({ children }) {
             method: 'PATCH',
             body: JSON.stringify({ locale }),
           })
+          setCachedUser(updated)
           setUser(updated)
         } catch (error) {
           setUser(previous)
@@ -161,7 +218,7 @@ export function AuthProvider({ children }) {
         }
       },
     }),
-    [user, ready],
+    [user, offline, ready],
   )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
@@ -183,6 +240,7 @@ async function patchUser(setUser, user, body) {
       method: 'PATCH',
       body: JSON.stringify(body),
     })
+    setCachedUser(updated)
     setUser(updated)
     return updated
   } catch (error) {
