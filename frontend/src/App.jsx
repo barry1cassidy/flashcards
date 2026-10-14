@@ -1,5 +1,5 @@
 import { Link, Navigate, Outlet, Route, Routes, useLocation, useNavigate, useParams } from 'react-router-dom'
-import { lazy, Suspense, useEffect, useLayoutEffect } from 'react'
+import { lazy, Suspense, useEffect, useLayoutEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AuthProvider, useAuth } from './AuthContext'
 import { AiCreditsProvider } from './AiCreditsContext'
@@ -45,6 +45,50 @@ import { BackNavigation } from './backNavigation'
 
 const RememberPages = webMarketing ? lazy(() => import('./pages/remember/RememberPages.jsx')) : null
 const QuizletAlternativePage = webMarketing ? lazy(() => import('./pages/QuizletAlternativePage.jsx')) : null
+
+function AnalyticsPageViews() {
+  const { pathname, search } = useLocation()
+  const first = useRef(true)
+  const lastTitle = useRef(typeof document === 'undefined' ? '' : document.title)
+  useEffect(() => {
+    if (first.current) {
+      first.current = false
+      return
+    }
+    const path = pathname + search
+    let cancelled = false
+    let timer = 0
+    let observer
+    const send = () => {
+      if (cancelled || typeof window.gtag !== 'function') return
+      cancelled = true
+      observer?.disconnect()
+      window.clearTimeout(timer)
+      lastTitle.current = document.title
+      window.gtag('event', 'page_view', {
+        page_path: path,
+        page_location: window.location.href,
+        page_title: document.title,
+      })
+    }
+    if (document.title !== lastTitle.current) {
+      send()
+      return
+    }
+    const titleEl = document.querySelector('title')
+    if (titleEl) {
+      observer = new MutationObserver(send)
+      observer.observe(titleEl, { childList: true, characterData: true, subtree: true })
+    }
+    timer = window.setTimeout(send, 1000)
+    return () => {
+      cancelled = true
+      observer?.disconnect()
+      window.clearTimeout(timer)
+    }
+  }, [pathname, search])
+  return null
+}
 
 function ScrollToTop() {
   const { pathname, hash } = useLocation()
@@ -323,6 +367,7 @@ export default function App() {
         <ScrollToTop />
         <BackNavigation />
         <DocumentLang />
+        {webMarketing ? <AnalyticsPageViews /> : null}
         <SavingIndicator />
         <InviteResume />
         <Routes>

@@ -2,6 +2,27 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { writeLibrarySitemap } from './scripts/librarySitemap.mjs'
 
+function websiteGoogleAnalytics() {
+  let command = 'build'
+  let mode = 'production'
+  return {
+    name: 'website-google-analytics',
+    configResolved(config) {
+      command = config.command
+      mode = config.mode
+    },
+    transformIndexHtml(html) {
+      if (command === 'serve' || mode === 'android') {
+        return html.replace(
+          /\s*<!-- Google tag \(gtag\.js\) -->\s*<script async src="https:\/\/www\.googletagmanager\.com\/gtag\/js\?id=G-9DQLJNQYYE"><\/script>\s*<script>[\s\S]*?<\/script>/,
+          '',
+        )
+      }
+      return html
+    },
+  }
+}
+
 function librarySitemap() {
   let root = process.cwd()
   return {
@@ -21,7 +42,7 @@ function librarySitemap() {
 }
 
 export default defineConfig({
-  plugins: [react(), librarySitemap()],
+  plugins: [react(), websiteGoogleAnalytics(), librarySitemap()],
   server: {
     port: 5173,
     headers: {
