@@ -20,6 +20,7 @@ function Source({ href, children }) {
 const ROWS = [
   {
     name: 'Quiz',
+    accent: '#4c6fff',
     zipdeck: 'Unlimited. There is no round limit.',
     quizlet: (
       <>
@@ -30,6 +31,7 @@ const ROWS = [
   },
   {
     name: 'Write',
+    accent: '#ff6b57',
     zipdeck: 'Write Answer is its own free mode. Keep going.',
     quizlet: (
       <>
@@ -40,6 +42,7 @@ const ROWS = [
   },
   {
     name: 'Spaced repetition',
+    accent: '#f2b84b',
     zipdeck: 'Included. A card comes back when you are about to forget it.',
     quizlet: (
       <>
@@ -50,6 +53,7 @@ const ROWS = [
   },
   {
     name: 'Ads',
+    accent: '#3fcf8e',
     zipdeck: 'None. Not on the website, and not in the apps.',
     quizlet: (
       <>
@@ -59,6 +63,7 @@ const ROWS = [
   },
   {
     name: 'Your cards',
+    accent: '#7c6cff',
     zipdeck: 'Import a CSV, and export your own decks, free.',
     quizlet: (
       <>
@@ -144,17 +149,43 @@ export default function QuizletAlternativePage() {
 
   return (
     <article className="remember-page compare-page">
-      <p className="kicker">Comparison</p>
-      <h1>A free Quizlet alternative</h1>
-      <p className="remember-lede">
-        Study without a round limit, and without ads. Flip, Quiz, Write Answer, Match, and Audio
-        Review are free on Zipdeck, and spaced repetition is included. On Quizlet, free Learn stops
-        after a limited number of rounds, and a free account gets one practice test per set.
-      </p>
-      <p className="compare-checked">
-        Checked {CHECKED}. Quizlet’s limits change. The notes below link to their help center and to a
-        2026 review.
-      </p>
+      <header className="compare-hero">
+        <div>
+          <p className="kicker">Comparison</p>
+          <h1>A free Quizlet alternative</h1>
+          <p className="remember-lede">
+            Study without a round limit, and without ads. Flip, Quiz, Write Answer, Match, and Audio
+            Review are free on Zipdeck, and spaced repetition is included. On Quizlet, free Learn stops
+            after a limited number of rounds, and a free account gets one practice test per set.
+          </p>
+          <p className="compare-checked">
+            Checked {CHECKED}. Quizlet’s limits change. The notes below link to their help center and to a
+            2026 review.
+          </p>
+        </div>
+        <div className="compare-stage" aria-hidden="true">
+          <div className="compare-card compare-card-flip">
+            <span className="pill">Flip</span>
+            <span className="front">Hello</span>
+            <span className="back">你好 · nǐ hǎo</span>
+          </div>
+          <div className="compare-card compare-card-quiz">
+            <span className="pill">Quiz</span>
+            <span className="front">Friend</span>
+            <span className="back">amigo</span>
+          </div>
+          <div className="compare-card compare-card-write">
+            <span className="pill">Write</span>
+            <span className="front">Consideration</span>
+            <span className="back">Bargained-for exchange</span>
+          </div>
+          <div className="compare-chips">
+            <span>Match</span>
+            <span>Audio</span>
+            <span>No ads</span>
+          </div>
+        </div>
+      </header>
 
       <section className="guide-section" aria-labelledby="compare-heading">
         <h2 id="compare-heading">Zipdeck vs Quizlet: what stays free</h2>
@@ -165,7 +196,7 @@ export default function QuizletAlternativePage() {
             <span>Quizlet</span>
           </div>
           {ROWS.map((row) => (
-            <div key={row.name} className="compare-row">
+            <div key={row.name} className="compare-row" style={{ '--row-accent': row.accent }}>
               <h3>{row.name}</h3>
               <p>
                 <span className="compare-label">Zipdeck</span>
