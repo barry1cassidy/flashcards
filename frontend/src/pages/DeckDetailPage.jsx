@@ -19,6 +19,7 @@ import { useAuth } from '../AuthContext'
 import { isProLicensed } from '../pro'
 import { getOfflinePack, saveOfflinePack } from '../offlinePacks'
 import { useResumeExpiredSubscription } from '../useResumeExpiredSubscription'
+import EditCardsWithAi from './EditCardsWithAi'
 
 function deckUpdateBody(deck, overrides = {}) {
   return {
@@ -74,7 +75,10 @@ export default function DeckDetailPage() {
   const [offlineError, setOfflineError] = useState('')
   const [offlineProOpen, setOfflineProOpen] = useState(false)
   const [offlineToast, setOfflineToast] = useState('')
+  const [aiEditOpen, setAiEditOpen] = useState(false)
+  const [aiToast, setAiToast] = useState('')
   const offlineToastTimer = useRef(null)
+  const aiToastTimer = useRef(null)
   cardsRef.current = cards
   deckRef.current = deck
 
@@ -111,7 +115,13 @@ export default function DeckDetailPage() {
     }
   }, [id])
 
-  useEffect(() => () => window.clearTimeout(offlineToastTimer.current), [])
+  useEffect(
+    () => () => {
+      window.clearTimeout(offlineToastTimer.current)
+      window.clearTimeout(aiToastTimer.current)
+    },
+    [],
+  )
 
   function showOfflineSaved() {
     setOfflineToast(t('offline.saved'))
@@ -653,6 +663,10 @@ export default function DeckDetailPage() {
                 </button>
               </>
             ) : null}
+            <button className="btn ai-edit-btn" type="button" onClick={() => setAiEditOpen(true)}>
+              <MenuIcon name="agent" />
+              {t('agent.edit.button')}
+            </button>
             <button className="btn" type="button" onClick={exportCsv}>
               {t('decks.exportCsv')}
             </button>
@@ -838,6 +852,19 @@ export default function DeckDetailPage() {
           </form>
         </div>
       ) : null}
+      {aiEditOpen && deck ? (
+        <EditCardsWithAi
+          deck={deck}
+          cards={cards}
+          onClose={() => setAiEditOpen(false)}
+          onSaved={(count) => {
+            setAiToast(t('agent.edit.saved', { count }))
+            window.clearTimeout(aiToastTimer.current)
+            aiToastTimer.current = window.setTimeout(() => setAiToast(''), 2500)
+            load().catch((err) => setError(err.message))
+          }}
+        />
+      ) : null}
       {shareOpen ? (
         <ShareModal
           kind="DECK"
@@ -903,6 +930,11 @@ export default function DeckDetailPage() {
         <div className="toast" role="status">
           <MenuIcon name="offline" />
           <span>{offlineToast}</span>
+        </div>
+      ) : null}
+      {aiToast ? (
+        <div className="toast" role="status">
+          <span>{aiToast}</span>
         </div>
       ) : null}
     </div>

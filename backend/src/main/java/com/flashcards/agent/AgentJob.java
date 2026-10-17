@@ -28,6 +28,8 @@ public class AgentJob implements AgentProgress {
 
     private volatile State state = State.RUNNING;
     private volatile AgentCreateResponse result;
+    private volatile AgentEditPreview preview;
+    private volatile Integer settledCredits;
     private volatile String error;
 
     AgentJob(UUID userId, int remainingCredits) {
@@ -77,8 +79,23 @@ public class AgentJob implements AgentProgress {
             return;
         }
         this.result = result;
+        this.settledCredits = result.remainingCredits();
         this.state = State.DONE;
         log.info("[agent {}] done deckId={} cards={}", id, result.deckId(), result.cardCount());
+    }
+
+    public synchronized void completeEdit(AgentEditPreview preview, int remainingCredits) {
+        if (state != State.RUNNING) {
+            return;
+        }
+        this.preview = preview;
+        this.settledCredits = remainingCredits;
+        this.state = State.DONE;
+        log.info(
+                "[agent {}] edit preview deckId={} changes={}",
+                id,
+                preview.deckId(),
+                preview.changes().size());
     }
 
     public synchronized void fail(String error) {
@@ -92,6 +109,7 @@ public class AgentJob implements AgentProgress {
 
     public AgentJobResponse toResponse() {
         int elapsed = (int) Math.max(0, Duration.between(createdAt, Instant.now()).toSeconds());
+        int credits = settledCredits != null ? settledCredits : remainingCredits;
         return new AgentJobResponse(
                 id,
                 state.name().toLowerCase(Locale.ROOT),
@@ -99,6 +117,7 @@ public class AgentJob implements AgentProgress {
                 List.copyOf(steps),
                 error,
                 result,
-                result == null ? remainingCredits : result.remainingCredits());
+                preview,
+                credits);
     }
 }

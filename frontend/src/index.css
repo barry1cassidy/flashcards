@@ -2282,6 +2282,205 @@ html[data-theme='light'] .pro-benefit-item {
   gap: 8px;
 }
 
+.ai-edit-backdrop {
+  padding: max(12px, var(--safe-top)) max(12px, var(--safe-inline)) max(12px, var(--safe-bottom));
+  align-items: end;
+}
+
+.modal.ai-edit-modal {
+  width: min(560px, 100%);
+  max-height: min(92dvh, 640px);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 16px 18px 14px;
+  gap: 10px;
+}
+
+.ai-edit-modal h2,
+.ai-edit-modal h3 {
+  margin: 0;
+  font-size: 1.35rem;
+}
+
+.ai-edit-lock {
+  display: grid;
+  gap: 8px;
+}
+
+.ai-edit-lock .btn {
+  margin-top: 8px;
+  justify-self: start;
+}
+
+.ai-edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.ai-edit-body {
+  overflow: auto;
+  min-height: 0;
+  display: grid;
+  gap: 10px;
+  align-content: start;
+}
+
+.ai-edit-footer {
+  display: grid;
+  gap: 6px;
+  flex-shrink: 0;
+  padding-top: 8px;
+  border-top: 1px solid var(--line);
+}
+
+.ai-edit-footer p,
+.ai-edit-error {
+  margin: 0;
+}
+
+.ai-edit-footer .ai-edit-btn {
+  width: 100%;
+}
+
+.ai-edit-modal textarea {
+  min-height: 64px;
+}
+
+.btn.ai-edit-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--cobalt);
+  color: #fff;
+}
+
+.btn.ai-edit-btn:hover {
+  background: var(--cobalt-dark);
+}
+
+.btn.ai-edit-btn:disabled {
+  opacity: 0.55;
+}
+
+.btn.ai-edit-btn .menu-icon {
+  width: 18px;
+  height: 18px;
+}
+
+.ai-edit-samples {
+  display: grid;
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ai-edit-change {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 12px;
+  list-style: none;
+  border-radius: 14px;
+  background: var(--bg);
+}
+
+.ai-edit-side {
+  display: grid;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+}
+
+.ai-edit-mark {
+  padding: 8px 12px;
+  background: var(--surface-2);
+  color: var(--text);
+  font-weight: 500;
+}
+
+.ai-edit-fields {
+  display: grid;
+  gap: 4px;
+  padding: 10px 12px;
+}
+
+.ai-edit-side p {
+  margin: 0;
+}
+
+.ai-edit-field {
+  display: grid;
+  gap: 6px;
+}
+
+.ai-edit-field-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+
+.ai-edit-examples-toggle {
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 0;
+  background: transparent;
+  color: var(--cobalt);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.ai-edit-example-list {
+  display: grid;
+  gap: 8px;
+}
+
+.ai-edit-example-list button {
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.ai-edit-example-list button[aria-pressed='true'] {
+  border-color: #4c6fff;
+  background: rgba(76, 111, 255, 0.12);
+}
+
+.ai-edit-after {
+  border-color: color-mix(in srgb, var(--cobalt) 72%, var(--text));
+  background: var(--due-bg);
+}
+
+.ai-edit-after .ai-edit-mark {
+  background: var(--cobalt-dark);
+  color: #fff;
+}
+
+@media (min-width: 800px) {
+  .ai-edit-backdrop {
+    align-items: center;
+  }
+}
+
 .study-mode-modal .modal-header h2 {
   font-size: 1.35rem;
   margin: 0;
@@ -3174,6 +3373,15 @@ button.agent-preset:disabled {
     padding-left: 8px;
     padding-right: 8px;
     white-space: nowrap;
+  }
+
+  .deck-card-actions {
+    flex-wrap: wrap;
+  }
+
+  .deck-card-actions .btn.ai-edit-btn {
+    flex: 1 0 auto;
+    min-width: max-content;
   }
 
   .deck-detail-actions {

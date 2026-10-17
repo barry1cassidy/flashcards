@@ -1,7 +1,11 @@
 package com.flashcards.card;
 
-import java.util.UUID;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -76,6 +80,31 @@ public class CardService {
         cardRepository.save(card);
         deck.setUpdatedAt(java.time.Instant.now());
         return toResponse(card);
+    }
+
+    @Transactional
+    public int applyEdits(UUID userId, UUID deckId, List<ApplyCardEditsRequest.CardEdit> edits) {
+        Deck deck = deckService.requireOwned(userId, deckId);
+        if (edits == null || edits.isEmpty()) {
+            throw new ApiException(HttpStatus.BAD_REQUEST, "Choose at least one card to save");
+        }
+        List<Card> cards = cardRepository.findByDeckIdOrderByPositionAscIdAsc(deckId);
+        Map<UUID, Card> byId = cards.stream().collect(Collectors.toMap(Card::getId, card -> card));
+        Set<UUID> seen = new HashSet<>();
+        for (ApplyCardEditsRequest.CardEdit edit : edits) {
+            if (edit == null || edit.cardId() == null || !seen.add(edit.cardId()) || !byId.containsKey(edit.cardId())) {
+                throw new ApiException(HttpStatus.BAD_REQUEST, "Card list does not match this deck");
+            }
+            if (edit.front() == null || edit.front().isBlank() || edit.back() == null || edit.back().isBlank()) {
+                throw new ApiException(HttpStatus.BAD_REQUEST, "Each card needs both a front and a back");
+            }
+            Card card = byId.get(edit.cardId());
+            card.setFront(edit.front().trim());
+            card.setBack(edit.back().trim());
+            card.setHint(trimToNull(edit.hint()));
+        }
+        deck.setUpdatedAt(java.time.Instant.now());
+        return edits.size();
     }
 
     @Transactional

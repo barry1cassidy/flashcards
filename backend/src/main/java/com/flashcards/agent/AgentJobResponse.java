@@ -10,5 +10,6 @@ public record AgentJobResponse(
         List<AgentStepView> steps,
         String error,
         AgentCreateResponse result,
+        AgentEditPreview preview,
         int remainingCredits) {
 }

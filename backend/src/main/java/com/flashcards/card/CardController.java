@@ -41,6 +41,15 @@ public class CardController {
         return cardService.create(AuthSupport.requireUser(authentication).id(), deckId, request);
     }
 
+    @PutMapping("/api/decks/{deckId}/cards/ai-edits")
+    public int applyAiEdits(
+            Authentication authentication,
+            @PathVariable UUID deckId,
+            @Valid @RequestBody ApplyCardEditsRequest request) {
+        return cardService.applyEdits(
+                AuthSupport.requireUser(authentication).id(), deckId, request.cards());
+    }
+
     @PutMapping("/api/decks/{deckId}/cards/order")
     public List<CardResponse> reorder(
             Authentication authentication,

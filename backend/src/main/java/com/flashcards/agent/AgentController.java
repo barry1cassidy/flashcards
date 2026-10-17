@@ -2,7 +2,10 @@ package com.flashcards.agent;
 
 import java.util.UUID;
 
+import org.springframework.http.CacheControl;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -51,8 +54,26 @@ public class AgentController {
                 file);
     }
 
+    @PostMapping(path = "/decks/{deckId}/edits", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<AgentJobResponse> editDeck(
+            Authentication authentication,
+            @PathVariable UUID deckId,
+            @RequestParam(value = "jobId", required = false) UUID jobId,
+            @Valid @RequestBody AgentEditRequest request) {
+        AgentEditRequest resolved = jobId == null ? request : new AgentEditRequest(request.instruction(), jobId);
+        return jobResponse(agentService.startEditDeck(
+                AuthSupport.requireUser(authentication).id(), deckId, resolved));
+    }
+
     @GetMapping("/jobs/{jobId}")
-    public AgentJobResponse getJob(Authentication authentication, @PathVariable UUID jobId) {
-        return agentService.getJob(AuthSupport.requireUser(authentication).id(), jobId);
+    public ResponseEntity<AgentJobResponse> getJob(Authentication authentication, @PathVariable UUID jobId) {
+        return jobResponse(agentService.getJob(AuthSupport.requireUser(authentication).id(), jobId));
+    }
+
+    private static ResponseEntity<AgentJobResponse> jobResponse(AgentJobResponse job) {
+        return ResponseEntity.ok()
+                .cacheControl(CacheControl.noStore())
+                .header(HttpHeaders.CONNECTION, "close")
+                .body(job);
     }
 }

@@ -272,6 +272,27 @@ sudo chmod +x /etc/letsencrypt/renewal-hooks/deploy/reload-nginx.sh
 
 Adjust the `cd` path if the repo lives somewhere else on the instance.
 
+### Database backups
+
+The nightly dump is not in this repo. It is a script and a cron job on the Lightsail host, installed for the `ubuntu` user.
+
+| Piece | Where |
+|---|---|
+| Cron | `ubuntu` crontab: `0 3 * * * /home/ubuntu/bin/backup-flashcards.sh` (3:00 AM server time; Lightsail Ubuntu is usually UTC) |
+| Script | `/home/ubuntu/bin/backup-flashcards.sh` |
+| Dump files | `/home/ubuntu/backups/flashcards-YYYY-MM-DD.sql.gz` |
+| Log | `/home/ubuntu/backups/backup.log` |
+
+The script runs `mysqldump` through `docker compose -f docker-compose.prod.yml` from `/home/ubuntu/flashcards`, keeps the newest 6 dump files, and overwrites that day’s file if it runs again. Check it with:
+
+```bash
+crontab -l
+ls -lh /home/ubuntu/backups
+tail -n 30 /home/ubuntu/backups/backup.log
+```
+
+These files are on the same VM as the database. Copy `/home/ubuntu/backups/*.sql.gz` off the box (laptop, S3, or another disk) if the instance itself is lost. Lightsail automatic instance snapshots are the separate “the disk died” copy.
+
 ### Play Billing key
 
 The Android app sends each purchase token to the API, which asks Google whether the purchase is real. That call needs a Play Developer API service-account JSON. It is gitignored and excluded from the image, so it has to be placed on the host and mounted in.
