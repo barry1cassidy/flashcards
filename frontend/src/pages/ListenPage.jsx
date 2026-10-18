@@ -227,7 +227,7 @@ export default function ListenPage() {
 
   if (playing && playback) {
     return (
-      <div className="page">
+      <div className="page listen-session">
         <ListenPlayer
           playback={playback}
           title={queue?.title || playback.card?.deckName}

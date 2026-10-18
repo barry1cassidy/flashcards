@@ -6012,11 +6012,59 @@ button.agent-preset:disabled {
 }
 
 .listen-sources,
-.listen-options,
-.listen-player {
+.listen-options {
   display: grid;
   gap: 10px;
   align-content: start;
+}
+
+.app-pane:has(.listen-session) {
+  height: 100dvh;
+  max-height: 100dvh;
+  overflow: hidden;
+}
+
+.page-content:has(.listen-session) {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+  padding-bottom: calc(12px + var(--safe-bottom));
+}
+
+.page.listen-session {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+.listen-player {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  gap: 10px;
+}
+
+.listen-player .page-back,
+.listen-player .page-title,
+.listen-player .listen-controls {
+  flex-shrink: 0;
+}
+
+.listen-player .listen-stage {
+  flex: 0 1 auto;
+  min-height: 0;
+  margin-bottom: 0;
+  overflow: auto;
+  align-content: start;
+}
+
+.listen-controls {
+  display: grid;
+  gap: 8px;
+  margin-top: auto;
 }
 
 .listen-source-grid {
@@ -6286,7 +6334,7 @@ button.page-back {
   width: min(100%, 320px);
   min-width: 0;
   min-height: 56px;
-  margin-top: 8px;
+  margin-top: 0;
   padding: 14px 20px;
   font-size: 1.05rem;
   white-space: nowrap;

@@ -1,4 +1,4 @@
-import { canListenSpeak, silentAudio, speakCue, stopCue, waitCue } from './listenSpeech'
+import { silentAudio, speakCue, stopCue, waitCue } from './listenSpeech'
 
 function sideText(card, side) {
   return side === 'back' ? card.back : card.front
@@ -17,6 +17,8 @@ export function createListenSession({ cards, options, onChange }) {
   let abort = new AbortController()
   let generation = 0
   let resumeResolve = null
+  let shownLine = ''
+  let shownPrompt = ''
   const bed = silentAudio()
   const deckIds = new Set(cards.map((card) => card.deckId))
   const multi = deckIds.size > 1 && options.announce
@@ -31,12 +33,20 @@ export function createListenSession({ cards, options, onChange }) {
   }
 
   function publish(extra) {
+    if (Object.hasOwn(extra, 'line')) {
+      shownLine = extra.line
+    }
+    if (Object.hasOwn(extra, 'prompt')) {
+      shownPrompt = extra.prompt
+    }
     onChange({
       index,
       total: cards.length,
       card: cardAt(),
       paused,
       multi,
+      line: shownLine,
+      prompt: shownPrompt,
       ...extra,
     })
   }
@@ -222,9 +232,6 @@ export function createListenSession({ cards, options, onChange }) {
       interrupt()
       bed.pause()
       stopCue()
-    },
-    get speaking() {
-      return canListenSpeak()
     },
   }
 }

@@ -19,6 +19,7 @@ export default function ListenPlayer({
   const actions = useRef({})
   actions.current = { onPause, onResume, onNext, onPrevious, onReplay, onRestart }
   const phase = playback?.phase || 'question'
+  const speaking = phase === 'announce' || phase === 'question' || phase === 'answer'
   const card = playback?.card
   const line = playback?.line || ''
   const showPrompt = phase === 'answer' && playback?.prompt && playback.prompt !== line
@@ -112,30 +113,30 @@ export default function ListenPlayer({
       )}
 
       {phase === 'done' ? null : (
-        <div className="listen-transport">
-          <button className="btn" type="button" onClick={onPrevious}>
-            <TransportIcon name="previous" />
-            <span>{t('listen.previous')}</span>
-          </button>
-          <button className="btn" type="button" onClick={onReplay}>
-            <TransportIcon name="replay" />
-            <span>{t('listen.replay')}</span>
-          </button>
-          <button className="btn primary" type="button" onClick={phase === 'paused' || phase === 'blocked' ? onResume : onPause}>
-            <TransportIcon name={phase === 'paused' || phase === 'blocked' ? 'play' : 'pause'} />
-            <span>{phase === 'paused' || phase === 'blocked' ? t('listen.resume') : t('listen.pause')}</span>
-          </button>
-          <button className="btn" type="button" onClick={onNext}>
-            <TransportIcon name="next" />
-            <span>{t('listen.next')}</span>
+        <div className="listen-controls">
+          <div className="listen-transport">
+            <button className="btn" type="button" onClick={onPrevious}>
+              <TransportIcon name="previous" />
+              <span>{t('listen.previous')}</span>
+            </button>
+            <button className="btn" type="button" onClick={onReplay}>
+              <TransportIcon name="replay" />
+              <span>{t('listen.replay')}</span>
+            </button>
+            <button className="btn primary" type="button" onClick={phase === 'paused' || phase === 'blocked' ? onResume : onPause}>
+              <TransportIcon name={phase === 'paused' || phase === 'blocked' ? 'play' : 'pause'} />
+              <span>{phase === 'paused' || phase === 'blocked' ? t('listen.resume') : t('listen.pause')}</span>
+            </button>
+            <button className="btn" type="button" onClick={onNext}>
+              <TransportIcon name="next" />
+              <span>{t('listen.next')}</span>
+            </button>
+          </div>
+          <button className="btn listen-restart" type="button" onClick={onRestart}>
+            <TransportIcon name="restart" />
+            <span>{t('listen.restart')}</span>
           </button>
         </div>
-      )}
-      {phase === 'done' ? null : (
-        <button className="btn listen-restart" type="button" onClick={onRestart}>
-          <TransportIcon name="restart" />
-          <span>{t('listen.restart')}</span>
-        </button>
       )}
     </div>
   )
