@@ -1,8 +1,8 @@
-import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '../AuthContext'
 import { isProLicensed } from '../pro'
+import Modal from './Modal'
 
 const MODES = [
   { id: 'flip', titleKey: 'study.flip', hintKey: 'study.flipHint' },
@@ -19,16 +19,6 @@ export default function StudyModeModal({ onSelect, onCancel, hint, hardCount = 0
   const navigate = useNavigate()
   const pro = isProLicensed(user)
 
-  useEffect(() => {
-    function onKeyDown(event) {
-      if (event.key === 'Escape') {
-        onCancel()
-      }
-    }
-    document.addEventListener('keydown', onKeyDown)
-    return () => document.removeEventListener('keydown', onKeyDown)
-  }, [onCancel])
-
   function pickMode(mode, filter) {
     if (mode === 'rehearse' && !pro) {
       onCancel()
@@ -39,20 +29,7 @@ export default function StudyModeModal({ onSelect, onCancel, hint, hardCount = 0
   }
 
   return (
-    <div className="modal-backdrop" onClick={onCancel}>
-      <div
-        className="modal study-mode-modal"
-        onClick={(event) => event.stopPropagation()}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="study-mode-title"
-      >
-        <div className="modal-header">
-          <h2 id="study-mode-title">{t('study.selectMode')}</h2>
-          <button className="modal-close" type="button" aria-label={t('common.close')} onClick={onCancel}>
-            ×
-          </button>
-        </div>
+    <Modal variant="sheet" className="study-mode-modal" title={t('study.selectMode')} onClose={onCancel}>
         {hint ? <p className="muted">{hint}</p> : null}
         <div className="study-mode-list">
           {MODES.map((mode) => (
@@ -103,8 +80,7 @@ export default function StudyModeModal({ onSelect, onCancel, hint, hardCount = 0
             </button>
           ) : null}
         </div>
-      </div>
-    </div>
+    </Modal>
   )
 }
 

@@ -7,7 +7,7 @@ import { isProLicensed } from '../pro'
 import { translateError } from '../i18n/errors'
 import { listOfflinePacks } from '../offlinePacks'
 import { flattenListenCards, loadListenQueue } from '../listenQueue'
-import { canHearCommands, createListenSession } from '../listenSession'
+import { createListenSession } from '../listenSession'
 import ListenPlayer from './ListenPlayer'
 import MenuIcon from './MenuIcon'
 
@@ -43,7 +43,6 @@ export default function ListenPage() {
   const [side, setSide] = useState('front')
   const [loop, setLoop] = useState(false)
   const [announce, setAnnounce] = useState(true)
-  const [voice, setVoice] = useState(false)
   const [queue, setQueue] = useState(null)
   const [queueError, setQueueError] = useState('')
   const [loadingQueue, setLoadingQueue] = useState(false)
@@ -233,7 +232,6 @@ export default function ListenPage() {
           playback={playback}
           title={queue?.title || playback.card?.deckName}
           loop={loop}
-          voice={voice}
           onBack={stopToOptions}
           onPause={() => sessionRef.current?.pause()}
           onResume={() => sessionRef.current?.resume()}
@@ -430,16 +428,6 @@ export default function ListenPage() {
                 <span>{t('listen.announce')}</span>
               </label>
             ) : null}
-            <label className="listen-toggle">
-              <input
-                type="checkbox"
-                checked={voice && Boolean(canHearCommands())}
-                disabled={!canHearCommands()}
-                onChange={(event) => setVoice(event.target.checked)}
-              />
-              <span>{t('listen.voice')}</span>
-            </label>
-            <p className="muted">{canHearCommands() ? t('listen.voiceHint') : t('listen.voiceUnavailable')}</p>
           </div>
           {loadingQueue ? <p>{t('listen.loading')}</p> : null}
           {!loadingQueue && queue && cards.length === 0 ? <p>{t('listen.emptyCards')}</p> : null}

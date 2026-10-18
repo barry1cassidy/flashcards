@@ -1,13 +1,15 @@
 import { useTranslation } from 'react-i18next'
+import Modal from './Modal'
 
 export default function ConfirmModal({ title, message, confirmLabel, danger = false, onConfirm, onCancel }) {
   const { t } = useTranslation()
   return (
-    <div className="modal-backdrop" onClick={onCancel}>
-      <div className="modal" onClick={(event) => event.stopPropagation()} role="dialog" aria-modal="true">
-        <h2>{title}</h2>
-        <p className="muted">{message}</p>
-        <div className="header-actions">
+    <Modal
+      variant="sheet"
+      title={title}
+      onClose={onCancel}
+      footer={
+        <div className="modal-actions">
           <button className={danger ? 'btn danger' : 'btn primary'} type="button" onClick={onConfirm}>
             {confirmLabel}
           </button>
@@ -15,7 +17,9 @@ export default function ConfirmModal({ title, message, confirmLabel, danger = fa
             {t('common.cancel')}
           </button>
         </div>
-      </div>
-    </div>
+      }
+    >
+      <p className="muted">{message}</p>
+    </Modal>
   )
 }

@@ -9,6 +9,7 @@ import ConfirmModal from './ConfirmModal'
 import ShareModal from './ShareModal'
 import ListingActions from './ListingActions'
 import GroupForm from './GroupForm'
+import Modal from './Modal'
 
 export default function GroupsPage() {
   const { t } = useTranslation()
@@ -102,18 +103,15 @@ export default function GroupsPage() {
         />
       ) : null}
       {creating ? (
-        <div className="modal-backdrop" onClick={() => setSearchParams({})}>
-          <div className="modal" onClick={(event) => event.stopPropagation()}>
-            <h2>{t('groups.newTitle')}</h2>
-            <p className="muted">{t('groups.newSubtitle')}</p>
-            <GroupForm
-              initialColor={PRESET_COLORS[0]}
-              submitLabel={t('groups.createGroup')}
-              onSubmit={createGroup}
-              onCancel={() => setSearchParams({})}
-            />
-          </div>
-        </div>
+        <Modal variant="form" title={t('groups.newTitle')} onClose={() => setSearchParams({})}>
+          <p className="muted">{t('groups.newSubtitle')}</p>
+          <GroupForm
+            initialColor={PRESET_COLORS[0]}
+            submitLabel={t('groups.createGroup')}
+            onSubmit={createGroup}
+            onCancel={() => setSearchParams({})}
+          />
+        </Modal>
       ) : null}
     </div>
   )

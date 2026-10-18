@@ -6,6 +6,7 @@ import { useAuth } from '../AuthContext'
 import { translateError } from '../i18n/errors'
 import { isTeacherMode } from '../teacher'
 import MenuIcon from './MenuIcon'
+import Modal from './Modal'
 
 export default function ClassesPage() {
   const { t } = useTranslation()
@@ -246,33 +247,37 @@ export default function ClassesPage() {
       ) : null}
 
       {creating ? (
-        <div className="modal-backdrop" onClick={() => setSearchParams({})}>
-          <div className="modal" onClick={(event) => event.stopPropagation()}>
-            <h2>{t('classes.newTitle')}</h2>
-            <p className="muted">{t('classes.newSubtitle')}</p>
-            <form className="stack" onSubmit={createClass}>
-              {error ? <div className="error">{translateError(t, error)}</div> : null}
-              <label>
-                {t('classes.className')}
-                <input
-                  value={name}
-                  onChange={(event) => setName(event.target.value)}
-                  required
-                  maxLength={120}
-                  autoFocus
-                />
-              </label>
-              <div className="header-actions">
-                <button className="btn primary" type="submit" disabled={busy || !name.trim()}>
-                  {busy ? t('common.saving') : t('classes.createClass')}
-                </button>
-                <button className="btn ghost" type="button" onClick={() => setSearchParams({})}>
-                  {t('common.cancel')}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
+        <Modal
+          variant="form"
+          as="form"
+          title={t('classes.newTitle')}
+          onClose={() => setSearchParams({})}
+          closeDisabled={busy}
+          onSubmit={createClass}
+          footer={
+            <div className="modal-actions">
+              <button className="btn primary" type="submit" disabled={busy || !name.trim()}>
+                {busy ? t('common.saving') : t('classes.createClass')}
+              </button>
+              <button className="btn ghost" type="button" disabled={busy} onClick={() => setSearchParams({})}>
+                {t('common.cancel')}
+              </button>
+            </div>
+          }
+        >
+          <p className="muted">{t('classes.newSubtitle')}</p>
+          {error ? <div className="error">{translateError(t, error)}</div> : null}
+          <label>
+            {t('classes.className')}
+            <input
+              value={name}
+              onChange={(event) => setName(event.target.value)}
+              required
+              maxLength={120}
+              autoFocus
+            />
+          </label>
+        </Modal>
       ) : null}
     </div>
   )

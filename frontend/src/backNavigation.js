@@ -64,7 +64,13 @@ function onAndroidBack(navigateRef, locationRef) {
   const creating = new URLSearchParams(search).get('new') === '1'
   const modals = document.querySelectorAll('.modal-backdrop')
   if (modals.length > 1 || (modals.length === 1 && !creating)) {
-    modals[modals.length - 1].click()
+    const top = modals[modals.length - 1]
+    const dismiss = top.querySelector('[data-modal-dismiss]:not(:disabled)')
+    if (dismiss) {
+      dismiss.click()
+    } else if (!top.classList.contains('modal-form')) {
+      top.click()
+    }
     return
   }
   if (creating) {

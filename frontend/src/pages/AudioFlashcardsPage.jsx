@@ -96,7 +96,6 @@ export default function AudioFlashcardsPage() {
             <li>Pause after the question</li>
             <li>Front or answer first</li>
             <li>Start over at the end</li>
-            <li>Voice: next, back, repeat, pause</li>
           </ul>
         </div>
       </section>

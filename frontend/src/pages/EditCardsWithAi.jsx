@@ -7,6 +7,7 @@ import { useAiCredits } from '../AiCreditsContext'
 import { isProLicensed } from '../pro'
 import { translateError } from '../i18n/errors'
 import MenuIcon from './MenuIcon'
+import Modal from './Modal'
 
 const POLL_MS = 500
 const POLL_TIMEOUT_MS = 3000
@@ -250,30 +251,75 @@ export default function EditCardsWithAi({ deck, cards, onClose, onSaved }) {
     }
   }
 
-  return (
-    <div className="modal-backdrop ai-edit-backdrop" onClick={close}>
-      <div
-        className="modal ai-edit-modal"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="ai-edit-title"
-        onClick={(event) => event.stopPropagation()}
-      >
-        <div className="modal-header">
-          <h2 id="ai-edit-title">{t('agent.edit.title')}</h2>
-          <button className="modal-close" type="button" onClick={close} aria-label={t('common.close')} disabled={saving}>
-            ×
+  const creditLine = status
+    ? status.addonCredits > 0
+      ? t('agent.remainingWithExtra', {
+          included: status.includedCredits,
+          allowance: status.monthlyAllowance,
+          extra: status.addonCredits,
+          total: status.remainingCredits,
+        })
+      : t('agent.remaining', {
+          included: status.includedCredits,
+          allowance: status.monthlyAllowance,
+        })
+    : ''
+
+  let footer = null
+  if (preview) {
+    footer = (
+      <>
+        <p className="muted">{t('agent.edit.spent')}</p>
+        <div className="modal-actions">
+          <button className="btn primary" type="button" disabled={saving} onClick={saveChanges}>
+            {saving ? t('agent.edit.saving') : t('agent.edit.save')}
+          </button>
+          <button className="btn ghost" type="button" disabled={saving} onClick={close}>
+            {t('agent.edit.discard')}
           </button>
         </div>
+      </>
+    )
+  } else if (status && locked) {
+    footer = (
+      <div className="modal-actions">
+        <Link className="btn primary" to="/pro">
+          {t('pro.goToPro')}
+        </Link>
+      </div>
+    )
+  } else if (status && !locked && status.configured) {
+    footer = (
+      <>
+        <div className="ai-edit-credits">
+          {remaining <= 0 ? <p>{t('agent.outOfCredits')}</p> : <p className="muted">{t('agent.edit.credit')}</p>}
+          {creditLine ? <p className={remaining <= 0 ? 'credit-remaining is-empty' : 'muted'}>{creditLine}</p> : null}
+        </div>
+        <button className="btn ai-edit-btn" type="submit" form="ai-edit-form" disabled={!canPreview}>
+          <MenuIcon name="agent" />
+          {busy ? t('agent.edit.previewing') : t('agent.edit.preview')}
+        </button>
+      </>
+    )
+  }
+
+  return (
+    <Modal
+      variant="form"
+      className="ai-edit-modal"
+      title={t('agent.edit.title')}
+      onClose={close}
+      closeDisabled={saving}
+      footer={footer}
+    >
         {error ? <div className="error ai-edit-error">{translateError(t, error)}</div> : null}
 
         {preview ? (
           <>
-            <div className="ai-edit-body">
-              {preview.unchangedCount > 0 ? (
-                <p>{t('agent.edit.unchanged', { count: preview.unchangedCount })}</p>
-              ) : null}
-              <ol className="ai-edit-samples">
+            {preview.unchangedCount > 0 ? (
+              <p>{t('agent.edit.unchanged', { count: preview.unchangedCount })}</p>
+            ) : null}
+            <ol className="ai-edit-samples">
                 {preview.changes.map((change) => {
                   const showHint = Boolean(change.beforeHint || change.afterHint)
                   return (
@@ -306,19 +352,7 @@ export default function EditCardsWithAi({ deck, cards, onClose, onSaved }) {
                     </li>
                   )
                 })}
-              </ol>
-            </div>
-            <div className="ai-edit-footer">
-              <p className="muted">{t('agent.edit.spent')}</p>
-              <div className="header-actions">
-                <button className="btn primary" type="button" disabled={saving} onClick={saveChanges}>
-                  {saving ? t('agent.edit.saving') : t('agent.edit.save')}
-                </button>
-                <button className="btn ghost" type="button" disabled={saving} onClick={close}>
-                  {t('agent.edit.discard')}
-                </button>
-              </div>
-            </div>
+            </ol>
           </>
         ) : null}
 
@@ -328,17 +362,13 @@ export default function EditCardsWithAi({ deck, cards, onClose, onSaved }) {
           <section className="ai-edit-lock">
             <h3>{t('agent.edit.proTitle')}</h3>
             <p>{t('agent.edit.proBody')}</p>
-            <Link className="btn primary" to="/pro">
-              {t('pro.goToPro')}
-            </Link>
           </section>
         ) : null}
 
         {!preview && status && !locked && !status.configured ? <p>{t('agent.notConfigured')}</p> : null}
 
         {!preview && status && !locked && status.configured ? (
-          <form className="ai-edit-form" onSubmit={previewChanges}>
-            <div className="ai-edit-body">
+          <form id="ai-edit-form" className="ai-edit-form" onSubmit={previewChanges}>
               <p>
                 <strong>{t('agent.edit.deckLine', { name: deck.name, count: cards.length })}</strong>
               </p>
@@ -378,7 +408,7 @@ export default function EditCardsWithAi({ deck, cards, onClose, onSaved }) {
                       setInstruction(event.target.value)
                     }}
                     placeholder={t('agent.edit.placeholder')}
-                    rows={2}
+                    rows={6}
                     maxLength={2000}
                   />
                 )}
@@ -398,33 +428,8 @@ export default function EditCardsWithAi({ deck, cards, onClose, onSaved }) {
                   ) : null}
                 </div>
               ) : null}
-            </div>
-            <div className="ai-edit-footer">
-              {remaining <= 0 ? <p>{t('agent.outOfCredits')}</p> : null}
-              {status ? (
-                <p className={remaining <= 0 ? 'credit-remaining is-empty' : 'muted'}>
-                  {status.addonCredits > 0
-                    ? t('agent.remainingWithExtra', {
-                        included: status.includedCredits,
-                        allowance: status.monthlyAllowance,
-                        extra: status.addonCredits,
-                        total: status.remainingCredits,
-                      })
-                    : t('agent.remaining', {
-                        included: status.includedCredits,
-                        allowance: status.monthlyAllowance,
-                      })}
-                </p>
-              ) : null}
-              {remaining > 0 ? <p>{t('agent.edit.credit')}</p> : null}
-              <button className="btn ai-edit-btn" type="submit" disabled={!canPreview}>
-                <MenuIcon name="agent" />
-                {busy ? t('agent.edit.previewing') : t('agent.edit.preview')}
-              </button>
-            </div>
           </form>
         ) : null}
-      </div>
-    </div>
+    </Modal>
   )
 }

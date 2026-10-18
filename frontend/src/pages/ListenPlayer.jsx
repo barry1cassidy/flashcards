@@ -2,15 +2,11 @@ import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import AudioTrack from './AudioTrack'
 import { canListenSpeak } from '../listenSpeech'
-import { canHearCommands, voiceCommand } from '../listenSession'
-
-const SPEAKING = new Set(['announce', 'question', 'answer'])
 
 export default function ListenPlayer({
   playback,
   title,
   loop,
-  voice,
   onPause,
   onResume,
   onNext,
@@ -24,7 +20,6 @@ export default function ListenPlayer({
   actions.current = { onPause, onResume, onNext, onPrevious, onReplay, onRestart }
   const phase = playback?.phase || 'question'
   const card = playback?.card
-  const speaking = SPEAKING.has(phase)
   const line = playback?.line || ''
   const showPrompt = phase === 'answer' && playback?.prompt && playback.prompt !== line
 
@@ -62,64 +57,6 @@ export default function ListenPlayer({
       }
     }
   }, [line, title, card?.deckName, phase, t])
-
-  useEffect(() => {
-    if (!voice || !canHearCommands()) {
-      return undefined
-    }
-    if (speaking) {
-      return undefined
-    }
-    const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition
-    const recognition = new Recognition()
-    recognition.continuous = false
-    recognition.interimResults = false
-    recognition.lang = 'en-US'
-    let stopped = false
-    recognition.onerror = (event) => {
-      if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
-        stopped = true
-      }
-    }
-    recognition.onresult = (event) => {
-      const transcript = event.results?.[0]?.[0]?.transcript
-      const command = voiceCommand(transcript)
-      if (command === 'next') {
-        actions.current.onNext()
-      } else if (command === 'previous') {
-        actions.current.onPrevious()
-      } else if (command === 'replay') {
-        actions.current.onReplay()
-      } else if (command === 'pause') {
-        actions.current.onPause()
-      } else if (command === 'resume') {
-        actions.current.onResume()
-      }
-    }
-    recognition.onend = () => {
-      if (!stopped && !speaking) {
-        try {
-          recognition.start()
-        } catch {
-          // Already listening.
-        }
-      }
-    }
-    try {
-      recognition.start()
-    } catch {
-      // The mic is busy.
-    }
-    return () => {
-      stopped = true
-      recognition.onend = null
-      try {
-        recognition.stop()
-      } catch {
-        // Already stopped.
-      }
-    }
-  }, [voice, speaking, phase])
 
   const phaseLabel =
     phase === 'announce'
@@ -177,24 +114,57 @@ export default function ListenPlayer({
       {phase === 'done' ? null : (
         <div className="listen-transport">
           <button className="btn" type="button" onClick={onPrevious}>
-            {t('listen.previous')}
+            <TransportIcon name="previous" />
+            <span>{t('listen.previous')}</span>
           </button>
           <button className="btn" type="button" onClick={onReplay}>
-            {t('listen.replay')}
+            <TransportIcon name="replay" />
+            <span>{t('listen.replay')}</span>
           </button>
           <button className="btn primary" type="button" onClick={phase === 'paused' || phase === 'blocked' ? onResume : onPause}>
-            {phase === 'paused' || phase === 'blocked' ? t('listen.resume') : t('listen.pause')}
+            <TransportIcon name={phase === 'paused' || phase === 'blocked' ? 'play' : 'pause'} />
+            <span>{phase === 'paused' || phase === 'blocked' ? t('listen.resume') : t('listen.pause')}</span>
           </button>
           <button className="btn" type="button" onClick={onNext}>
-            {t('listen.next')}
+            <TransportIcon name="next" />
+            <span>{t('listen.next')}</span>
           </button>
         </div>
       )}
       {phase === 'done' ? null : (
         <button className="btn listen-restart" type="button" onClick={onRestart}>
-          {t('listen.restart')}
+          <TransportIcon name="restart" />
+          <span>{t('listen.restart')}</span>
         </button>
       )}
     </div>
+  )
+}
+
+function TransportIcon({ name }) {
+  return (
+    <svg className="listen-control-icon" viewBox="0 0 24 24" aria-hidden="true">
+      {name === 'previous' ? <path d="M6 6v12M18 6l-8 6 8 6z" /> : null}
+      {name === 'next' ? <path d="M6 6l8 6-8 6zM18 6v12" /> : null}
+      {name === 'replay' ? (
+        <>
+          <path d="M8 8H4V4" />
+          <path d="M4.5 8a8 8 0 1 1-1 4" />
+        </>
+      ) : null}
+      {name === 'pause' ? (
+        <>
+          <rect x="7" y="5" width="3.5" height="14" rx="1" />
+          <rect x="13.5" y="5" width="3.5" height="14" rx="1" />
+        </>
+      ) : null}
+      {name === 'play' ? <path d="M8 5v14l11-7z" fill="currentColor" stroke="none" /> : null}
+      {name === 'restart' ? (
+        <>
+          <path d="M4 12a8 8 0 1 0 2.3-5.6" />
+          <path d="M4 4v5h5" />
+        </>
+      ) : null}
+    </svg>
   )
 }

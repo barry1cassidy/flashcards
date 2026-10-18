@@ -6,6 +6,7 @@ import { formatDate } from '../i18n/format'
 import { translateError } from '../i18n/errors'
 import { GroupBadge } from './ColorPicker'
 import ConfirmModal from './ConfirmModal'
+import Modal from './Modal'
 import ShareModal from './ShareModal'
 import ListingActions from './ListingActions'
 import { useAuth } from '../AuthContext'
@@ -236,29 +237,15 @@ export default function DecksPage() {
         />
       ) : null}
       {creating ? (
-        <div className="modal-backdrop" onClick={closeCreate}>
-          <form className="modal" onClick={(event) => event.stopPropagation()} onSubmit={createDeck}>
-            <h2>{t('decks.createDeckTitle')}</h2>
-            {error ? <div className="error">{translateError(t, error)}</div> : null}
-            <label>
-              {t('decks.deckName')}
-              <input
-                value={name}
-                onChange={(event) => setName(event.target.value)}
-                required
-                autoFocus
-              />
-            </label>
-            <label>
-              {t('decks.description')}
-              <textarea
-                value={description}
-                maxLength={2000}
-                placeholder={t('decks.descriptionPlaceholder')}
-                onChange={(event) => setDescription(event.target.value)}
-              />
-            </label>
-            <div className="header-actions">
+        <Modal
+          variant="form"
+          as="form"
+          title={t('decks.createDeckTitle')}
+          onClose={closeCreate}
+          closeDisabled={busy}
+          onSubmit={createDeck}
+          footer={
+            <div className="modal-actions">
               <button className="btn primary" type="submit" disabled={busy}>
                 {busy ? t('common.saving') : t('decks.createDeck')}
               </button>
@@ -266,8 +253,23 @@ export default function DecksPage() {
                 {t('common.cancel')}
               </button>
             </div>
-          </form>
-        </div>
+          }
+        >
+          {error ? <div className="error">{translateError(t, error)}</div> : null}
+          <label>
+            {t('decks.deckName')}
+            <input value={name} onChange={(event) => setName(event.target.value)} required autoFocus />
+          </label>
+          <label>
+            {t('decks.description')}
+            <textarea
+              value={description}
+              maxLength={2000}
+              placeholder={t('decks.descriptionPlaceholder')}
+              onChange={(event) => setDescription(event.target.value)}
+            />
+          </label>
+        </Modal>
       ) : null}
     </div>
   )

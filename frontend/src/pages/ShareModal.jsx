@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { api } from '../api'
 import { translateError } from '../i18n/errors'
 import ConfirmModal from './ConfirmModal'
+import Modal from './Modal'
 
 function sharePath(kind, targetId) {
   return kind === 'SET' ? `/api/groups/${targetId}/share` : `/api/decks/${targetId}/share`
@@ -89,21 +90,14 @@ export default function ShareModal({ kind, targetId, name, onClose }) {
 
   return (
     <>
-    <div className="modal-backdrop" onClick={onClose}>
-      <div className="modal share-modal" onClick={(event) => event.stopPropagation()} role="dialog" aria-modal="true">
-        <div className="modal-header">
-          <h2>{t('share.title')}</h2>
-          <button className="modal-close" type="button" onClick={onClose} aria-label={t('common.close')}>
-            ×
-          </button>
-        </div>
+    <Modal variant="sheet" className="share-modal" title={t('share.title')} onClose={onClose}>
         <p className="muted">{t('share.hint')}</p>
         {error ? <div className="error">{translateError(t, error)}</div> : null}
         {code ? (
           <>
             <p className="class-join-code">{code}</p>
             <p className="class-join-url muted">{url}</p>
-            <div className="header-actions">
+            <div className="modal-actions">
               <button className="btn primary" type="button" disabled={busy} onClick={nativeShare}>
                 {t('share.shareLink')}
               </button>
@@ -116,7 +110,7 @@ export default function ShareModal({ kind, targetId, name, onClose }) {
             </div>
           </>
         ) : (
-          <div className="header-actions">
+          <div className="modal-actions">
             <button className="btn primary" type="button" disabled={busy} onClick={createLink}>
               {busy ? t('share.creating') : t('share.createLink')}
             </button>
@@ -125,8 +119,7 @@ export default function ShareModal({ kind, targetId, name, onClose }) {
             </button>
           </div>
         )}
-      </div>
-    </div>
+    </Modal>
       {revokeOpen ? (
         <ConfirmModal
           title={t('share.revokeTitle')}

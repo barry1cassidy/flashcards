@@ -14,6 +14,7 @@ import { GroupBadge } from './ColorPicker'
 import LanguageSelect from './LanguageSelect'
 import SpeakButton from './SpeakButton'
 import CardImageField from './CardImageField'
+import Modal from './Modal'
 import AuthImage from './AuthImage'
 import { useAuth } from '../AuthContext'
 import { isProLicensed } from '../pro'
@@ -58,6 +59,7 @@ export default function DeckDetailPage() {
   const [busy, setBusy] = useState(false)
   const [confirm, setConfirm] = useState(null)
   const [editingDeck, setEditingDeck] = useState(false)
+  const [editingCards, setEditingCards] = useState(false)
   const [editName, setEditName] = useState('')
   const [editDescription, setEditDescription] = useState('')
   const [editGroupId, setEditGroupId] = useState('')
@@ -223,7 +225,14 @@ export default function DeckDetailPage() {
     setEditFrontLanguage(normalizeSpeechLanguage(deck.frontLanguage, 'en-US'))
     setEditBackLanguage(normalizeSpeechLanguage(deck.backLanguage, 'en-US'))
     setError('')
+    setEditingCards(false)
     setEditingDeck(true)
+  }
+
+  function beginCardEdit() {
+    setError('')
+    setEditingDeck(false)
+    setEditingCards(true)
   }
 
   function leaveEditMode() {
@@ -233,6 +242,17 @@ export default function DeckDetailPage() {
     drag.current = null
     setDraggingId(null)
     setEditingDeck(false)
+    setEditingCards(false)
+    resetCardForm()
+  }
+
+  function finishCardEdit() {
+    window.removeEventListener('pointermove', reorderWindow.current.onMove)
+    window.removeEventListener('pointerup', reorderWindow.current.onEnd)
+    window.removeEventListener('pointercancel', reorderWindow.current.onEnd)
+    drag.current = null
+    setDraggingId(null)
+    setEditingCards(false)
     resetCardForm()
   }
 
@@ -502,7 +522,7 @@ export default function DeckDetailPage() {
           {deck.description ? <p>{deck.description}</p> : null}
           <p className="muted">{stats.join(' · ')}</p>
         </div>
-        {editingDeck ? null : (
+        {editingDeck || editingCards ? null : (
           <div className="header-actions deck-hero-actions">
             <button
               className={`btn ghost icon-btn offline-download-btn${offlinePack ? ' is-saved' : ''}`}
@@ -655,39 +675,50 @@ export default function DeckDetailPage() {
           <h2 id="deck-cards-heading" className="section-heading">
             {t('decks.cardsSection')}
           </h2>
-          <div className="header-actions deck-card-actions">
-            {editingDeck ? (
-              <>
-                <button className="btn primary" type="button" onClick={openAddCard}>
-                  {t('decks.addCard')}
-                </button>
-                <button className="btn" type="button" onClick={() => fileRef.current?.click()}>
-                  {t('decks.importCsv')}
-                </button>
-              </>
-            ) : null}
-            <button className="btn ai-edit-btn" type="button" onClick={() => setAiEditOpen(true)}>
-              <MenuIcon name="agent" />
-              {t('agent.edit.button')}
-            </button>
-            <button className="btn" type="button" onClick={exportCsv}>
-              {t('decks.exportCsv')}
-            </button>
-            <input ref={fileRef} type="file" accept=".csv,text/csv" hidden onChange={importCsv} />
-          </div>
+          {editingDeck ? null : (
+            <div className="header-actions deck-card-actions">
+              {editingCards ? (
+                <>
+                  <button className="btn primary" type="button" onClick={finishCardEdit}>
+                    {t('decks.doneEditing')}
+                  </button>
+                  <button className="btn primary" type="button" onClick={openAddCard}>
+                    {t('decks.addCard')}
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button className="btn" type="button" onClick={beginCardEdit}>
+                    {t('decks.editCards')}
+                  </button>
+                  <button className="btn" type="button" onClick={() => fileRef.current?.click()}>
+                    {t('decks.importCsv')}
+                  </button>
+                  <button className="btn ai-edit-btn" type="button" onClick={() => setAiEditOpen(true)}>
+                    <MenuIcon name="agent" />
+                    {t('agent.edit.button')}
+                  </button>
+                  <button className="btn" type="button" onClick={exportCsv}>
+                    {t('decks.exportCsv')}
+                  </button>
+                </>
+              )}
+            </div>
+          )}
+          <input ref={fileRef} type="file" accept=".csv,text/csv" hidden onChange={importCsv} />
         </div>
         {cards.length === 0 ? (
           <div className="empty">{t('decks.emptyCards')}</div>
         ) : (
           <>
-            {editingDeck ? <p className="muted">{t('decks.reorderHint')}</p> : null}
+            {editingCards ? <p className="muted">{t('decks.reorderHint')}</p> : null}
             <ul ref={listRef} className={`card-list${draggingId ? ' is-reordering' : ''}`}>
               {cards.map((card, index) => (
                 <li
                   key={card.id}
                   className={`card-row${card.id === draggingId ? ' is-dragging' : ''}`}
                 >
-                  {editingDeck ? (
+                  {editingCards ? (
                     <div className="reorder-controls">
                       <button
                         type="button"
@@ -744,7 +775,7 @@ export default function DeckDetailPage() {
                         </p>
                       ) : null}
                     </div>
-                    {editingDeck ? (
+                    {editingCards ? (
                       <div className="card-row-actions">
                         <button className="btn ghost" type="button" onClick={() => openEditCard(card)}>
                           {t('common.edit')}
@@ -773,78 +804,16 @@ export default function DeckDetailPage() {
         )}
       </section>
       {cardFormOpen ? (
-        <div className="modal-backdrop" onClick={closeCardForm}>
-          <form
-            className="modal card-edit-modal"
-            onClick={(event) => event.stopPropagation()}
-            onSubmit={saveCard}
-          >
-            <h2>{editing ? t('decks.editCardTitle') : t('decks.addCard')}</h2>
-            {error ? <div className="error">{translateError(t, error)}</div> : null}
-            <div className="card-side-block">
-              <label>
-                {t('decks.front')}
-                <textarea
-                  value={front}
-                  onChange={(event) => setFront(event.target.value)}
-                  required
-                  autoFocus
-                />
-              </label>
-              <CardImageField
-                side="front"
-                cardId={editing?.id}
-                hasImage={Boolean(editing?.hasFrontImage)}
-                file={frontFile}
-                removed={removeFrontImage}
-                isPro={pro}
-                disabled={busy}
-                onFile={(next) => {
-                  setFrontFile(next)
-                  setRemoveFrontImage(false)
-                }}
-                onRemove={() => {
-                  setFrontFile(null)
-                  setRemoveFrontImage(true)
-                }}
-                onNeedPro={() => setProModal(true)}
-                onError={setError}
-              />
-            </div>
-            <div className="card-side-block">
-              <label>
-                {t('decks.back')}
-                <textarea value={back} onChange={(event) => setBack(event.target.value)} required />
-              </label>
-              <CardImageField
-                side="back"
-                cardId={editing?.id}
-                hasImage={Boolean(editing?.hasBackImage)}
-                file={backFile}
-                removed={removeBackImage}
-                isPro={pro}
-                disabled={busy}
-                onFile={(next) => {
-                  setBackFile(next)
-                  setRemoveBackImage(false)
-                }}
-                onRemove={() => {
-                  setBackFile(null)
-                  setRemoveBackImage(true)
-                }}
-                onNeedPro={() => setProModal(true)}
-                onError={setError}
-              />
-            </div>
-            <label>
-              {t('decks.hint')}
-              <textarea
-                value={hint}
-                placeholder={t('decks.hintPlaceholder')}
-                onChange={(event) => setHint(event.target.value)}
-              />
-            </label>
-            <div className="header-actions">
+        <Modal
+          variant="form"
+          as="form"
+          className="card-edit-modal"
+          title={editing ? t('decks.editCardTitle') : t('decks.addCard')}
+          onClose={closeCardForm}
+          closeDisabled={busy}
+          onSubmit={saveCard}
+          footer={
+            <div className="modal-actions">
               <button className="btn primary" type="submit" disabled={busy}>
                 {editing ? t('decks.saveCard') : t('decks.addCard')}
               </button>
@@ -852,8 +821,68 @@ export default function DeckDetailPage() {
                 {t('common.cancel')}
               </button>
             </div>
-          </form>
-        </div>
+          }
+        >
+          {error ? <div className="error">{translateError(t, error)}</div> : null}
+          <div className="card-side-block">
+            <label>
+              {t('decks.front')}
+              <textarea value={front} onChange={(event) => setFront(event.target.value)} required autoFocus />
+            </label>
+            <CardImageField
+              side="front"
+              cardId={editing?.id}
+              hasImage={Boolean(editing?.hasFrontImage)}
+              file={frontFile}
+              removed={removeFrontImage}
+              isPro={pro}
+              disabled={busy}
+              onFile={(next) => {
+                setFrontFile(next)
+                setRemoveFrontImage(false)
+              }}
+              onRemove={() => {
+                setFrontFile(null)
+                setRemoveFrontImage(true)
+              }}
+              onNeedPro={() => setProModal(true)}
+              onError={setError}
+            />
+          </div>
+          <div className="card-side-block">
+            <label>
+              {t('decks.back')}
+              <textarea value={back} onChange={(event) => setBack(event.target.value)} required />
+            </label>
+            <CardImageField
+              side="back"
+              cardId={editing?.id}
+              hasImage={Boolean(editing?.hasBackImage)}
+              file={backFile}
+              removed={removeBackImage}
+              isPro={pro}
+              disabled={busy}
+              onFile={(next) => {
+                setBackFile(next)
+                setRemoveBackImage(false)
+              }}
+              onRemove={() => {
+                setBackFile(null)
+                setRemoveBackImage(true)
+              }}
+              onNeedPro={() => setProModal(true)}
+              onError={setError}
+            />
+          </div>
+          <label>
+            {t('decks.hint')}
+            <textarea
+              value={hint}
+              placeholder={t('decks.hintPlaceholder')}
+              onChange={(event) => setHint(event.target.value)}
+            />
+          </label>
+        </Modal>
       ) : null}
       {aiEditOpen && deck ? (
         <EditCardsWithAi
@@ -877,17 +906,12 @@ export default function DeckDetailPage() {
         />
       ) : null}
       {offlineProOpen ? (
-        <div className="modal-backdrop" onClick={() => setOfflineProOpen(false)}>
-          <div
-            className="modal"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="offline-pro-title"
-            onClick={(event) => event.stopPropagation()}
-          >
-            <h2 id="offline-pro-title">{t('offline.proGateTitle')}</h2>
-            <p>{t('offline.proGateBody')}</p>
-            <div className="header-actions">
+        <Modal
+          variant="sheet"
+          title={t('offline.proGateTitle')}
+          onClose={() => setOfflineProOpen(false)}
+          footer={
+            <div className="modal-actions">
               <Link className="btn primary" to="/pro">
                 {t('pro.goToPro')}
               </Link>
@@ -895,8 +919,10 @@ export default function DeckDetailPage() {
                 {t('common.close')}
               </button>
             </div>
-          </div>
-        </div>
+          }
+        >
+          <p>{t('offline.proGateBody')}</p>
+        </Modal>
       ) : null}
       {studyOpen ? (
         <StudyModeModal

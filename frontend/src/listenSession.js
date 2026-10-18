@@ -228,34 +228,3 @@ export function createListenSession({ cards, options, onChange }) {
     },
   }
 }
-
-export function voiceCommand(transcript) {
-  const words = String(transcript || '')
-    .toLowerCase()
-    .replace(/[^a-z\s]/g, ' ')
-    .split(/\s+/)
-    .filter(Boolean)
-  if (words.length === 0 || words.length > 3) {
-    return null
-  }
-  if (words.includes('next') || words.includes('skip') || words.includes('forward')) {
-    return 'next'
-  }
-  if (words.includes('previous') || words.includes('back')) {
-    return 'previous'
-  }
-  if (words.includes('repeat') || words.includes('replay')) {
-    return 'replay'
-  }
-  if (words.includes('pause') || words.includes('stop')) {
-    return 'pause'
-  }
-  if (words.includes('play') || words.includes('resume')) {
-    return 'resume'
-  }
-  return null
-}
-
-export function canHearCommands() {
-  return typeof window !== 'undefined' && (window.SpeechRecognition || window.webkitSpeechRecognition)
-}
