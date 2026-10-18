@@ -123,6 +123,13 @@ const ICONS = {
       <path d="M14 11v6" />
     </>
   ),
+  listen: (
+    <>
+      <path d="M4 13a8 8 0 0 1 16 0" />
+      <rect x="3" y="13" width="4.5" height="7" rx="1.6" />
+      <rect x="16.5" y="13" width="4.5" height="7" rx="1.6" />
+    </>
+  ),
   offline: (
     <>
       <path d="M12 4v10" />

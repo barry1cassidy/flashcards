@@ -70,6 +70,9 @@ export default function MixesPage() {
                 <p className="muted">{t('mix.dueCount', { count: mix.dueCount })}</p>
               </Link>
               <div className="deck-card-actions">
+                <button className="btn" type="button" onClick={() => navigate(`/listen?source=mix&id=${mix.id}`)}>
+                  {t('listen.menu')}
+                </button>
                 <button className="btn primary" type="button" onClick={() => setStudyMix(mix)}>
                   {t('decks.study')}
                 </button>

@@ -71,6 +71,7 @@ export default function MarketingHeader({ showLoginForm = false, loginOpen, onLo
           <Link to="/#modes">{t('marketing.studyModes')}</Link>
           {webMarketing ? <Link to="/memorize">{t('marketing.rememberNav')}</Link> : null}
           {webMarketing ? <Link to="/library">{t('library.title')}</Link> : null}
+          {webMarketing ? <Link to="/audio-flashcards">{t('marketing.listenNav')}</Link> : null}
           <Link to="/#ai">{t('marketing.aiNav')}</Link>
           <Link to="/#stat">{t('marketing.whyItWorks')}</Link>
         </div>

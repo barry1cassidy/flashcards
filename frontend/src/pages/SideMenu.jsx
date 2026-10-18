@@ -18,6 +18,7 @@ export default function SideMenu() {
   const offlineActive = location.pathname.startsWith('/offline')
   const agentActive = location.pathname.startsWith('/create-with-ai')
   const mixActive = location.pathname.startsWith('/mixes')
+  const listenActive = location.pathname.startsWith('/listen')
   const libraryActive = location.pathname.startsWith('/library')
   const classesActive = location.pathname.startsWith('/classes')
   const setsActive = location.pathname.startsWith('/sets') || location.pathname.startsWith('/groups')
@@ -70,6 +71,11 @@ export default function SideMenu() {
             <MenuIcon name="mix" />
             <span className="menu-link-text">{t('mix.menu')}</span>
             <span className="menu-pro-tag">{badge}</span>
+          </NavLink>
+          <NavLink to="/listen" className={() => menuLinkClass(listenActive)} onClick={close}>
+            <MenuIcon name="listen" />
+            <span className="menu-link-text">{t('listen.menu')}</span>
+            {!pro ? <span className="menu-pro-tag">{badge}</span> : null}
           </NavLink>
           <NavLink to="/pro" className={() => menuLinkClass(proActive)} onClick={close}>
             <MenuIcon name="pro" />

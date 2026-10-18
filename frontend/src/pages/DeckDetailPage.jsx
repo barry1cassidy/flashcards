@@ -527,6 +527,9 @@ export default function DeckDetailPage() {
             >
               <MenuIcon name="share" />
             </button>
+            <button className="btn" type="button" onClick={() => navigate(`/listen?source=deck&id=${id}`)}>
+              {t('listen.menu')}
+            </button>
             <button className="btn primary" type="button" onClick={() => setStudyOpen(true)}>
               {t('decks.studyDeck')}
             </button>

@@ -103,6 +103,9 @@ export default function GroupDetailPage() {
             >
               <MenuIcon name="share" />
             </button>
+            <button className="btn" type="button" onClick={() => navigate(`/listen?source=set&id=${id}`)}>
+              {t('listen.menu')}
+            </button>
             <button className="btn danger" type="button" onClick={() => setConfirmDelete(true)}>
               {t('groups.deleteGroup')}
             </button>

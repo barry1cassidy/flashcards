@@ -37,6 +37,7 @@ import SharePage from './pages/SharePage'
 import VerifyEmailPage from './pages/VerifyEmailPage'
 import OfflineDecksPage from './pages/OfflineDecksPage'
 import OfflineStudyPage from './pages/OfflineStudyPage'
+import ListenPage from './pages/ListenPage'
 import SavingIndicator from './pages/SavingIndicator'
 import { getToken } from './api'
 import { clearLibraryReturn, pathAfterAuth, peekJoinInvite, shouldResumeJoinInvite } from './authRedirect'
@@ -45,6 +46,7 @@ import { BackNavigation } from './backNavigation'
 
 const RememberPages = webMarketing ? lazy(() => import('./pages/remember/RememberPages.jsx')) : null
 const QuizletAlternativePage = webMarketing ? lazy(() => import('./pages/QuizletAlternativePage.jsx')) : null
+const AudioFlashcardsPage = webMarketing ? lazy(() => import('./pages/AudioFlashcardsPage.jsx')) : null
 
 function AnalyticsPageViews() {
   const { pathname, search } = useLocation()
@@ -107,7 +109,8 @@ function DocumentLang() {
   const { user } = useAuth()
   useEffect(() => {
     const library = pathname.startsWith('/library')
-    const remember = pathname.startsWith('/memorize') || pathname === '/quizlet-alternative'
+    const remember =
+      pathname.startsWith('/memorize') || pathname === '/quizlet-alternative' || pathname === '/audio-flashcards'
     const splash = !user && (pathname === '/' || pathname === '/login' || pathname === '/register')
     const privacy = pathname === '/privacy'
     const join = pathname.startsWith('/join/')
@@ -404,6 +407,7 @@ export default function App() {
         <Route path="/share/:code" element={<SharePage />} />
         {webMarketing ? <Route path="/memorize/*" element={<WebArticleGate>{RememberPages ? <RememberPages /> : null}</WebArticleGate>} /> : null}
         {webMarketing ? <Route path="/quizlet-alternative" element={<WebArticleGate>{QuizletAlternativePage ? <QuizletAlternativePage /> : null}</WebArticleGate>} /> : null}
+        {webMarketing ? <Route path="/audio-flashcards" element={<WebArticleGate>{AudioFlashcardsPage ? <AudioFlashcardsPage /> : null}</WebArticleGate>} /> : null}
         <Route element={<LibraryGate />}>
           <Route path="/library" element={<LibraryPage />} />
           <Route path="/library/groups/:id" element={<LibraryGroupPage />} />
@@ -424,6 +428,7 @@ export default function App() {
           <Route path="/mixes/:id/study/:mode" element={<StudyPage />} />
           <Route path="/mixes/:id" element={<MixEditorPage />} />
           <Route path="/mixes" element={<MixesPage />} />
+          <Route path="/listen" element={<ListenPage />} />
           <Route path="/pro" element={<ProPage />} />
           <Route path="/verify" element={<VerifyEmailPage />} />
           <Route path="/help" element={<HelpPage />} />

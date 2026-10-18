@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import MarketingHeader, { MarketingFooter } from './MarketingHeader'
+import { webMarketing } from '../webOnly'
+import AudioTrack from './AudioTrack'
 
 const MODE_KEYS = ['flip', 'quiz', 'write', 'match', 'audio']
 
@@ -97,6 +99,22 @@ export default function LoginPage() {
           </div>
         </div>
       </section>
+
+      {webMarketing ? (
+        <section className="listen-promo" id="listen">
+          <div className="marketing-wrap">
+            <h2>{t('marketing.listenTitle')}</h2>
+            <p className="sub">{t('marketing.listenSub')}</p>
+            <div className="listen-promo-card">
+              <AudioTrack text="Who painted The Persistence of Memory?" progress={0.46} active />
+              <p>Who painted The Persistence of Memory?</p>
+            </div>
+            <Link className="btn primary" to="/audio-flashcards">
+              {t('marketing.listenCta')}
+            </Link>
+          </div>
+        </section>
+      ) : null}
 
       <section className="ai-cases" id="ai">
         <div className="marketing-wrap">

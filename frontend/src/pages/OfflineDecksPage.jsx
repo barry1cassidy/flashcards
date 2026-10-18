@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { formatDate } from '../i18n/format'
 import { useAuth } from '../AuthContext'
@@ -12,6 +12,7 @@ const PAGE_SIZE = 5
 
 export default function OfflineDecksPage() {
   const { t } = useTranslation()
+  const navigate = useNavigate()
   const { user } = useAuth()
   const pro = isProLicensed(user)
   const [packs, setPacks] = useState(null)
@@ -50,6 +51,11 @@ export default function OfflineDecksPage() {
     <div className="page offline-decks">
       <div className="page-title">
         <h1>{t('offline.title')}</h1>
+        {packs && packs.length > 0 ? (
+          <button className="btn" type="button" onClick={() => navigate('/listen?source=offline')}>
+            {t('listen.menu')}
+          </button>
+        ) : null}
       </div>
       {user ? (
         <>
