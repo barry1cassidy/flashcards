@@ -70,7 +70,7 @@ export default function SideMenu() {
           <NavLink to="/mixes" className={() => menuLinkClass(mixActive)} onClick={close}>
             <MenuIcon name="mix" />
             <span className="menu-link-text">{t('mix.menu')}</span>
-            <span className="menu-pro-tag">{badge}</span>
+            {!pro ? <span className="menu-pro-tag">{badge}</span> : null}
           </NavLink>
           <NavLink to="/listen" className={() => menuLinkClass(listenActive)} onClick={close}>
             <MenuIcon name="listen" />
