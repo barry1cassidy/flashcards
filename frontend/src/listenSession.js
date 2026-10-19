@@ -1,5 +1,5 @@
 import { bindListenPlayback, startListenPlayback, stopListenPlayback, updateListenPlayback } from './listenPlayback'
-import { silentAudio, speakCue, stopCue, waitCue } from './listenSpeech'
+import { listenBed, speakCue, stopCue, waitCue } from './listenSpeech'
 
 function sideText(card, side) {
   return side === 'back' ? card.back : card.front
@@ -20,7 +20,7 @@ export function createListenSession({ cards, options, onChange }) {
   let resumeResolve = null
   let shownLine = ''
   let shownPrompt = ''
-  const bed = silentAudio()
+  const bed = listenBed()
   const deckIds = new Set(cards.map((card) => card.deckId))
   const multi = deckIds.size > 1 && options.announce
   const firstSide = options.side === 'back' ? 'back' : 'front'
@@ -159,7 +159,7 @@ export function createListenSession({ cards, options, onChange }) {
       return
     }
     running = true
-    bed.play().catch(() => {})
+    bed.start()
     startListenPlayback(playbackLabel())
     try {
       let first = immediate
@@ -177,7 +177,6 @@ export function createListenSession({ cards, options, onChange }) {
             continue
           }
           publish({ phase: 'done', line: '', prompt: '', progress: 0 })
-          bed.pause()
           return
         }
         try {
@@ -202,6 +201,9 @@ export function createListenSession({ cards, options, onChange }) {
       }
     } finally {
       running = false
+      if (!paused) {
+        bed.stop()
+      }
     }
   }
 
@@ -218,7 +220,6 @@ export function createListenSession({ cards, options, onChange }) {
     pause() {
       paused = true
       interrupt()
-      bed.pause()
     },
     resume() {
       paused = false
@@ -284,7 +285,7 @@ export function createListenSession({ cards, options, onChange }) {
       resumeResolve = null
       wake?.()
       interrupt()
-      bed.pause()
+      bed.stop()
       stopCue()
     },
   }

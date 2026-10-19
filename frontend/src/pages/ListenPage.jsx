@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { Capacitor } from '@capacitor/core'
 import { Link, useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { api } from '../api'
@@ -449,6 +450,12 @@ export default function ListenPage() {
           </div>
           {loadingQueue ? <p>{t('listen.loading')}</p> : null}
           {!loadingQueue && queue && cards.length === 0 ? <p>{t('listen.emptyCards')}</p> : null}
+          {Capacitor.getPlatform() === 'android' ? (
+            <p className="muted listen-lock-note">{t('listen.lockNoteAndroid')}</p>
+          ) : null}
+          {Capacitor.getPlatform() === 'ios' ? (
+            <p className="muted listen-lock-note">{t('listen.lockNoteIos')}</p>
+          ) : null}
           <button className="btn primary listen-play" type="button" disabled={!ready} onClick={play}>
             <MenuIcon name="listen" />
             {t('listen.play')}

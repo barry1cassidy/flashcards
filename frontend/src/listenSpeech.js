@@ -152,32 +152,54 @@ export function waitCue(ms, signal) {
   })
 }
 
-export function silentAudio() {
-  const sampleRate = 8000
-  const samples = 800
-  const dataSize = samples * 2
-  const buffer = new ArrayBuffer(44 + dataSize)
-  const view = new DataView(buffer)
-  const write = (offset, value) => {
-    for (let i = 0; i < value.length; i += 1) {
-      view.setUint8(offset + i, value.charCodeAt(i))
+export function listenBed() {
+  const AudioCtx = window.AudioContext || window.webkitAudioContext
+  if (!AudioCtx) {
+    return { start() {}, stop() {} }
+  }
+  let context = null
+  let oscillator = null
+  let started = false
+  const wake = () => {
+    if (started && context?.state === 'suspended') {
+      context.resume().catch(() => {})
     }
   }
-  write(0, 'RIFF')
-  view.setUint32(4, 36 + dataSize, true)
-  write(8, 'WAVE')
-  write(12, 'fmt ')
-  view.setUint32(16, 16, true)
-  view.setUint16(20, 1, true)
-  view.setUint16(22, 1, true)
-  view.setUint32(24, sampleRate, true)
-  view.setUint32(28, sampleRate * 2, true)
-  view.setUint16(32, 2, true)
-  view.setUint16(34, 16, true)
-  write(36, 'data')
-  view.setUint32(40, dataSize, true)
-  const audio = new Audio(URL.createObjectURL(new Blob([buffer], { type: 'audio/wav' })))
-  audio.loop = true
-  audio.volume = 0.01
-  return audio
+  return {
+    start() {
+      if (started) {
+        wake()
+        return
+      }
+      context = new AudioCtx()
+      oscillator = context.createOscillator()
+      const gain = context.createGain()
+      oscillator.type = 'sine'
+      oscillator.frequency.value = 40
+      gain.gain.value = 10 ** (-62 / 20)
+      oscillator.connect(gain)
+      gain.connect(context.destination)
+      oscillator.start()
+      started = true
+      context.onstatechange = wake
+      document.addEventListener('visibilitychange', wake)
+      wake()
+    },
+    stop() {
+      if (!started) {
+        return
+      }
+      started = false
+      document.removeEventListener('visibilitychange', wake)
+      try {
+        oscillator.stop()
+      } catch {
+        // The tone already ended.
+      }
+      const current = context
+      oscillator = null
+      context = null
+      current?.close().catch(() => {})
+    },
+  }
 }

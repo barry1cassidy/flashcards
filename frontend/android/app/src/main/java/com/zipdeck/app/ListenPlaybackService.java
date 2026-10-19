@@ -8,6 +8,9 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ServiceInfo;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.media.AudioAttributes;
 import android.media.AudioFocusRequest;
 import android.media.AudioFormat;
@@ -20,6 +23,8 @@ import android.os.IBinder;
 import android.os.PowerManager;
 
 import androidx.core.content.ContextCompat;
+
+import com.zipdeck.app.R;
 
 public class ListenPlaybackService extends Service {
 
@@ -45,6 +50,7 @@ public class ListenPlaybackService extends Service {
     private String title = "Zipdeck";
     private String artist = "";
     private boolean paused;
+    private Bitmap art;
 
     static boolean isRunning() {
         return instance != null;
@@ -184,15 +190,16 @@ public class ListenPlaybackService extends Service {
         Notification.Builder builder = Build.VERSION.SDK_INT >= 26
             ? new Notification.Builder(this, CHANNEL_ID)
             : new Notification.Builder(this);
+        Bitmap icon = art();
         if (mediaSession == null) {
             return builder
-                .setSmallIcon(android.R.drawable.ic_media_play)
+                .setSmallIcon(R.drawable.ic_stat_listen)
                 .setContentTitle(title)
                 .setOngoing(true)
                 .build();
         }
         builder
-            .setSmallIcon(android.R.drawable.ic_media_play)
+            .setSmallIcon(R.drawable.ic_stat_listen)
             .setContentTitle(title)
             .setContentText(artist)
             .setOngoing(true)
@@ -200,6 +207,9 @@ public class ListenPlaybackService extends Service {
             .setVisibility(Notification.VISIBILITY_PUBLIC)
             .setContentIntent(content)
             .setCategory(Notification.CATEGORY_TRANSPORT);
+        if (icon != null) {
+            builder.setLargeIcon(icon);
+        }
         if (mediaSession != null) {
             builder.setStyle(new Notification.MediaStyle().setMediaSession(mediaSession.getSessionToken()));
         }
@@ -216,11 +226,37 @@ public class ListenPlaybackService extends Service {
             .setState(state, PlaybackState.PLAYBACK_POSITION_UNKNOWN, paused ? 0f : 1f)
             .build();
         mediaSession.setPlaybackState(playback);
-        mediaSession.setMetadata(new android.media.MediaMetadata.Builder()
+        android.media.MediaMetadata.Builder metadata = new android.media.MediaMetadata.Builder()
             .putString(android.media.MediaMetadata.METADATA_KEY_TITLE, title)
             .putString(android.media.MediaMetadata.METADATA_KEY_ARTIST, artist)
-            .putString(android.media.MediaMetadata.METADATA_KEY_ALBUM, "Zipdeck")
-            .build());
+            .putString(android.media.MediaMetadata.METADATA_KEY_ALBUM, "Zipdeck");
+        Bitmap icon = art();
+        if (icon != null) {
+            metadata.putBitmap(android.media.MediaMetadata.METADATA_KEY_ALBUM_ART, icon);
+            metadata.putBitmap(android.media.MediaMetadata.METADATA_KEY_ART, icon);
+            metadata.putBitmap(android.media.MediaMetadata.METADATA_KEY_DISPLAY_ICON, icon);
+        }
+        mediaSession.setMetadata(metadata.build());
+    }
+
+    private Bitmap art() {
+        if (art != null) {
+            return art;
+        }
+        Drawable drawable = ContextCompat.getDrawable(this, R.mipmap.ic_launcher);
+        if (drawable == null) {
+            return null;
+        }
+        int size = drawable.getIntrinsicWidth();
+        if (size <= 0) {
+            size = 128;
+        }
+        Bitmap bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, size, size);
+        drawable.draw(canvas);
+        art = bitmap;
+        return art;
     }
 
     private void createChannel() {
@@ -336,20 +372,24 @@ public class ListenPlaybackService extends Service {
                 AudioTrack.MODE_STREAM
             );
         }
-        bed.setVolume(0.02f);
+        bed.setVolume(1f);
         bed.play();
-        int chunk = min;
         writing = true;
         bedWriter = new Thread(() -> {
-            byte[] silence = new byte[chunk];
-            silence[0] = 1;
+            int period = sampleRate / 40;
+            byte[] tone = new byte[period * 2];
+            for (int i = 0; i < period; i++) {
+                short sample = (short) (Math.sin((2 * Math.PI * i) / period) * 64);
+                tone[i * 2] = (byte) (sample & 0xff);
+                tone[i * 2 + 1] = (byte) ((sample >> 8) & 0xff);
+            }
             while (writing && bed != null) {
                 AudioTrack current = bed;
                 if (current == null) {
                     return;
                 }
                 try {
-                    int wrote = current.write(silence, 0, silence.length);
+                    int wrote = current.write(tone, 0, tone.length);
                     if (wrote < 0) {
                         return;
                     }

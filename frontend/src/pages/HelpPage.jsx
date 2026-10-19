@@ -16,6 +16,8 @@ const SECTIONS = [
   { id: 'help-sm2', titleKey: 'help.sm2Title' },
   { id: 'help-library', titleKey: 'help.libraryTitle' },
   { id: 'help-ai', titleKey: 'help.aiTitle' },
+  { id: 'help-edit', titleKey: 'help.editTitle' },
+  { id: 'help-listen', titleKey: 'help.listenTitle' },
   { id: 'help-mix', titleKey: 'help.mixTitle' },
   { id: 'help-offline', titleKey: 'help.offlineTitle' },
   { id: 'help-pro', titleKey: 'help.proTitle' },
@@ -176,6 +178,34 @@ export default function HelpPage() {
         </p>
       </HelpSection>
 
+      <HelpSection id="help-edit" title={t('help.editTitle')}>
+        <p>{t('help.editBenefit')}</p>
+        <ol className="help-steps">
+          <li>{t('help.editStep1')}</li>
+          <li>{t('help.editStep2')}</li>
+          <li>{t('help.editStep3')}</li>
+        </ol>
+        <p>{t('help.editCredit')}</p>
+        <p>
+          <Link to="/">{t('decks.title')}</Link>
+        </p>
+      </HelpSection>
+
+      <HelpSection id="help-listen" title={t('help.listenTitle')}>
+        <p>{t('help.listenBenefit')}</p>
+        <ol className="help-steps">
+          <li>{t('help.listenStep1')}</li>
+          <li>{t('help.listenStep2')}</li>
+          <li>{t('help.listenStep3')}</li>
+        </ol>
+        <p>{t('help.listenSchedule')}</p>
+        <p>{t('help.listenLockAndroid')}</p>
+        <p>{t('help.listenLockIos')}</p>
+        <p>
+          <Link to="/listen">{t('listen.menu')}</Link>
+        </p>
+      </HelpSection>
+
       <HelpSection id="help-mix" title={t('help.mixTitle')}>
         <p>{t('help.mixBenefit')}</p>
         <HelpMixDemo t={t} />
@@ -218,6 +248,8 @@ export default function HelpPage() {
         <p>{t('help.proIntro')}</p>
         <ul className="help-list">
           <li>{t('help.proItemAi')}</li>
+          <li>{t('help.proItemEdit')}</li>
+          <li>{t('help.proItemListen')}</li>
           <li>{t('help.proItemMix')}</li>
           <li>{t('help.proItemOffline')}</li>
           <li>{t('help.proItemImages')}</li>

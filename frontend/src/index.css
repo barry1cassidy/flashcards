@@ -6271,8 +6271,10 @@ button.agent-preset:disabled {
   margin: 8px 0 4px;
 }
 
-.listen-schedule {
+.listen-schedule,
+.listen-lock-note {
   margin: 0;
+  line-height: 1.45;
 }
 
 @media (max-width: 700px) {
