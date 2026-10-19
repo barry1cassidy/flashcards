@@ -452,6 +452,8 @@ Digital Pro on iOS uses StoreKit, not Stripe. Product IDs must match App Store C
 
 The Swift sources live at `frontend/ios-native/` because `ios/` is created on the Mac. **`npx cap sync ios` does not copy that folder.** After every `git pull` that touches `ios-native/`, copy the files into the Xcode App target yourself and confirm they replaced the copies Xcode compiles.
 
+Listen’s lock-screen player also needs the speech plugin to play on Zipdeck’s audio session. That one-line change is applied by `npm install` in `frontend`, or by `node scripts/patch-tts-session.mjs` if `node_modules` is already there. Rebuild after it. Copy the updated `ListenPlaybackPlugin.swift` as well.
+
 Copying `AppleBillingPlugin.swift` is **not** enough: Capacitor 8 only talks to in-app plugins that `registerPluginInstance` loads, the same way Android `MainActivity` calls `registerPlugin(PlayBillingPlugin.class)`. That call lives on `MainViewController`. **Capacitor 8.5 ignores `Main.storyboard`:** `SceneDelegate` creates the window in code with `CAPBridgeViewController()`, so the storyboard Custom Class never runs and Subscribe shows `AppleBilling plugin is not implemented on ios`. Set `window?.rootViewController = MainViewController()` in `SceneDelegate.swift`. StoreKit must start the purchase on the main thread (`Task { @MainActor in }`). If Subscribe returns with no sheet and no error, Xcode is still compiling an old plugin copy.
 
 Xcode may keep **two** on-disk copies. Overwrite both after pull:

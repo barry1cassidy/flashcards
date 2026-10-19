@@ -44,7 +44,9 @@ public class ListenPlaybackPlugin: CAPPlugin, CAPBridgedPlugin {
     @objc func update(_ call: CAPPluginCall) {
         DispatchQueue.main.async {
             let paused = call.getBool("paused") ?? false
-            if self.player?.isPlaying != true {
+            if paused {
+                self.player?.pause()
+            } else if self.player?.isPlaying != true {
                 try? self.session.setActive(true)
                 self.player?.play()
             }
@@ -61,12 +63,12 @@ public class ListenPlaybackPlugin: CAPPlugin, CAPBridgedPlugin {
     }
 
     private func activate() throws {
-        try session.setCategory(.playback, mode: .spokenAudio, options: [.mixWithOthers])
+        try session.setCategory(.playback, mode: .spokenAudio)
         try session.setActive(true)
         if player == nil {
-            let bed = try silentPlayer()
+            let bed = try tonePlayer()
             bed.numberOfLoops = -1
-            bed.volume = 0.01
+            bed.volume = 0.2
             player = bed
         }
         player?.play()
@@ -163,7 +165,7 @@ public class ListenPlaybackPlugin: CAPPlugin, CAPBridgedPlugin {
         try? session.setActive(false, options: [.notifyOthersOnDeactivation])
     }
 
-    private func silentPlayer() throws -> AVAudioPlayer {
+    private func tonePlayer() throws -> AVAudioPlayer {
         let sampleRate = 8000
         let frames = sampleRate
         let dataSize = frames * 2
@@ -196,7 +198,14 @@ public class ListenPlaybackPlugin: CAPPlugin, CAPBridgedPlugin {
         write16(34, 16)
         writeText(36, "data")
         write32(40, UInt32(dataSize))
-        bytes[44] = 1
+        let frequency = 220.0
+        for frame in 0..<frames {
+            let value = sin((2 * Double.pi * frequency * Double(frame)) / Double(sampleRate)) * 12
+            let sample = UInt16(bitPattern: Int16(Int(value)))
+            let offset = 44 + frame * 2
+            bytes[offset] = UInt8(sample & 0xff)
+            bytes[offset + 1] = UInt8((sample >> 8) & 0xff)
+        }
         let bed = try AVAudioPlayer(data: Data(bytes))
         bed.prepareToPlay()
         return bed

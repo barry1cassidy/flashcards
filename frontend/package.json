@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "build:android": "vite build --mode android",
     "cap:sync": "npm run build:android && npx cap sync android",
-    "android": "npm run cap:sync && npx cap open android"
+    "android": "npm run cap:sync && npx cap open android",
+    "postinstall": "node scripts/patch-tts-session.mjs"
   },
   "dependencies": {
     "@capacitor-community/text-to-speech": "^8.0.2",
