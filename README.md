@@ -395,7 +395,7 @@ This is how we produce the signed AAB for Play **internal testing** and, later, 
 2. Set `VITE_API_BASE=https://api.zipdeck.app`. Relative `/api` has no proxy on device.
 3. Set `VITE_GOOGLE_CLIENT_ID` to the **Web** OAuth client ID (same as the website and API). Do not put an Android client ID in this file or in the app.
 4. Bump `versionCode` (integer, must increase on every Play upload) and `versionName` in `frontend/android/app/build.gradle`.
-5. From `frontend`, run `npm run cap:sync` (`build:android` then `npx cap sync android`). Confirm `frontend/android/app/src/main/assets/capacitor.config.json` has `"hostname": "zipdeck.app"` and that the JS bundle calls `https://api.zipdeck.app`, not `https://zipdeck.app/api`.
+5. From `frontend`, run `npm run cap:sync` (`build:android` then `npx cap sync android`). Confirm `frontend/android/app/src/main/assets/capacitor.config.json` has `"hostname": "zipdeck.app"` and that the JS bundle calls `https://api.zipdeck.app`, not `https://zipdeck.app/api`. Audio Flashcards keeps playing with the screen off through `ListenPlaybackService` (media playback foreground service). On the next Play upload, declare that foreground service as **Media playback** under App content → Foreground service permissions. The first Play press on Android 13+ asks for notification permission so the lock-screen controls can appear.
 6. Release signing reads gitignored `frontend/android/keystore.properties`. The keys are `storeFile`, `storePassword`, `keyAlias`, and `keyPassword`. The upload keystore file named by `storeFile` lives next to that properties file and is also gitignored. Do not commit either file.
 7. From `frontend/android`, run `.\gradlew.bat bundleRelease`. The AAB is `frontend/android/app/build/outputs/bundle/release/app-release.aab`.
 8. Play Console → Test and release → Internal testing → create a release, upload **only** that AAB, then Review and Start rollout. Production uses the same AAB steps on the Production track once the store listing is ready.
@@ -442,6 +442,7 @@ In the **same Google Cloud project** as the Web client, create one **iOS** OAuth
 - `GIDClientID` — the iOS OAuth client ID (`….apps.googleusercontent.com`).
 - `CFBundleURLTypes` → `CFBundleURLSchemes` — the **reversed** iOS URL scheme Google shows on that client (`com.googleusercontent.apps.…`). Role can stay **Editor**.
 - `ITSAppUsesNonExemptEncryption` — Boolean **NO** (standard HTTPS only; avoids a TestFlight export-compliance prompt).
+- `UIBackgroundModes` — array containing `audio`. In Xcode: Signing & Capabilities → **Background Modes** → check **Audio, AirPlay, and Picture in Picture**. Audio Flashcards needs this so the pause between cards does not suspend the app when the screen locks. There is no permission prompt.
 
 Do not paste those values into git or chat.
 
@@ -458,6 +459,8 @@ Xcode may keep **two** on-disk copies. Overwrite both after pull:
 ```bash
 cp frontend/ios-native/AppleBillingPlugin.swift frontend/ios/App/App/AppleBillingPlugin.swift
 cp frontend/ios-native/AppleBillingPlugin.swift frontend/ios/App/AppleBillingPlugin.swift
+cp frontend/ios-native/ListenPlaybackPlugin.swift frontend/ios/App/App/ListenPlaybackPlugin.swift
+cp frontend/ios-native/ListenPlaybackPlugin.swift frontend/ios/App/ListenPlaybackPlugin.swift
 cp frontend/ios-native/MainViewController.swift frontend/ios/App/App/MainViewController.swift
 cp frontend/ios-native/MainViewController.swift frontend/ios/App/MainViewController.swift
 cp frontend/ios-native/SceneDelegate.swift frontend/ios/App/App/SceneDelegate.swift
@@ -467,11 +470,11 @@ Then `find frontend/ios -name AppleBillingPlugin.swift` and `grep MainActor` on 
 
 After `git pull`:
 
-1. Copy **all three** Swift files into the Xcode **App** target as above (same target as `Info.plist`). Add `MainViewController.swift` with File → Add Files if it is not already in the project. Overwrite `SceneDelegate.swift` — do not leave `CAPBridgeViewController()` as the root controller.
-2. Confirm **Build Phases → Compile Sources** lists `AppleBillingPlugin.swift`, `MainViewController.swift`, and `SceneDelegate.swift` (select the blue App project, then TARGETS → App → Build Phases).
+1. Copy the Swift files into the Xcode **App** target as above (same target as `Info.plist`). Add `MainViewController.swift` and `ListenPlaybackPlugin.swift` with File → Add Files if they are not already in the project. Overwrite `SceneDelegate.swift` — do not leave `CAPBridgeViewController()` as the root controller.
+2. Confirm **Build Phases → Compile Sources** lists `AppleBillingPlugin.swift`, `ListenPlaybackPlugin.swift`, `MainViewController.swift`, and `SceneDelegate.swift` (select the blue App project, then TARGETS → App → Build Phases). Confirm **Background Modes → Audio** is still checked after `cap sync`.
 3. In `SceneDelegate.swift`, `willConnectTo` must use `window?.rootViewController = MainViewController()`. The storyboard Custom Class does not matter on Capacitor 8.5. Grep must show `MainViewController()`, not `CAPBridgeViewController()`.
 4. Signing & Capabilities → add **In-App Purchase** if it is not already there. Keep Associated Domains (`applinks:zipdeck.app`, `webcredentials:zipdeck.app`).
-5. `npm run build:android` then `npx cap sync ios`. Confirm the three Swift files are still in Compile Sources (`cap sync` must not delete them). If you sync after copying, copy the Swift files **again**.
+5. `npm run build:android` then `npx cap sync ios`. Confirm `AppleBillingPlugin.swift`, `ListenPlaybackPlugin.swift`, `MainViewController.swift`, and `SceneDelegate.swift` are still in Compile Sources (`cap sync` must not delete them). If you sync after copying, copy the Swift files **again**. Confirm Background Modes → Audio is still checked.
 
 **Paid Apps** (App Store Connect → **Business** → Agreements) must be **Active** or StoreKit returns no products and Subscribe shows “This subscription is not available in the App Store yet.” **Pending User Info** / **Processing** means tax or banking is incomplete. Complete the **electronic W-9** in that page (do not download a blank IRS form). US individual / sole proprietor is **Non-Exempt Payee**. Leave Business Name blank unless you file under a different legal name. Add a **bank account** on the same page. Do not paste TINs or bank numbers into git or chat. Bank can stay **Processing** after Paid Apps is already Active.
 
@@ -489,7 +492,7 @@ This is how we produce the signed archive for **internal** TestFlight. App name 
 
 1. On a browser: App Store Connect → register App ID `com.zipdeck.app` if needed (Certificates, Identifiers & Profiles → Identifiers), then Apps → New App → iOS, name Zipdeck, SKU `zipdeck`.
 2. On the Mac: `git pull` (if pull refuses to overwrite `frontend/package.json` or `package-lock.json`, `git restore` those two files only — they are leftover Mac `npm install @capacitor/ios` edits; do not commit them). From `frontend` run `npm ci`, `npm install @capacitor/ios` if needed, `npm run build:android`, `npx cap sync ios`. Confirm `GIDClientID`, the URL scheme, and `ITSAppUsesNonExemptEncryption=NO` survived (`cap sync` does not overwrite `Info.plist`).
-3. Copy all `frontend/ios-native/*.swift` files into the App target as in **App Store subscriptions** (overwrite `ios/App/App/SceneDelegate.swift` and both plugin copies). `SceneDelegate` must set `rootViewController = MainViewController()`. Compile Sources must list `AppleBillingPlugin`, `MainViewController`, and `SceneDelegate`. If Subscribe fails with `AppleBilling plugin is not implemented on ios`, SceneDelegate is still creating `CAPBridgeViewController()`.
+3. Copy all `frontend/ios-native/*.swift` files into the App target as in **App Store subscriptions** (overwrite `ios/App/App/SceneDelegate.swift` and the plugin copies, including `ListenPlaybackPlugin.swift`). `SceneDelegate` must set `rootViewController = MainViewController()`. Compile Sources must list `AppleBillingPlugin`, `ListenPlaybackPlugin`, `MainViewController`, and `SceneDelegate`. Signing & Capabilities → Background Modes → **Audio, AirPlay, and Picture in Picture** must be checked (`UIBackgroundModes` = `audio`). If Subscribe fails with `AppleBilling plugin is not implemented on ios`, SceneDelegate is still creating `CAPBridgeViewController()`.
 4. Xcode → **App** target (under TARGETS) → **Signing & Capabilities**: Automatically manage signing, your Apple Developer team, bundle identifier `com.zipdeck.app`. Associated Domains must list `applinks:zipdeck.app` and `webcredentials:zipdeck.app`. Add **In-App Purchase**. Do not commit team IDs, certificates, or provisioning profiles.
 5. Bump **Build** (`CFBundleVersion`) on every upload. Apple rejects a reuse of the same version+build (all-`1.0 (1)` archives fail). Version can stay `1.0`.
 6. App Store icon is the **1024×1024** slot in **Assets.xcassets → AppIcon**, not an App Store Connect upload (there is no icon file picker). The PNG must be RGB with **no alpha**. Confirm it on the TestFlight / home-screen icon; the Apps list in App Store Connect often stays a placeholder until a version is submitted. Listing screenshots go in App Store Connect → the iOS version → **Previews and Screenshots → iPhone 6.5"** (1284×2778). A 6.9" set is optional if 6.5" is present.

@@ -1,3 +1,4 @@
+import { bindListenPlayback, startListenPlayback, stopListenPlayback, updateListenPlayback } from './listenPlayback'
 import { silentAudio, speakCue, stopCue, waitCue } from './listenSpeech'
 
 function sideText(card, side) {
@@ -32,6 +33,36 @@ export function createListenSession({ cards, options, onChange }) {
     return cards[index]
   }
 
+  let playbackKey = ''
+  let detachPlayback = () => {}
+  let playbackClosed = false
+
+  function playbackLabel() {
+    const card = cardAt()
+    return {
+      title: (shownLine || card?.deckName || 'Zipdeck').slice(0, 80),
+      artist: (card?.deckName || 'Zipdeck').slice(0, 80),
+    }
+  }
+
+  function syncPlayback(phase) {
+    if (playbackClosed) {
+      return
+    }
+    if (phase === 'done' || phase === 'error') {
+      playbackKey = phase
+      stopListenPlayback()
+      return
+    }
+    const resting = paused || phase === 'paused' || phase === 'blocked'
+    const key = `${phase}|${shownLine}|${resting}`
+    if (key === playbackKey) {
+      return
+    }
+    playbackKey = key
+    updateListenPlayback({ ...playbackLabel(), paused: resting })
+  }
+
   function publish(extra) {
     if (Object.hasOwn(extra, 'line')) {
       shownLine = extra.line
@@ -49,7 +80,25 @@ export function createListenSession({ cards, options, onChange }) {
       prompt: shownPrompt,
       ...extra,
     })
+    if (extra.phase) {
+      syncPlayback(extra.phase)
+    }
   }
+
+  const controls = {}
+  bindListenPlayback((action) => {
+    if (playbackClosed) {
+      return
+    }
+    const name = action === 'play' ? 'resume' : action
+    controls[name]?.()
+  }).then((detach) => {
+    if (playbackClosed) {
+      detach()
+      return
+    }
+    detachPlayback = detach
+  })
 
   function interrupt() {
     generation += 1
@@ -111,6 +160,7 @@ export function createListenSession({ cards, options, onChange }) {
     }
     running = true
     bed.play().catch(() => {})
+    startListenPlayback(playbackLabel())
     try {
       let first = immediate
       while (!stopped) {
@@ -155,7 +205,7 @@ export function createListenSession({ cards, options, onChange }) {
     }
   }
 
-  return {
+  const session = {
     start() {
       stopped = false
       paused = false
@@ -226,6 +276,10 @@ export function createListenSession({ cards, options, onChange }) {
     stop() {
       stopped = true
       paused = false
+      playbackClosed = true
+      detachPlayback()
+      detachPlayback = () => {}
+      stopListenPlayback()
       const wake = resumeResolve
       resumeResolve = null
       wake?.()
@@ -234,4 +288,6 @@ export function createListenSession({ cards, options, onChange }) {
       stopCue()
     },
   }
+  Object.assign(controls, session)
+  return session
 }

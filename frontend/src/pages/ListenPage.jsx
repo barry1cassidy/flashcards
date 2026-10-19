@@ -9,7 +9,15 @@ import { listOfflinePacks } from '../offlinePacks'
 import { flattenListenCards, loadListenQueue } from '../listenQueue'
 import { createListenSession } from '../listenSession'
 import ListenPlayer from './ListenPlayer'
+import { UseScene } from './ListenScenes'
 import MenuIcon from './MenuIcon'
+
+const GATE_SCENES = [
+  { scene: 'walk', label: 'listen.useWalk' },
+  { scene: 'run', label: 'listen.useRun' },
+  { scene: 'workout', label: 'listen.useWorkout' },
+  { scene: 'chores', label: 'listen.useChores' },
+]
 
 const WAITS = [
   { id: 'short', ms: 2000 },
@@ -209,14 +217,24 @@ export default function ListenPage() {
         <div className="page-title">
           <h1>{t('listen.title')}</h1>
         </div>
-        <section className="card-form">
-          <p>{t('listen.proRequired')}</p>
-          <p>{t('listen.proWhy')}</p>
-          <ul className="pro-feature-list">
-            <li>{t('listen.proExample1')}</li>
-            <li>{t('listen.proExample2')}</li>
-            <li>{t('listen.proExample3')}</li>
+        <section className="listen-gate">
+          <p className="listen-gate-lead">{t('listen.proLead')}</p>
+          <p className="listen-gate-pitch">{t('listen.proMemory')}</p>
+          <ul className="pro-feature-list listen-gate-points">
+            <li>{t('listen.proPoint1')}</li>
+            <li>{t('listen.proPoint2')}</li>
+            <li>{t('listen.proPoint3')}</li>
           </ul>
+          <div className="listen-uses listen-gate-uses">
+            {GATE_SCENES.map((item) => (
+              <figure className="listen-use" key={item.scene}>
+                <UseScene scene={item.scene} />
+                <figcaption>
+                  <strong>{t(item.label)}</strong>
+                </figcaption>
+              </figure>
+            ))}
+          </div>
           <Link className="btn primary" to="/pro">
             {t('pro.goToPro')}
           </Link>

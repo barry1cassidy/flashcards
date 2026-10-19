@@ -6581,6 +6581,53 @@ button.page-back {
   width: fit-content;
 }
 
+.listen-gate {
+  display: grid;
+  gap: 16px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--surface);
+}
+
+.listen-gate-lead {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  line-height: 1.25;
+}
+
+.listen-gate-pitch {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.listen-gate-points {
+  margin: 0;
+}
+
+.listen-gate-points li + li {
+  margin-top: 8px;
+}
+
+.listen-gate-uses .listen-use {
+  padding: 8px 8px 10px;
+  gap: 2px;
+}
+
+.listen-gate-uses .listen-use svg {
+  max-height: 88px;
+}
+
+.listen-gate-uses figcaption {
+  text-align: center;
+}
+
+.listen-gate .btn {
+  width: 100%;
+  min-height: 48px;
+}
+
 @media (max-width: 800px) {
   .listen-uses {
     grid-template-columns: 1fr 1fr;

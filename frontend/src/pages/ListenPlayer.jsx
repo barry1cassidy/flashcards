@@ -1,3 +1,4 @@
+import { Capacitor } from '@capacitor/core'
 import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import AudioTrack from './AudioTrack'
@@ -25,6 +26,9 @@ export default function ListenPlayer({
   const showPrompt = phase === 'answer' && playback?.prompt && playback.prompt !== line
 
   useEffect(() => {
+    if (Capacitor.isNativePlatform()) {
+      return undefined
+    }
     if (!playback || !('mediaSession' in navigator) || !('MediaMetadata' in window)) {
       return undefined
     }

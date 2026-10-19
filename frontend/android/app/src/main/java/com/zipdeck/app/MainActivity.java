@@ -12,7 +12,29 @@ public class MainActivity extends BridgeActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         registerPlugin(PlayBillingPlugin.class);
+        registerPlugin(ListenPlaybackPlugin.class);
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        keepListenWebViewRunning();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        keepListenWebViewRunning();
+    }
+
+    private void keepListenWebViewRunning() {
+        if (!ListenPlaybackService.isRunning() || getBridge() == null || getBridge().getWebView() == null) {
+            return;
+        }
+        WebView webView = getBridge().getWebView();
+        webView.onResume();
+        webView.resumeTimers();
     }
 
     @Override
