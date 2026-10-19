@@ -159,10 +159,24 @@ export function listenBed() {
   }
   let context = null
   let oscillator = null
+  let gain = null
   let started = false
+  const level = 10 ** (-68 / 20)
+  const fadeIn = () => {
+    if (!context || !gain) {
+      return
+    }
+    const now = context.currentTime
+    gain.gain.cancelScheduledValues(now)
+    gain.gain.setValueAtTime(0, now)
+    gain.gain.linearRampToValueAtTime(level, now + 0.12)
+  }
   const wake = () => {
-    if (started && context?.state === 'suspended') {
-      context.resume().catch(() => {})
+    if (!started || !context) {
+      return
+    }
+    if (context.state === 'suspended') {
+      context.resume().then(fadeIn).catch(() => {})
     }
   }
   return {
@@ -173,13 +187,14 @@ export function listenBed() {
       }
       context = new AudioCtx()
       oscillator = context.createOscillator()
-      const gain = context.createGain()
+      gain = context.createGain()
       oscillator.type = 'sine'
-      oscillator.frequency.value = 40
-      gain.gain.value = 10 ** (-62 / 20)
+      oscillator.frequency.value = 220
+      gain.gain.setValueAtTime(0, context.currentTime)
       oscillator.connect(gain)
       gain.connect(context.destination)
       oscillator.start()
+      fadeIn()
       started = true
       context.onstatechange = wake
       document.addEventListener('visibilitychange', wake)
@@ -198,6 +213,7 @@ export function listenBed() {
       }
       const current = context
       oscillator = null
+      gain = null
       context = null
       current?.close().catch(() => {})
     },

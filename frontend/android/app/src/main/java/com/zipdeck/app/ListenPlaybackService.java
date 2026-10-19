@@ -372,29 +372,47 @@ public class ListenPlaybackService extends Service {
                 AudioTrack.MODE_STREAM
             );
         }
-        bed.setVolume(1f);
+        bed.setVolume(0.2f);
         bed.play();
         writing = true;
+        int bufferBytes = min;
         bedWriter = new Thread(() -> {
-            int period = sampleRate / 40;
-            byte[] tone = new byte[period * 2];
-            for (int i = 0; i < period; i++) {
-                short sample = (short) (Math.sin((2 * Math.PI * i) / period) * 64);
-                tone[i * 2] = (byte) (sample & 0xff);
-                tone[i * 2 + 1] = (byte) ((sample >> 8) & 0xff);
-            }
+            int period = sampleRate / 220;
+            int samples = Math.max(period, bufferBytes / 2);
+            byte[] tone = new byte[samples * 2];
+            int phase = 0;
             while (writing && bed != null) {
+                for (int i = 0; i < samples; i++) {
+                    short sample = (short) (Math.sin((2 * Math.PI * phase) / period) * 8);
+                    tone[i * 2] = (byte) (sample & 0xff);
+                    tone[i * 2 + 1] = (byte) ((sample >> 8) & 0xff);
+                    phase++;
+                    if (phase >= period) {
+                        phase = 0;
+                    }
+                }
                 AudioTrack current = bed;
                 if (current == null) {
                     return;
                 }
-                try {
-                    int wrote = current.write(tone, 0, tone.length);
-                    if (wrote < 0) {
+                int offset = 0;
+                while (offset < tone.length && writing) {
+                    try {
+                        int wrote = current.write(tone, offset, tone.length - offset);
+                        if (wrote < 0) {
+                            return;
+                        }
+                        if ((wrote & 1) == 1) {
+                            wrote -= 1;
+                        }
+                        if (wrote == 0) {
+                            Thread.sleep(5);
+                            continue;
+                        }
+                        offset += wrote;
+                    } catch (Exception ignored) {
                         return;
                     }
-                } catch (Exception ignored) {
-                    return;
                 }
             }
         }, "zipdeck-listen");
