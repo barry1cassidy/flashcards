@@ -66,6 +66,22 @@ public class User {
     @Column(name = "restudy_wait", nullable = false, length = 16)
     private RestudyWait restudyWait = RestudyWait.ONE_DAY;
 
+    @Column(name = "listen_pause_seconds", nullable = false)
+    private int listenPauseSeconds = 4;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "listen_side_first", nullable = false, length = 8)
+    private ListenSideFirst listenSideFirst = ListenSideFirst.FRONT;
+
+    @Column(name = "listen_repeat", nullable = false)
+    private boolean listenRepeat;
+
+    @Column(name = "listen_announce", nullable = false)
+    private boolean listenAnnounce = true;
+
+    @Column(name = "listen_sleep_minutes", nullable = false)
+    private int listenSleepMinutes;
+
     @Column(name = "pro_licensed", nullable = false)
     private boolean proLicensed;
 
@@ -118,6 +134,12 @@ public class User {
         }
         if (restudyWait == null) {
             restudyWait = RestudyWait.ONE_DAY;
+        }
+        if (listenSideFirst == null) {
+            listenSideFirst = ListenSideFirst.FRONT;
+        }
+        if (listenPauseSeconds < 0 || listenPauseSeconds > 60) {
+            listenPauseSeconds = 4;
         }
     }
 }

@@ -6,16 +6,37 @@ if (!existsSync(path)) {
   process.exit(0)
 }
 
-const from = 'self.synthesizer.usesApplicationAudioSession = false'
-const to = 'self.synthesizer.usesApplicationAudioSession = true'
-const text = readFileSync(path, 'utf8')
-if (text.includes(to)) {
-  console.log('text-to-speech already uses the app audio session')
-  process.exit(0)
-}
-if (!text.includes(from)) {
+let text = readFileSync(path, 'utf8')
+let changed = false
+
+const sessionFrom = 'self.synthesizer.usesApplicationAudioSession = false'
+const sessionTo = 'self.synthesizer.usesApplicationAudioSession = true'
+if (text.includes(sessionFrom)) {
+  text = text.replace(sessionFrom, sessionTo)
+  changed = true
+} else if (!text.includes(sessionTo)) {
   console.error('Could not find the text-to-speech audio-session line to patch')
   process.exit(1)
 }
-writeFileSync(path, text.replace(from, to))
-console.log('text-to-speech now uses the app audio session')
+
+const sleepName = 'zipdeck.listen.sleep'
+if (!text.includes(sleepName)) {
+  const anchor = 'self.synthesizer.delegate = self'
+  if (!text.includes(anchor)) {
+    console.error('Could not find the speech delegate line to patch')
+    process.exit(1)
+  }
+  const observer = [
+    anchor,
+    'NotificationCenter.default.addObserver(forName: Notification.Name("zipdeck.listen.sleep"), object: nil, queue: .main) { [weak self] _ in',
+    '            self?.stop()',
+    '        }',
+  ].join('\n        ')
+  text = text.replace(anchor, observer)
+  changed = true
+}
+
+if (changed) {
+  writeFileSync(path, text)
+}
+console.log('text-to-speech uses the app audio session and stops when the sleep timer ends')

@@ -20,6 +20,9 @@ export function createListenSession({ cards, options, onChange }) {
   let resumeResolve = null
   let shownLine = ''
   let shownPrompt = ''
+  let sleepTimer = 0
+  let sleepDeadline = 0
+  const sleepMs = Number(options.sleepMs) > 0 ? Number(options.sleepMs) : 0
   const bed = listenBed()
   const deckIds = new Set(cards.map((card) => card.deckId))
   const multi = deckIds.size > 1 && options.announce
@@ -60,7 +63,7 @@ export function createListenSession({ cards, options, onChange }) {
       return
     }
     playbackKey = key
-    updateListenPlayback({ ...playbackLabel(), paused: resting })
+    updateListenPlayback({ ...playbackLabel(), paused: resting, sleepAt: sleepDeadline })
   }
 
   function publish(extra) {
@@ -78,6 +81,7 @@ export function createListenSession({ cards, options, onChange }) {
       multi,
       line: shownLine,
       prompt: shownPrompt,
+      sleepDeadline,
       ...extra,
     })
     if (extra.phase) {
@@ -85,9 +89,56 @@ export function createListenSession({ cards, options, onChange }) {
     }
   }
 
+  function disarmSleep() {
+    window.clearTimeout(sleepTimer)
+    sleepTimer = 0
+  }
+
+  function endForSleep() {
+    if (stopped) {
+      return
+    }
+    stopped = true
+    disarmSleep()
+    sleepDeadline = 0
+    playbackClosed = true
+    detachPlayback()
+    detachPlayback = () => {}
+    stopListenPlayback()
+    const wake = resumeResolve
+    resumeResolve = null
+    wake?.()
+    interrupt()
+    bed.stop()
+    stopCue()
+    publish({ phase: 'slept', line: '', prompt: '', progress: 0 })
+  }
+
+  function armSleep(push) {
+    disarmSleep()
+    if (sleepMs > 0) {
+      sleepDeadline = Date.now() + sleepMs
+      const delay = Math.max(0, sleepDeadline - Date.now())
+      sleepTimer = window.setTimeout(endForSleep, delay)
+    } else {
+      sleepDeadline = 0
+    }
+    if (push) {
+      updateListenPlayback({ ...playbackLabel(), paused, sleepAt: sleepDeadline })
+    }
+  }
+
+  function sleepDue() {
+    return sleepDeadline > 0 && Date.now() >= sleepDeadline
+  }
+
   const controls = {}
   bindListenPlayback((action) => {
     if (playbackClosed) {
+      return
+    }
+    if (action === 'sleep') {
+      endForSleep()
       return
     }
     const name = action === 'play' ? 'resume' : action
@@ -134,23 +185,39 @@ export function createListenSession({ cards, options, onChange }) {
         onProgress: (progress) => publish({ phase, line, prompt, progress }),
       })
     }
+    const keepGoing = () => !stopped && !sleepDue()
     if (multi && card.deckId !== lastDeck) {
       await say(card.deckName, card.frontLanguage, 'announce', card.deckName, '')
+      if (!keepGoing()) {
+        return false
+      }
       lastDeck = card.deckId
     }
     const question = sideText(card, firstSide)
     const answer = sideText(card, secondSide)
     if (question) {
       await say(question, sideLang(card, firstSide), 'question', question, '')
+      if (!keepGoing()) {
+        return false
+      }
     }
     if (answer && answer !== question) {
       if (question) {
         publish({ phase: 'gap', line: question, prompt: '', progress: 1 })
         await waitCue(options.waitMs, signal)
+        if (!keepGoing()) {
+          return false
+        }
       }
       await say(answer, sideLang(card, secondSide), 'answer', answer, question)
+      if (!keepGoing()) {
+        return false
+      }
     }
     await waitCue(450, signal)
+    if (!keepGoing()) {
+      return false
+    }
     return startedGeneration === generation
   }
 
@@ -159,11 +226,16 @@ export function createListenSession({ cards, options, onChange }) {
       return
     }
     running = true
+    armSleep(false)
     bed.start()
-    startListenPlayback(playbackLabel()).then(() => bed.kick())
+    startListenPlayback({ ...playbackLabel(), sleepAt: sleepDeadline }).then(() => bed.kick())
     try {
       let first = immediate
       while (!stopped) {
+        if (sleepDue()) {
+          endForSleep()
+          return
+        }
         if (paused) {
           await waitIfPaused()
         }
@@ -176,12 +248,18 @@ export function createListenSession({ cards, options, onChange }) {
             lastDeck = null
             continue
           }
+          disarmSleep()
+          sleepDeadline = 0
           publish({ phase: 'done', line: '', prompt: '', progress: 0 })
           return
         }
         try {
           const finished = await playCard(first)
           first = false
+          if (sleepDue()) {
+            endForSleep()
+            return
+          }
           if (finished && !stopped && !paused) {
             index += 1
           }
@@ -193,6 +271,10 @@ export function createListenSession({ cards, options, onChange }) {
           if (error?.message === 'not-allowed') {
             paused = true
             publish({ phase: 'blocked', progress: 0 })
+            return
+          }
+          if (sleepDue()) {
+            endForSleep()
             return
           }
           publish({ phase: 'error', error: error?.message || 'speech', progress: 0 })
@@ -266,17 +348,22 @@ export function createListenSession({ cards, options, onChange }) {
       index = 0
       lastDeck = null
       paused = false
+      stopped = false
       const wake = resumeResolve
       resumeResolve = null
       wake?.()
       interrupt()
       if (!running) {
         loop(true)
+      } else {
+        armSleep(true)
       }
     },
     stop() {
       stopped = true
       paused = false
+      disarmSleep()
+      sleepDeadline = 0
       playbackClosed = true
       detachPlayback()
       detachPlayback = () => {}

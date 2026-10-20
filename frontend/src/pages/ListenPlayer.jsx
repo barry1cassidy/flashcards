@@ -1,7 +1,8 @@
 import { Capacitor } from '@capacitor/core'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import AudioTrack from './AudioTrack'
+import { formatSleepLeft } from '../listenPrefs'
 import { canListenSpeak } from '../listenSpeech'
 
 export default function ListenPlayer({
@@ -21,6 +22,16 @@ export default function ListenPlayer({
   actions.current = { onPause, onResume, onNext, onPrevious, onReplay, onRestart }
   const phase = playback?.phase || 'question'
   const speaking = phase === 'announce' || phase === 'question' || phase === 'answer'
+  const finished = phase === 'done' || phase === 'slept'
+  const [now, setNow] = useState(() => Date.now())
+  useEffect(() => {
+    if (!playback?.sleepDeadline || finished) {
+      return undefined
+    }
+    const timer = window.setInterval(() => setNow(Date.now()), 1000)
+    return () => window.clearInterval(timer)
+  }, [playback?.sleepDeadline, finished])
+  const sleepLeft = playback?.sleepDeadline > now ? playback.sleepDeadline - now : 0
   const card = playback?.card
   const line = playback?.line || ''
   const showPrompt = phase === 'answer' && playback?.prompt && playback.prompt !== line
@@ -87,14 +98,15 @@ export default function ListenPlayer({
             {playback?.total
               ? t('listen.progress', { current: Math.min(playback.total, playback.index + 1), total: playback.total })
               : t('listen.schedule')}
-            {loop ? ` · ${t('listen.loop')}` : ''}
+            {loop ? ` · ${t('listen.repeat')}` : ''}
+            {sleepLeft > 0 ? ` · ${t('listen.sleepLeft', { time: formatSleepLeft(sleepLeft) })}` : ''}
           </p>
         </div>
       </div>
 
-      {phase === 'done' ? (
+      {finished ? (
         <section className="card-form">
-          <h2 className="section-heading">{t('listen.doneTitle')}</h2>
+          <h2 className="section-heading">{t(phase === 'slept' ? 'listen.sleptTitle' : 'listen.doneTitle')}</h2>
           <p className="muted">{t('listen.doneBody')}</p>
           <div className="header-actions">
             <button className="btn primary" type="button" onClick={onRestart}>
@@ -116,7 +128,7 @@ export default function ListenPlayer({
         </section>
       )}
 
-      {phase === 'done' ? null : (
+      {finished ? null : (
         <div className="listen-controls">
           <div className="listen-transport">
             <button className="btn" type="button" onClick={onPrevious}>

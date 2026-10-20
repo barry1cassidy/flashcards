@@ -69,8 +69,13 @@ export default function OfflineStudyPage() {
         {t('offline.back')}
       </Link>
       <div className="page-title">
-        <h1>{pack.name}</h1>
-        <p className="muted">{t('offline.scheduleNote')}</p>
+        <div>
+          <h1>{pack.name}</h1>
+          <p className="muted">{t('offline.scheduleNote')}</p>
+        </div>
+        <Link className="btn" to={`/offline/listen?id=${encodeURIComponent(pack.id)}`}>
+          {t('listen.menu')}
+        </Link>
       </div>
       {done ? (
         <section className="card-form">

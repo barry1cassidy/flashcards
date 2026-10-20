@@ -3,6 +3,8 @@ import { Link, Navigate, useLocation, useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '../AuthContext'
 import { DECK_SORTS, normalizeDeckSort } from '../deckSort'
+import { listenPrefsFromUser } from '../listenPrefs'
+import ListenOptions from './ListenOptions'
 import { RESTUDY_WAITS, STUDY_ORDERS, normalizeRestudyWait, normalizeStudyOrder } from '../studySettings'
 import { LOCALES, currentLocale } from '../i18n'
 import { translateError } from '../i18n/errors'
@@ -12,7 +14,7 @@ export default function SettingsPage() {
   const { t } = useTranslation()
   const location = useLocation()
   const [searchParams] = useSearchParams()
-  const { user, setTheme, setLocale, setDeckSort, setStudyOrder, setRestudyWait } = useAuth()
+  const { user, setTheme, setLocale, setDeckSort, setStudyOrder, setRestudyWait, setListenPrefs } = useAuth()
   const [error, setError] = useState('')
 
   useEffect(() => {
@@ -31,6 +33,7 @@ export default function SettingsPage() {
   const deckSort = normalizeDeckSort(user?.deckSort)
   const studyOrder = normalizeStudyOrder(user?.studyOrder)
   const restudyWait = normalizeRestudyWait(user?.restudyWait)
+  const listenPrefs = listenPrefsFromUser(user)
 
   async function run(work) {
     setError('')
@@ -140,6 +143,15 @@ export default function SettingsPage() {
             </label>
           ))}
         </div>
+      </section>
+
+      <section className="card-form" id="listen-options">
+        <h2 className="section-heading">{t('settings.listen')}</h2>
+        <p className="muted">{t('settings.listenHint')}</p>
+        <ListenOptions
+          prefs={listenPrefs}
+          onChange={(partial) => run(() => setListenPrefs({ ...listenPrefs, ...partial }))}
+        />
       </section>
 
       <section className="card-form">

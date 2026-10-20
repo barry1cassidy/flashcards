@@ -8,7 +8,9 @@ import { isProLicensed } from '../pro'
 import { translateError } from '../i18n/errors'
 import { listOfflinePacks } from '../offlinePacks'
 import { flattenListenCards, loadListenQueue } from '../listenQueue'
+import { listenPrefsFromUser, normalizeListenPrefs } from '../listenPrefs'
 import { createListenSession } from '../listenSession'
+import ListenOptions, { listenPrefsSummary } from './ListenOptions'
 import ListenPlayer from './ListenPlayer'
 import { UseScene } from './ListenScenes'
 import MenuIcon from './MenuIcon'
@@ -20,11 +22,6 @@ const GATE_SCENES = [
   { scene: 'chores', label: 'listen.useChores' },
 ]
 
-const WAITS = [
-  { id: 'short', ms: 2000 },
-  { id: 'medium', ms: 4000 },
-  { id: 'long', ms: 7000 },
-]
 const SOURCES = [
   { id: 'deck', icon: 'decks' },
   { id: 'set', icon: 'groups' },
@@ -40,7 +37,7 @@ function itemColor(item) {
 
 export default function ListenPage() {
   const { t } = useTranslation()
-  const { user } = useAuth()
+  const { user, setListenPrefs } = useAuth()
   const pro = isProLicensed(user)
   const [params, setParams] = useSearchParams()
   const sourceParam = params.get('source')
@@ -48,10 +45,9 @@ export default function ListenPage() {
   const id = params.get('id') || ''
   const [items, setItems] = useState(null)
   const [selectedOffline, setSelectedOffline] = useState(null)
-  const [wait, setWait] = useState('medium')
-  const [side, setSide] = useState('front')
-  const [loop, setLoop] = useState(false)
-  const [announce, setAnnounce] = useState(true)
+  const [prefs, setPrefs] = useState(() => listenPrefsFromUser(user))
+  const [optionsOpen, setOptionsOpen] = useState(false)
+  const prefsRef = useRef(prefs)
   const [queue, setQueue] = useState(null)
   const [queueError, setQueueError] = useState('')
   const [loadingQueue, setLoadingQueue] = useState(false)
@@ -60,6 +56,14 @@ export default function ListenPage() {
   const [query, setQuery] = useState('')
   const [page, setPage] = useState(1)
   const sessionRef = useRef(null)
+  prefsRef.current = prefs
+
+  function changePrefs(partial) {
+    const next = normalizeListenPrefs({ ...prefsRef.current, ...partial })
+    prefsRef.current = next
+    setPrefs(next)
+    setListenPrefs(next).catch(() => {})
+  }
 
   const offlineIds = source === 'offline' ? [...(selectedOffline || [])] : []
   const multi = (queue?.decks.length || 0) > 1
@@ -190,13 +194,15 @@ export default function ListenPage() {
       return
     }
     sessionRef.current?.stop()
+    const chosen = prefsRef.current
     const session = createListenSession({
       cards,
       options: {
-        waitMs: WAITS.find((item) => item.id === wait)?.ms || 4000,
-        side,
-        loop,
-        announce: multi && announce,
+        waitMs: chosen.pauseSeconds * 1000,
+        side: chosen.side,
+        loop: chosen.loop,
+        announce: multi && chosen.announce,
+        sleepMs: chosen.sleepMinutes * 60 * 1000,
       },
       onChange: setPlayback,
     })
@@ -250,7 +256,7 @@ export default function ListenPage() {
         <ListenPlayer
           playback={playback}
           title={queue?.title || playback.card?.deckName}
-          loop={loop}
+          loop={prefs.loop}
           onBack={stopToOptions}
           onPause={() => sessionRef.current?.pause()}
           onResume={() => sessionRef.current?.resume()}
@@ -402,52 +408,22 @@ export default function ListenPage() {
               {cards.length > 0 ? <p className="muted">{t('listen.cards', { count: cards.length })}</p> : null}
             </div>
           </div>
-          <div className="listen-setup-grid">
-            <fieldset className="listen-panel">
-              <legend>{t('listen.wait')}</legend>
-              <div className="listen-choice-row">
-                {WAITS.map((item) => (
-                  <button
-                    key={item.id}
-                    className={`btn${wait === item.id ? ' primary' : ''}`}
-                    type="button"
-                    aria-pressed={wait === item.id}
-                    onClick={() => setWait(item.id)}
-                  >
-                    {t(`listen.wait${item.id[0].toUpperCase()}${item.id.slice(1)}`)}
-                  </button>
-                ))}
-              </div>
-            </fieldset>
-            <fieldset className="listen-panel">
-              <legend>{t('listen.side')}</legend>
-              <div className="listen-choice-row">
-                {['front', 'back'].map((item) => (
-                  <button
-                    key={item}
-                    className={`btn${side === item ? ' primary' : ''}`}
-                    type="button"
-                    aria-pressed={side === item}
-                    onClick={() => setSide(item)}
-                  >
-                    {t(item === 'front' ? 'listen.sideFront' : 'listen.sideBack')}
-                  </button>
-                ))}
-              </div>
-            </fieldset>
+          <div className="listen-play-bar">
+            <button className="btn primary listen-play" type="button" disabled={!ready} onClick={play}>
+              <MenuIcon name="listen" />
+              {t('listen.play')}
+            </button>
           </div>
-          <div className="listen-panel listen-switches">
-            <label className="listen-toggle">
-              <input type="checkbox" checked={loop} onChange={(event) => setLoop(event.target.checked)} />
-              <span>{t('listen.loop')}</span>
-            </label>
-            {multi ? (
-              <label className="listen-toggle">
-                <input type="checkbox" checked={announce} onChange={(event) => setAnnounce(event.target.checked)} />
-                <span>{t('listen.announce')}</span>
-              </label>
-            ) : null}
-          </div>
+          <button
+            className="listen-options-toggle"
+            type="button"
+            aria-expanded={optionsOpen}
+            onClick={() => setOptionsOpen((open) => !open)}
+          >
+            <span>{optionsOpen ? t('listen.optionsHide') : t('listen.options')}</span>
+            <span className="muted">{listenPrefsSummary(prefs, t, multi)}</span>
+          </button>
+          {optionsOpen ? <ListenOptions prefs={prefs} onChange={changePrefs} showAnnounce={multi} /> : null}
           {loadingQueue ? <p>{t('listen.loading')}</p> : null}
           {!loadingQueue && queue && cards.length === 0 ? <p>{t('listen.emptyCards')}</p> : null}
           {Capacitor.getPlatform() === 'android' ? (
@@ -456,10 +432,6 @@ export default function ListenPage() {
           {Capacitor.getPlatform() === 'ios' ? (
             <p className="muted listen-lock-note">{t('listen.lockNoteIos')}</p>
           ) : null}
-          <button className="btn primary listen-play" type="button" disabled={!ready} onClick={play}>
-            <MenuIcon name="listen" />
-            {t('listen.play')}
-          </button>
           <p className="muted listen-schedule">{t('listen.schedule')}</p>
         </div>
       ) : null}

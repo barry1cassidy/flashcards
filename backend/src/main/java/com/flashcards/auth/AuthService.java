@@ -1,5 +1,6 @@
 package com.flashcards.auth;
 
+import java.util.Set;
 import java.util.UUID;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -11,6 +12,7 @@ import com.flashcards.common.ApiException;
 import com.flashcards.security.JwtService;
 import com.flashcards.security.UserPrincipal;
 import com.flashcards.user.DeckSort;
+import com.flashcards.user.ListenSideFirst;
 import com.flashcards.user.RestudyWait;
 import com.flashcards.user.StudyOrder;
 import com.flashcards.user.StudyScope;
@@ -21,6 +23,8 @@ import com.flashcards.user.UserRepository;
 
 @Service
 public class AuthService {
+
+    private static final Set<Integer> LISTEN_SLEEP_MINUTES = Set.of(0, 5, 10, 15, 30, 45, 60);
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -139,6 +143,29 @@ public class AuthService {
             }
             user.setDisplayName(name);
         }
+        if (request.listenPauseSeconds() != null) {
+            int seconds = request.listenPauseSeconds();
+            if (seconds < 0 || seconds > 60) {
+                throw new ApiException(HttpStatus.BAD_REQUEST, "Validation failed");
+            }
+            user.setListenPauseSeconds(seconds);
+        }
+        if (request.listenSideFirst() != null) {
+            user.setListenSideFirst(request.listenSideFirst());
+        }
+        if (request.listenRepeat() != null) {
+            user.setListenRepeat(request.listenRepeat());
+        }
+        if (request.listenAnnounce() != null) {
+            user.setListenAnnounce(request.listenAnnounce());
+        }
+        if (request.listenSleepMinutes() != null) {
+            int minutes = request.listenSleepMinutes();
+            if (!LISTEN_SLEEP_MINUTES.contains(minutes)) {
+                throw new ApiException(HttpStatus.BAD_REQUEST, "Validation failed");
+            }
+            user.setListenSleepMinutes(minutes);
+        }
         return toUserResponse(user);
     }
 
@@ -171,6 +198,16 @@ public class AuthService {
         StudyOrder studyOrder = user.getStudyOrder() == null ? StudyOrder.POSITION : user.getStudyOrder();
         StudyScope studyScope = user.getStudyScope() == null ? StudyScope.DUE_ONLY : user.getStudyScope();
         RestudyWait restudyWait = user.getRestudyWait() == null ? RestudyWait.ONE_DAY : user.getRestudyWait();
+        int listenPauseSeconds = user.getListenPauseSeconds();
+        if (listenPauseSeconds < 0 || listenPauseSeconds > 60) {
+            listenPauseSeconds = 4;
+        }
+        ListenSideFirst listenSideFirst = user.getListenSideFirst() == null
+                ? ListenSideFirst.FRONT
+                : user.getListenSideFirst();
+        int listenSleepMinutes = LISTEN_SLEEP_MINUTES.contains(user.getListenSleepMinutes())
+                ? user.getListenSleepMinutes()
+                : 0;
         return new UserResponse(
                 user.getId(),
                 user.getEmail(),
@@ -186,7 +223,12 @@ public class AuthService {
                 user.isAdmin(),
                 user.isTeacherMode(),
                 user.isEmailVerified(),
-                AccountService.hasPassword(user));
+                AccountService.hasPassword(user),
+                listenPauseSeconds,
+                listenSideFirst,
+                user.isListenRepeat(),
+                user.isListenAnnounce(),
+                listenSleepMinutes);
     }
 
     private static String displayNameFrom(GoogleTokenService.GoogleProfile profile, String email) {

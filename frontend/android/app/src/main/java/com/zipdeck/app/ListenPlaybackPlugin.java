@@ -41,6 +41,9 @@ public class ListenPlaybackPlugin extends Plugin {
             call.getString("artist", ""),
             Boolean.TRUE.equals(call.getBoolean("paused", false))
         );
+        if (call.getData() != null && call.getData().has("sleepAt")) {
+            ListenPlaybackService.armSleep(call.getData().optLong("sleepAt", 0));
+        }
         call.resolve();
     }
 
@@ -57,11 +60,15 @@ public class ListenPlaybackPlugin extends Plugin {
     }
 
     private void begin(PluginCall call) {
+        long sleepAt = call.getData() != null && call.getData().has("sleepAt")
+            ? call.getData().optLong("sleepAt", 0)
+            : 0;
         ListenPlaybackService.start(
             getContext(),
             this,
             call.getString("title", "Zipdeck"),
-            call.getString("artist", "")
+            call.getString("artist", ""),
+            sleepAt
         );
         call.resolve();
     }

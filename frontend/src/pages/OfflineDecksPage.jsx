@@ -52,7 +52,7 @@ export default function OfflineDecksPage() {
       <div className="page-title">
         <h1>{t('offline.title')}</h1>
         {packs && packs.length > 0 ? (
-          <button className="btn" type="button" onClick={() => navigate('/listen?source=offline')}>
+          <button className="btn" type="button" onClick={() => navigate('/offline/listen')}>
             {t('listen.menu')}
           </button>
         ) : null}
@@ -102,6 +102,9 @@ export default function OfflineDecksPage() {
               <div className="header-actions">
                 <Link className="btn primary" to={`/offline/${pack.id}`}>
                   {t('offline.study')}
+                </Link>
+                <Link className="btn" to={`/offline/listen?id=${encodeURIComponent(pack.id)}`}>
+                  {t('listen.menu')}
                 </Link>
                 <button
                   className="btn danger"

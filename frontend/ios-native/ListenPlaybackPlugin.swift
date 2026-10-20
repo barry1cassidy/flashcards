@@ -27,6 +27,8 @@ public class ListenPlaybackPlugin: CAPPlugin, CAPBridgedPlugin {
     private var nextTarget: Any?
     private var previousTarget: Any?
     private var interruptionObserver: NSObjectProtocol?
+    private var sleepTimer: DispatchSourceTimer?
+    private var sleeping = false
 
     @objc func start(_ call: CAPPluginCall) {
         DispatchQueue.main.async {
@@ -34,6 +36,11 @@ public class ListenPlaybackPlugin: CAPPlugin, CAPBridgedPlugin {
                 try self.activate()
                 self.installCommands()
                 self.observeInterruptions()
+                self.armSleep(call)
+                if self.sleeping {
+                    call.resolve()
+                    return
+                }
                 self.refresh(call, paused: false)
                 call.resolve()
             } catch {
@@ -45,6 +52,11 @@ public class ListenPlaybackPlugin: CAPPlugin, CAPBridgedPlugin {
     @objc func update(_ call: CAPPluginCall) {
         DispatchQueue.main.async {
             let paused = call.getBool("paused") ?? false
+            self.armSleep(call)
+            if self.sleeping {
+                call.resolve()
+                return
+            }
             if self.player?.isPlaying != true {
                 try? self.session.setActive(true)
                 self.player?.play()
@@ -187,7 +199,47 @@ public class ListenPlaybackPlugin: CAPPlugin, CAPBridgedPlugin {
         }
     }
 
+    private func armSleep(_ call: CAPPluginCall) {
+        guard call.getDouble("sleepAt") != nil else {
+            return
+        }
+        let epochMs = call.getDouble("sleepAt") ?? 0
+        sleepTimer?.cancel()
+        sleepTimer = nil
+        guard epochMs > 0 else {
+            sleeping = false
+            return
+        }
+        let delay = epochMs / 1000 - Date().timeIntervalSince1970
+        if delay <= 0.05 {
+            onSleep()
+            return
+        }
+        sleeping = false
+        let timer = DispatchSource.makeTimerSource(queue: .main)
+        timer.schedule(deadline: .now() + delay, leeway: .milliseconds(250))
+        timer.setEventHandler { [weak self] in
+            self?.onSleep()
+        }
+        sleepTimer = timer
+        timer.resume()
+    }
+
+    private func onSleep() {
+        if sleeping {
+            return
+        }
+        sleeping = true
+        sleepTimer?.cancel()
+        sleepTimer = nil
+        NotificationCenter.default.post(name: Notification.Name("zipdeck.listen.sleep"), object: nil)
+        notifyListeners("action", data: ["action": "sleep"])
+        teardown()
+    }
+
     private func teardown() {
+        sleepTimer?.cancel()
+        sleepTimer = nil
         let center = MPRemoteCommandCenter.shared()
         if let playTarget {
             center.playCommand.removeTarget(playTarget)

@@ -6,6 +6,7 @@ import { applyLocale, deviceLocale } from './i18n'
 import { applyTheme } from './theme'
 import { clearJoinInvite } from './authRedirect'
 import { offerSavePassword } from './offerSavePassword'
+import { listenPrefsToApi, mergeListenResponse, readStoredListenPrefs, writeStoredListenPrefs } from './listenPrefs'
 
 const AuthContext = createContext(null)
 
@@ -161,6 +162,34 @@ export function AuthProvider({ children }) {
       },
       async setRestudyWait(restudyWait) {
         return patchUser(setUser, user, { restudyWait })
+      },
+      async setListenPrefs(prefs) {
+        const body = listenPrefsToApi(prefs)
+        const previousStored = readStoredListenPrefs()
+        writeStoredListenPrefs(prefs)
+        const previous = user
+        setUser((current) => (current ? { ...current, ...body } : current))
+        try {
+          const updated = await api('/api/auth/me', {
+            method: 'PATCH',
+            body: JSON.stringify(body),
+          })
+          const merged = mergeListenResponse(updated, body)
+          setCachedUser(merged)
+          setUser(merged)
+          return merged
+        } catch (error) {
+          writeStoredListenPrefs(previousStored || prefs)
+          if (!previousStored) {
+            try {
+              localStorage.removeItem('zipdeck.listenPrefs')
+            } catch {
+              // localStorage can be unavailable in some WebViews.
+            }
+          }
+          setUser(previous)
+          throw error
+        }
       },
       async setTeacherMode(teacherMode) {
         return patchUser(setUser, user, { teacherMode })

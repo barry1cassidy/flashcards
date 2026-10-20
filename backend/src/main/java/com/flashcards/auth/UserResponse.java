@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.util.UUID;
 
 import com.flashcards.user.DeckSort;
+import com.flashcards.user.ListenSideFirst;
 import com.flashcards.user.RestudyWait;
 import com.flashcards.user.StudyOrder;
 import com.flashcards.user.StudyScope;
@@ -24,5 +25,10 @@ public record UserResponse(
         boolean admin,
         boolean teacherMode,
         boolean emailVerified,
-        boolean hasPassword) {
+        boolean hasPassword,
+        int listenPauseSeconds,
+        ListenSideFirst listenSideFirst,
+        boolean listenRepeat,
+        boolean listenAnnounce,
+        int listenSleepMinutes) {
 }

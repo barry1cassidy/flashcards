@@ -201,6 +201,7 @@ export default function HelpPage() {
         <p>{t('help.listenSchedule')}</p>
         <p>{t('help.listenLockAndroid')}</p>
         <p>{t('help.listenLockIos')}</p>
+        <p>{t('help.listenSleep')}</p>
         <p>
           <Link to="/listen">{t('listen.menu')}</Link>
         </p>
@@ -239,6 +240,7 @@ export default function HelpPage() {
           <li>{t('help.offlineStep2')}</li>
           <li>{t('help.offlineStep3')}</li>
         </ol>
+        <p>{t('help.offlineListen')}</p>
         <p>
           <Link to="/offline">{t('offline.menu')}</Link>
         </p>

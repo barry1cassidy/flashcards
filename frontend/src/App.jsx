@@ -36,6 +36,7 @@ import JoinClassPage from './pages/JoinClassPage'
 import SharePage from './pages/SharePage'
 import VerifyEmailPage from './pages/VerifyEmailPage'
 import OfflineDecksPage from './pages/OfflineDecksPage'
+import OfflineListenPage from './pages/OfflineListenPage'
 import OfflineStudyPage from './pages/OfflineStudyPage'
 import ListenPage from './pages/ListenPage'
 import SavingIndicator from './pages/SavingIndicator'
@@ -403,6 +404,7 @@ export default function App() {
         <Route path="/privacy" element={<PrivacyPage />} />
         <Route element={<OfflineGate />}>
           <Route path="/offline" element={<OfflineDecksPage />} />
+          <Route path="/offline/listen" element={<OfflineListenPage />} />
           <Route path="/offline/:deckId" element={<OfflineStudyPage />} />
         </Route>
         <Route path="/join/:code" element={<JoinClassPage />} />

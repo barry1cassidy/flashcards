@@ -19,7 +19,9 @@ import android.media.AudioTrack;
 import android.media.session.MediaSession;
 import android.media.session.PlaybackState;
 import android.os.Build;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.PowerManager;
 
 import androidx.core.content.ContextCompat;
@@ -51,17 +53,27 @@ public class ListenPlaybackService extends Service {
     private String artist = "";
     private boolean paused;
     private Bitmap art;
+    private Handler sleepHandler;
+    private boolean sleepFired;
 
     static boolean isRunning() {
         return instance != null;
     }
 
-    static void start(Context context, ListenPlaybackPlugin owner, String nextTitle, String nextArtist) {
+    static void start(Context context, ListenPlaybackPlugin owner, String nextTitle, String nextArtist, long sleepAt) {
         plugin = owner;
         Intent intent = new Intent(context, ListenPlaybackService.class);
         intent.putExtra("title", nextTitle);
         intent.putExtra("artist", nextArtist);
+        intent.putExtra("sleepAt", sleepAt);
         ContextCompat.startForegroundService(context, intent);
+    }
+
+    static void armSleep(long sleepAt) {
+        ListenPlaybackService service = instance;
+        if (service != null) {
+            service.scheduleSleep(sleepAt);
+        }
     }
 
     static void update(String nextTitle, String nextArtist, boolean nextPaused) {
@@ -116,11 +128,14 @@ public class ListenPlaybackService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        long sleepAt = 0;
         if (intent != null) {
             title = text(intent.getStringExtra("title"), title);
             artist = text(intent.getStringExtra("artist"), artist);
+            sleepAt = intent.getLongExtra("sleepAt", 0);
         }
         paused = false;
+        scheduleSleep(sleepAt);
         try {
             enterForeground();
         } catch (Exception error) {
@@ -439,7 +454,43 @@ public class ListenPlaybackService extends Service {
         }
     }
 
+    private void scheduleSleep(long sleepAt) {
+        cancelSleep();
+        sleepFired = false;
+        if (sleepAt <= 0) {
+            return;
+        }
+        if (sleepHandler == null) {
+            sleepHandler = new Handler(Looper.getMainLooper());
+        }
+        long delay = sleepAt - System.currentTimeMillis();
+        if (delay <= 0) {
+            sleepHandler.post(this::onSleep);
+            return;
+        }
+        sleepHandler.postDelayed(this::onSleep, delay);
+    }
+
+    private void cancelSleep() {
+        if (sleepHandler != null) {
+            sleepHandler.removeCallbacksAndMessages(null);
+        }
+    }
+
+    private void onSleep() {
+        if (sleepFired) {
+            return;
+        }
+        sleepFired = true;
+        cancelSleep();
+        ListenSpeechCut.cut(plugin);
+        sendAction("sleep");
+        stopPlayback();
+        stopSelf();
+    }
+
     private void stopPlayback() {
+        cancelSleep();
         stopBed();
         releaseWakeLock();
         abandonFocus();

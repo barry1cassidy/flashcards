@@ -1,11 +1,12 @@
 package com.flashcards.auth;
 
-import com.flashcards.user.UserLocale;
 import com.flashcards.user.DeckSort;
+import com.flashcards.user.ListenSideFirst;
 import com.flashcards.user.RestudyWait;
 import com.flashcards.user.StudyOrder;
 import com.flashcards.user.StudyScope;
 import com.flashcards.user.Theme;
+import com.flashcards.user.UserLocale;
 
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -18,5 +19,10 @@ public record UpdateMeRequest(
         StudyScope studyScope,
         RestudyWait restudyWait,
         Boolean teacherMode,
-        @Size(max = 100) String displayName) {
+        @Size(max = 100) String displayName,
+        Integer listenPauseSeconds,
+        ListenSideFirst listenSideFirst,
+        Boolean listenRepeat,
+        Boolean listenAnnounce,
+        Integer listenSleepMinutes) {
 }
