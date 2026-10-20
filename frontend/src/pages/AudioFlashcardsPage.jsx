@@ -79,7 +79,7 @@ export default function AudioFlashcardsPage() {
       </section>
 
       <section aria-labelledby="listen-controls">
-        <h2 id="listen-controls">Buttons you can use without looking</h2>
+        <h2 id="listen-controls">Hear the question, then the answer</h2>
         <div className="listen-board">
           <div className="listen-promo-card">
             <p className="eyebrow">Question</p>

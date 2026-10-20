@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { api } from '../api'
+import { publicSiteOrigin } from '../publicOrigin'
 import { translateError } from '../i18n/errors'
 import ConfirmModal from './ConfirmModal'
 import Modal from './Modal'
@@ -10,7 +11,7 @@ function sharePath(kind, targetId) {
 }
 
 function shareUrl(code) {
-  return `${window.location.origin}/share/${code}`
+  return `${publicSiteOrigin()}/share/${code}`
 }
 
 export default function ShareModal({ kind, targetId, name, onClose }) {

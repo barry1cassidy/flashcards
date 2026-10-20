@@ -451,7 +451,11 @@
     "study": "Study",
     "studyDeck": "Study Deck",
     "detailsSection": "Deck Details",
-    "cardsSection": "Cards"
+    "cardsSection": "Cards",
+    "addShare": "Add a shared deck",
+    "addShareHint": "Paste a share link or enter the code.",
+    "addSharePlaceholder": "Share code",
+    "addShareButton": "Add"
   },
   "agent": {
     "menu": "Create With AI",
@@ -1093,7 +1097,7 @@
     "settingsTitle": "Settings",
     "settingsIntro": "Language and appearance follow you on every screen. You can also sort My Decks by name or last studied. Study options set card order (deck order, reverse, or random) and whether a rated card can return the same day or waits for the SM-2 date. Teacher Mode is on the Classes page if you need to run a class.",
     "shareTitle": "Share",
-    "shareIntro": "Share a deck or a set with a 6-character link, the same style as a class join code. The other person gets their own copy — they never see your original, and their study progress is theirs. Revoke the link anytime so it stops working. Sharing again creates a new link.",
+    "shareIntro": "Share a deck or a set with an 8-character link, the same style as a class join code. The other person gets their own copy — they never see your original, and their study progress is theirs. Revoke the link anytime so it stops working. Sharing again creates a new link.",
     "classesTitle": "Classes",
     "editTitle": "Edit cards with AI",
     "editBenefit": "Create With AI makes a new deck. Edit cards with AI changes the cards you already have. One instruction applies across the deck, and you review a preview before anything is saved.",

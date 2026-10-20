@@ -110,7 +110,8 @@ class ShareServiceTest {
         ShareLinkResponse response = shareService.createDeckShare(ownerId, deckId);
 
         assertEquals(ShareKind.DECK, response.kind());
-        assertTrue(JoinCodes.isWellFormed(response.code()));
+        assertEquals(JoinCodes.SHARE_LENGTH, response.code().length());
+        assertTrue(JoinCodes.isShareCode(response.code()));
         ArgumentCaptor<ContentShare> saved = ArgumentCaptor.forClass(ContentShare.class);
         verify(shareRepository).save(saved.capture());
         assertEquals(deck, saved.getValue().getDeck());

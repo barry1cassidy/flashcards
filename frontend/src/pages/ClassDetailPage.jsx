@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { api } from '../api'
+import { publicSiteOrigin } from '../publicOrigin'
 import { formatDate } from '../i18n/format'
 import { translateError } from '../i18n/errors'
 import ConfirmModal from './ConfirmModal'
@@ -37,7 +38,7 @@ export default function ClassDetailPage() {
   const teacher = detail?.role === 'TEACHER'
   const assignedIds = new Set((detail?.decks || []).map((deck) => String(deck.deckId)))
   const availableDecks = allDecks.filter((deck) => !assignedIds.has(String(deck.id)))
-  const joinUrl = detail?.joinCode ? `${window.location.origin}/join/${detail.joinCode}` : ''
+  const joinUrl = detail?.joinCode ? `${publicSiteOrigin()}/join/${detail.joinCode}` : ''
 
   async function saveName(event) {
     event.preventDefault()

@@ -12,6 +12,7 @@ import ListingActions from './ListingActions'
 import { useAuth } from '../AuthContext'
 import { isAdmin } from '../admin'
 import { sortDecks } from '../deckSort'
+import { shareCodeFromInput } from '../shareCode'
 
 const GROUP_FILTER_KEY = 'flashcards.deckGroupFilter'
 
@@ -50,6 +51,10 @@ export default function DecksPage() {
   const [busy, setBusy] = useState(false)
   const [shareTarget, setShareTarget] = useState(null)
   const [deleteTarget, setDeleteTarget] = useState(null)
+  const [shareInput, setShareInput] = useState('')
+  const [shareError, setShareError] = useState('')
+  const [shareBusy, setShareBusy] = useState(false)
+  const shareCode = shareCodeFromInput(shareInput)
 
   async function load() {
     const [deckData, groupData] = await Promise.all([api('/api/decks'), api('/api/groups')])
@@ -103,6 +108,30 @@ export default function DecksPage() {
       await load()
     } catch (err) {
       setError(err.message)
+    }
+  }
+
+  async function addSharedDeck(event) {
+    event.preventDefault()
+    if (!shareCode || shareBusy) {
+      return
+    }
+    setShareError('')
+    setShareBusy(true)
+    try {
+      const result = await api(`/api/shares/${encodeURIComponent(shareCode)}/copy`, { method: 'POST' })
+      setShareInput('')
+      if (result?.kind === 'SET' && result.groupId) {
+        navigate(`/sets/${result.groupId}`)
+        return
+      }
+      if (result?.deckId) {
+        navigate(`/decks/${result.deckId}`)
+      }
+    } catch (err) {
+      setShareError(err.message)
+    } finally {
+      setShareBusy(false)
     }
   }
 
@@ -160,6 +189,33 @@ export default function DecksPage() {
           </button>
         </div>
       </div>
+      <form className="deck-share-add" onSubmit={addSharedDeck}>
+        <label>
+          <span>{t('decks.addShare')}</span>
+          <span className="muted">{t('decks.addShareHint')}</span>
+        </label>
+        <div className="create-row">
+          <input
+            value={shareInput}
+            onChange={(event) => {
+              setShareInput(event.target.value)
+              setShareError('')
+            }}
+            maxLength={200}
+            autoCapitalize="characters"
+            autoComplete="off"
+            autoCorrect="off"
+            spellCheck={false}
+            placeholder={t('decks.addSharePlaceholder')}
+            aria-label={t('decks.addSharePlaceholder')}
+            className="deck-share-input"
+          />
+          <button className="btn" type="submit" disabled={shareBusy || !shareCode}>
+            {shareBusy ? t('share.copying') : t('decks.addShareButton')}
+          </button>
+        </div>
+        {shareError ? <div className="error">{translateError(t, shareError)}</div> : null}
+      </form>
       {error && !creating ? <div className="error">{translateError(t, error)}</div> : null}
       {!error && decks.length === 0 ? (
         <div className="empty">{t('decks.empty')}</div>

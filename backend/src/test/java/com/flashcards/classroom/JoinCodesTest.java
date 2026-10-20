@@ -29,5 +29,18 @@ class JoinCodesTest {
         assertTrue(JoinCodes.isWellFormed("K7M2QX"));
         assertFalse(JoinCodes.isWellFormed("ABC"));
         assertFalse(JoinCodes.isWellFormed("O12345"));
+        assertTrue(JoinCodes.isShareCode("K7M2QX"));
+        assertFalse(JoinCodes.isShareCode("K7M2Q"));
+    }
+
+    @Test
+    void shareCodesAreEightCharacters() {
+        SecureRandom random = new SecureRandom();
+        for (int i = 0; i < 20; i++) {
+            String code = JoinCodes.randomShare(random);
+            assertEquals(JoinCodes.SHARE_LENGTH, code.length());
+            assertTrue(JoinCodes.isShareCode(code), code);
+            assertFalse(JoinCodes.isWellFormed(code));
+        }
     }
 }

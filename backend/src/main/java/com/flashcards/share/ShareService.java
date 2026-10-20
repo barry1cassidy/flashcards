@@ -254,7 +254,7 @@ public class ShareService {
 
     private ContentShare requireShare(String rawCode) {
         String code = JoinCodes.normalize(rawCode);
-        if (!JoinCodes.isWellFormed(code)) {
+        if (!JoinCodes.isShareCode(code)) {
             throw OwnedAccess.hidden("Share not found");
         }
         ContentShare share = shareRepository
@@ -287,7 +287,7 @@ public class ShareService {
 
     private String newShareCode() {
         for (int attempt = 0; attempt < 20; attempt++) {
-            String code = JoinCodes.random(random);
+            String code = JoinCodes.randomShare(random);
             if (!shareRepository.existsByCode(code)) {
                 return code;
             }

@@ -160,7 +160,7 @@ export function createListenSession({ cards, options, onChange }) {
     }
     running = true
     bed.start()
-    startListenPlayback(playbackLabel())
+    startListenPlayback(playbackLabel()).then(() => bed.kick())
     try {
       let first = immediate
       while (!stopped) {

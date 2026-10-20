@@ -43,6 +43,7 @@ import { getToken } from './api'
 import { clearLibraryReturn, pathAfterAuth, peekJoinInvite, shouldResumeJoinInvite } from './authRedirect'
 import { webMarketing } from './webOnly'
 import { BackNavigation } from './backNavigation'
+import { IncomingLinks } from './incomingLinks'
 
 const RememberPages = webMarketing ? lazy(() => import('./pages/remember/RememberPages.jsx')) : null
 const QuizletAlternativePage = webMarketing ? lazy(() => import('./pages/QuizletAlternativePage.jsx')) : null
@@ -369,6 +370,7 @@ export default function App() {
       <AiCreditsProvider>
         <ScrollToTop />
         <BackNavigation />
+        <IncomingLinks />
         <DocumentLang />
         {webMarketing ? <AnalyticsPageViews /> : null}
         <SavingIndicator />

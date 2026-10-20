@@ -9,6 +9,7 @@ import { translateError } from '../i18n/errors'
 import { listOfflinePacks } from '../offlinePacks'
 import { flattenListenCards, loadListenQueue } from '../listenQueue'
 import { createListenSession } from '../listenSession'
+import { startListenPlayback, stopListenPlayback } from '../listenPlayback'
 import ListenPlayer from './ListenPlayer'
 import { UseScene } from './ListenScenes'
 import MenuIcon from './MenuIcon'
@@ -183,6 +184,19 @@ export default function ListenPage() {
       }
       return next
     })
+  }
+
+  function armPlayback() {
+    if (!ready || Capacitor.getPlatform() !== 'ios') {
+      return
+    }
+    startListenPlayback({ title: 'Zipdeck', artist: 'Zipdeck' })
+  }
+
+  function cancelArm() {
+    if (Capacitor.getPlatform() === 'ios' && !sessionRef.current) {
+      stopListenPlayback()
+    }
   }
 
   function play() {
@@ -456,7 +470,14 @@ export default function ListenPage() {
           {Capacitor.getPlatform() === 'ios' ? (
             <p className="muted listen-lock-note">{t('listen.lockNoteIos')}</p>
           ) : null}
-          <button className="btn primary listen-play" type="button" disabled={!ready} onClick={play}>
+          <button
+            className="btn primary listen-play"
+            type="button"
+            disabled={!ready}
+            onPointerDown={armPlayback}
+            onPointerCancel={cancelArm}
+            onClick={play}
+          >
             <MenuIcon name="listen" />
             {t('listen.play')}
           </button>

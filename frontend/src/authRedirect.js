@@ -128,6 +128,15 @@ function isJoinPath(path) {
   return isSafePath(path) && JOIN_PATH.test(path)
 }
 
+export function invitePathFromUrl(url) {
+  try {
+    const path = pathnameOnly(new URL(url).pathname).replace(/\/+$/, '') || '/'
+    return isJoinPath(path) ? path : null
+  } catch {
+    return null
+  }
+}
+
 function libraryReturnPath(location) {
   return libraryFromState(location) || peekLibraryReturn()
 }
