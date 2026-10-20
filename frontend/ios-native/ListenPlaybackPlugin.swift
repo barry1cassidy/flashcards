@@ -98,13 +98,42 @@ public class ListenPlaybackPlugin: CAPPlugin, CAPBridgedPlugin {
         if let cachedArt {
             return cachedArt
         }
-        guard let data = Data(base64Encoded: ListenMark.png, options: .ignoreUnknownCharacters),
-              let image = UIImage(data: data) else {
+        guard let image = iconImage() else {
             return nil
         }
-        let art = MPMediaItemArtwork(boundsSize: image.size) { _ in image }
+        let side: CGFloat = 600
+        let art = MPMediaItemArtwork(boundsSize: CGSize(width: side, height: side)) { size in
+            let canvas = CGSize(width: max(size.width, 1), height: max(size.height, 1))
+            let format = UIGraphicsImageRendererFormat()
+            format.opaque = true
+            format.scale = 1
+            let renderer = UIGraphicsImageRenderer(size: canvas, format: format)
+            return renderer.image { _ in
+                UIColor(red: 0.45, green: 0.42, blue: 0.95, alpha: 1).setFill()
+                UIBezierPath(rect: CGRect(origin: .zero, size: canvas)).fill()
+                image.draw(in: CGRect(origin: .zero, size: canvas))
+            }
+        }
         cachedArt = art
         return art
+    }
+
+    private func iconImage() -> UIImage? {
+        if let data = Data(base64Encoded: ListenMark.png, options: .ignoreUnknownCharacters),
+           let image = UIImage(data: data),
+           image.size.width > 0 {
+            return image
+        }
+        if let icons = Bundle.main.infoDictionary?["CFBundleIcons"] as? [String: Any],
+           let primary = icons["CFBundlePrimaryIcon"] as? [String: Any],
+           let files = primary["CFBundleIconFiles"] as? [String] {
+            for name in files.reversed() {
+                if let image = UIImage(named: name) {
+                    return image
+                }
+            }
+        }
+        return nil
     }
 
     private func installCommands() {

@@ -152,50 +152,14 @@ export function waitCue(ms, signal) {
   })
 }
 
-let toneUrl = ''
-
-function quietToneUrl() {
-  if (toneUrl) {
-    return toneUrl
-  }
-  const sampleRate = 8000
-  const frames = sampleRate
-  const frequency = 200
-  const bytes = new Uint8Array(44 + frames * 2)
-  const view = new DataView(bytes.buffer)
-  const writeText = (offset, text) => {
-    for (let index = 0; index < text.length; index += 1) {
-      bytes[offset + index] = text.charCodeAt(index)
-    }
-  }
-  writeText(0, 'RIFF')
-  view.setUint32(4, 36 + frames * 2, true)
-  writeText(8, 'WAVE')
-  writeText(12, 'fmt ')
-  view.setUint32(16, 16, true)
-  view.setUint16(20, 1, true)
-  view.setUint16(22, 1, true)
-  view.setUint32(24, sampleRate, true)
-  view.setUint32(28, sampleRate * 2, true)
-  view.setUint16(32, 2, true)
-  view.setUint16(34, 16, true)
-  writeText(36, 'data')
-  view.setUint32(40, frames * 2, true)
-  for (let frame = 0; frame < frames; frame += 1) {
-    const value = Math.sin((2 * Math.PI * frequency * frame) / sampleRate) * 160
-    view.setInt16(44 + frame * 2, value, true)
-  }
-  toneUrl = URL.createObjectURL(new Blob([bytes], { type: 'audio/wav' }))
-  return toneUrl
-}
-
 export function listenBed() {
-  const ios = Capacitor.getPlatform() === 'ios'
   const AudioCtx = window.AudioContext || window.webkitAudioContext
+  if (!AudioCtx) {
+    return { start() {}, kick() {}, stop() {} }
+  }
   let context = null
   let oscillator = null
   let gain = null
-  let audio = null
   let started = false
   const level = 10 ** (-68 / 20)
   const fadeIn = () => {
@@ -208,13 +172,10 @@ export function listenBed() {
     gain.gain.linearRampToValueAtTime(level, now + 0.12)
   }
   const wake = () => {
-    if (!started) {
+    if (!started || !context) {
       return
     }
-    if (audio?.paused) {
-      audio.play().catch(() => {})
-    }
-    if (context && (context.state === 'suspended' || context.state === 'interrupted')) {
+    if (context.state === 'suspended' || context.state === 'interrupted') {
       context.resume().then(fadeIn).catch(() => {})
     }
   }
@@ -224,31 +185,18 @@ export function listenBed() {
         wake()
         return
       }
-      if (ios) {
-        audio = new Audio(quietToneUrl())
-        audio.loop = true
-        audio.preload = 'auto'
-        audio.playsInline = true
-        audio.setAttribute('playsinline', '')
-        audio.volume = 1
-        audio.setAttribute('aria-hidden', 'true')
-        audio.addEventListener('pause', wake)
-        document.body.appendChild(audio)
-      }
-      if (AudioCtx) {
-        context = new AudioCtx()
-        oscillator = context.createOscillator()
-        gain = context.createGain()
-        oscillator.type = 'sine'
-        oscillator.frequency.value = 200
-        gain.gain.setValueAtTime(0, context.currentTime)
-        oscillator.connect(gain)
-        gain.connect(context.destination)
-        oscillator.start()
-        fadeIn()
-        context.onstatechange = wake
-      }
+      context = new AudioCtx()
+      oscillator = context.createOscillator()
+      gain = context.createGain()
+      oscillator.type = 'sine'
+      oscillator.frequency.value = 200
+      gain.gain.setValueAtTime(0, context.currentTime)
+      oscillator.connect(gain)
+      gain.connect(context.destination)
+      oscillator.start()
+      fadeIn()
       started = true
+      context.onstatechange = wake
       document.addEventListener('visibilitychange', wake)
       wake()
     },
@@ -261,13 +209,6 @@ export function listenBed() {
       }
       started = false
       document.removeEventListener('visibilitychange', wake)
-      if (audio) {
-        audio.removeEventListener('pause', wake)
-        audio.pause()
-        audio.remove()
-        audio.src = ''
-        audio = null
-      }
       try {
         oscillator?.stop()
       } catch {
