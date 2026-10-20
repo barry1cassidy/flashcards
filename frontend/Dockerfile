@@ -1,6 +1,7 @@
 FROM node:22-alpine AS build
 WORKDIR /app
 COPY package.json package-lock.json ./
+COPY scripts/patch-tts-session.mjs scripts/patch-tts-session.mjs
 RUN npm ci
 COPY . .
 ARG VITE_GOOGLE_CLIENT_ID=
