@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { SUPPORT_EMAIL, SUPPORT_MAILTO } from '../support'
+import { webMarketing } from '../webOnly'
 import MenuIcon from './MenuIcon'
 
 const CSV_EXAMPLE = `front,back,hint
@@ -18,6 +19,7 @@ const SECTIONS = [
   { id: 'help-ai', titleKey: 'help.aiTitle' },
   { id: 'help-edit', titleKey: 'help.editTitle' },
   { id: 'help-listen', titleKey: 'help.listenTitle' },
+  { id: 'help-studio', titleKey: 'help.studioTitle' },
   { id: 'help-mix', titleKey: 'help.mixTitle' },
   { id: 'help-offline', titleKey: 'help.offlineTitle' },
   { id: 'help-pro', titleKey: 'help.proTitle' },
@@ -207,6 +209,25 @@ export default function HelpPage() {
         </p>
       </HelpSection>
 
+      <HelpSection id="help-studio" title={t('help.studioTitle')}>
+        <p>{t('help.studioBenefit')}</p>
+        <ol className="help-steps">
+          <li>{t('help.studioStep1')}</li>
+          <li>{t('help.studioStep2')}</li>
+          <li>{t('help.studioStep3')}</li>
+        </ol>
+        <p>{t('help.studioGrade')}</p>
+        <p>{t('help.studioListen')}</p>
+        {webMarketing ? (
+          <p>
+            <Link to="/language-conversations">{t('marketing.studioCta')}</Link>
+          </p>
+        ) : null}
+        <p>
+          <Link to="/language-studio">{t('studio.menu')}</Link>
+        </p>
+      </HelpSection>
+
       <HelpSection id="help-mix" title={t('help.mixTitle')}>
         <p>{t('help.mixBenefit')}</p>
         <HelpMixDemo t={t} />
@@ -252,6 +273,7 @@ export default function HelpPage() {
           <li>{t('help.proItemAi')}</li>
           <li>{t('help.proItemEdit')}</li>
           <li>{t('help.proItemListen')}</li>
+          <li>{t('help.proItemStudio')}</li>
           <li>{t('help.proItemMix')}</li>
           <li>{t('help.proItemOffline')}</li>
           <li>{t('help.proItemImages')}</li>

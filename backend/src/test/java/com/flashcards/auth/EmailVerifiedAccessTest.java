@@ -34,5 +34,7 @@ class EmailVerifiedAccessTest {
         assertFalse(EmailVerifiedAccess.allowedWhileUnverified("POST", "/api/auth/account/delete"));
         assertFalse(EmailVerifiedAccess.allowedWhileUnverified("GET", "/api/mixes"));
         assertFalse(EmailVerifiedAccess.allowedWhileUnverified("POST", "/api/shares/K7M2QX/copy"));
+        assertFalse(EmailVerifiedAccess.allowedWhileUnverified("GET", "/api/language-studio/samples"));
+        assertFalse(EmailVerifiedAccess.allowedWhileUnverified("GET", "/api/language-studio/samples/pharmacy"));
     }
 }

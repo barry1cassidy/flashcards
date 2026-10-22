@@ -130,6 +130,117 @@ const ICONS = {
       <rect x="16.5" y="13" width="4.5" height="7" rx="1.6" />
     </>
   ),
+  studio: (
+    <>
+      <path d="M4 6.5h9a2 2 0 0 1 2 2V14H8l-4 3V8.5a2 2 0 0 1 2-2z" />
+      <path d="M15 9.5h5a2 2 0 0 1 2 2V19l-3.5-2.5H15V9.5z" />
+    </>
+  ),
+  practice: (
+    <>
+      <path d="M4 6.5h13a2 2 0 0 1 2 2V16H9l-5 3.5V8.5a2 2 0 0 1 2-2z" />
+    </>
+  ),
+  reveal: (
+    <>
+      <path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7-10-7-10-7z" />
+      <circle cx="12" cy="12" r="3" />
+    </>
+  ),
+  next: (
+    <>
+      <path d="M5 12h14" />
+      <path d="M13 6l6 6-6 6" />
+    </>
+  ),
+  check: (
+    <>
+      <path d="M20 6L9 17l-5-5" />
+    </>
+  ),
+  cafe: (
+    <>
+      <path d="M6 9h10v5a4 4 0 0 1-4 4h-2a4 4 0 0 1-4-4V9z" />
+      <path d="M16 10.5h1.8a2.4 2.4 0 1 1 0 4.8H16" />
+      <path d="M8 20h8" />
+      <path d="M9 4.2c.5.9.5 1.8 0 2.7" />
+      <path d="M12 3.8c.5.9.5 2 0 2.9" />
+    </>
+  ),
+  airport: (
+    <>
+      <path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9L2 14v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5L21 16z" />
+    </>
+  ),
+  doctor: (
+    <>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M12 8v8" />
+      <path d="M8 12h8" />
+    </>
+  ),
+  hotel: (
+    <>
+      <path d="M3 18V10a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v8" />
+      <path d="M14 13h5a2 2 0 0 1 2 2v3" />
+      <path d="M3 18h18" />
+      <path d="M8 8V6" />
+    </>
+  ),
+  pharmacy: (
+    <>
+      <path d="M8.5 15.5l7-7a3.5 3.5 0 1 1 5 5l-7 7a3.5 3.5 0 1 1-5-5z" />
+      <path d="M11.2 12.8l4-4" />
+    </>
+  ),
+  interview: (
+    <>
+      <rect x="3" y="8" width="18" height="12" rx="2" />
+      <path d="M8 8V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+      <path d="M3 13h18" />
+    </>
+  ),
+  restaurant: (
+    <>
+      <path d="M8 3v11" />
+      <path d="M6 3v4a2 2 0 0 0 4 0V3" />
+      <path d="M8 14v7" />
+      <path d="M16 3v18" />
+      <path d="M14 8h4" />
+    </>
+  ),
+  taxi: (
+    <>
+      <path d="M4 16v2a1 1 0 0 0 1 1h1" />
+      <path d="M18 19h1a1 1 0 0 0 1-1v-2" />
+      <path d="M5 16l1.5-6h11L19 16H5z" />
+      <circle cx="7.5" cy="19" r="1.5" />
+      <circle cx="16.5" cy="19" r="1.5" />
+      <path d="M9 10V7h6v3" />
+    </>
+  ),
+  supermarket: (
+    <>
+      <path d="M5 7h15l-1.5 8H8L5 7z" />
+      <path d="M8 15v2" />
+      <path d="M16 15v2" />
+      <circle cx="9" cy="20" r="1.2" />
+      <circle cx="16" cy="20" r="1.2" />
+      <path d="M5 7L4 4H2" />
+    </>
+  ),
+  directions: (
+    <>
+      <path d="M12 21V8" />
+      <path d="M6 8h10l3-3-3-3H6l-2 3 2 3z" />
+    </>
+  ),
+  custom: (
+    <>
+      <path d="M12 20h9" />
+      <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z" />
+    </>
+  ),
   offline: (
     <>
       <path d="M12 4v10" />

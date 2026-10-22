@@ -8,6 +8,7 @@ Allow: /memorize
 Allow: /memorize/
 Allow: /quizlet-alternative
 Allow: /audio-flashcards
+Allow: /language-conversations
 Allow: /login
 Allow: /register
 
@@ -19,6 +20,7 @@ Disallow: /groups/
 Disallow: /mixes/
 Disallow: /classes/
 Disallow: /create-with-ai
+Disallow: /language-studio
 Disallow: /verify
 Disallow: /pro
 Disallow: /join/

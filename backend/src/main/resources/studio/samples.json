@@ -1,0 +1,3714 @@
+{
+  "scenes": [
+    {
+      "slug": "pharmacy",
+      "scenario": "pharmacy",
+      "level": "A2",
+      "position": 1,
+      "meta": {
+        "en-US": {
+          "title": "At the pharmacy",
+          "yourRole": "customer",
+          "theirRole": "pharmacist"
+        },
+        "zh-CN": {
+          "title": "在药店",
+          "yourRole": "顾客",
+          "theirRole": "药剂师"
+        },
+        "zh-HK": {
+          "title": "喺藥房",
+          "yourRole": "顧客",
+          "theirRole": "藥劑師"
+        },
+        "hi-IN": {
+          "title": "फार्मेसी में",
+          "yourRole": "ग्राहक",
+          "theirRole": "फार्मासिस्ट"
+        },
+        "es-ES": {
+          "title": "En la farmacia",
+          "yourRole": "cliente",
+          "theirRole": "farmacéutico"
+        },
+        "ar-SA": {
+          "title": "في الصيدلية",
+          "yourRole": "زبون",
+          "theirRole": "صيدلي"
+        },
+        "fr-FR": {
+          "title": "À la pharmacie",
+          "yourRole": "client",
+          "theirRole": "pharmacien"
+        },
+        "bn-IN": {
+          "title": "ফার্মেসিতে",
+          "yourRole": "গ্রাহক",
+          "theirRole": "ফার্মাসিস্ট"
+        },
+        "pt-BR": {
+          "title": "Na farmácia",
+          "yourRole": "cliente",
+          "theirRole": "farmacêutico"
+        },
+        "ru-RU": {
+          "title": "В аптеке",
+          "yourRole": "покупатель",
+          "theirRole": "фармацевт"
+        },
+        "id-ID": {
+          "title": "Di apotek",
+          "yourRole": "pelanggan",
+          "theirRole": "apoteker"
+        },
+        "de-DE": {
+          "title": "In der Apotheke",
+          "yourRole": "Kunde",
+          "theirRole": "Apotheker"
+        },
+        "ja-JP": {
+          "title": "薬局で",
+          "yourRole": "客",
+          "theirRole": "薬剤師"
+        },
+        "tr-TR": {
+          "title": "Eczanede",
+          "yourRole": "müşteri",
+          "theirRole": "eczacı"
+        },
+        "vi-VN": {
+          "title": "Ở nhà thuốc",
+          "yourRole": "khách",
+          "theirRole": "dược sĩ"
+        },
+        "ko-KR": {
+          "title": "약국에서",
+          "yourRole": "손님",
+          "theirRole": "약사"
+        },
+        "it-IT": {
+          "title": "In farmacia",
+          "yourRole": "cliente",
+          "theirRole": "farmacista"
+        },
+        "th-TH": {
+          "title": "ที่ร้านยา",
+          "yourRole": "ลูกค้า",
+          "theirRole": "เภสัชกร"
+        },
+        "pl-PL": {
+          "title": "W aptece",
+          "yourRole": "klient",
+          "theirRole": "farmaceuta"
+        },
+        "nl-NL": {
+          "title": "In de apotheek",
+          "yourRole": "klant",
+          "theirRole": "apotheker"
+        },
+        "ga-IE": {
+          "title": "Ag an gcógaslann",
+          "yourRole": "custaiméir",
+          "theirRole": "cógaiseoir"
+        }
+      },
+      "speakers": {
+        "them": {
+          "en-US": "Pharmacist",
+          "zh-CN": "药剂师",
+          "zh-HK": "藥劑師",
+          "hi-IN": "फार्मासिस्ट",
+          "es-ES": "Farmacéutico",
+          "ar-SA": "الصيدلي",
+          "fr-FR": "Pharmacien",
+          "bn-IN": "ফার্মাসিস্ট",
+          "pt-BR": "Farmacêutico",
+          "ru-RU": "Фармацевт",
+          "id-ID": "Apoteker",
+          "de-DE": "Apotheker",
+          "ja-JP": "薬剤師",
+          "tr-TR": "Eczacı",
+          "vi-VN": "Dược sĩ",
+          "ko-KR": "약사",
+          "it-IT": "Farmacista",
+          "th-TH": "เภสัชกร",
+          "pl-PL": "Farmaceuta",
+          "nl-NL": "Apotheker",
+          "ga-IE": "Cógaiseoir"
+        },
+        "you": {
+          "en-US": "You",
+          "zh-CN": "你",
+          "zh-HK": "你",
+          "hi-IN": "आप",
+          "es-ES": "Tú",
+          "ar-SA": "أنت",
+          "fr-FR": "Vous",
+          "bn-IN": "আপনি",
+          "pt-BR": "Você",
+          "ru-RU": "Вы",
+          "id-ID": "Anda",
+          "de-DE": "Du",
+          "ja-JP": "あなた",
+          "tr-TR": "Sen",
+          "vi-VN": "Bạn",
+          "ko-KR": "나",
+          "it-IT": "Tu",
+          "th-TH": "คุณ",
+          "pl-PL": "Ty",
+          "nl-NL": "Jij",
+          "ga-IE": "Tusa"
+        }
+      },
+      "turns": [
+        {
+          "role": "them",
+          "lines": {
+            "en-US": "Hello, how can I help you today?",
+            "zh-CN": "你好，今天有什么可以帮您的？",
+            "zh-HK": "你好，今日有咩可以幫到你？",
+            "hi-IN": "नमस्ते, आज मैं आपकी क्या मदद करूँ?",
+            "es-ES": "Hola, ¿en qué puedo ayudarle hoy?",
+            "ar-SA": "مرحباً، كيف يمكنني مساعدتك اليوم؟",
+            "fr-FR": "Bonjour, comment puis-je vous aider aujourd'hui ?",
+            "bn-IN": "নমস্কার, আজ আমি আপনাকে কীভাবে সাহায্য করতে পারি?",
+            "pt-BR": "Olá, como posso ajudar hoje?",
+            "ru-RU": "Здравствуйте, чем могу помочь сегодня?",
+            "id-ID": "Halo, ada yang bisa saya bantu hari ini?",
+            "de-DE": "Guten Tag, womit kann ich Ihnen helfen?",
+            "ja-JP": "こんにちは。今日はどうなさいましたか。",
+            "tr-TR": "Merhaba, bugün size nasıl yardımcı olabilirim?",
+            "vi-VN": "Xin chào, hôm nay tôi có thể giúp gì?",
+            "ko-KR": "안녕하세요, 오늘 무엇을 도와드릴까요?",
+            "it-IT": "Buongiorno, come posso aiutarla oggi?",
+            "th-TH": "สวัสดีครับ วันนี้ให้ช่วยอะไรดีครับ",
+            "pl-PL": "Dzień dobry, w czym mogę pomóc?",
+            "nl-NL": "Hallo, waarmee kan ik u helpen?",
+            "ga-IE": "Dia dhuit, conas is féidir liom cabhrú leat inniu?"
+          }
+        },
+        {
+          "role": "you",
+          "lines": {
+            "en-US": "I need something for a headache.",
+            "zh-CN": "我需要一点治头痛的药。",
+            "zh-HK": "我想要啲嘢醫頭痛。",
+            "hi-IN": "मुझे सिर दर्द की दवा चाहिए।",
+            "es-ES": "Necesito algo para un dolor de cabeza.",
+            "ar-SA": "أريد شيئاً لصداع الرأس.",
+            "fr-FR": "J'ai besoin de quelque chose pour un mal de tête.",
+            "bn-IN": "আমার মাথাব্যথার জন্য কিছু দরকার।",
+            "pt-BR": "Preciso de algo para dor de cabeça.",
+            "ru-RU": "Мне нужно что-нибудь от головной боли.",
+            "id-ID": "Saya butuh obat untuk sakit kepala.",
+            "de-DE": "Ich brauche etwas gegen Kopfschmerzen.",
+            "ja-JP": "頭痛の薬がほしいです。",
+            "tr-TR": "Baş ağrısı için bir şey lazım.",
+            "vi-VN": "Tôi cần thuốc đau đầu.",
+            "ko-KR": "두통약이 필요해요.",
+            "it-IT": "Mi serve qualcosa per il mal di testa.",
+            "th-TH": "ขอยาแก้ปวดหัวหน่อยครับ",
+            "pl-PL": "Potrzebuję coś na ból głowy.",
+            "nl-NL": "Ik heb iets nodig tegen hoofdpijn.",
+            "ga-IE": "Teastaíonn rud éigin uaim le haghaidh tinneas cinn."
+          }
+        },
+        {
+          "role": "them",
+          "lines": {
+            "en-US": "Have you taken anything else today?",
+            "zh-CN": "您今天还吃过别的东西吗？",
+            "zh-HK": "你今日有冇食過其他藥？",
+            "hi-IN": "क्या आपने आज और कुछ लिया है?",
+            "es-ES": "¿Ha tomado algo más hoy?",
+            "ar-SA": "هل تناولت شيئاً آخر اليوم؟",
+            "fr-FR": "Avez-vous pris autre chose aujourd'hui ?",
+            "bn-IN": "আপনি কি আজ আর কিছু খেয়েছেন?",
+            "pt-BR": "Você tomou mais alguma coisa hoje?",
+            "ru-RU": "Вы сегодня ещё что-то принимали?",
+            "id-ID": "Apakah Anda sudah minum obat lain hari ini?",
+            "de-DE": "Haben Sie heute sonst noch etwas genommen?",
+            "ja-JP": "今日、他に何か飲みましたか。",
+            "tr-TR": "Bugün başka bir şey aldınız mı?",
+            "vi-VN": "Hôm nay bạn đã uống gì khác chưa?",
+            "ko-KR": "오늘 다른 약은 드셨어요?",
+            "it-IT": "Ha preso qualcos'altro oggi?",
+            "th-TH": "วันนี้ทานอะไรอย่างอื่นมาไหมครับ",
+            "pl-PL": "Czy brał pan dziś coś jeszcze?",
+            "nl-NL": "Heeft u vandaag nog iets anders ingenomen?",
+            "ga-IE": "Ar ghlac tú aon rud eile inniu?"
+          }
+        },
+        {
+          "role": "you",
+          "lines": {
+            "en-US": "Just a cup of coffee this morning.",
+            "zh-CN": "早上只喝了一杯咖啡。",
+            "zh-HK": "今朝淨係飲咗杯咖啡。",
+            "hi-IN": "सुबह सिर्फ़ एक कप कॉफ़ी पी है।",
+            "es-ES": "Solo una taza de café esta mañana.",
+            "ar-SA": "فقط فنجان قهوة هذا الصباح.",
+            "fr-FR": "Juste une tasse de café ce matin.",
+            "bn-IN": "সকালে শুধু এক কাপ কফি খেয়েছি।",
+            "pt-BR": "Só uma xícara de café esta manhã.",
+            "ru-RU": "Только чашку кофе утром.",
+            "id-ID": "Hanya secangkir kopi pagi ini.",
+            "de-DE": "Nur eine Tasse Kaffee heute Morgen.",
+            "ja-JP": "今朝コーヒーを一杯だけです。",
+            "tr-TR": "Sabah sadece bir fincan kahve içtim.",
+            "vi-VN": "Sáng nay chỉ một tách cà phê.",
+            "ko-KR": "아침에 커피 한 잔만 마셨어요.",
+            "it-IT": "Solo una tazza di caffè stamattina.",
+            "th-TH": "เช้านี้ดื่มกาแฟแค่ถ้วยเดียวครับ",
+            "pl-PL": "Tylko filiżankę kawy rano.",
+            "nl-NL": "Alleen een kop koffie vanochtend.",
+            "ga-IE": "Cupán caife amháin ar maidin."
+          }
+        },
+        {
+          "role": "them",
+          "lines": {
+            "en-US": "Is it a strong pain, or more of a mild one?",
+            "zh-CN": "是很疼，还是比较轻？",
+            "zh-HK": "痛得勁定係輕微啲？",
+            "hi-IN": "दर्द तेज़ है, या हल्का है?",
+            "es-ES": "¿Es un dolor fuerte o más bien leve?",
+            "ar-SA": "هل الألم قوي أم خفيف؟",
+            "fr-FR": "C'est une douleur forte, ou plutôt légère ?",
+            "bn-IN": "ব্যথা কি খুব বেশি, নাকি হালকা?",
+            "pt-BR": "É uma dor forte ou mais leve?",
+            "ru-RU": "Боль сильная или скорее слабая?",
+            "id-ID": "Sakitnya kuat, atau agak ringan?",
+            "de-DE": "Ist der Schmerz stark oder eher leicht?",
+            "ja-JP": "強い痛みですか、それとも軽いですか。",
+            "tr-TR": "Ağrı şiddetli mi, yoksa hafif mi?",
+            "vi-VN": "Đau nhiều hay chỉ hơi đau?",
+            "ko-KR": "많이 아프세요, 아니면 약한 편인가요?",
+            "it-IT": "È un dolore forte o piuttosto lieve?",
+            "th-TH": "ปวดมาก หรือแค่ปวดเล็กน้อยครับ",
+            "pl-PL": "Ból jest silny, czy raczej lekki?",
+            "nl-NL": "Is de pijn hevig, of eerder mild?",
+            "ga-IE": "An pian láidir atá ann, nó pian éadrom?"
+          }
+        },
+        {
+          "role": "you",
+          "lines": {
+            "en-US": "It's mild, but it won't go away.",
+            "zh-CN": "不太疼，但一直不消。",
+            "zh-HK": "唔係好痛，但係消唔到。",
+            "hi-IN": "हल्का है, लेकिन जाता नहीं।",
+            "es-ES": "Es leve, pero no se va.",
+            "ar-SA": "خفيف، لكنه لا يزول.",
+            "fr-FR": "C'est léger, mais ça ne part pas.",
+            "bn-IN": "হালকা, কিন্তু যাচ্ছে না।",
+            "pt-BR": "É leve, mas não passa.",
+            "ru-RU": "Слабая, но не проходит.",
+            "id-ID": "Ringan, tapi tidak hilang-hilang.",
+            "de-DE": "Er ist leicht, aber er geht nicht weg.",
+            "ja-JP": "軽いですが、なかなか治りません。",
+            "tr-TR": "Hafif ama geçmiyor.",
+            "vi-VN": "Hơi đau, nhưng không hết.",
+            "ko-KR": "약한데 안 없어져요.",
+            "it-IT": "È lieve, ma non passa.",
+            "th-TH": "ปวดไม่มาก แต่ไม่หายครับ",
+            "pl-PL": "Lekki, ale nie przechodzi.",
+            "nl-NL": "Mild, maar het gaat niet weg.",
+            "ga-IE": "Tá sé éadrom, ach níl sé ag imeacht."
+          }
+        },
+        {
+          "role": "them",
+          "lines": {
+            "en-US": "I can give you paracetamol. Take one every six hours.",
+            "zh-CN": "我可以给您扑热息痛。每六小时吃一片。",
+            "zh-HK": "我可以俾你撲熱息痛。每六個鐘食一粒。",
+            "hi-IN": "आप पैरासिटामोल ले सकते हैं। हर छह घंटे में एक लें।",
+            "es-ES": "Puedo darle paracetamol. Tome uno cada seis horas.",
+            "ar-SA": "يمكنني إعطاؤك باراسيتامول. خذ حبة كل ست ساعات.",
+            "fr-FR": "Je peux vous donner du paracétamol. Un comprimé toutes les six heures.",
+            "bn-IN": "আমি প্যারাসিটামল দিতে পারি। প্রতি ছয় ঘণ্টায় একটি খান।",
+            "pt-BR": "Posso te dar paracetamol. Tome um a cada seis horas.",
+            "ru-RU": "Могу дать парацетамол. Принимайте по одной каждые шесть часов.",
+            "id-ID": "Saya bisa beri parasetamol. Minum satu setiap enam jam.",
+            "de-DE": "Ich kann Ihnen Paracetamol geben. Nehmen Sie eine alle sechs Stunden.",
+            "ja-JP": "パラセタモールをお出しできます。六時間ごとに一錠です。",
+            "tr-TR": "Size parasetamol verebilirim. Altı saatte bir tane alın.",
+            "vi-VN": "Tôi có thể cho bạn paracetamol. Uống một viên mỗi sáu giờ.",
+            "ko-KR": "파라세타몰 드릴게요. 여섯 시간마다 한 알 드세요.",
+            "it-IT": "Posso darle del paracetamolo. Ne prenda uno ogni sei ore.",
+            "th-TH": "ให้พาราเซตามอลได้ครับ ทานหนึ่งเม็ดทุกหกชั่วโมง",
+            "pl-PL": "Mogę dać paracetamol. Proszę brać jedną co sześć godzin.",
+            "nl-NL": "Ik kan u paracetamol geven. Neem er elke zes uur één.",
+            "ga-IE": "Is féidir liom paracetamol a thabhairt duit. Tóg ceann gach sé huaire."
+          }
+        },
+        {
+          "role": "you",
+          "lines": {
+            "en-US": "Perfect. How much is that?",
+            "zh-CN": "好的。这个多少钱？",
+            "zh-HK": "好呀。呢個幾多錢？",
+            "hi-IN": "बहुत बढ़िया। यह कितने का है?",
+            "es-ES": "Perfecto. ¿Cuánto es?",
+            "ar-SA": "ممتاز. بكم هذا؟",
+            "fr-FR": "Parfait. C'est combien ?",
+            "bn-IN": "দারুণ। এটা কত টাকা?",
+            "pt-BR": "Perfeito. Quanto é?",
+            "ru-RU": "Отлично. Сколько это стоит?",
+            "id-ID": "Sempurna. Berapa harganya?",
+            "de-DE": "Perfekt. Was kostet das?",
+            "ja-JP": "ありがとうございます。おいくらですか。",
+            "tr-TR": "Harika. Ne kadar?",
+            "vi-VN": "Tuyệt. Bao nhiêu tiền?",
+            "ko-KR": "좋아요. 얼마예요?",
+            "it-IT": "Perfetto. Quanto costa?",
+            "th-TH": "ดีครับ เท่าไหร่ครับ",
+            "pl-PL": "Świetnie. Ile to kosztuje?",
+            "nl-NL": "Perfect. Wat kost dat?",
+            "ga-IE": "Foirfe. Cé mhéad atá air sin?"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "cafe",
+      "scenario": "cafe",
+      "level": "A2",
+      "position": 2,
+      "meta": {
+        "en-US": {
+          "title": "At the cafe",
+          "yourRole": "customer",
+          "theirRole": "barista"
+        },
+        "zh-CN": {
+          "title": "在咖啡馆",
+          "yourRole": "顾客",
+          "theirRole": "咖啡师"
+        },
+        "zh-HK": {
+          "title": "喺咖啡店",
+          "yourRole": "顧客",
+          "theirRole": "咖啡師"
+        },
+        "hi-IN": {
+          "title": "कैफ़े में",
+          "yourRole": "ग्राहक",
+          "theirRole": "बारिस्ता"
+        },
+        "es-ES": {
+          "title": "En el café",
+          "yourRole": "cliente",
+          "theirRole": "barista"
+        },
+        "ar-SA": {
+          "title": "في المقهى",
+          "yourRole": "زبون",
+          "theirRole": "باريستا"
+        },
+        "fr-FR": {
+          "title": "Au café",
+          "yourRole": "client",
+          "theirRole": "barista"
+        },
+        "bn-IN": {
+          "title": "ক্যাফেতে",
+          "yourRole": "গ্রাহক",
+          "theirRole": "বারিস্তা"
+        },
+        "pt-BR": {
+          "title": "No café",
+          "yourRole": "cliente",
+          "theirRole": "barista"
+        },
+        "ru-RU": {
+          "title": "В кафе",
+          "yourRole": "посетитель",
+          "theirRole": "бариста"
+        },
+        "id-ID": {
+          "title": "Di kafe",
+          "yourRole": "pelanggan",
+          "theirRole": "barista"
+        },
+        "de-DE": {
+          "title": "Im Café",
+          "yourRole": "Gast",
+          "theirRole": "Barista"
+        },
+        "ja-JP": {
+          "title": "カフェで",
+          "yourRole": "客",
+          "theirRole": "店員"
+        },
+        "tr-TR": {
+          "title": "Kafede",
+          "yourRole": "müşteri",
+          "theirRole": "barista"
+        },
+        "vi-VN": {
+          "title": "Ở quán cà phê",
+          "yourRole": "khách",
+          "theirRole": "pha chế"
+        },
+        "ko-KR": {
+          "title": "카페에서",
+          "yourRole": "손님",
+          "theirRole": "바리스타"
+        },
+        "it-IT": {
+          "title": "Al bar",
+          "yourRole": "cliente",
+          "theirRole": "barista"
+        },
+        "th-TH": {
+          "title": "ที่ร้านกาแฟ",
+          "yourRole": "ลูกค้า",
+          "theirRole": "บาริสต้า"
+        },
+        "pl-PL": {
+          "title": "W kawiarni",
+          "yourRole": "klient",
+          "theirRole": "barista"
+        },
+        "nl-NL": {
+          "title": "In het café",
+          "yourRole": "klant",
+          "theirRole": "barista"
+        },
+        "ga-IE": {
+          "title": "Ag an gcaifé",
+          "yourRole": "custaiméir",
+          "theirRole": "barista"
+        }
+      },
+      "speakers": {
+        "them": {
+          "en-US": "Barista",
+          "zh-CN": "咖啡师",
+          "zh-HK": "咖啡師",
+          "hi-IN": "बारिस्ता",
+          "es-ES": "Barista",
+          "ar-SA": "الباريستا",
+          "fr-FR": "Barista",
+          "bn-IN": "বারিস্তা",
+          "pt-BR": "Barista",
+          "ru-RU": "Бариста",
+          "id-ID": "Barista",
+          "de-DE": "Barista",
+          "ja-JP": "店員",
+          "tr-TR": "Barista",
+          "vi-VN": "Pha chế",
+          "ko-KR": "바리스타",
+          "it-IT": "Barista",
+          "th-TH": "บาริสต้า",
+          "pl-PL": "Barista",
+          "nl-NL": "Barista",
+          "ga-IE": "Barista"
+        },
+        "you": {
+          "en-US": "You",
+          "zh-CN": "你",
+          "zh-HK": "你",
+          "hi-IN": "आप",
+          "es-ES": "Tú",
+          "ar-SA": "أنت",
+          "fr-FR": "Vous",
+          "bn-IN": "আপনি",
+          "pt-BR": "Você",
+          "ru-RU": "Вы",
+          "id-ID": "Anda",
+          "de-DE": "Du",
+          "ja-JP": "あなた",
+          "tr-TR": "Sen",
+          "vi-VN": "Bạn",
+          "ko-KR": "나",
+          "it-IT": "Tu",
+          "th-TH": "คุณ",
+          "pl-PL": "Ty",
+          "nl-NL": "Jij",
+          "ga-IE": "Tusa"
+        }
+      },
+      "turns": [
+        {
+          "role": "them",
+          "lines": {
+            "en-US": "Hello, what can I get for you?",
+            "zh-CN": "你好，您想点什么？",
+            "zh-HK": "你好，想要啲咩？",
+            "hi-IN": "नमस्ते, आप क्या लेंगे?",
+            "es-ES": "Hola, ¿qué le pongo?",
+            "ar-SA": "مرحباً، ماذا تحب أن تطلب؟",
+            "fr-FR": "Bonjour, qu'est-ce que je vous sers ?",
+            "bn-IN": "নমস্কার, আপনি কী নেবেন?",
+            "pt-BR": "Olá, o que você vai querer?",
+            "ru-RU": "Здравствуйте, что вам приготовить?",
+            "id-ID": "Halo, mau pesan apa?",
+            "de-DE": "Hallo, was darf es sein?",
+            "ja-JP": "こんにちは。ご注文は？",
+            "tr-TR": "Merhaba, ne alırsınız?",
+            "vi-VN": "Xin chào, bạn muốn uống gì?",
+            "ko-KR": "안녕하세요, 뭐 드릴까요?",
+            "it-IT": "Buongiorno, cosa le preparo?",
+            "th-TH": "สวัสดีครับ รับอะไรดีครับ",
+            "pl-PL": "Dzień dobry, co podać?",
+            "nl-NL": "Hallo, wat mag het zijn?",
+            "ga-IE": "Dia dhuit, cad is féidir liom a fháil duit?"
+          }
+        },
+        {
+          "role": "you",
+          "lines": {
+            "en-US": "A coffee to go, please.",
+            "zh-CN": "一杯外带咖啡，谢谢。",
+            "zh-HK": "一杯外賣咖啡，唔該。",
+            "hi-IN": "एक कॉफ़ी पैक करके, कृपया।",
+            "es-ES": "Un café para llevar, por favor.",
+            "ar-SA": "قهوة للطريق من فضلك.",
+            "fr-FR": "Un café à emporter, s'il vous plaît.",
+            "bn-IN": "একটা কফি প্যাকে, দয়া করে।",
+            "pt-BR": "Um café para viagem, por favor.",
+            "ru-RU": "Кофе с собой, пожалуйста.",
+            "id-ID": "Kopi untuk dibawa, tolong.",
+            "de-DE": "Einen Kaffee zum Mitnehmen, bitte.",
+            "ja-JP": "コーヒーをテイクアウトでお願いします。",
+            "tr-TR": "Paket kahve, lütfen.",
+            "vi-VN": "Một cà phê mang đi, làm ơn.",
+            "ko-KR": "테이크아웃 커피 주세요.",
+            "it-IT": "Un caffè da asporto, per favore.",
+            "th-TH": "กาแฟใส่ถุงกลับบ้านครับ",
+            "pl-PL": "Kawę na wynos, proszę.",
+            "nl-NL": "Een koffie om mee te nemen, alstublieft.",
+            "ga-IE": "Caife le tabhairt leat, le do thoil."
+          }
+        },
+        {
+          "role": "them",
+          "lines": {
+            "en-US": "What size would you like?",
+            "zh-CN": "您要什么杯型？",
+            "zh-HK": "你要大、中、定細杯？",
+            "hi-IN": "कौन सा साइज़ चाहिए?",
+            "es-ES": "¿De qué tamaño lo quiere?",
+            "ar-SA": "أي حجم تريد؟",
+            "fr-FR": "Quelle taille voulez-vous ?",
+            "bn-IN": "কোন সাইজ চান?",
+            "pt-BR": "Qual tamanho você quer?",
+            "ru-RU": "Какой размер хотите?",
+            "id-ID": "Ukurannya yang mana?",
+            "de-DE": "Welche Größe möchten Sie?",
+            "ja-JP": "サイズはどれになさいますか。",
+            "tr-TR": "Hangi boy olsun?",
+            "vi-VN": "Bạn muốn size nào?",
+            "ko-KR": "사이즈는 어떤 걸로 할까요?",
+            "it-IT": "Che taglia vuole?",
+            "th-TH": "รับไซส์ไหนครับ",
+            "pl-PL": "Jaki rozmiar?",
+            "nl-NL": "Welke maat wilt u?",
+            "ga-IE": "Cén mhéid ba mhaith leat?"
+          }
+        },
+        {
+          "role": "you",
+          "lines": {
+            "en-US": "Medium, with a little milk.",
+            "zh-CN": "中杯，加点牛奶。",
+            "zh-HK": "中杯，少少奶。",
+            "hi-IN": "मीडियम, थोड़ा दूध के साथ।",
+            "es-ES": "Mediano, con un poco de leche.",
+            "ar-SA": "وسط، مع قليل من الحليب.",
+            "fr-FR": "Moyen, avec un peu de lait.",
+            "bn-IN": "মিডিয়াম, একটু দুধ দিয়ে।",
+            "pt-BR": "Médio, com um pouco de leite.",
+            "ru-RU": "Средний, с небольшим количеством молока.",
+            "id-ID": "Sedang, dengan sedikit susu.",
+            "de-DE": "Mittel, mit etwas Milch.",
+            "ja-JP": "中サイズで、ミルクを少し入れてください。",
+            "tr-TR": "Orta, biraz sütlü.",
+            "vi-VN": "Vừa, thêm một ít sữa.",
+            "ko-KR": "미디엄이요, 우유 조금만요.",
+            "it-IT": "Medio, con un po' di latte.",
+            "th-TH": "ไซส์กลาง ใส่นมนิดหน่อยครับ",
+            "pl-PL": "Średnia, z odrobiną mleka.",
+            "nl-NL": "Middel, met een beetje melk.",
+            "ga-IE": "Meánmhéid, le beagán bainne."
+          }
+        },
+        {
+          "role": "them",
+          "lines": {
+            "en-US": "Sure. Are you in a hurry?",
+            "zh-CN": "好的。您赶时间吗？",
+            "zh-HK": "好。你趕唔趕時間呀？",
+            "hi-IN": "ठीक है। क्या आप जल्दी में हैं?",
+            "es-ES": "Claro. ¿Va con prisa?",
+            "ar-SA": "حسناً. هل أنت مستعجل؟",
+            "fr-FR": "D'accord. Vous êtes pressé ?",
+            "bn-IN": "ঠিক আছে। আপনি কি তাড়াতাড়ি করছেন?",
+            "pt-BR": "Claro. Você está com pressa?",
+            "ru-RU": "Хорошо. Вы торопитесь?",
+            "id-ID": "Baik. Anda sedang terburu-buru?",
+            "de-DE": "Klar. Sind Sie in Eile?",
+            "ja-JP": "わかりました。お急ぎですか。",
+            "tr-TR": "Tamam. Aceleiniz var mı?",
+            "vi-VN": "Được. Bạn đang vội không?",
+            "ko-KR": "알겠어요. 급하세요?",
+            "it-IT": "Certo. Ha fretta?",
+            "th-TH": "ได้ครับ รีบไหมครับ",
+            "pl-PL": "Jasne. Śpieszy się pan?",
+            "nl-NL": "Prima. Heeft u haast?",
+            "ga-IE": "Cinnte. An bhfuil deifir ort?"
+          }
+        },
+        {
+          "role": "you",
+          "lines": {
+            "en-US": "Yes, a little. I'm running late.",
+            "zh-CN": "有一点，我要迟到了。",
+            "zh-HK": "有啲趕，我快遲到。",
+            "hi-IN": "हाँ, थोड़ा। मुझे देर हो रही है।",
+            "es-ES": "Sí, un poco. Llego tarde.",
+            "ar-SA": "نعم، قليلاً. سأتأخر.",
+            "fr-FR": "Oui, un peu. Je suis en retard.",
+            "bn-IN": "হ্যাঁ, একটু। আমি দেরি করে ফেলছি।",
+            "pt-BR": "Sim, um pouco. Estou atrasado.",
+            "ru-RU": "Да, немного. Я опаздываю.",
+            "id-ID": "Ya, sedikit. Saya hampir terlambat.",
+            "de-DE": "Ja, ein bisschen. Ich bin spät dran.",
+            "ja-JP": "はい、少し。遅れそうです。",
+            "tr-TR": "Evet, biraz. Geç kalıyorum.",
+            "vi-VN": "Có, một chút. Tôi sắp trễ.",
+            "ko-KR": "네, 조금요. 늦을 것 같아요.",
+            "it-IT": "Sì, un po'. Sono in ritardo.",
+            "th-TH": "รีบนิดหน่อยครับ ใกล้สายแล้ว",
+            "pl-PL": "Tak, trochę. Spóźniam się.",
+            "nl-NL": "Ja, een beetje. Ik ben te laat.",
+            "ga-IE": "Tá, beagán. Tá mé déanach."
+          }
+        },
+        {
+          "role": "them",
+          "lines": {
+            "en-US": "That's two fifty. Cash or card?",
+            "zh-CN": "一共两块五。现金还是刷卡？",
+            "zh-HK": "兩蚊半。現金定拍卡？",
+            "hi-IN": "दो पचास। नकद या कार्ड?",
+            "es-ES": "Son dos cincuenta. ¿Efectivo o tarjeta?",
+            "ar-SA": "اثنان ونصف. نقداً أم بطاقة؟",
+            "fr-FR": "Ça fait deux cinquante. Espèces ou carte ?",
+            "bn-IN": "দুই পঞ্চাশ। নগদ না কার্ড?",
+            "pt-BR": "São dois e cinquenta. Dinheiro ou cartão?",
+            "ru-RU": "Два пятьдесят. Наличными или картой?",
+            "id-ID": "Dua koma lima puluh. Tunai atau kartu?",
+            "de-DE": "Das macht zwei fünfzig. Bar oder Karte?",
+            "ja-JP": "二ドル五十です。現金ですか、カードですか。",
+            "tr-TR": "İki buçuk. Nakit mi kart mı?",
+            "vi-VN": "Hai phẩy năm mươi. Tiền mặt hay thẻ?",
+            "ko-KR": "이 점 오예요. 현금이요, 카드요?",
+            "it-IT": "Sono due e cinquanta. Contanti o carta?",
+            "th-TH": "สองจุดห้าศูนย์ครับ เงินสดหรือบัตรครับ",
+            "pl-PL": "Dwa pięćdziesiąt. Gotówka czy karta?",
+            "nl-NL": "Dat is twee vijftig. Contant of pin?",
+            "ga-IE": "Dhá euro caoga. Airgead tirim nó cárta?"
+          }
+        },
+        {
+          "role": "you",
+          "lines": {
+            "en-US": "Card, please.",
+            "zh-CN": "刷卡，谢谢。",
+            "zh-HK": "拍卡，唔該。",
+            "hi-IN": "कार्ड, कृपया।",
+            "es-ES": "Con tarjeta, por favor.",
+            "ar-SA": "بطاقة من فضلك.",
+            "fr-FR": "Par carte, s'il vous plaît.",
+            "bn-IN": "কার্ড, দয়া করে।",
+            "pt-BR": "Cartão, por favor.",
+            "ru-RU": "Картой, пожалуйста.",
+            "id-ID": "Kartu, tolong.",
+            "de-DE": "Mit Karte, bitte.",
+            "ja-JP": "カードでお願いします。",
+            "tr-TR": "Kart, lütfen.",
+            "vi-VN": "Thẻ, làm ơn.",
+            "ko-KR": "카드로 주세요.",
+            "it-IT": "Con la carta, per favore.",
+            "th-TH": "บัตรครับ",
+            "pl-PL": "Kartą, proszę.",
+            "nl-NL": "Pinnen, alstublieft.",
+            "ga-IE": "Cárta, le do thoil."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "airport",
+      "scenario": "airport",
+      "level": "A2",
+      "position": 3,
+      "meta": {
+        "en-US": {
+          "title": "At the airport",
+          "yourRole": "passenger",
+          "theirRole": "agent"
+        },
+        "zh-CN": {
+          "title": "在机场",
+          "yourRole": "乘客",
+          "theirRole": "工作人员"
+        },
+        "zh-HK": {
+          "title": "喺機場",
+          "yourRole": "乘客",
+          "theirRole": "職員"
+        },
+        "hi-IN": {
+          "title": "हवाई अड्डे पर",
+          "yourRole": "यात्री",
+          "theirRole": "एजेंट"
+        },
+        "es-ES": {
+          "title": "En el aeropuerto",
+          "yourRole": "pasajero",
+          "theirRole": "agente"
+        },
+        "ar-SA": {
+          "title": "في المطار",
+          "yourRole": "مسافر",
+          "theirRole": "موظف"
+        },
+        "fr-FR": {
+          "title": "À l'aéroport",
+          "yourRole": "passager",
+          "theirRole": "agent"
+        },
+        "bn-IN": {
+          "title": "বিমানবন্দরে",
+          "yourRole": "যাত্রী",
+          "theirRole": "এজেন্ট"
+        },
+        "pt-BR": {
+          "title": "No aeroporto",
+          "yourRole": "passageiro",
+          "theirRole": "agente"
+        },
+        "ru-RU": {
+          "title": "В аэропорту",
+          "yourRole": "пассажир",
+          "theirRole": "агент"
+        },
+        "id-ID": {
+          "title": "Di bandara",
+          "yourRole": "penumpang",
+          "theirRole": "petugas"
+        },
+        "de-DE": {
+          "title": "Am Flughafen",
+          "yourRole": "Passagier",
+          "theirRole": "Agent"
+        },
+        "ja-JP": {
+          "title": "空港で",
+          "yourRole": "乗客",
+          "theirRole": "係員"
+        },
+        "tr-TR": {
+          "title": "Havalimanında",
+          "yourRole": "yolcu",
+          "theirRole": "görevli"
+        },
+        "vi-VN": {
+          "title": "Ở sân bay",
+          "yourRole": "hành khách",
+          "theirRole": "nhân viên"
+        },
+        "ko-KR": {
+          "title": "공항에서",
+          "yourRole": "승객",
+          "theirRole": "직원"
+        },
+        "it-IT": {
+          "title": "In aeroporto",
+          "yourRole": "passeggero",
+          "theirRole": "agente"
+        },
+        "th-TH": {
+          "title": "ที่สนามบิน",
+          "yourRole": "ผู้โดยสาร",
+          "theirRole": "พนักงาน"
+        },
+        "pl-PL": {
+          "title": "Na lotnisku",
+          "yourRole": "pasażer",
+          "theirRole": "agent"
+        },
+        "nl-NL": {
+          "title": "Op het vliegveld",
+          "yourRole": "passagier",
+          "theirRole": "medewerker"
+        },
+        "ga-IE": {
+          "title": "Ag an aerfort",
+          "yourRole": "paisinéir",
+          "theirRole": "gníomhaire"
+        }
+      },
+      "speakers": {
+        "them": {
+          "en-US": "Agent",
+          "zh-CN": "工作人员",
+          "zh-HK": "職員",
+          "hi-IN": "एजेंट",
+          "es-ES": "Agente",
+          "ar-SA": "الموظف",
+          "fr-FR": "Agent",
+          "bn-IN": "এজেন্ট",
+          "pt-BR": "Agente",
+          "ru-RU": "Агент",
+          "id-ID": "Petugas",
+          "de-DE": "Agent",
+          "ja-JP": "係員",
+          "tr-TR": "Görevli",
+          "vi-VN": "Nhân viên",
+          "ko-KR": "직원",
+          "it-IT": "Agente",
+          "th-TH": "พนักงาน",
+          "pl-PL": "Agent",
+          "nl-NL": "Medewerker",
+          "ga-IE": "Gníomhaire"
+        },
+        "you": {
+          "en-US": "You",
+          "zh-CN": "你",
+          "zh-HK": "你",
+          "hi-IN": "आप",
+          "es-ES": "Tú",
+          "ar-SA": "أنت",
+          "fr-FR": "Vous",
+          "bn-IN": "আপনি",
+          "pt-BR": "Você",
+          "ru-RU": "Вы",
+          "id-ID": "Anda",
+          "de-DE": "Du",
+          "ja-JP": "あなた",
+          "tr-TR": "Sen",
+          "vi-VN": "Bạn",
+          "ko-KR": "나",
+          "it-IT": "Tu",
+          "th-TH": "คุณ",
+          "pl-PL": "Ty",
+          "nl-NL": "Jij",
+          "ga-IE": "Tusa"
+        }
+      },
+      "turns": [
+        {
+          "role": "them",
+          "lines": {
+            "en-US": "Good afternoon. Where are you flying today?",
+            "zh-CN": "下午好。您今天飞往哪里？",
+            "zh-HK": "午安。你今日飛去邊度？",
+            "hi-IN": "नमस्कार। आज आप कहाँ जा रहे हैं?",
+            "es-ES": "Buenas tardes. ¿Adónde vuela hoy?",
+            "ar-SA": "مرحباً. إلى أين تسافر اليوم؟",
+            "fr-FR": "Bonjour. Où volez-vous aujourd'hui ?",
+            "bn-IN": "শুভ অপরাহ্ন। আজ আপনি কোথায় যাচ্ছেন?",
+            "pt-BR": "Boa tarde. Para onde você voa hoje?",
+            "ru-RU": "Добрый день. Куда вы летите сегодня?",
+            "id-ID": "Selamat siang. Hari ini Anda terbang ke mana?",
+            "de-DE": "Guten Tag. Wohin fliegen Sie heute?",
+            "ja-JP": "こんにちは。今日はどちらへ行かれますか。",
+            "tr-TR": "İyi günler. Bugün nereye uçuyorsunuz?",
+            "vi-VN": "Chào buổi chiều. Hôm nay bạn bay đi đâu?",
+            "ko-KR": "안녕하세요. 오늘 어디로 가세요?",
+            "it-IT": "Buongiorno. Dove vola oggi?",
+            "th-TH": "สวัสดีครับ วันนี้บินไปไหนครับ",
+            "pl-PL": "Dzień dobry. Dokąd dziś pan leci?",
+            "nl-NL": "Goedemiddag. Waar vliegt u vandaag naartoe?",
+            "ga-IE": "Tráthnóna maith. Cá bhfuil tú ag eitilt inniu?"
+          }
+        },
+        {
+          "role": "you",
+          "lines": {
+            "en-US": "I'm checking in to London.",
+            "zh-CN": "我要办理去伦敦的登机手续。",
+            "zh-HK": "我要辦理去倫敦嘅登機手續。",
+            "hi-IN": "मुझे लंदन के लिए चेक-इन करना है।",
+            "es-ES": "Voy a facturar a Londres.",
+            "ar-SA": "أريد تسجيل الوصول إلى لندن.",
+            "fr-FR": "Je m'enregistre pour Londres.",
+            "bn-IN": "আমি লন্ডনের ফ্লাইটে চেক-ইন করছি।",
+            "pt-BR": "Estou fazendo check-in para Londres.",
+            "ru-RU": "Я регистрируюсь на рейс в Лондон.",
+            "id-ID": "Saya check-in ke London.",
+            "de-DE": "Ich checke nach London ein.",
+            "ja-JP": "ロンドン便のチェックインをお願いします。",
+            "tr-TR": "Londra uçuşuna check-in yapmak istiyorum.",
+            "vi-VN": "Tôi làm thủ tục chuyến đến London.",
+            "ko-KR": "런던 비행기 체크인하려고요.",
+            "it-IT": "Devo fare il check-in per Londra.",
+            "th-TH": "ขอเช็กอินเที่ยวบินไปลอนดอนครับ",
+            "pl-PL": "Odprawiam się do Londynu.",
+            "nl-NL": "Ik check in naar Londen.",
+            "ga-IE": "Tá mé ag seiceáil isteach go Londain."
+          }
+        },
+        {
+          "role": "them",
+          "lines": {
+            "en-US": "How many bags are you checking?",
+            "zh-CN": "您要托运几件行李？",
+            "zh-HK": "你有幾件行李要託運？",
+            "hi-IN": "आप कितने बैग चेक कर रहे हैं?",
+            "es-ES": "¿Cuántas maletas facture?",
+            "ar-SA": "كم حقيبة تسجل؟",
+            "fr-FR": "Combien de bagages enregistrez-vous ?",
+            "bn-IN": "কয়টা ব্যাগ চেক করবেন?",
+            "pt-BR": "Quantas malas você vai despachar?",
+            "ru-RU": "Сколько мест багажа сдаёте?",
+            "id-ID": "Berapa koper yang akan Anda daftarkan?",
+            "de-DE": "Wie viele Gepäckstücke geben Sie auf?",
+            "ja-JP": "お預けの荷物はいくつですか。",
+            "tr-TR": "Kaç bavul bırakacaksınız?",
+            "vi-VN": "Bạn gửi bao nhiêu kiện?",
+            "ko-KR": "부칠 짐은 몇 개예요?",
+            "it-IT": "Quante valigie registra?",
+            "th-TH": "ส่งกระเป๋ากี่ใบครับ",
+            "pl-PL": "Ile bagaży pan nadaje?",
+            "nl-NL": "Hoeveel koffers checkt u in?",
+            "ga-IE": "Cé mhéad mála atá tú ag seiceáil?"
+          }
+        },
+        {
+          "role": "you",
+          "lines": {
+            "en-US": "Just one suitcase.",
+            "zh-CN": "只有一个行李箱。",
+            "zh-HK": "得一個行李喼。",
+            "hi-IN": "सिर्फ़ एक सूटकेस।",
+            "es-ES": "Solo una maleta.",
+            "ar-SA": "حقيبة واحدة فقط.",
+            "fr-FR": "Une seule valise.",
+            "bn-IN": "শুধু একটা স্যুটকেস।",
+            "pt-BR": "Só uma mala.",
+            "ru-RU": "Только один чемодан.",
+            "id-ID": "Hanya satu koper.",
+            "de-DE": "Nur einen Koffer.",
+            "ja-JP": "スーツケースが一つだけです。",
+            "tr-TR": "Sadece bir bavul.",
+            "vi-VN": "Chỉ một vali.",
+            "ko-KR": "캐리어 하나만요.",
+            "it-IT": "Solo una valigia.",
+            "th-TH": "ใบเดียวครับ",
+            "pl-PL": "Tylko jedną walizkę.",
+            "nl-NL": "Maar één koffer.",
+            "ga-IE": "Mála taistil amháin."
+          }
+        },
+        {
+          "role": "them",
+          "lines": {
+            "en-US": "Would you like a window or an aisle seat?",
+            "zh-CN": "您要靠窗还是靠过道？",
+            "zh-HK": "你要靠窗定靠通道？",
+            "hi-IN": "खिड़की वाली सीट या गलियारे वाली?",
+            "es-ES": "¿Ventanilla o pasillo?",
+            "ar-SA": "مقعد بجانب النافذة أم الممر؟",
+            "fr-FR": "Fenêtre ou couloir ?",
+            "bn-IN": "জানালার পাশে নাকি আইলের পাশে?",
+            "pt-BR": "Janela ou corredor?",
+            "ru-RU": "У окна или у прохода?",
+            "id-ID": "Jendela atau lorong?",
+            "de-DE": "Fenster oder Gang?",
+            "ja-JP": "窓側と通路側、どちらがいいですか。",
+            "tr-TR": "Cam kenarı mı, koridor mu?",
+            "vi-VN": "Ghế cửa sổ hay ghế lối đi?",
+            "ko-KR": "창가 자리, 통로 자리 중에 어떤 걸로 할까요?",
+            "it-IT": "Finestrino o corridoio?",
+            "th-TH": "อยากนั่งริมหน้าต่างหรือริมทางเดินครับ",
+            "pl-PL": "Okno czy przejście?",
+            "nl-NL": "Raam of gangpad?",
+            "ga-IE": "Fuinneog nó pasáiste?"
+          }
+        },
+        {
+          "role": "you",
+          "lines": {
+            "en-US": "An aisle seat, please.",
+            "zh-CN": "靠过道，谢谢。",
+            "zh-HK": "靠通道，唔該。",
+            "hi-IN": "गलियारे वाली सीट, कृपया।",
+            "es-ES": "Pasillo, por favor.",
+            "ar-SA": "مقعد الممر من فضلك.",
+            "fr-FR": "Côté couloir, s'il vous plaît.",
+            "bn-IN": "আইলের সিট, দয়া করে।",
+            "pt-BR": "Corredor, por favor.",
+            "ru-RU": "У прохода, пожалуйста.",
+            "id-ID": "Kursi lorong, tolong.",
+            "de-DE": "Einen Gangplatz, bitte.",
+            "ja-JP": "通路側をお願いします。",
+            "tr-TR": "Koridor, lütfen.",
+            "vi-VN": "Ghế lối đi, làm ơn.",
+            "ko-KR": "통로 자리로 주세요.",
+            "it-IT": "Corridoio, per favore.",
+            "th-TH": "ริมทางเดินครับ",
+            "pl-PL": "Miejsce przy przejściu, proszę.",
+            "nl-NL": "Een stoel aan het gangpad, alstublieft.",
+            "ga-IE": "Suíochán pasáiste, le do thoil."
+          }
+        },
+        {
+          "role": "them",
+          "lines": {
+            "en-US": "Your gate is twelve. Boarding starts in forty minutes.",
+            "zh-CN": "您的登机口是十二号。四十分钟后开始登机。",
+            "zh-HK": "你嘅閘口係十二號。四十分鐘後登機。",
+            "hi-IN": "आपका गेट बारह है। चालीस मिनट में बोर्डिंग शुरू होगी।",
+            "es-ES": "Su puerta es la doce. El embarque empieza en cuarenta minutos.",
+            "ar-SA": "البوابة رقم اثني عشر. الصعود بعد أربعين دقيقة.",
+            "fr-FR": "Votre porte est la douze. L'embarquement commence dans quarante minutes.",
+            "bn-IN": "আপনার গেট বারো। চল্লিশ মিনিটে বোর্ডিং শুরু।",
+            "pt-BR": "Seu portão é o doze. O embarque começa em quarenta minutos.",
+            "ru-RU": "Ваш выход двенадцать. Посадка через сорок минут.",
+            "id-ID": "Gate Anda nomor dua belas. Boarding empat puluh menit lagi.",
+            "de-DE": "Ihr Gate ist zwölf. Das Boarding beginnt in vierzig Minuten.",
+            "ja-JP": "ゲートは十二番です。四十分後に搭乗が始まります。",
+            "tr-TR": "Kapınız on iki. Biniş kırk dakika sonra.",
+            "vi-VN": "Cửa số mười hai. Lên máy bay sau bốn mươi phút.",
+            "ko-KR": "게이트는 십이 번이에요. 사십 분 뒤에 탑승해요.",
+            "it-IT": "Il gate è il dodici. L'imbarco inizia tra quaranta minuti.",
+            "th-TH": "ประตูสิบสองครับ ขึ้นเครื่องในอีกสี่สิบนาที",
+            "pl-PL": "Bramka dwunasta. Wejście na pokład za czterdzieści minut.",
+            "nl-NL": "Uw gate is twaalf. Boarding begint over veertig minuten.",
+            "ga-IE": "Geata a dó dhéag atá agat. Tosóidh an bordáil i gceann daichead nóiméad."
+          }
+        },
+        {
+          "role": "you",
+          "lines": {
+            "en-US": "Thank you. What time do we board?",
+            "zh-CN": "谢谢。我们什么时候登机？",
+            "zh-HK": "唔該。我哋幾點登機？",
+            "hi-IN": "धन्यवाद। हम कितने बजे बोर्ड करेंगे?",
+            "es-ES": "Gracias. ¿A qué hora embarcamos?",
+            "ar-SA": "شكراً. متى نصعد إلى الطائرة؟",
+            "fr-FR": "Merci. À quelle heure embarque-t-on ?",
+            "bn-IN": "ধন্যবাদ। আমরা কখন বোর্ড করব?",
+            "pt-BR": "Obrigado. A que horas embarcamos?",
+            "ru-RU": "Спасибо. Во сколько посадка?",
+            "id-ID": "Terima kasih. Jam berapa kita boarding?",
+            "de-DE": "Danke. Wann steigen wir ein?",
+            "ja-JP": "ありがとうございます。何時に搭乗しますか。",
+            "tr-TR": "Teşekkürler. Saat kaçta biniyoruz?",
+            "vi-VN": "Cảm ơn. Mấy giờ thì lên máy bay?",
+            "ko-KR": "감사합니다. 몇 시에 타요?",
+            "it-IT": "Grazie. A che ora si imbarca?",
+            "th-TH": "ขอบคุณครับ ขึ้นเครื่องกี่โมงครับ",
+            "pl-PL": "Dziękuję. O której wchodzimy na pokład?",
+            "nl-NL": "Dank u. Hoe laat stappen we in?",
+            "ga-IE": "Go raibh maith agat. Cén t-am a mbeidh muid ag bordáil?"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "doctor",
+      "scenario": "doctor",
+      "level": "A2",
+      "position": 4,
+      "meta": {
+        "en-US": {
+          "title": "At the doctor",
+          "yourRole": "patient",
+          "theirRole": "doctor"
+        },
+        "zh-CN": {
+          "title": "在诊所",
+          "yourRole": "病人",
+          "theirRole": "医生"
+        },
+        "zh-HK": {
+          "title": "喺診所",
+          "yourRole": "病人",
+          "theirRole": "醫生"
+        },
+        "hi-IN": {
+          "title": "डॉक्टर के पास",
+          "yourRole": "मरीज़",
+          "theirRole": "डॉक्टर"
+        },
+        "es-ES": {
+          "title": "En el médico",
+          "yourRole": "paciente",
+          "theirRole": "médico"
+        },
+        "ar-SA": {
+          "title": "عند الطبيب",
+          "yourRole": "مريض",
+          "theirRole": "طبيب"
+        },
+        "fr-FR": {
+          "title": "Chez le médecin",
+          "yourRole": "patient",
+          "theirRole": "médecin"
+        },
+        "bn-IN": {
+          "title": "ডাক্তারের কাছে",
+          "yourRole": "রোগী",
+          "theirRole": "ডাক্তার"
+        },
+        "pt-BR": {
+          "title": "No médico",
+          "yourRole": "paciente",
+          "theirRole": "médico"
+        },
+        "ru-RU": {
+          "title": "У врача",
+          "yourRole": "пациент",
+          "theirRole": "врач"
+        },
+        "id-ID": {
+          "title": "Di dokter",
+          "yourRole": "pasien",
+          "theirRole": "dokter"
+        },
+        "de-DE": {
+          "title": "Beim Arzt",
+          "yourRole": "Patient",
+          "theirRole": "Arzt"
+        },
+        "ja-JP": {
+          "title": "病院で",
+          "yourRole": "患者",
+          "theirRole": "医者"
+        },
+        "tr-TR": {
+          "title": "Doktorda",
+          "yourRole": "hasta",
+          "theirRole": "doktor"
+        },
+        "vi-VN": {
+          "title": "Ở phòng khám",
+          "yourRole": "bệnh nhân",
+          "theirRole": "bác sĩ"
+        },
+        "ko-KR": {
+          "title": "병원에서",
+          "yourRole": "환자",
+          "theirRole": "의사"
+        },
+        "it-IT": {
+          "title": "Dal medico",
+          "yourRole": "paziente",
+          "theirRole": "medico"
+        },
+        "th-TH": {
+          "title": "ที่คลินิก",
+          "yourRole": "คนไข้",
+          "theirRole": "แพทย์"
+        },
+        "pl-PL": {
+          "title": "U lekarza",
+          "yourRole": "pacjent",
+          "theirRole": "lekarz"
+        },
+        "nl-NL": {
+          "title": "Bij de dokter",
+          "yourRole": "patiënt",
+          "theirRole": "arts"
+        },
+        "ga-IE": {
+          "title": "Ag an dochtúir",
+          "yourRole": "othar",
+          "theirRole": "dochtúir"
+        }
+      },
+      "speakers": {
+        "them": {
+          "en-US": "Doctor",
+          "zh-CN": "医生",
+          "zh-HK": "醫生",
+          "hi-IN": "डॉक्टर",
+          "es-ES": "Médico",
+          "ar-SA": "الطبيب",
+          "fr-FR": "Médecin",
+          "bn-IN": "ডাক্তার",
+          "pt-BR": "Médico",
+          "ru-RU": "Врач",
+          "id-ID": "Dokter",
+          "de-DE": "Arzt",
+          "ja-JP": "医者",
+          "tr-TR": "Doktor",
+          "vi-VN": "Bác sĩ",
+          "ko-KR": "의사",
+          "it-IT": "Medico",
+          "th-TH": "แพทย์",
+          "pl-PL": "Lekarz",
+          "nl-NL": "Arts",
+          "ga-IE": "Dochtúir"
+        },
+        "you": {
+          "en-US": "You",
+          "zh-CN": "你",
+          "zh-HK": "你",
+          "hi-IN": "आप",
+          "es-ES": "Tú",
+          "ar-SA": "أنت",
+          "fr-FR": "Vous",
+          "bn-IN": "আপনি",
+          "pt-BR": "Você",
+          "ru-RU": "Вы",
+          "id-ID": "Anda",
+          "de-DE": "Du",
+          "ja-JP": "あなた",
+          "tr-TR": "Sen",
+          "vi-VN": "Bạn",
+          "ko-KR": "나",
+          "it-IT": "Tu",
+          "th-TH": "คุณ",
+          "pl-PL": "Ty",
+          "nl-NL": "Jij",
+          "ga-IE": "Tusa"
+        }
+      },
+      "turns": [
+        {
+          "role": "them",
+          "lines": {
+            "en-US": "Hello. What seems to be the problem?",
+            "zh-CN": "你好。您哪里不舒服？",
+            "zh-HK": "你好。你邊度唔舒服？",
+            "hi-IN": "नमस्ते। क्या तकलीफ़ है?",
+            "es-ES": "Hola. ¿Qué le ocurre?",
+            "ar-SA": "مرحباً. ما المشكلة؟",
+            "fr-FR": "Bonjour. Qu'est-ce qui ne va pas ?",
+            "bn-IN": "নমস্কার। কী সমস্যা?",
+            "pt-BR": "Olá. Qual é o problema?",
+            "ru-RU": "Здравствуйте. Что вас беспокоит?",
+            "id-ID": "Halo. Ada keluhan apa?",
+            "de-DE": "Guten Tag. Was fehlt Ihnen?",
+            "ja-JP": "こんにちは。どうされましたか。",
+            "tr-TR": "Merhaba. Şikayetiniz nedir?",
+            "vi-VN": "Xin chào. Bạn bị gì vậy?",
+            "ko-KR": "안녕하세요. 어디가 불편하세요?",
+            "it-IT": "Buongiorno. Qual è il problema?",
+            "th-TH": "สวัสดีครับ มีอาการอะไรครับ",
+            "pl-PL": "Dzień dobry. Co panu dolega?",
+            "nl-NL": "Hallo. Wat is er aan de hand?",
+            "ga-IE": "Dia dhuit. Cad atá cearr?"
+          }
+        },
+        {
+          "role": "you",
+          "lines": {
+            "en-US": "I've had a sore throat since yesterday.",
+            "zh-CN": "我从昨天开始喉咙痛。",
+            "zh-HK": "我由尋日開始喉嚨痛。",
+            "hi-IN": "कल से मेरे गले में दर्द है।",
+            "es-ES": "Tengo dolor de garganta desde ayer.",
+            "ar-SA": "عندي ألم في الحلق منذ أمس.",
+            "fr-FR": "J'ai mal à la gorge depuis hier.",
+            "bn-IN": "কাল থেকে আমার গলা ব্যথা।",
+            "pt-BR": "Estou com dor de garganta desde ontem.",
+            "ru-RU": "У меня болит горло со вчерашнего дня.",
+            "id-ID": "Tenggorokan saya sakit sejak kemarin.",
+            "de-DE": "Ich habe seit gestern Halsschmerzen.",
+            "ja-JP": "昨日から喉が痛いです。",
+            "tr-TR": "Dünden beri boğazım ağrıyor.",
+            "vi-VN": "Tôi đau họng từ hôm qua.",
+            "ko-KR": "어제부터 목이 아파요.",
+            "it-IT": "Ho mal di gola da ieri.",
+            "th-TH": "เจ็บคอมาตั้งแต่เมื่อวานครับ",
+            "pl-PL": "Od wczoraj boli mnie gardło.",
+            "nl-NL": "Ik heb sinds gisteren keelpijn.",
+            "ga-IE": "Tá scornach thinn orm ó inné."
+          }
+        },
+        {
+          "role": "them",
+          "lines": {
+            "en-US": "Do you have a cough or a fever?",
+            "zh-CN": "您有咳嗽或发烧吗？",
+            "zh-HK": "你有冇咳或者發燒？",
+            "hi-IN": "खांसी या बुखार भी है?",
+            "es-ES": "¿Tiene tos o fiebre?",
+            "ar-SA": "هل لديك سعال أو حمى؟",
+            "fr-FR": "Vous avez de la toux ou de la fièvre ?",
+            "bn-IN": "কাশি বা জ্বর আছে?",
+            "pt-BR": "Você tem tosse ou febre?",
+            "ru-RU": "Есть кашель или температура?",
+            "id-ID": "Ada batuk atau demam?",
+            "de-DE": "Haben Sie Husten oder Fieber?",
+            "ja-JP": "咳や熱はありますか。",
+            "tr-TR": "Öksürük veya ateş var mı?",
+            "vi-VN": "Bạn có ho hay sốt không?",
+            "ko-KR": "기침이나 열은 있어요?",
+            "it-IT": "Ha tosse o febbre?",
+            "th-TH": "มีไอหรือไข้ไหมครับ",
+            "pl-PL": "Jest kaszel albo gorączka?",
+            "nl-NL": "Heeft u hoest of koorts?",
+            "ga-IE": "An bhfuil casacht nó fiabhras ort?"
+          }
+        },
+        {
+          "role": "you",
+          "lines": {
+            "en-US": "A little cough, but no fever.",
+            "zh-CN": "有一点咳嗽，但不发烧。",
+            "zh-HK": "有少少咳，但係冇發燒。",
+            "hi-IN": "थोड़ी खांसी है, लेकिन बुखार नहीं।",
+            "es-ES": "Un poco de tos, pero no fiebre.",
+            "ar-SA": "سعال خفيف، لكن بلا حمى.",
+            "fr-FR": "Un peu de toux, mais pas de fièvre.",
+            "bn-IN": "একটু কাশি আছে, জ্বর নেই।",
+            "pt-BR": "Um pouco de tosse, mas sem febre.",
+            "ru-RU": "Небольшой кашель, но температуры нет.",
+            "id-ID": "Batuk sedikit, tapi tidak demam.",
+            "de-DE": "Etwas Husten, aber kein Fieber.",
+            "ja-JP": "少し咳が出ますが、熱はありません。",
+            "tr-TR": "Biraz öksürük var, ateş yok.",
+            "vi-VN": "Ho nhẹ, nhưng không sốt.",
+            "ko-KR": "기침은 조금 있는데 열은 없어요.",
+            "it-IT": "Un po' di tosse, ma niente febbre.",
+            "th-TH": "ไอเล็กน้อย แต่ไม่มีไข้ครับ",
+            "pl-PL": "Lekki kaszel, ale bez gorączki.",
+            "nl-NL": "Een beetje hoest, maar geen koorts.",
+            "ga-IE": "Casacht bheag, ach níl fiabhras orm."
+          }
+        },
+        {
+          "role": "them",
+          "lines": {
+            "en-US": "I'll give you a three-day prescription.",
+            "zh-CN": "我给您开三天的药。",
+            "zh-HK": "我俾你三日嘅藥。",
+            "hi-IN": "मैं तीन दिन की दवा लिख देता हूँ।",
+            "es-ES": "Le doy una receta de tres días.",
+            "ar-SA": "سأعطيك وصفة لثلاثة أيام.",
+            "fr-FR": "Je vous fais une ordonnance de trois jours.",
+            "bn-IN": "আমি তিন দিনের ওষুধ লিখে দিচ্ছি।",
+            "pt-BR": "Vou te passar uma receita de três dias.",
+            "ru-RU": "Я выпишу рецепт на три дня.",
+            "id-ID": "Saya beri resep untuk tiga hari.",
+            "de-DE": "Ich gebe Ihnen ein Rezept für drei Tage.",
+            "ja-JP": "三日分の薬を出します。",
+            "tr-TR": "Üç günlük reçete yazacağım.",
+            "vi-VN": "Tôi kê đơn thuốc ba ngày.",
+            "ko-KR": "삼 일짜리 처방전 드릴게요.",
+            "it-IT": "Le do una ricetta di tre giorni.",
+            "th-TH": "เขียนยาสามวันให้ครับ",
+            "pl-PL": "Dam receptę na trzy dni.",
+            "nl-NL": "Ik geef u een recept voor drie dagen.",
+            "ga-IE": "Tabharfaidh mé oideas trí lá duit."
+          }
+        },
+        {
+          "role": "you",
+          "lines": {
+            "en-US": "Should I rest as well?",
+            "zh-CN": "我也需要休息吗？",
+            "zh-HK": "我需唔需要休息呀？",
+            "hi-IN": "क्या मुझे आराम भी करना चाहिए?",
+            "es-ES": "¿Debo descansar también?",
+            "ar-SA": "هل يجب أن أرتاح أيضاً؟",
+            "fr-FR": "Je dois aussi me reposer ?",
+            "bn-IN": "আমাকে কি বিশ্রামও নিতে হবে?",
+            "pt-BR": "Eu preciso descansar também?",
+            "ru-RU": "Мне тоже нужно отдыхать?",
+            "id-ID": "Apakah saya juga harus istirahat?",
+            "de-DE": "Soll ich mich auch ausruhen?",
+            "ja-JP": "安静にした方がいいですか。",
+            "tr-TR": "Dinlenmem de gerekir mi?",
+            "vi-VN": "Tôi có cần nghỉ ngơi không?",
+            "ko-KR": "쉬어야 하나요?",
+            "it-IT": "Devo anche riposare?",
+            "th-TH": "ต้องพักด้วยไหมครับ",
+            "pl-PL": "Czy powinienem też odpoczywać?",
+            "nl-NL": "Moet ik ook rusten?",
+            "ga-IE": "Ar cheart dom scíth a ligint freisin?"
+          }
+        },
+        {
+          "role": "them",
+          "lines": {
+            "en-US": "Yes. Try to rest if you can.",
+            "zh-CN": "是的。尽量多休息。",
+            "zh-HK": "需要。可以嘅話就休息吓。",
+            "hi-IN": "हाँ। जितना हो सके आराम करें।",
+            "es-ES": "Sí. Descanse si puede.",
+            "ar-SA": "نعم. حاول أن ترتاح إن استطعت.",
+            "fr-FR": "Oui. Reposez-vous si vous pouvez.",
+            "bn-IN": "হ্যাঁ। পারলে বিশ্রাম নিন।",
+            "pt-BR": "Sim. Tente descansar se puder.",
+            "ru-RU": "Да. Отдыхайте, если можете.",
+            "id-ID": "Ya. Cobalah istirahat jika bisa.",
+            "de-DE": "Ja. Ruhen Sie sich aus, wenn Sie können.",
+            "ja-JP": "はい。できるだけ休んでください。",
+            "tr-TR": "Evet. Mümkünse dinlenin.",
+            "vi-VN": "Có. Cố gắng nghỉ nếu được.",
+            "ko-KR": "네. 가능하면 쉬세요.",
+            "it-IT": "Sì. Riposi se può.",
+            "th-TH": "ใช่ครับ พักถ้าได้ครับ",
+            "pl-PL": "Tak. Proszę odpoczywać, jeśli można.",
+            "nl-NL": "Ja. Rust als het kan.",
+            "ga-IE": "Ba cheart. Lig do scíth más féidir leat."
+          }
+        },
+        {
+          "role": "you",
+          "lines": {
+            "en-US": "Okay. Do I need to stay home?",
+            "zh-CN": "好的。我需要在家休息吗？",
+            "zh-HK": "好。我要唔要喺屋企休息？",
+            "hi-IN": "ठीक है। क्या घर पर रहना होगा?",
+            "es-ES": "Vale. ¿Tengo que quedarme en casa?",
+            "ar-SA": "حسناً. هل أبقى في البيت؟",
+            "fr-FR": "D'accord. Je dois rester à la maison ?",
+            "bn-IN": "ঠিক আছে। কি বাড়িতে থাকতে হবে?",
+            "pt-BR": "Tá. Preciso ficar em casa?",
+            "ru-RU": "Хорошо. Нужно оставаться дома?",
+            "id-ID": "Baik. Apakah saya harus di rumah?",
+            "de-DE": "Gut. Muss ich zu Hause bleiben?",
+            "ja-JP": "わかりました。家で休んだ方がいいですか。",
+            "tr-TR": "Tamam. Evde kalmam gerekir mi?",
+            "vi-VN": "Được. Tôi có phải ở nhà không?",
+            "ko-KR": "알겠어요. 집에 있어야 하나요?",
+            "it-IT": "Va bene. Devo restare a casa?",
+            "th-TH": "ได้ครับ ต้องอยู่บ้านไหมครับ",
+            "pl-PL": "Dobrze. Muszę zostać w domu?",
+            "nl-NL": "Oké. Moet ik thuis blijven?",
+            "ga-IE": "Ceart go leor. An gcaithfidh mé fanacht sa bhaile?"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "hotel",
+      "scenario": "hotel",
+      "level": "A2",
+      "position": 5,
+      "meta": {
+        "en-US": {
+          "title": "At the hotel",
+          "yourRole": "guest",
+          "theirRole": "receptionist"
+        },
+        "zh-CN": {
+          "title": "在酒店",
+          "yourRole": "客人",
+          "theirRole": "前台"
+        },
+        "zh-HK": {
+          "title": "喺酒店",
+          "yourRole": "客人",
+          "theirRole": "接待處"
+        },
+        "hi-IN": {
+          "title": "होटल में",
+          "yourRole": "मेहमान",
+          "theirRole": "रिसेप्शनिस्ट"
+        },
+        "es-ES": {
+          "title": "En el hotel",
+          "yourRole": "huésped",
+          "theirRole": "recepcionista"
+        },
+        "ar-SA": {
+          "title": "في الفندق",
+          "yourRole": "نزيل",
+          "theirRole": "موظف استقبال"
+        },
+        "fr-FR": {
+          "title": "À l'hôtel",
+          "yourRole": "client",
+          "theirRole": "réceptionniste"
+        },
+        "bn-IN": {
+          "title": "হোটেলে",
+          "yourRole": "অতিথি",
+          "theirRole": "রিসেপশনিস্ট"
+        },
+        "pt-BR": {
+          "title": "No hotel",
+          "yourRole": "hóspede",
+          "theirRole": "recepcionista"
+        },
+        "ru-RU": {
+          "title": "В отеле",
+          "yourRole": "гость",
+          "theirRole": "администратор"
+        },
+        "id-ID": {
+          "title": "Di hotel",
+          "yourRole": "tamu",
+          "theirRole": "resepsionis"
+        },
+        "de-DE": {
+          "title": "Im Hotel",
+          "yourRole": "Gast",
+          "theirRole": "Rezeptionist"
+        },
+        "ja-JP": {
+          "title": "ホテルで",
+          "yourRole": "宿泊客",
+          "theirRole": "受付"
+        },
+        "tr-TR": {
+          "title": "Otelde",
+          "yourRole": "misafir",
+          "theirRole": "resepsiyonist"
+        },
+        "vi-VN": {
+          "title": "Ở khách sạn",
+          "yourRole": "khách",
+          "theirRole": "lễ tân"
+        },
+        "ko-KR": {
+          "title": "호텔에서",
+          "yourRole": "투숙객",
+          "theirRole": "직원"
+        },
+        "it-IT": {
+          "title": "In albergo",
+          "yourRole": "ospite",
+          "theirRole": "receptionist"
+        },
+        "th-TH": {
+          "title": "ที่โรงแรม",
+          "yourRole": "แขก",
+          "theirRole": "พนักงานต้อนรับ"
+        },
+        "pl-PL": {
+          "title": "W hotelu",
+          "yourRole": "gość",
+          "theirRole": "recepcjonista"
+        },
+        "nl-NL": {
+          "title": "In het hotel",
+          "yourRole": "gast",
+          "theirRole": "receptionist"
+        },
+        "ga-IE": {
+          "title": "Ag an óstán",
+          "yourRole": "aoi",
+          "theirRole": "fáilteoir"
+        }
+      },
+      "speakers": {
+        "them": {
+          "en-US": "Receptionist",
+          "zh-CN": "前台",
+          "zh-HK": "接待處",
+          "hi-IN": "रिसेप्शनिस्ट",
+          "es-ES": "Recepcionista",
+          "ar-SA": "موظف الاستقبال",
+          "fr-FR": "Réceptionniste",
+          "bn-IN": "রিসেপশনিস্ট",
+          "pt-BR": "Recepcionista",
+          "ru-RU": "Администратор",
+          "id-ID": "Resepsionis",
+          "de-DE": "Rezeption",
+          "ja-JP": "受付",
+          "tr-TR": "Resepsiyonist",
+          "vi-VN": "Lễ tân",
+          "ko-KR": "직원",
+          "it-IT": "Receptionist",
+          "th-TH": "พนักงานต้อนรับ",
+          "pl-PL": "Recepcjonista",
+          "nl-NL": "Receptionist",
+          "ga-IE": "Fáilteoir"
+        },
+        "you": {
+          "en-US": "You",
+          "zh-CN": "你",
+          "zh-HK": "你",
+          "hi-IN": "आप",
+          "es-ES": "Tú",
+          "ar-SA": "أنت",
+          "fr-FR": "Vous",
+          "bn-IN": "আপনি",
+          "pt-BR": "Você",
+          "ru-RU": "Вы",
+          "id-ID": "Anda",
+          "de-DE": "Du",
+          "ja-JP": "あなた",
+          "tr-TR": "Sen",
+          "vi-VN": "Bạn",
+          "ko-KR": "나",
+          "it-IT": "Tu",
+          "th-TH": "คุณ",
+          "pl-PL": "Ty",
+          "nl-NL": "Jij",
+          "ga-IE": "Tusa"
+        }
+      },
+      "turns": [
+        {
+          "role": "them",
+          "lines": {
+            "en-US": "Good evening. Do you have a reservation?",
+            "zh-CN": "晚上好。您有预订吗？",
+            "zh-HK": "晚上好。你有冇預約？",
+            "hi-IN": "शुभ संध्या। क्या आपका रिज़र्वेशन है?",
+            "es-ES": "Buenas noches. ¿Tiene reserva?",
+            "ar-SA": "مساء الخير. هل لديك حجز؟",
+            "fr-FR": "Bonsoir. Vous avez une réservation ?",
+            "bn-IN": "শুভ সন্ধ্যা। আপনার রিজার্ভেশন আছে?",
+            "pt-BR": "Boa noite. Você tem reserva?",
+            "ru-RU": "Добрый вечер. У вас есть бронь?",
+            "id-ID": "Selamat malam. Apakah Anda punya reservasi?",
+            "de-DE": "Guten Abend. Haben Sie eine Reservierung?",
+            "ja-JP": "こんばんは。ご予約はございますか。",
+            "tr-TR": "İyi akşamlar. Rezervasyonunuz var mı?",
+            "vi-VN": "Chào buổi tối. Bạn có đặt phòng không?",
+            "ko-KR": "안녕하세요. 예약하셨나요?",
+            "it-IT": "Buonasera. Ha una prenotazione?",
+            "th-TH": "สวัสดีครับ มีการจองไหมครับ",
+            "pl-PL": "Dobry wieczór. Czy ma pan rezerwację?",
+            "nl-NL": "Goedenavond. Heeft u een reservering?",
+            "ga-IE": "Tráthnóna maith. An bhfuil áirithint agat?"
+          }
+        },
+        {
+          "role": "you",
+          "lines": {
+            "en-US": "Yes, for one night. The name is Taylor.",
+            "zh-CN": "有，一晚。名字是泰勒。",
+            "zh-HK": "有，一晚。個名係泰勒。",
+            "hi-IN": "हाँ, एक रात के लिए। नाम टेलर है।",
+            "es-ES": "Sí, para una noche. El nombre es Taylor.",
+            "ar-SA": "نعم، لليلة واحدة. الاسم تايلور.",
+            "fr-FR": "Oui, pour une nuit. Le nom est Taylor.",
+            "bn-IN": "হ্যাঁ, এক রাতের। নাম টেলর।",
+            "pt-BR": "Sim, para uma noite. O nome é Taylor.",
+            "ru-RU": "Да, на одну ночь. Фамилия Тейлор.",
+            "id-ID": "Ya, untuk satu malam. Namanya Taylor.",
+            "de-DE": "Ja, für eine Nacht. Der Name ist Taylor.",
+            "ja-JP": "はい、一泊です。名前はテイラーです。",
+            "tr-TR": "Evet, bir gecelik. İsim Taylor.",
+            "vi-VN": "Có, một đêm. Tên là Taylor.",
+            "ko-KR": "네, 하루요. 이름은 테일러예요.",
+            "it-IT": "Sì, per una notte. Il nome è Taylor.",
+            "th-TH": "มีครับ คืนเดียว ชื่อเทย์เลอร์ครับ",
+            "pl-PL": "Tak, na jedną noc. Nazwisko Taylor.",
+            "nl-NL": "Ja, voor één nacht. De naam is Taylor.",
+            "ga-IE": "Tá, ar feadh oíche amháin. Taylor an t-ainm."
+          }
+        },
+        {
+          "role": "them",
+          "lines": {
+            "en-US": "A room with two beds, is that right?",
+            "zh-CN": "一间两张床的房间，对吗？",
+            "zh-HK": "一間兩張床嘅房，啱唔啱？",
+            "hi-IN": "दो बिस्तर वाला कमरा, सही है न?",
+            "es-ES": "Una habitación con dos camas, ¿verdad?",
+            "ar-SA": "غرفة بسريرين، صحيح؟",
+            "fr-FR": "Une chambre avec deux lits, c'est ça ?",
+            "bn-IN": "দুটো বিছানার ঘর, তাই তো?",
+            "pt-BR": "Um quarto com duas camas, certo?",
+            "ru-RU": "Номер с двумя кроватями, верно?",
+            "id-ID": "Kamar dengan dua tempat tidur, benar?",
+            "de-DE": "Ein Zimmer mit zwei Betten, richtig?",
+            "ja-JP": "ベッドが二つのお部屋ですね。",
+            "tr-TR": "İki yataklı oda, doğru mu?",
+            "vi-VN": "Phòng hai giường, đúng không?",
+            "ko-KR": "침대 두 개인 방 맞죠?",
+            "it-IT": "Una camera con due letti, giusto?",
+            "th-TH": "ห้องเตียงคู่ ใช่ไหมครับ",
+            "pl-PL": "Pokój z dwoma łóżkami, tak?",
+            "nl-NL": "Een kamer met twee bedden, klopt dat?",
+            "ga-IE": "Seomra le dhá leaba, an ea?"
+          }
+        },
+        {
+          "role": "you",
+          "lines": {
+            "en-US": "Yes, two beds please. Is breakfast included?",
+            "zh-CN": "对，两张床。含早餐吗？",
+            "zh-HK": "啱，兩張床。包唔包早餐？",
+            "hi-IN": "हाँ, दो बिस्तर। नाश्ता शामिल है?",
+            "es-ES": "Sí, dos camas. ¿El desayuno está incluido?",
+            "ar-SA": "نعم، سريران. هل الإفطار مشمول؟",
+            "fr-FR": "Oui, deux lits. Le petit-déjeuner est compris ?",
+            "bn-IN": "হ্যাঁ, দুটো বিছানা। নাস্তা অন্তর্ভুক্ত?",
+            "pt-BR": "Sim, duas camas. O café da manhã está incluso?",
+            "ru-RU": "Да, две кровати. Завтрак включён?",
+            "id-ID": "Ya, dua tempat tidur. Sarapan termasuk?",
+            "de-DE": "Ja, zwei Betten. Ist das Frühstück inklusive?",
+            "ja-JP": "はい、二つお願いします。朝食は付きますか。",
+            "tr-TR": "Evet, iki yatak. Kahvaltı dahil mi?",
+            "vi-VN": "Đúng, hai giường. Có gồm bữa sáng không?",
+            "ko-KR": "네, 침대 둘이요. 아침 포함인가요?",
+            "it-IT": "Sì, due letti. La colazione è inclusa?",
+            "th-TH": "ใช่ครับ สองเตียง รวมอาหารเช้าไหมครับ",
+            "pl-PL": "Tak, dwa łóżka. Śniadanie w cenie?",
+            "nl-NL": "Ja, twee bedden. Is het ontbijt inbegrepen?",
+            "ga-IE": "Sea, dhá leaba. An bhfuil bricfeasta san áireamh?"
+          }
+        },
+        {
+          "role": "them",
+          "lines": {
+            "en-US": "Yes, breakfast is included. Checkout is at eleven.",
+            "zh-CN": "含早餐。退房时间是十一点。",
+            "zh-HK": "包早餐。退房時間係十一點。",
+            "hi-IN": "हाँ, नाश्ता शामिल है। चेकआउट ग्यारह बजे है।",
+            "es-ES": "Sí, el desayuno está incluido. La salida es a las once.",
+            "ar-SA": "نعم، الإفطار مشمول. المغادرة الساعة الحادية عشرة.",
+            "fr-FR": "Oui, le petit-déjeuner est compris. Le départ est à onze heures.",
+            "bn-IN": "হ্যাঁ, নাস্তা অন্তর্ভুক্ত। চেকআউট এগারোটায়।",
+            "pt-BR": "Sim, está incluso. O check-out é às onze.",
+            "ru-RU": "Да, завтрак включён. Выезд в одиннадцать.",
+            "id-ID": "Ya, sarapan termasuk. Check-out jam sebelas.",
+            "de-DE": "Ja, Frühstück inklusive. Checkout ist um elf.",
+            "ja-JP": "はい、朝食付きです。チェックアウトは十一時です。",
+            "tr-TR": "Evet, kahvaltı dahil. Çıkış saat on bir.",
+            "vi-VN": "Có, gồm bữa sáng. Trả phòng lúc mười một giờ.",
+            "ko-KR": "네, 아침 포함이에요. 체크아웃은 열한 시예요.",
+            "it-IT": "Sì, colazione inclusa. Il check-out è alle undici.",
+            "th-TH": "รวมอาหารเช้าครับ เช็กเอาต์สิบเอ็ดโมงครับ",
+            "pl-PL": "Tak, śniadanie w cenie. Wymeldowanie o jedenastej.",
+            "nl-NL": "Ja, ontbijt inbegrepen. Uitchecken om elf uur.",
+            "ga-IE": "Tá, tá bricfeasta san áireamh. Seiceáil amach ar a haon déag."
+          }
+        },
+        {
+          "role": "you",
+          "lines": {
+            "en-US": "Perfect. Where is the wifi password?",
+            "zh-CN": "太好了。无线网密码在哪里？",
+            "zh-HK": "好呀。Wi-Fi 密碼喺邊？",
+            "hi-IN": "बढ़िया। वाई-फ़ाई पासवर्ड कहाँ है?",
+            "es-ES": "Perfecto. ¿Dónde está la contraseña del wifi?",
+            "ar-SA": "ممتاز. أين كلمة سر الواي فاي؟",
+            "fr-FR": "Parfait. Où est le mot de passe du wifi ?",
+            "bn-IN": "দারুণ। ওয়াই-ফাই পাসওয়ার্ড কোথায়?",
+            "pt-BR": "Perfeito. Onde está a senha do wifi?",
+            "ru-RU": "Отлично. Где пароль от вайфая?",
+            "id-ID": "Sempurna. Kata sandi wifi di mana?",
+            "de-DE": "Perfekt. Wo ist das WLAN-Passwort?",
+            "ja-JP": "助かります。Wi-Fiのパスワードはどこですか。",
+            "tr-TR": "Harika. Wifi şifresi nerede?",
+            "vi-VN": "Tuyệt. Mật khẩu wifi ở đâu?",
+            "ko-KR": "좋아요. 와이파이 비밀번호가 어디에 있나요?",
+            "it-IT": "Perfetto. Dov'è la password del wifi?",
+            "th-TH": "ดีครับ รหัสไวไฟอยู่ไหนครับ",
+            "pl-PL": "Świetnie. Gdzie jest hasło do wifi?",
+            "nl-NL": "Perfect. Waar is het wifi-wachtwoord?",
+            "ga-IE": "Foirfe. Cá bhfuil pasfhocal an wifi?"
+          }
+        },
+        {
+          "role": "them",
+          "lines": {
+            "en-US": "It's on a card on the desk in your room.",
+            "zh-CN": "在您房间桌上的卡片上。",
+            "zh-HK": "喺你房間書枱上面張卡度。",
+            "hi-IN": "आपके कमरे की मेज़ पर कार्ड पर लिखा है।",
+            "es-ES": "En una tarjeta sobre el escritorio de su habitación.",
+            "ar-SA": "على بطاقة فوق المكتب في غرفتك.",
+            "fr-FR": "Sur une carte sur le bureau dans votre chambre.",
+            "bn-IN": "আপনার ঘরের টেবিলের কার্ডে আছে।",
+            "pt-BR": "Num cartão em cima da mesa no seu quarto.",
+            "ru-RU": "На карточке на столе в вашем номере.",
+            "id-ID": "Di kartu di atas meja di kamar Anda.",
+            "de-DE": "Auf einer Karte auf dem Schreibtisch in Ihrem Zimmer.",
+            "ja-JP": "お部屋の机の上のカードに書いてあります。",
+            "tr-TR": "Odanızdaki masanın üstündeki kartta.",
+            "vi-VN": "Trên tấm thẻ trên bàn trong phòng bạn.",
+            "ko-KR": "방 책상 위 카드에 있어요.",
+            "it-IT": "Su un biglietto sulla scrivania in camera.",
+            "th-TH": "อยู่บนการ์ดบนโต๊ะในห้องครับ",
+            "pl-PL": "Na kartce na biurku w pokoju.",
+            "nl-NL": "Op een kaartje op het bureau in uw kamer.",
+            "ga-IE": "Ar chárta ar an deasc i do sheomra."
+          }
+        },
+        {
+          "role": "you",
+          "lines": {
+            "en-US": "Thank you very much.",
+            "zh-CN": "非常感谢。",
+            "zh-HK": "多謝。",
+            "hi-IN": "बहुत धन्यवाद।",
+            "es-ES": "Muchas gracias.",
+            "ar-SA": "شكراً جزيلاً.",
+            "fr-FR": "Merci beaucoup.",
+            "bn-IN": "অনেক ধন্যবাদ।",
+            "pt-BR": "Muito obrigado.",
+            "ru-RU": "Большое спасибо.",
+            "id-ID": "Terima kasih banyak.",
+            "de-DE": "Vielen Dank.",
+            "ja-JP": "どうもありがとうございます。",
+            "tr-TR": "Çok teşekkürler.",
+            "vi-VN": "Cảm ơn nhiều.",
+            "ko-KR": "정말 감사합니다.",
+            "it-IT": "Grazie mille.",
+            "th-TH": "ขอบคุณมากครับ",
+            "pl-PL": "Bardzo dziękuję.",
+            "nl-NL": "Hartelijk dank.",
+            "ga-IE": "Go raibh míle maith agat."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "interview",
+      "scenario": "interview",
+      "level": "A2",
+      "position": 6,
+      "meta": {
+        "en-US": {
+          "title": "Job interview",
+          "yourRole": "applicant",
+          "theirRole": "interviewer"
+        },
+        "zh-CN": {
+          "title": "工作面试",
+          "yourRole": "求职者",
+          "theirRole": "面试官"
+        },
+        "zh-HK": {
+          "title": "工作面試",
+          "yourRole": "求職者",
+          "theirRole": "面試官"
+        },
+        "hi-IN": {
+          "title": "नौकरी का इंटरव्यू",
+          "yourRole": "उम्मीदवार",
+          "theirRole": "इंटरव्यूअर"
+        },
+        "es-ES": {
+          "title": "Entrevista de trabajo",
+          "yourRole": "candidato",
+          "theirRole": "entrevistador"
+        },
+        "ar-SA": {
+          "title": "مقابلة عمل",
+          "yourRole": "متقدم",
+          "theirRole": "محاور"
+        },
+        "fr-FR": {
+          "title": "Entretien d'embauche",
+          "yourRole": "candidat",
+          "theirRole": "recruteur"
+        },
+        "bn-IN": {
+          "title": "চাকরির সাক্ষাৎকার",
+          "yourRole": "প্রার্থী",
+          "theirRole": "সাক্ষাৎকারক"
+        },
+        "pt-BR": {
+          "title": "Entrevista de emprego",
+          "yourRole": "candidato",
+          "theirRole": "entrevistador"
+        },
+        "ru-RU": {
+          "title": "Собеседование",
+          "yourRole": "соискатель",
+          "theirRole": "интервьюер"
+        },
+        "id-ID": {
+          "title": "Wawancara kerja",
+          "yourRole": "pelamar",
+          "theirRole": "pewawancara"
+        },
+        "de-DE": {
+          "title": "Vorstellungsgespräch",
+          "yourRole": "Bewerber",
+          "theirRole": "Interviewer"
+        },
+        "ja-JP": {
+          "title": "就職の面接",
+          "yourRole": "応募者",
+          "theirRole": "面接官"
+        },
+        "tr-TR": {
+          "title": "İş görüşmesi",
+          "yourRole": "aday",
+          "theirRole": "görüşmeci"
+        },
+        "vi-VN": {
+          "title": "Phỏng vấn xin việc",
+          "yourRole": "ứng viên",
+          "theirRole": "người phỏng vấn"
+        },
+        "ko-KR": {
+          "title": "면접",
+          "yourRole": "지원자",
+          "theirRole": "면접관"
+        },
+        "it-IT": {
+          "title": "Colloquio di lavoro",
+          "yourRole": "candidato",
+          "theirRole": "selezionatore"
+        },
+        "th-TH": {
+          "title": "สัมภาษณ์งาน",
+          "yourRole": "ผู้สมัคร",
+          "theirRole": "ผู้สัมภาษณ์"
+        },
+        "pl-PL": {
+          "title": "Rozmowa o pracę",
+          "yourRole": "kandydat",
+          "theirRole": "rekruter"
+        },
+        "nl-NL": {
+          "title": "Sollicitatiegesprek",
+          "yourRole": "sollicitant",
+          "theirRole": "interviewer"
+        },
+        "ga-IE": {
+          "title": "Agallamh poist",
+          "yourRole": "iarrthóir",
+          "theirRole": "agallóir"
+        }
+      },
+      "speakers": {
+        "them": {
+          "en-US": "Interviewer",
+          "zh-CN": "面试官",
+          "zh-HK": "面試官",
+          "hi-IN": "इंटरव्यूअर",
+          "es-ES": "Entrevistador",
+          "ar-SA": "المحاور",
+          "fr-FR": "Recruteur",
+          "bn-IN": "সাক্ষাৎকারক",
+          "pt-BR": "Entrevistador",
+          "ru-RU": "Интервьюер",
+          "id-ID": "Pewawancara",
+          "de-DE": "Interviewer",
+          "ja-JP": "面接官",
+          "tr-TR": "Görüşmeci",
+          "vi-VN": "Người phỏng vấn",
+          "ko-KR": "면접관",
+          "it-IT": "Selezionatore",
+          "th-TH": "ผู้สัมภาษณ์",
+          "pl-PL": "Rekruter",
+          "nl-NL": "Interviewer",
+          "ga-IE": "Agallóir"
+        },
+        "you": {
+          "en-US": "You",
+          "zh-CN": "你",
+          "zh-HK": "你",
+          "hi-IN": "आप",
+          "es-ES": "Tú",
+          "ar-SA": "أنت",
+          "fr-FR": "Vous",
+          "bn-IN": "আপনি",
+          "pt-BR": "Você",
+          "ru-RU": "Вы",
+          "id-ID": "Anda",
+          "de-DE": "Du",
+          "ja-JP": "あなた",
+          "tr-TR": "Sen",
+          "vi-VN": "Bạn",
+          "ko-KR": "나",
+          "it-IT": "Tu",
+          "th-TH": "คุณ",
+          "pl-PL": "Ty",
+          "nl-NL": "Jij",
+          "ga-IE": "Tusa"
+        }
+      },
+      "turns": [
+        {
+          "role": "them",
+          "lines": {
+            "en-US": "Thanks for coming in. Why do you want this shop job?",
+            "zh-CN": "谢谢你来。为什么想做这份店员工作？",
+            "zh-HK": "多謝你嚟。點解想做呢份舖頭工？",
+            "hi-IN": "आने के लिए धन्यवाद। यह दुकान की नौकरी क्यों चाहते हैं?",
+            "es-ES": "Gracias por venir. ¿Por qué quiere este trabajo en la tienda?",
+            "ar-SA": "شكراً لحضورك. لماذا تريد هذه الوظيفة في المتجر؟",
+            "fr-FR": "Merci d'être venu. Pourquoi ce poste en magasin ?",
+            "bn-IN": "আসার জন্য ধন্যবাদ। এই দোকানের চাকরি কেন চান?",
+            "pt-BR": "Obrigado por vir. Por que você quer esse emprego na loja?",
+            "ru-RU": "Спасибо, что пришли. Почему эта работа в магазине?",
+            "id-ID": "Terima kasih sudah datang. Mengapa pekerjaan toko ini?",
+            "de-DE": "Danke, dass Sie gekommen sind. Warum dieser Ladenjob?",
+            "ja-JP": "来てくれてありがとうございます。なぜこの店の仕事ですか。",
+            "tr-TR": "Geldiğiniz için teşekkürler. Neden bu dükkan işi?",
+            "vi-VN": "Cảm ơn bạn đã đến. Sao bạn muốn việc ở cửa hàng này?",
+            "ko-KR": "와 주셔서 감사합니다. 왜 이 가게 일자리인가요?",
+            "it-IT": "Grazie per essere venuto. Perché questo lavoro in negozio?",
+            "th-TH": "ขอบคุณที่มาครับ ทำไมอยากทำงานร้านนี้ครับ",
+            "pl-PL": "Dziękuję, że pan przyszedł. Dlaczego ta praca w sklepie?",
+            "nl-NL": "Dank u dat u gekomen bent. Waarom deze winkelbaan?",
+            "ga-IE": "Go raibh maith agat as teacht. Cén fáth ar mhaith leat an post siopa seo?"
+          }
+        },
+        {
+          "role": "you",
+          "lines": {
+            "en-US": "I like working with people, and it's close to home.",
+            "zh-CN": "离家近，而且我喜欢和人打交道。",
+            "zh-HK": "近屋企，而且我鍾意同人接觸。",
+            "hi-IN": "घर के पास है, और मुझे लोगों से बात करना अच्छा लगता है।",
+            "es-ES": "Está cerca de casa y me gusta tratar con gente.",
+            "ar-SA": "قريبة من البيت، وأحب مساعدة الناس.",
+            "fr-FR": "C'est près de chez moi, et j'aime aider les gens.",
+            "bn-IN": "বাড়ির কাছে, আর মানুষের সাথে কাজ ভালো লাগে।",
+            "pt-BR": "É perto de casa, e eu gosto de atender pessoas.",
+            "ru-RU": "Близко к дому, и мне нравится помогать людям.",
+            "id-ID": "Dekat rumah, dan saya suka membantu orang.",
+            "de-DE": "Es ist nah am Wohnort, und ich helfe gern Menschen.",
+            "ja-JP": "家から近くて、人と話すのが好きです。",
+            "tr-TR": "Eve yakın, ve insanlarla çalışmayı seviyorum.",
+            "vi-VN": "Gần nhà, và tôi thích giúp người khác.",
+            "ko-KR": "집과 가깝고, 사람을 돕는 걸 좋아해요.",
+            "it-IT": "È vicino a casa e mi piace aiutare le persone.",
+            "th-TH": "ใกล้บ้าน และชอบช่วยคนครับ",
+            "pl-PL": "Blisko domu i lubię pomagać ludziom.",
+            "nl-NL": "Dicht bij huis, en ik help graag mensen.",
+            "ga-IE": "Tá sé gar don bhaile, agus is maith liom cabhrú le daoine."
+          }
+        },
+        {
+          "role": "them",
+          "lines": {
+            "en-US": "Have you used a till before?",
+            "zh-CN": "你用过收银机吗？",
+            "zh-HK": "你用過收銀機未？",
+            "hi-IN": "क्या आपने पहले कैश काउंटर चलाया है?",
+            "es-ES": "¿Ha usado una caja registradora?",
+            "ar-SA": "هل عملت على الصندوق من قبل؟",
+            "fr-FR": "Vous avez déjà utilisé une caisse ?",
+            "bn-IN": "আপনি কি ক্যাশ কাউন্টার চালিয়েছেন?",
+            "pt-BR": "Você já usou o caixa?",
+            "ru-RU": "Вы работали на кассе?",
+            "id-ID": "Anda pernah memakai kasir?",
+            "de-DE": "Haben Sie schon an einer Kasse gearbeitet?",
+            "ja-JP": "レジを使ったことはありますか。",
+            "tr-TR": "Kasa kullandınız mı?",
+            "vi-VN": "Bạn đã dùng máy tính tiền chưa?",
+            "ko-KR": "계산대 써 보셨어요?",
+            "it-IT": "Ha già usato una cassa?",
+            "th-TH": "เคยใช้เครื่องคิดเงินไหมครับ",
+            "pl-PL": "Pracował pan już na kasie?",
+            "nl-NL": "Heeft u al achter de kassa gewerkt?",
+            "ga-IE": "Ar úsáid tú tarraiceán airgid cheana?"
+          }
+        },
+        {
+          "role": "you",
+          "lines": {
+            "en-US": "Yes, I have till experience.",
+            "zh-CN": "用过，我以前的工作用过收银机。",
+            "zh-HK": "用過，上一份工用過收銀機。",
+            "hi-IN": "हाँ, पिछली नौकरी में चलाया है।",
+            "es-ES": "Sí, la usé en mi último trabajo.",
+            "ar-SA": "نعم، في عملي السابق.",
+            "fr-FR": "Oui, à mon dernier travail.",
+            "bn-IN": "হ্যাঁ, আগের চাকরিতে চালিয়েছি।",
+            "pt-BR": "Sim, usei no meu último emprego.",
+            "ru-RU": "Да, на прошлой работе.",
+            "id-ID": "Pernah, di pekerjaan saya yang lalu.",
+            "de-DE": "Ja, in meinem letzten Job.",
+            "ja-JP": "はい、前の仕事で使いました。",
+            "tr-TR": "Evet, önceki işimde kullandım.",
+            "vi-VN": "Rồi, ở việc trước tôi đã dùng.",
+            "ko-KR": "네, 전 직장에서 썼어요.",
+            "it-IT": "Sì, nel mio ultimo lavoro.",
+            "th-TH": "เคยครับ ที่งานเก่าใช้ครับ",
+            "pl-PL": "Tak, w poprzedniej pracy.",
+            "nl-NL": "Ja, op mijn vorige werk.",
+            "ga-IE": "D'úsáid, i mo phost deireanach."
+          }
+        },
+        {
+          "role": "them",
+          "lines": {
+            "en-US": "Can you work evenings and weekends?",
+            "zh-CN": "晚上和周末可以上班吗？",
+            "zh-HK": "夜晚同週末可唔可以返工？",
+            "hi-IN": "शाम और सप्ताहांत काम कर सकते हैं?",
+            "es-ES": "¿Puede trabajar tardes y fines de semana?",
+            "ar-SA": "هل تستطيع العمل مساءً وفي عطلة نهاية الأسبوع؟",
+            "fr-FR": "Vous pouvez travailler le soir et le week-end ?",
+            "bn-IN": "সন্ধ্যায় ও সপ্তাহান্তে কাজ করতে পারবেন?",
+            "pt-BR": "Pode trabalhar à noite e nos fins de semana?",
+            "ru-RU": "Можете работать вечерами и в выходные?",
+            "id-ID": "Bisa kerja malam dan akhir pekan?",
+            "de-DE": "Können Sie abends und am Wochenende arbeiten?",
+            "ja-JP": "夕方と週末は働けますか。",
+            "tr-TR": "Akşamları ve hafta sonları çalışabilir misiniz?",
+            "vi-VN": "Bạn làm được buổi tối và cuối tuần không?",
+            "ko-KR": "저녁이랑 주말에도 일할 수 있어요?",
+            "it-IT": "Può lavorare sere e weekend?",
+            "th-TH": "ทำเย็นและวันหยุดได้ไหมครับ",
+            "pl-PL": "Może pan pracować wieczorami i w weekendy?",
+            "nl-NL": "Kunt u avonden en weekenden werken?",
+            "ga-IE": "An féidir leat oibriú tráthnóna agus deireadh seachtaine?"
+          }
+        },
+        {
+          "role": "you",
+          "lines": {
+            "en-US": "Yes, evenings and weekends are fine.",
+            "zh-CN": "可以，晚上和周末都没问题。",
+            "zh-HK": "得，夜晚同週末都得。",
+            "hi-IN": "हाँ, शाम और सप्ताहांत ठीक हैं।",
+            "es-ES": "Sí, tardes y fines de semana me va bien.",
+            "ar-SA": "نعم، المساء والعطل مناسبان.",
+            "fr-FR": "Oui, le soir et le week-end, ça me va.",
+            "bn-IN": "হ্যাঁ, সন্ধ্যা ও সপ্তাহান্ত ঠিক আছে।",
+            "pt-BR": "Sim, noites e fins de semana estão ótimos.",
+            "ru-RU": "Да, вечера и выходные мне подходят.",
+            "id-ID": "Bisa, malam dan akhir pekan tidak masalah.",
+            "de-DE": "Ja, Abende und Wochenenden sind in Ordnung.",
+            "ja-JP": "はい、夕方と週末は大丈夫です。",
+            "tr-TR": "Evet, akşam ve hafta sonu olur.",
+            "vi-VN": "Được, tối và cuối tuần đều ổn.",
+            "ko-KR": "네, 저녁이랑 주말 괜찮아요.",
+            "it-IT": "Sì, sere e weekend vanno bene.",
+            "th-TH": "ได้ครับ เย็นและวันหยุดได้ครับ",
+            "pl-PL": "Tak, wieczory i weekendy pasują.",
+            "nl-NL": "Ja, avonden en weekenden zijn prima.",
+            "ga-IE": "Is féidir. Tá tráthnóna agus deireadh seachtaine ceart go leor."
+          }
+        },
+        {
+          "role": "them",
+          "lines": {
+            "en-US": "Could you start on Monday?",
+            "zh-CN": "星期一开始可以吗？",
+            "zh-HK": "星期一同你開始得唔得？",
+            "hi-IN": "सोमवार से शुरू कर सकते हैं?",
+            "es-ES": "¿Podría empezar el lunes?",
+            "ar-SA": "هل تستطيع أن تبدأ يوم الاثنين؟",
+            "fr-FR": "Vous pouvez commencer lundi ?",
+            "bn-IN": "সোমবার থেকে শুরু করতে পারবেন?",
+            "pt-BR": "Pode começar na segunda?",
+            "ru-RU": "Можете выйти в понедельник?",
+            "id-ID": "Bisa mulai hari Senin?",
+            "de-DE": "Könnten Sie montags anfangen?",
+            "ja-JP": "月曜日から始められますか。",
+            "tr-TR": "Pazartesi başlayabilir misiniz?",
+            "vi-VN": "Bạn bắt đầu thứ Hai được không?",
+            "ko-KR": "월요일부터 시작할 수 있어요?",
+            "it-IT": "Potrebbe iniziare lunedì?",
+            "th-TH": "เริ่มวันจันทร์ได้ไหมครับ",
+            "pl-PL": "Może pan zacząć w poniedziałek?",
+            "nl-NL": "Kunt u maandag beginnen?",
+            "ga-IE": "An féidir leat tosú Dé Luain?"
+          }
+        },
+        {
+          "role": "you",
+          "lines": {
+            "en-US": "Yes, I can start on Monday.",
+            "zh-CN": "可以，我星期一就能开始。",
+            "zh-HK": "得，我星期一可以開始。",
+            "hi-IN": "हाँ, मैं सोमवार से शुरू कर सकता हूँ।",
+            "es-ES": "Sí, puedo empezar el lunes.",
+            "ar-SA": "نعم، أستطيع أن أبدأ يوم الاثنين.",
+            "fr-FR": "Oui, je peux commencer lundi.",
+            "bn-IN": "হ্যাঁ, সোমবার থেকে শুরু করতে পারি।",
+            "pt-BR": "Sim, posso começar na segunda.",
+            "ru-RU": "Да, могу начать в понедельник.",
+            "id-ID": "Bisa, saya bisa mulai hari Senin.",
+            "de-DE": "Ja, ich kann montags anfangen.",
+            "ja-JP": "はい、月曜日から始められます。",
+            "tr-TR": "Evet, pazartesi başlayabilirim.",
+            "vi-VN": "Được, tôi có thể bắt đầu thứ Hai.",
+            "ko-KR": "네, 월요일부터 시작할 수 있어요.",
+            "it-IT": "Sì, posso iniziare lunedì.",
+            "th-TH": "ได้ครับ เริ่มวันจันทร์ได้ครับ",
+            "pl-PL": "Tak, mogę zacząć w poniedziałek.",
+            "nl-NL": "Ja, ik kan maandag beginnen.",
+            "ga-IE": "Is féidir, is féidir liom tosú Dé Luain."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "restaurant",
+      "scenario": "restaurant",
+      "level": "A2",
+      "position": 7,
+      "meta": {
+        "en-US": {
+          "title": "At the restaurant",
+          "yourRole": "diner",
+          "theirRole": "waiter"
+        },
+        "zh-CN": {
+          "title": "在餐厅",
+          "yourRole": "客人",
+          "theirRole": "服务员"
+        },
+        "zh-HK": {
+          "title": "喺餐廳",
+          "yourRole": "客人",
+          "theirRole": "侍應"
+        },
+        "hi-IN": {
+          "title": "रेस्तरां में",
+          "yourRole": "ग्राहक",
+          "theirRole": "वेटर"
+        },
+        "es-ES": {
+          "title": "En el restaurante",
+          "yourRole": "comensal",
+          "theirRole": "camarero"
+        },
+        "ar-SA": {
+          "title": "في المطعم",
+          "yourRole": "زبون",
+          "theirRole": "نادل"
+        },
+        "fr-FR": {
+          "title": "Au restaurant",
+          "yourRole": "client",
+          "theirRole": "serveur"
+        },
+        "bn-IN": {
+          "title": "রেস্তোরাঁয়",
+          "yourRole": "অতিথি",
+          "theirRole": "ওয়েটার"
+        },
+        "pt-BR": {
+          "title": "No restaurante",
+          "yourRole": "cliente",
+          "theirRole": "garçom"
+        },
+        "ru-RU": {
+          "title": "В ресторане",
+          "yourRole": "гость",
+          "theirRole": "официант"
+        },
+        "id-ID": {
+          "title": "Di restoran",
+          "yourRole": "tamu",
+          "theirRole": "pelayan"
+        },
+        "de-DE": {
+          "title": "Im Restaurant",
+          "yourRole": "Gast",
+          "theirRole": "Kellner"
+        },
+        "ja-JP": {
+          "title": "レストランで",
+          "yourRole": "客",
+          "theirRole": "店員"
+        },
+        "tr-TR": {
+          "title": "Restoranda",
+          "yourRole": "misafir",
+          "theirRole": "garson"
+        },
+        "vi-VN": {
+          "title": "Ở nhà hàng",
+          "yourRole": "thực khách",
+          "theirRole": "phục vụ"
+        },
+        "ko-KR": {
+          "title": "식당에서",
+          "yourRole": "손님",
+          "theirRole": "직원"
+        },
+        "it-IT": {
+          "title": "Al ristorante",
+          "yourRole": "cliente",
+          "theirRole": "cameriere"
+        },
+        "th-TH": {
+          "title": "ที่ร้านอาหาร",
+          "yourRole": "ลูกค้า",
+          "theirRole": "พนักงานเสิร์ฟ"
+        },
+        "pl-PL": {
+          "title": "W restauracji",
+          "yourRole": "gość",
+          "theirRole": "kelner"
+        },
+        "nl-NL": {
+          "title": "In het restaurant",
+          "yourRole": "gast",
+          "theirRole": "ober"
+        },
+        "ga-IE": {
+          "title": "Ag an mbialann",
+          "yourRole": "custaiméir",
+          "theirRole": "freastalaí"
+        }
+      },
+      "speakers": {
+        "them": {
+          "en-US": "Waiter",
+          "zh-CN": "服务员",
+          "zh-HK": "侍應",
+          "hi-IN": "वेटर",
+          "es-ES": "Camarero",
+          "ar-SA": "النادل",
+          "fr-FR": "Serveur",
+          "bn-IN": "ওয়েটার",
+          "pt-BR": "Garçom",
+          "ru-RU": "Официант",
+          "id-ID": "Pelayan",
+          "de-DE": "Kellner",
+          "ja-JP": "店員",
+          "tr-TR": "Garson",
+          "vi-VN": "Phục vụ",
+          "ko-KR": "직원",
+          "it-IT": "Cameriere",
+          "th-TH": "พนักงานเสิร์ฟ",
+          "pl-PL": "Kelner",
+          "nl-NL": "Ober",
+          "ga-IE": "Freastalaí"
+        },
+        "you": {
+          "en-US": "You",
+          "zh-CN": "你",
+          "zh-HK": "你",
+          "hi-IN": "आप",
+          "es-ES": "Tú",
+          "ar-SA": "أنت",
+          "fr-FR": "Vous",
+          "bn-IN": "আপনি",
+          "pt-BR": "Você",
+          "ru-RU": "Вы",
+          "id-ID": "Anda",
+          "de-DE": "Du",
+          "ja-JP": "あなた",
+          "tr-TR": "Sen",
+          "vi-VN": "Bạn",
+          "ko-KR": "나",
+          "it-IT": "Tu",
+          "th-TH": "คุณ",
+          "pl-PL": "Ty",
+          "nl-NL": "Jij",
+          "ga-IE": "Tusa"
+        }
+      },
+      "turns": [
+        {
+          "role": "them",
+          "lines": {
+            "en-US": "Good evening. Do you have a reservation?",
+            "zh-CN": "晚上好。您有预订吗？",
+            "zh-HK": "晚上好。你有冇預訂？",
+            "hi-IN": "शुभ संध्या। क्या आपका रिज़र्वेशन है?",
+            "es-ES": "Buenas noches. ¿Tiene reserva?",
+            "ar-SA": "مساء الخير. هل لديك حجز؟",
+            "fr-FR": "Bonsoir. Vous avez une réservation ?",
+            "bn-IN": "শুভ সন্ধ্যা। রিজার্ভেশন আছে?",
+            "pt-BR": "Boa noite. Você tem reserva?",
+            "ru-RU": "Добрый вечер. У вас есть бронь?",
+            "id-ID": "Selamat malam. Ada reservasi?",
+            "de-DE": "Guten Abend. Haben Sie eine Reservierung?",
+            "ja-JP": "こんばんは。ご予約はありますか。",
+            "tr-TR": "İyi akşamlar. Rezervasyonunuz var mı?",
+            "vi-VN": "Chào buổi tối. Bạn có đặt bàn không?",
+            "ko-KR": "안녕하세요. 예약하셨나요?",
+            "it-IT": "Buonasera. Ha una prenotazione?",
+            "th-TH": "สวัสดีครับ มีการจองไหมครับ",
+            "pl-PL": "Dobry wieczór. Czy ma pan rezerwację?",
+            "nl-NL": "Goedenavond. Heeft u een reservering?",
+            "ga-IE": "Tráthnóna maith. An bhfuil áirithint agat?"
+          }
+        },
+        {
+          "role": "you",
+          "lines": {
+            "en-US": "No, just a table for two, please.",
+            "zh-CN": "没有，请给我们一张两人桌。",
+            "zh-HK": "冇，兩個人，唔該。",
+            "hi-IN": "नहीं, दो लोगों की टेबल चाहिए।",
+            "es-ES": "No, una mesa para dos, por favor.",
+            "ar-SA": "لا، طاولة لاثنين من فضلك.",
+            "fr-FR": "Non, une table pour deux, s'il vous plaît.",
+            "bn-IN": "না, দুজনের টেবিল দিন।",
+            "pt-BR": "Não, uma mesa para dois, por favor.",
+            "ru-RU": "Нет, столик на двоих, пожалуйста.",
+            "id-ID": "Tidak, meja untuk dua orang, tolong.",
+            "de-DE": "Nein, einen Tisch für zwei, bitte.",
+            "ja-JP": "いいえ、二人席をお願いします。",
+            "tr-TR": "Yok, iki kişilik masa lütfen.",
+            "vi-VN": "Không, bàn cho hai người, làm ơn.",
+            "ko-KR": "아니요, 두 명 자리 주세요.",
+            "it-IT": "No, un tavolo per due, per favore.",
+            "th-TH": "ไม่มีครับ โต๊ะสองที่ครับ",
+            "pl-PL": "Nie, stolik dla dwóch osób, proszę.",
+            "nl-NL": "Nee, een tafel voor twee, alstublieft.",
+            "ga-IE": "Níl, bord do bheirt, le do thoil."
+          }
+        },
+        {
+          "role": "them",
+          "lines": {
+            "en-US": "Of course. Would you like some water?",
+            "zh-CN": "当然。要水吗？",
+            "zh-HK": "冇問題。要唔要水？",
+            "hi-IN": "ज़रूर। पानी लेंगे?",
+            "es-ES": "Por supuesto. ¿Quieren agua?",
+            "ar-SA": "بالطبع. هل تريد ماء؟",
+            "fr-FR": "Bien sûr. Vous voulez de l'eau ?",
+            "bn-IN": "অবশ্যই। পানি নেবেন?",
+            "pt-BR": "Claro. Querem água?",
+            "ru-RU": "Конечно. Принести воды?",
+            "id-ID": "Tentu. Mau air?",
+            "de-DE": "Natürlich. Möchten Sie Wasser?",
+            "ja-JP": "かしこまりました。お水はいかがですか。",
+            "tr-TR": "Tabii. Su ister misiniz?",
+            "vi-VN": "Được chứ. Bạn muốn nước không?",
+            "ko-KR": "물론이죠. 물 드릴까요?",
+            "it-IT": "Certo. Vuole dell'acqua?",
+            "th-TH": "ได้ครับ รับน้ำไหมครับ",
+            "pl-PL": "Oczywiście. Woda?",
+            "nl-NL": "Natuurlijk. Wilt u water?",
+            "ga-IE": "Cinnte. Ar mhaith leat uisce?"
+          }
+        },
+        {
+          "role": "you",
+          "lines": {
+            "en-US": "Yes, water please. What's today's special?",
+            "zh-CN": "要水，谢谢。今天的特色菜是什么？",
+            "zh-HK": "要水，唔該。今日有咩推介？",
+            "hi-IN": "हाँ, पानी दीजिए। आज स्पेशल क्या है?",
+            "es-ES": "Sí, agua. ¿Cuál es el especial de hoy?",
+            "ar-SA": "نعم، ماء من فضلك. ما طبق اليوم؟",
+            "fr-FR": "Oui, de l'eau. Quel est le plat du jour ?",
+            "bn-IN": "হ্যাঁ, পানি। আজকের স্পেশাল কী?",
+            "pt-BR": "Sim, água. Qual é o especial de hoje?",
+            "ru-RU": "Да, воды. Какое сегодня фирменное блюдо?",
+            "id-ID": "Ya, air. Apa menu spesial hari ini?",
+            "de-DE": "Ja, Wasser bitte. Was ist das Tagesgericht?",
+            "ja-JP": "水をお願いします。今日の日替わりは何ですか。",
+            "tr-TR": "Evet, su lütfen. Günün yemeği nedir?",
+            "vi-VN": "Có, cho nước. Hôm nay món đặc biệt là gì?",
+            "ko-KR": "물 주세요. 오늘 특선이 뭐예요?",
+            "it-IT": "Sì, acqua. Qual è la specialità di oggi?",
+            "th-TH": "รับน้ำครับ วันนี้เมนูพิเศษอะไรครับ",
+            "pl-PL": "Tak, wodę. Jaki jest dzisiejszy specjał?",
+            "nl-NL": "Ja, water. Wat is het dagmenu?",
+            "ga-IE": "Ba mhaith, uisce. Cad é speisialta an lae?"
+          }
+        },
+        {
+          "role": "them",
+          "lines": {
+            "en-US": "The fish special. It takes about twenty minutes.",
+            "zh-CN": "特色鱼。大概要二十分钟。",
+            "zh-HK": "魚嘅特餐。大概要二十分鐘。",
+            "hi-IN": "मछली स्पेशल। लगभग बीस मिनट लगेंगे।",
+            "es-ES": "El especial de pescado. Tarda unos veinte minutos.",
+            "ar-SA": "طبق السمك الخاص. يستغرق نحو عشرين دقيقة.",
+            "fr-FR": "Le poisson du jour. Il faut environ vingt minutes.",
+            "bn-IN": "মাছের স্পেশাল। প্রায় বিশ মিনিট লাগবে।",
+            "pt-BR": "O especial de peixe. Leva uns vinte minutos.",
+            "ru-RU": "Рыбное блюдо дня. Примерно двадцать минут.",
+            "id-ID": "Spesial ikan. Kira-kira dua puluh menit.",
+            "de-DE": "Der Fisch. Das dauert etwa zwanzig Minuten.",
+            "ja-JP": "魚の日替わりです。二十分ほどかかります。",
+            "tr-TR": "Balık özel. Yaklaşık yirmi dakika sürer.",
+            "vi-VN": "Cá đặc biệt. Khoảng hai mươi phút.",
+            "ko-KR": "생선 특선이요. 이십 분쯤 걸려요.",
+            "it-IT": "Lo special di pesce. Ci vogliono circa venti minuti.",
+            "th-TH": "ปลาพิเศษครับ ประมาณยี่สิบนาทีครับ",
+            "pl-PL": "Specjał rybny. Około dwudziestu minut.",
+            "nl-NL": "De vis van de dag. Dat duurt ongeveer twintig minuten.",
+            "ga-IE": "Speisialta éisc. Tógann sé timpeall fiche nóiméad."
+          }
+        },
+        {
+          "role": "you",
+          "lines": {
+            "en-US": "That sounds good. We'll have that.",
+            "zh-CN": "听起来不错。我们就点这个。",
+            "zh-HK": "聽落不錯。我哋要呢個。",
+            "hi-IN": "अच्छा लगता है। वही ले लेंगे।",
+            "es-ES": "Suena bien. Lo tomamos.",
+            "ar-SA": "يبدو جيداً. سنأخذه.",
+            "fr-FR": "Ça me va. On prend ça.",
+            "bn-IN": "ভালো লাগছে। সেটাই নেব।",
+            "pt-BR": "Parece bom. Vamos querer esse.",
+            "ru-RU": "Звучит хорошо. Возьмём его.",
+            "id-ID": "Kedengarannya enak. Kami pesan itu.",
+            "de-DE": "Klingt gut. Den nehmen wir.",
+            "ja-JP": "よさそうです。それにします。",
+            "tr-TR": "Güzel. Onu alalım.",
+            "vi-VN": "Nghe hay. Chúng tôi lấy món đó.",
+            "ko-KR": "좋네요. 그걸로 할게요.",
+            "it-IT": "Sembra buono. Lo prendiamo.",
+            "th-TH": "ดีครับ เอาอันนั้นครับ",
+            "pl-PL": "Brzmi dobrze. Bierzemy to.",
+            "nl-NL": "Klinkt goed. Die nemen we.",
+            "ga-IE": "Fuaimeann sin go maith. Tógfaimid é sin."
+          }
+        },
+        {
+          "role": "them",
+          "lines": {
+            "en-US": "Would you like dessert?",
+            "zh-CN": "要甜点吗？",
+            "zh-HK": "要唔要甜品？",
+            "hi-IN": "मिठाई लेंगे?",
+            "es-ES": "¿Quieren postre?",
+            "ar-SA": "هل تريد حلوى؟",
+            "fr-FR": "Vous voulez un dessert ?",
+            "bn-IN": "ডেজার্ট নেবেন?",
+            "pt-BR": "Querem sobremesa?",
+            "ru-RU": "Хотите десерт?",
+            "id-ID": "Mau hidangan penutup?",
+            "de-DE": "Möchten Sie Dessert?",
+            "ja-JP": "デザートはいかがですか。",
+            "tr-TR": "Tatlı ister misiniz?",
+            "vi-VN": "Bạn muốn tráng miệng không?",
+            "ko-KR": "디저트 하실래요?",
+            "it-IT": "Vuole un dessert?",
+            "th-TH": "รับของหวานไหมครับ",
+            "pl-PL": "Czy deser?",
+            "nl-NL": "Wilt u dessert?",
+            "ga-IE": "Ar mhaith leat milseog?"
+          }
+        },
+        {
+          "role": "you",
+          "lines": {
+            "en-US": "No dessert, just the bill please.",
+            "zh-CN": "不要甜点，请结账。",
+            "zh-HK": "唔要甜品，埋單，唔該。",
+            "hi-IN": "नहीं, सिर्फ़ बिल दीजिए।",
+            "es-ES": "No, solo la cuenta, por favor.",
+            "ar-SA": "لا حلوى، الحساب فقط من فضلك.",
+            "fr-FR": "Non, juste l'addition, s'il vous plaît.",
+            "bn-IN": "না, শুধু বিল দিন।",
+            "pt-BR": "Não, só a conta, por favor.",
+            "ru-RU": "Нет, только счёт, пожалуйста.",
+            "id-ID": "Tidak, hanya bill-nya, tolong.",
+            "de-DE": "Nein, nur die Rechnung bitte.",
+            "ja-JP": "いいえ、お会計だけお願いします。",
+            "tr-TR": "Yok, sadece hesap lütfen.",
+            "vi-VN": "Không, chỉ tính tiền thôi.",
+            "ko-KR": "아니요, 계산만 해 주세요.",
+            "it-IT": "No, solo il conto, per favore.",
+            "th-TH": "ไม่เอาของหวาน เก็บเงินได้ครับ",
+            "pl-PL": "Nie, tylko rachunek, proszę.",
+            "nl-NL": "Nee, alleen de rekening, alstublieft.",
+            "ga-IE": "Ní maith, an bille amháin, le do thoil."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "taxi",
+      "scenario": "taxi",
+      "level": "A2",
+      "position": 8,
+      "meta": {
+        "en-US": {
+          "title": "In a taxi",
+          "yourRole": "passenger",
+          "theirRole": "driver"
+        },
+        "zh-CN": {
+          "title": "在出租车上",
+          "yourRole": "乘客",
+          "theirRole": "司机"
+        },
+        "zh-HK": {
+          "title": "喺的士度",
+          "yourRole": "乘客",
+          "theirRole": "司機"
+        },
+        "hi-IN": {
+          "title": "टैक्सी में",
+          "yourRole": "यात्री",
+          "theirRole": "ड्राइवर"
+        },
+        "es-ES": {
+          "title": "En un taxi",
+          "yourRole": "pasajero",
+          "theirRole": "taxista"
+        },
+        "ar-SA": {
+          "title": "في سيارة أجرة",
+          "yourRole": "راكب",
+          "theirRole": "سائق"
+        },
+        "fr-FR": {
+          "title": "Dans un taxi",
+          "yourRole": "passager",
+          "theirRole": "chauffeur"
+        },
+        "bn-IN": {
+          "title": "ট্যাক্সিতে",
+          "yourRole": "যাত্রী",
+          "theirRole": "চালক"
+        },
+        "pt-BR": {
+          "title": "No táxi",
+          "yourRole": "passageiro",
+          "theirRole": "motorista"
+        },
+        "ru-RU": {
+          "title": "В такси",
+          "yourRole": "пассажир",
+          "theirRole": "водитель"
+        },
+        "id-ID": {
+          "title": "Di taksi",
+          "yourRole": "penumpang",
+          "theirRole": "sopir"
+        },
+        "de-DE": {
+          "title": "Im Taxi",
+          "yourRole": "Fahrgast",
+          "theirRole": "Fahrer"
+        },
+        "ja-JP": {
+          "title": "タクシーで",
+          "yourRole": "乗客",
+          "theirRole": "運転手"
+        },
+        "tr-TR": {
+          "title": "Taksi'de",
+          "yourRole": "yolcu",
+          "theirRole": "şoför"
+        },
+        "vi-VN": {
+          "title": "Trên taxi",
+          "yourRole": "hành khách",
+          "theirRole": "tài xế"
+        },
+        "ko-KR": {
+          "title": "택시에서",
+          "yourRole": "승객",
+          "theirRole": "기사"
+        },
+        "it-IT": {
+          "title": "In taxi",
+          "yourRole": "passeggero",
+          "theirRole": "tassista"
+        },
+        "th-TH": {
+          "title": "ในแท็กซี่",
+          "yourRole": "ผู้โดยสาร",
+          "theirRole": "คนขับ"
+        },
+        "pl-PL": {
+          "title": "W taksówce",
+          "yourRole": "pasażer",
+          "theirRole": "kierowca"
+        },
+        "nl-NL": {
+          "title": "In een taxi",
+          "yourRole": "passagier",
+          "theirRole": "chauffeur"
+        },
+        "ga-IE": {
+          "title": "I dtacsaí",
+          "yourRole": "paisinéir",
+          "theirRole": "tiománaí"
+        }
+      },
+      "speakers": {
+        "them": {
+          "en-US": "Driver",
+          "zh-CN": "司机",
+          "zh-HK": "司機",
+          "hi-IN": "ड्राइवर",
+          "es-ES": "Taxista",
+          "ar-SA": "السائق",
+          "fr-FR": "Chauffeur",
+          "bn-IN": "চালক",
+          "pt-BR": "Motorista",
+          "ru-RU": "Водитель",
+          "id-ID": "Sopir",
+          "de-DE": "Fahrer",
+          "ja-JP": "運転手",
+          "tr-TR": "Şoför",
+          "vi-VN": "Tài xế",
+          "ko-KR": "기사",
+          "it-IT": "Tassista",
+          "th-TH": "คนขับ",
+          "pl-PL": "Kierowca",
+          "nl-NL": "Chauffeur",
+          "ga-IE": "Tiománaí"
+        },
+        "you": {
+          "en-US": "You",
+          "zh-CN": "你",
+          "zh-HK": "你",
+          "hi-IN": "आप",
+          "es-ES": "Tú",
+          "ar-SA": "أنت",
+          "fr-FR": "Vous",
+          "bn-IN": "আপনি",
+          "pt-BR": "Você",
+          "ru-RU": "Вы",
+          "id-ID": "Anda",
+          "de-DE": "Du",
+          "ja-JP": "あなた",
+          "tr-TR": "Sen",
+          "vi-VN": "Bạn",
+          "ko-KR": "나",
+          "it-IT": "Tu",
+          "th-TH": "คุณ",
+          "pl-PL": "Ty",
+          "nl-NL": "Jij",
+          "ga-IE": "Tusa"
+        }
+      },
+      "turns": [
+        {
+          "role": "them",
+          "lines": {
+            "en-US": "Where would you like to go?",
+            "zh-CN": "您去哪里？",
+            "zh-HK": "去邊度呀？",
+            "hi-IN": "आप कहाँ जाना चाहते हैं?",
+            "es-ES": "¿Adónde quiere ir?",
+            "ar-SA": "إلى أين تريد أن تذهب؟",
+            "fr-FR": "Où voulez-vous aller ?",
+            "bn-IN": "আপনি কোথায় যেতে চান?",
+            "pt-BR": "Para onde você quer ir?",
+            "ru-RU": "Куда вам нужно?",
+            "id-ID": "Mau ke mana?",
+            "de-DE": "Wohin möchten Sie?",
+            "ja-JP": "どちらまでですか。",
+            "tr-TR": "Nereye gitmek istersiniz?",
+            "vi-VN": "Bạn muốn đi đâu?",
+            "ko-KR": "어디로 가실까요?",
+            "it-IT": "Dove vuole andare?",
+            "th-TH": "ไปไหนครับ",
+            "pl-PL": "Dokąd jedziemy?",
+            "nl-NL": "Waar wilt u naartoe?",
+            "ga-IE": "Cá teastaíonn uait dul?"
+          }
+        },
+        {
+          "role": "you",
+          "lines": {
+            "en-US": "The main train station, please. I'm in a hurry.",
+            "zh-CN": "去火车站，谢谢。我赶时间。",
+            "zh-HK": "去火車站，唔該。我趕時間。",
+            "hi-IN": "मुख्य रेलवे स्टेशन, कृपया। मुझे जल्दी है।",
+            "es-ES": "A la estación principal, por favor. Tengo prisa.",
+            "ar-SA": "محطة القطار الرئيسية من فضلك. أنا مستعجل.",
+            "fr-FR": "La gare principale, s'il vous plaît. Je suis pressé.",
+            "bn-IN": "মেইন ট্রেন স্টেশন, দয়া করে। আমার তাড়া আছে।",
+            "pt-BR": "A estação central, por favor. Estou com pressa.",
+            "ru-RU": "На главный вокзал, пожалуйста. Я спешу.",
+            "id-ID": "Stasiun kereta utama, tolong. Saya terburu-buru.",
+            "de-DE": "Zum Hauptbahnhof, bitte. Ich habe es eilig.",
+            "ja-JP": "中央駅までお願いします。急いでいます。",
+            "tr-TR": "Ana tren istasyonu lütfen. Acelem var.",
+            "vi-VN": "Ga tàu chính, làm ơn. Tôi đang vội.",
+            "ko-KR": "중앙역으로 가 주세요. 급해요.",
+            "it-IT": "Alla stazione principale, per favore. Ho fretta.",
+            "th-TH": "สถานีรถไฟหลักครับ รีบหน่อยครับ",
+            "pl-PL": "Na dworzec główny, proszę. Śpieszę się.",
+            "nl-NL": "Het centraal station, alstublieft. Ik heb haast.",
+            "ga-IE": "An príomhstáisiún traenach, le do thoil. Tá deifir orm."
+          }
+        },
+        {
+          "role": "them",
+          "lines": {
+            "en-US": "There's traffic. It should take about twenty minutes.",
+            "zh-CN": "有点堵。大概要二十分钟。",
+            "zh-HK": "有啲塞車。大概要二十分鐘。",
+            "hi-IN": "थोड़ा ट्रैफ़िक है। लगभग बीस मिनट लगेंगे।",
+            "es-ES": "Hay un poco de tráfico. Serán unos veinte minutos.",
+            "ar-SA": "هناك ازدحام. سيستغرق نحو عشرين دقيقة.",
+            "fr-FR": "Il y a un peu de circulation. Ça devrait prendre vingt minutes.",
+            "bn-IN": "একটু ট্রাফিক আছে। প্রায় বিশ মিনিট লাগবে।",
+            "pt-BR": "Tem um pouco de trânsito. Dá uns vinte minutos.",
+            "ru-RU": "Есть пробки. Около двадцати минут.",
+            "id-ID": "Ada sedikit macet. Kira-kira dua puluh menit.",
+            "de-DE": "Es gibt etwas Verkehr. Etwa zwanzig Minuten.",
+            "ja-JP": "少し混んでいます。二十分ほどです。",
+            "tr-TR": "Biraz trafik var. Yaklaşık yirmi dakika sürer.",
+            "vi-VN": "Hơi kẹt xe. Khoảng hai mươi phút.",
+            "ko-KR": "차가 좀 막혀요. 이십 분쯤 걸려요.",
+            "it-IT": "C'è un po' di traffico. Circa venti minuti.",
+            "th-TH": "รถติดนิดหน่อย ประมาณยี่สิบนาทีครับ",
+            "pl-PL": "Jest trochę korków. Około dwudziestu minut.",
+            "nl-NL": "Er is wat verkeer. Ongeveer twintig minuten.",
+            "ga-IE": "Tá beagán tráchta ann. Timpeall fiche nóiméad."
+          }
+        },
+        {
+          "role": "you",
+          "lines": {
+            "en-US": "That's okay. How much will it be?",
+            "zh-CN": "没关系。大概多少钱？",
+            "zh-HK": "冇問題。大概幾多錢？",
+            "hi-IN": "ठीक है। कितने पैसे लगेंगे?",
+            "es-ES": "Está bien. ¿Cuánto será?",
+            "ar-SA": "حسناً. كم ستكون الأجرة؟",
+            "fr-FR": "Ça va. Ça va coûter combien ?",
+            "bn-IN": "ঠিক আছে। কত লাগবে?",
+            "pt-BR": "Tudo bem. Quanto vai ser?",
+            "ru-RU": "Ничего. Сколько это будет стоить?",
+            "id-ID": "Tidak apa-apa. Kira-kira berapa biayanya?",
+            "de-DE": "In Ordnung. Was kostet das ungefähr?",
+            "ja-JP": "大丈夫です。料金はいくらぐらいですか。",
+            "tr-TR": "Tamam. Ne kadar tutar?",
+            "vi-VN": "Không sao. Khoảng bao nhiêu tiền?",
+            "ko-KR": "괜찮아요. 얼마 나와요?",
+            "it-IT": "Va bene. Quanto verrà?",
+            "th-TH": "ได้ครับ ประมาณเท่าไหร่ครับ",
+            "pl-PL": "W porządku. Ile to będzie kosztować?",
+            "nl-NL": "Prima. Wat kost het ongeveer?",
+            "ga-IE": "Tá sin ceart go leor. Cé mhéad a bheidh air?"
+          }
+        },
+        {
+          "role": "them",
+          "lines": {
+            "en-US": "About twelve, depending on the traffic.",
+            "zh-CN": "大概十二，看路况。",
+            "zh-HK": "大概十二蚊，睇交通。",
+            "hi-IN": "लगभग बारह, ट्रैफ़िक पर निर्भर है।",
+            "es-ES": "Unos doce, según el tráfico.",
+            "ar-SA": "نحو اثني عشر، حسب الزحمة.",
+            "fr-FR": "Environ douze, selon la circulation.",
+            "bn-IN": "প্রায় বারো, ট্রাফিক দেখে।",
+            "pt-BR": "Uns doze, dependendo do trânsito.",
+            "ru-RU": "Около двенадцати, зависит от пробок.",
+            "id-ID": "Sekitar dua belas, tergantung macet.",
+            "de-DE": "Etwa zwölf, je nach Verkehr.",
+            "ja-JP": "だいたい十二です。道によります。",
+            "tr-TR": "Yaklaşık on iki, trafiğe göre.",
+            "vi-VN": "Khoảng mười hai, tùy xe cộ.",
+            "ko-KR": "십이 정도요, 교통에 따라요.",
+            "it-IT": "Circa dodici, dipende dal traffico.",
+            "th-TH": "ประมาณสิบสอง แล้วแต่รถครับ",
+            "pl-PL": "Około dwunastu, zależy od korków.",
+            "nl-NL": "Ongeveer twaalf, afhankelijk van het verkeer.",
+            "ga-IE": "Timpeall a dó dhéag, ag brath ar an trácht."
+          }
+        },
+        {
+          "role": "you",
+          "lines": {
+            "en-US": "Fine. Can you drop me at the front door?",
+            "zh-CN": "好。能停在正门口吗？",
+            "zh-HK": "好。可唔可以停喺正門？",
+            "hi-IN": "ठीक। आगे के दरवाज़े पर छोड़ सकते हैं?",
+            "es-ES": "Vale. ¿Puede dejarme en la puerta principal?",
+            "ar-SA": "حسناً. هل تنزلني عند الباب الأمامي؟",
+            "fr-FR": "D'accord. Vous pouvez me déposer à la porte d'entrée ?",
+            "bn-IN": "ঠিক। সামনের দরজায় নামিয়ে দিতে পারবেন?",
+            "pt-BR": "Beleza. Pode me deixar na porta da frente?",
+            "ru-RU": "Хорошо. Можете высадить у парадного входа?",
+            "id-ID": "Baik. Bisa turun di pintu depan?",
+            "de-DE": "Gut. Können Sie mich an der Haustür absetzen?",
+            "ja-JP": "わかりました。玄関の前で降ろしてもらえますか。",
+            "tr-TR": "İyi. Ön kapıda indirebilir misiniz?",
+            "vi-VN": "Được. Cho tôi xuống ở cửa trước được không?",
+            "ko-KR": "좋아요. 정문 앞에 세워 주실 수 있어요?",
+            "it-IT": "Bene. Può lasciarmi davanti alla porta?",
+            "th-TH": "ได้ครับ ลงหน้าประตูได้ไหมครับ",
+            "pl-PL": "Dobrze. Może pan wysadzić przy drzwiach wejściowych?",
+            "nl-NL": "Goed. Kunt u me bij de voordeur afzetten?",
+            "ga-IE": "Ceart. An féidir leat mé a fhágáil ag an doras tosaigh?"
+          }
+        },
+        {
+          "role": "them",
+          "lines": {
+            "en-US": "Yes. I'll stop right at the front door.",
+            "zh-CN": "可以。我会停在正门口。",
+            "zh-HK": "得。我會停喺正門。",
+            "hi-IN": "हाँ। मैं सामने के दरवाज़े पर रुकूँगा।",
+            "es-ES": "Sí. Pararé justo en la puerta.",
+            "ar-SA": "نعم. سأتوقف عند الباب الأمامي.",
+            "fr-FR": "Oui. Je m'arrête juste à la porte.",
+            "bn-IN": "হ্যাঁ। সামনের দরজায় থামব।",
+            "pt-BR": "Posso. Vou parar bem na porta.",
+            "ru-RU": "Да. Остановлюсь у входной двери.",
+            "id-ID": "Bisa. Saya berhenti di pintu depan.",
+            "de-DE": "Ja. Ich halte direkt an der Tür.",
+            "ja-JP": "はい。玄関の前で止めます。",
+            "tr-TR": "Evet. Tam ön kapıda dururum.",
+            "vi-VN": "Được. Tôi sẽ dừng ngay cửa trước.",
+            "ko-KR": "네. 정문 앞에 세울게요.",
+            "it-IT": "Sì. Mi fermo proprio alla porta.",
+            "th-TH": "ได้ครับ จอดหน้าประตูเลยครับ",
+            "pl-PL": "Tak. Zatrzymam się przy drzwiach.",
+            "nl-NL": "Ja. Ik stop bij de voordeur.",
+            "ga-IE": "Is féidir. Stopfaidh mé ag an doras tosaigh."
+          }
+        },
+        {
+          "role": "you",
+          "lines": {
+            "en-US": "Thank you. That's great.",
+            "zh-CN": "谢谢。太好了。",
+            "zh-HK": "唔該。好呀。",
+            "hi-IN": "धन्यवाद। बहुत अच्छा।",
+            "es-ES": "Gracias. Perfecto.",
+            "ar-SA": "شكراً. ممتاز.",
+            "fr-FR": "Merci. C'est parfait.",
+            "bn-IN": "ধন্যবাদ। খুব ভালো।",
+            "pt-BR": "Obrigado. Ótimo.",
+            "ru-RU": "Спасибо. Отлично.",
+            "id-ID": "Terima kasih. Bagus sekali.",
+            "de-DE": "Danke. Super.",
+            "ja-JP": "ありがとうございます。助かります。",
+            "tr-TR": "Teşekkürler. Harika.",
+            "vi-VN": "Cảm ơn. Tuyệt.",
+            "ko-KR": "감사합니다. 좋아요.",
+            "it-IT": "Grazie. Perfetto.",
+            "th-TH": "ขอบคุณครับ ดีมากครับ",
+            "pl-PL": "Dziękuję. Świetnie.",
+            "nl-NL": "Dank u. Super.",
+            "ga-IE": "Go raibh maith agat. Tá sin go hiontach."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "supermarket",
+      "scenario": "supermarket",
+      "level": "A2",
+      "position": 9,
+      "meta": {
+        "en-US": {
+          "title": "At the supermarket",
+          "yourRole": "shopper",
+          "theirRole": "assistant"
+        },
+        "zh-CN": {
+          "title": "在超市",
+          "yourRole": "顾客",
+          "theirRole": "店员"
+        },
+        "zh-HK": {
+          "title": "喺超市",
+          "yourRole": "顧客",
+          "theirRole": "店員"
+        },
+        "hi-IN": {
+          "title": "सुपरमार्केट में",
+          "yourRole": "खरीदार",
+          "theirRole": "सहायक"
+        },
+        "es-ES": {
+          "title": "En el supermercado",
+          "yourRole": "cliente",
+          "theirRole": "dependiente"
+        },
+        "ar-SA": {
+          "title": "في السوبرماركت",
+          "yourRole": "متسوق",
+          "theirRole": "موظف"
+        },
+        "fr-FR": {
+          "title": "Au supermarché",
+          "yourRole": "client",
+          "theirRole": "employé"
+        },
+        "bn-IN": {
+          "title": "সুপারমার্কেটে",
+          "yourRole": "ক্রেতা",
+          "theirRole": "সহকারী"
+        },
+        "pt-BR": {
+          "title": "No supermercado",
+          "yourRole": "cliente",
+          "theirRole": "atendente"
+        },
+        "ru-RU": {
+          "title": "В супермаркете",
+          "yourRole": "покупатель",
+          "theirRole": "продавец"
+        },
+        "id-ID": {
+          "title": "Di supermarket",
+          "yourRole": "pembeli",
+          "theirRole": "asisten"
+        },
+        "de-DE": {
+          "title": "Im Supermarkt",
+          "yourRole": "Kunde",
+          "theirRole": "Verkäufer"
+        },
+        "ja-JP": {
+          "title": "スーパーで",
+          "yourRole": "買い物客",
+          "theirRole": "店員"
+        },
+        "tr-TR": {
+          "title": "Markette",
+          "yourRole": "müşteri",
+          "theirRole": "görevli"
+        },
+        "vi-VN": {
+          "title": "Ở siêu thị",
+          "yourRole": "khách",
+          "theirRole": "nhân viên"
+        },
+        "ko-KR": {
+          "title": "마트에서",
+          "yourRole": "손님",
+          "theirRole": "직원"
+        },
+        "it-IT": {
+          "title": "Al supermercato",
+          "yourRole": "cliente",
+          "theirRole": "commesso"
+        },
+        "th-TH": {
+          "title": "ที่ซูเปอร์มาร์เก็ต",
+          "yourRole": "ลูกค้า",
+          "theirRole": "พนักงาน"
+        },
+        "pl-PL": {
+          "title": "W supermarkecie",
+          "yourRole": "klient",
+          "theirRole": "sprzedawca"
+        },
+        "nl-NL": {
+          "title": "In de supermarkt",
+          "yourRole": "klant",
+          "theirRole": "medewerker"
+        },
+        "ga-IE": {
+          "title": "Ag an ollmhargadh",
+          "yourRole": "siopadóir",
+          "theirRole": "cúntóir"
+        }
+      },
+      "speakers": {
+        "them": {
+          "en-US": "Assistant",
+          "zh-CN": "店员",
+          "zh-HK": "店員",
+          "hi-IN": "सहायक",
+          "es-ES": "Dependiente",
+          "ar-SA": "الموظف",
+          "fr-FR": "Employé",
+          "bn-IN": "সহকারী",
+          "pt-BR": "Atendente",
+          "ru-RU": "Продавец",
+          "id-ID": "Asisten",
+          "de-DE": "Verkäufer",
+          "ja-JP": "店員",
+          "tr-TR": "Görevli",
+          "vi-VN": "Nhân viên",
+          "ko-KR": "직원",
+          "it-IT": "Commesso",
+          "th-TH": "พนักงาน",
+          "pl-PL": "Sprzedawca",
+          "nl-NL": "Medewerker",
+          "ga-IE": "Cúntóir"
+        },
+        "you": {
+          "en-US": "You",
+          "zh-CN": "你",
+          "zh-HK": "你",
+          "hi-IN": "आप",
+          "es-ES": "Tú",
+          "ar-SA": "أنت",
+          "fr-FR": "Vous",
+          "bn-IN": "আপনি",
+          "pt-BR": "Você",
+          "ru-RU": "Вы",
+          "id-ID": "Anda",
+          "de-DE": "Du",
+          "ja-JP": "あなた",
+          "tr-TR": "Sen",
+          "vi-VN": "Bạn",
+          "ko-KR": "나",
+          "it-IT": "Tu",
+          "th-TH": "คุณ",
+          "pl-PL": "Ty",
+          "nl-NL": "Jij",
+          "ga-IE": "Tusa"
+        }
+      },
+      "turns": [
+        {
+          "role": "them",
+          "lines": {
+            "en-US": "Hello. Do you need a bag?",
+            "zh-CN": "你好。您需要袋子吗？",
+            "zh-HK": "你好。要唔要膠袋？",
+            "hi-IN": "नमस्ते। क्या आपको बैग चाहिए?",
+            "es-ES": "Hola. ¿Necesita una bolsa?",
+            "ar-SA": "مرحباً. هل تحتاج كيساً؟",
+            "fr-FR": "Bonjour. Vous avez besoin d'un sac ?",
+            "bn-IN": "নমস্কার। ব্যাগ লাগবে?",
+            "pt-BR": "Olá. Você precisa de uma sacola?",
+            "ru-RU": "Здравствуйте. Вам нужен пакет?",
+            "id-ID": "Halo. Perlu kantong?",
+            "de-DE": "Hallo. Brauchen Sie eine Tüte?",
+            "ja-JP": "こんにちは。袋はいりますか。",
+            "tr-TR": "Merhaba. Poşet ister misiniz?",
+            "vi-VN": "Xin chào. Bạn cần túi không?",
+            "ko-KR": "안녕하세요. 봉지 필요하세요?",
+            "it-IT": "Buongiorno. Le serve un sacchetto?",
+            "th-TH": "สวัสดีครับ รับถุงไหมครับ",
+            "pl-PL": "Dzień dobry. Potrzebna torba?",
+            "nl-NL": "Hallo. Heeft u een tas nodig?",
+            "ga-IE": "Dia dhuit. An teastaíonn mála uait?"
+          }
+        },
+        {
+          "role": "you",
+          "lines": {
+            "en-US": "Yes, please. Where is the milk?",
+            "zh-CN": "需要，谢谢。牛奶在哪里？",
+            "zh-HK": "要，唔該。牛奶喺邊？",
+            "hi-IN": "हाँ, कृपया। दूध कहाँ है?",
+            "es-ES": "Sí, por favor. ¿Dónde está la leche?",
+            "ar-SA": "نعم من فضلك. أين الحليب؟",
+            "fr-FR": "Oui, s'il vous plaît. Où est le lait ?",
+            "bn-IN": "হ্যাঁ, দয়া করে। দুধ কোথায়?",
+            "pt-BR": "Sim, por favor. Onde fica o leite?",
+            "ru-RU": "Да, пожалуйста. Где молоко?",
+            "id-ID": "Perlu, tolong. Susu di mana?",
+            "de-DE": "Ja, bitte. Wo ist die Milch?",
+            "ja-JP": "はい、お願いします。牛乳はどこですか。",
+            "tr-TR": "Evet, lütfen. Süt nerede?",
+            "vi-VN": "Cần, làm ơn. Sữa ở đâu?",
+            "ko-KR": "네, 주세요. 우유는 어디에 있어요?",
+            "it-IT": "Sì, per favore. Dov'è il latte?",
+            "th-TH": "รับครับ นมอยู่ไหนครับ",
+            "pl-PL": "Tak, proszę. Gdzie jest mleko?",
+            "nl-NL": "Ja, alstublieft. Waar is de melk?",
+            "ga-IE": "Teastaíonn, le do thoil. Cá bhfuil an bainne?"
+          }
+        },
+        {
+          "role": "them",
+          "lines": {
+            "en-US": "Milk is in aisle four, on the left.",
+            "zh-CN": "牛奶在四号通道，左手边。",
+            "zh-HK": "牛奶喺四號通道，左邊。",
+            "hi-IN": "दूध चौथी पंक्ति में है, बाईं ओर।",
+            "es-ES": "La leche está en el pasillo cuatro, a la izquierda.",
+            "ar-SA": "الحليب في الممر الرابع، على اليسار.",
+            "fr-FR": "Le lait est dans l'allée quatre, à gauche.",
+            "bn-IN": "দুধ চার নম্বর আইলে, বাঁ দিকে।",
+            "pt-BR": "O leite fica no corredor quatro, à esquerda.",
+            "ru-RU": "Молоко в четвёртом ряду, слева.",
+            "id-ID": "Susu di lorong empat, di kiri.",
+            "de-DE": "Die Milch ist in Gang vier, links.",
+            "ja-JP": "牛乳は四番通路の左側です。",
+            "tr-TR": "Süt dördüncü reyon, solda.",
+            "vi-VN": "Sữa ở lối bốn, bên trái.",
+            "ko-KR": "우유는 사 번 통로, 왼쪽이에요.",
+            "it-IT": "Il latte è al corridoio quattro, a sinistra.",
+            "th-TH": "นมอยู่ช่องสี่ ด้านซ้ายครับ",
+            "pl-PL": "Mleko w alei czwartej, po lewej.",
+            "nl-NL": "Melk ligt in gang vier, links.",
+            "ga-IE": "Tá an bainne i gconair a ceathair, ar chlé."
+          }
+        },
+        {
+          "role": "you",
+          "lines": {
+            "en-US": "Thanks. Is the bread still fresh?",
+            "zh-CN": "谢谢。面包还新鲜吗？",
+            "zh-HK": "唔該。麵包新鮮嗎？",
+            "hi-IN": "शुक्रिया। ब्रेड ताज़ी है?",
+            "es-ES": "Gracias. ¿El pan está fresco?",
+            "ar-SA": "شكراً. هل الخبز طازج؟",
+            "fr-FR": "Merci. Le pain est encore frais ?",
+            "bn-IN": "ধন্যবাদ। রুটি কি তাজা?",
+            "pt-BR": "Obrigado. O pão está fresco?",
+            "ru-RU": "Спасибо. Хлеб свежий?",
+            "id-ID": "Terima kasih. Rotinya masih segar?",
+            "de-DE": "Danke. Ist das Brot noch frisch?",
+            "ja-JP": "ありがとうございます。パンは新鮮ですか。",
+            "tr-TR": "Teşekkürler. Ekmek taze mi?",
+            "vi-VN": "Cảm ơn. Bánh mì còn tươi không?",
+            "ko-KR": "감사합니다. 빵은 신선해요?",
+            "it-IT": "Grazie. Il pane è fresco?",
+            "th-TH": "ขอบคุณครับ ขนมปังยังสดไหมครับ",
+            "pl-PL": "Dziękuję. Czy chleb jest świeży?",
+            "nl-NL": "Dank u. Is het brood nog vers?",
+            "ga-IE": "Go raibh maith agat. An bhfuil an t-arán úr?"
+          }
+        },
+        {
+          "role": "them",
+          "lines": {
+            "en-US": "Yes, we baked it this morning.",
+            "zh-CN": "新鲜，今天早上烤的。",
+            "zh-HK": "新鮮，今朝焗嘅。",
+            "hi-IN": "हाँ, आज सुबह बनी है।",
+            "es-ES": "Sí, lo hemos horneado esta mañana.",
+            "ar-SA": "نعم، خبزناه هذا الصباح.",
+            "fr-FR": "Oui, on l'a cuit ce matin.",
+            "bn-IN": "হ্যাঁ, আজ সকালে সেঁকেছি।",
+            "pt-BR": "Sim, assamos hoje de manhã.",
+            "ru-RU": "Да, испекли сегодня утром.",
+            "id-ID": "Segar, kami panggang pagi ini.",
+            "de-DE": "Ja, wir haben es heute Morgen gebacken.",
+            "ja-JP": "はい、今朝焼いたものです。",
+            "tr-TR": "Evet, bu sabah pişirdik.",
+            "vi-VN": "Tươi, chúng tôi nướng sáng nay.",
+            "ko-KR": "네, 오늘 아침에 구웠어요.",
+            "it-IT": "Sì, l'abbiamo sfornato stamattina.",
+            "th-TH": "สดครับ อบเช้านี้ครับ",
+            "pl-PL": "Tak, piekliśmy rano.",
+            "nl-NL": "Ja, vanochtend gebakken.",
+            "ga-IE": "Tá, rinneamar ar maidin é."
+          }
+        },
+        {
+          "role": "you",
+          "lines": {
+            "en-US": "Great. That's everything.",
+            "zh-CN": "太好了。就这些。",
+            "zh-HK": "好。就咁多。",
+            "hi-IN": "बढ़िया। बस इतना ही।",
+            "es-ES": "Genial. Eso es todo.",
+            "ar-SA": "رائع. هذا كل شيء.",
+            "fr-FR": "Super. C'est tout.",
+            "bn-IN": "দারুণ। এটুকুই।",
+            "pt-BR": "Ótimo. É só isso.",
+            "ru-RU": "Отлично. Это всё.",
+            "id-ID": "Bagus. Itu saja.",
+            "de-DE": "Super. Das ist alles.",
+            "ja-JP": "よかった。これで全部です。",
+            "tr-TR": "Güzel. Hepsi bu.",
+            "vi-VN": "Tốt. Thế thôi.",
+            "ko-KR": "좋아요. 이게 다예요.",
+            "it-IT": "Ottimo. È tutto.",
+            "th-TH": "ดีครับ แค่นี้ครับ",
+            "pl-PL": "Super. To wszystko.",
+            "nl-NL": "Super. Dat is alles.",
+            "ga-IE": "Iontach. Sin uile."
+          }
+        },
+        {
+          "role": "them",
+          "lines": {
+            "en-US": "That's eight twenty. Cash or card?",
+            "zh-CN": "一共八块二。现金还是刷卡？",
+            "zh-HK": "八蚊二。現金定拍卡？",
+            "hi-IN": "आठ रुपये बीस पैसे। नकद या कार्ड?",
+            "es-ES": "Son ocho veinte. ¿Efectivo o tarjeta?",
+            "ar-SA": "ثمانية فاصل عشرين. نقداً أم بطاقة؟",
+            "fr-FR": "Ça fait huit vingt. Espèces ou carte ?",
+            "bn-IN": "আট টাকা বিশ। নগদ না কার্ড?",
+            "pt-BR": "São oito e vinte. Dinheiro ou cartão?",
+            "ru-RU": "Восемь двадцать. Наличными или картой?",
+            "id-ID": "Delapan koma dua puluh. Tunai atau kartu?",
+            "de-DE": "Das macht acht zwanzig. Bar oder Karte?",
+            "ja-JP": "八ドル二十です。現金ですか、カードですか。",
+            "tr-TR": "Sekiz yirmi. Nakit mi kart mı?",
+            "vi-VN": "Tám phẩy hai mươi. Tiền mặt hay thẻ?",
+            "ko-KR": "팔 점 이십이에요. 현금이요, 카드요?",
+            "it-IT": "Sono otto e venti. Contanti o carta?",
+            "th-TH": "แปดจุดยี่สิบครับ เงินสดหรือบัตรครับ",
+            "pl-PL": "Osiem dwadzieścia. Gotówka czy karta?",
+            "nl-NL": "Dat is acht twintig. Contant of pin?",
+            "ga-IE": "Ocht euro fiche. Airgead tirim nó cárta?"
+          }
+        },
+        {
+          "role": "you",
+          "lines": {
+            "en-US": "Card, please.",
+            "zh-CN": "刷卡，谢谢。",
+            "zh-HK": "拍卡，唔該。",
+            "hi-IN": "कार्ड, कृपया।",
+            "es-ES": "Con tarjeta, por favor.",
+            "ar-SA": "بطاقة من فضلك.",
+            "fr-FR": "Par carte, s'il vous plaît.",
+            "bn-IN": "কার্ড, দয়া করে।",
+            "pt-BR": "Cartão, por favor.",
+            "ru-RU": "Картой, пожалуйста.",
+            "id-ID": "Kartu, tolong.",
+            "de-DE": "Mit Karte, bitte.",
+            "ja-JP": "カードでお願いします。",
+            "tr-TR": "Kart, lütfen.",
+            "vi-VN": "Thẻ, làm ơn.",
+            "ko-KR": "카드로 주세요.",
+            "it-IT": "Con la carta, per favore.",
+            "th-TH": "บัตรครับ",
+            "pl-PL": "Kartą, proszę.",
+            "nl-NL": "Pinnen, alstublieft.",
+            "ga-IE": "Cárta, le do thoil."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "directions",
+      "scenario": "directions",
+      "level": "A2",
+      "position": 10,
+      "meta": {
+        "en-US": {
+          "title": "Asking for directions",
+          "yourRole": "visitor",
+          "theirRole": "local"
+        },
+        "zh-CN": {
+          "title": "问路",
+          "yourRole": "访客",
+          "theirRole": "路人"
+        },
+        "zh-HK": {
+          "title": "問路",
+          "yourRole": "訪客",
+          "theirRole": "路人"
+        },
+        "hi-IN": {
+          "title": "रास्ता पूछना",
+          "yourRole": "आगंतुक",
+          "theirRole": "स्थानीय"
+        },
+        "es-ES": {
+          "title": "Pedir direcciones",
+          "yourRole": "visitante",
+          "theirRole": "local"
+        },
+        "ar-SA": {
+          "title": "السؤال عن الطريق",
+          "yourRole": "زائر",
+          "theirRole": "محلي"
+        },
+        "fr-FR": {
+          "title": "Demander son chemin",
+          "yourRole": "visiteur",
+          "theirRole": "passant"
+        },
+        "bn-IN": {
+          "title": "রাস্তা জিজ্ঞাসা",
+          "yourRole": "দর্শনার্থী",
+          "theirRole": "স্থানীয়"
+        },
+        "pt-BR": {
+          "title": "Pedindo informações",
+          "yourRole": "visitante",
+          "theirRole": "morador"
+        },
+        "ru-RU": {
+          "title": "Как пройти",
+          "yourRole": "гость",
+          "theirRole": "прохожий"
+        },
+        "id-ID": {
+          "title": "Menanyakan arah",
+          "yourRole": "pengunjung",
+          "theirRole": "warga"
+        },
+        "de-DE": {
+          "title": "Nach dem Weg fragen",
+          "yourRole": "Besucher",
+          "theirRole": "Passant"
+        },
+        "ja-JP": {
+          "title": "道を尋ねる",
+          "yourRole": "訪問者",
+          "theirRole": "通行人"
+        },
+        "tr-TR": {
+          "title": "Yol sorma",
+          "yourRole": "ziyaretçi",
+          "theirRole": "yerli"
+        },
+        "vi-VN": {
+          "title": "Hỏi đường",
+          "yourRole": "khách",
+          "theirRole": "người dân"
+        },
+        "ko-KR": {
+          "title": "길 묻기",
+          "yourRole": "방문객",
+          "theirRole": "행인"
+        },
+        "it-IT": {
+          "title": "Chiedere indicazioni",
+          "yourRole": "visitatore",
+          "theirRole": "passante"
+        },
+        "th-TH": {
+          "title": "ถามทาง",
+          "yourRole": "ผู้มาเยือน",
+          "theirRole": "คนท้องถิ่น"
+        },
+        "pl-PL": {
+          "title": "Pytanie o drogę",
+          "yourRole": "gość",
+          "theirRole": "przechodzień"
+        },
+        "nl-NL": {
+          "title": "De weg vragen",
+          "yourRole": "bezoeker",
+          "theirRole": "voorbijganger"
+        },
+        "ga-IE": {
+          "title": "Ag iarraidh treoracha",
+          "yourRole": "cuairteoir",
+          "theirRole": "duine áitiúil"
+        }
+      },
+      "speakers": {
+        "them": {
+          "en-US": "Local",
+          "zh-CN": "路人",
+          "zh-HK": "路人",
+          "hi-IN": "स्थानीय",
+          "es-ES": "Local",
+          "ar-SA": "محلي",
+          "fr-FR": "Passant",
+          "bn-IN": "স্থানীয়",
+          "pt-BR": "Morador",
+          "ru-RU": "Прохожий",
+          "id-ID": "Warga",
+          "de-DE": "Passant",
+          "ja-JP": "通行人",
+          "tr-TR": "Yerli",
+          "vi-VN": "Người dân",
+          "ko-KR": "행인",
+          "it-IT": "Passante",
+          "th-TH": "คนท้องถิ่น",
+          "pl-PL": "Przechodzień",
+          "nl-NL": "Voorbijganger",
+          "ga-IE": "Áitiúil"
+        },
+        "you": {
+          "en-US": "You",
+          "zh-CN": "你",
+          "zh-HK": "你",
+          "hi-IN": "आप",
+          "es-ES": "Tú",
+          "ar-SA": "أنت",
+          "fr-FR": "Vous",
+          "bn-IN": "আপনি",
+          "pt-BR": "Você",
+          "ru-RU": "Вы",
+          "id-ID": "Anda",
+          "de-DE": "Du",
+          "ja-JP": "あなた",
+          "tr-TR": "Sen",
+          "vi-VN": "Bạn",
+          "ko-KR": "나",
+          "it-IT": "Tu",
+          "th-TH": "คุณ",
+          "pl-PL": "Ty",
+          "nl-NL": "Jij",
+          "ga-IE": "Tusa"
+        }
+      },
+      "turns": [
+        {
+          "role": "them",
+          "lines": {
+            "en-US": "Excuse me, can I help you?",
+            "zh-CN": "不好意思，需要帮忙吗？",
+            "zh-HK": "唔好意思，要唔要幫忙？",
+            "hi-IN": "माफ़ कीजिए, क्या मैं आपकी मदद करूँ?",
+            "es-ES": "Perdone, ¿le puedo ayudar?",
+            "ar-SA": "عفواً، هل أستطيع مساعدتك؟",
+            "fr-FR": "Excusez-moi, je peux vous aider ?",
+            "bn-IN": "মাফ করবেন, সাহায্য করব?",
+            "pt-BR": "Com licença, posso ajudar?",
+            "ru-RU": "Извините, вам помочь?",
+            "id-ID": "Permisi, bisa saya bantu?",
+            "de-DE": "Entschuldigung, kann ich Ihnen helfen?",
+            "ja-JP": "すみません、何かお手伝いしましょうか。",
+            "tr-TR": "Affedersiniz, yardımcı olabilir miyim?",
+            "vi-VN": "Xin lỗi, tôi giúp được gì không?",
+            "ko-KR": "죄송한데요, 도와드릴까요?",
+            "it-IT": "Scusi, posso aiutarla?",
+            "th-TH": "ขอโทษครับ ช่วยอะไรได้ไหมครับ",
+            "pl-PL": "Przepraszam, mogę pomóc?",
+            "nl-NL": "Pardon, kan ik u helpen?",
+            "ga-IE": "Gabh mo leithscéal, an féidir liom cabhrú leat?"
+          }
+        },
+        {
+          "role": "you",
+          "lines": {
+            "en-US": "Yes, I'm looking for the museum.",
+            "zh-CN": "是的，我在找博物馆。",
+            "zh-HK": "係呀，我搵緊博物館。",
+            "hi-IN": "हाँ, मुझे संग्रहालय चाहिए।",
+            "es-ES": "Sí, busco el museo.",
+            "ar-SA": "نعم، أبحث عن المتحف.",
+            "fr-FR": "Oui, je cherche le musée.",
+            "bn-IN": "হ্যাঁ, আমি যাদুঘর খুঁজছি।",
+            "pt-BR": "Sim, estou procurando o museu.",
+            "ru-RU": "Да, я ищу музей.",
+            "id-ID": "Ya, saya mencari museum.",
+            "de-DE": "Ja, ich suche das Museum.",
+            "ja-JP": "はい、博物館を探しています。",
+            "tr-TR": "Evet, müzeyi arıyorum.",
+            "vi-VN": "Vâng, tôi đang tìm bảo tàng.",
+            "ko-KR": "네, 박물관을 찾고 있어요.",
+            "it-IT": "Sì, sto cercando il museo.",
+            "th-TH": "ครับ กำลังหาพิพิธภัณฑ์ครับ",
+            "pl-PL": "Tak, szukam muzeum.",
+            "nl-NL": "Ja, ik zoek het museum.",
+            "ga-IE": "Is féidir, táim ag lorg an mhúsaeim."
+          }
+        },
+        {
+          "role": "them",
+          "lines": {
+            "en-US": "Go straight, then turn left at the lights.",
+            "zh-CN": "一直走，然后在红绿灯左转。",
+            "zh-HK": "一直行，然後喺紅綠燈轉左。",
+            "hi-IN": "सीधे जाएँ, फिर लाल बत्ती पर बाएँ मुड़ें।",
+            "es-ES": "Siga recto y gire a la izquierda en el semáforo.",
+            "ar-SA": "اذهب مباشرة ثم انعطف يساراً عند الإشارة.",
+            "fr-FR": "Allez tout droit, puis à gauche aux feux.",
+            "bn-IN": "সোজা যান, তারপর লাইটে বাঁক নিন।",
+            "pt-BR": "Siga em frente e vire à esquerda no sinal.",
+            "ru-RU": "Идите прямо, потом налево на светофоре.",
+            "id-ID": "Jalan lurus, lalu belok kiri di lampu merah.",
+            "de-DE": "Gehen Sie geradeaus, dann links an der Ampel.",
+            "ja-JP": "まっすぐ行って、信号を左に曲がってください。",
+            "tr-TR": "Düz gidin, sonra ışıkta sola dönün.",
+            "vi-VN": "Đi thẳng, rồi rẽ trái ở đèn.",
+            "ko-KR": "직진하다가 신호등에서 왼쪽으로 가세요.",
+            "it-IT": "Vada dritto, poi a sinistra al semaforo.",
+            "th-TH": "ตรงไป แล้วเลี้ยวซ้ายที่ไฟแดงครับ",
+            "pl-PL": "Proszę iść prosto, potem w lewo na światłach.",
+            "nl-NL": "Ga rechtdoor, dan links bij de stoplichten.",
+            "ga-IE": "Téigh díreach ar aghaidh, ansin ar chlé ag na soilse."
+          }
+        },
+        {
+          "role": "you",
+          "lines": {
+            "en-US": "Is it far from here?",
+            "zh-CN": "离这里远吗？",
+            "zh-HK": "遠唔遠呀？",
+            "hi-IN": "यहाँ से दूर है क्या?",
+            "es-ES": "¿Está lejos de aquí?",
+            "ar-SA": "هل هو بعيد من هنا؟",
+            "fr-FR": "C'est loin d'ici ?",
+            "bn-IN": "এখান থেকে কি দূরে?",
+            "pt-BR": "Fica longe daqui?",
+            "ru-RU": "Это далеко отсюда?",
+            "id-ID": "Jauh dari sini?",
+            "de-DE": "Ist es weit von hier?",
+            "ja-JP": "ここから遠いですか。",
+            "tr-TR": "Buradan uzak mı?",
+            "vi-VN": "Có xa đây không?",
+            "ko-KR": "여기서 멀어요?",
+            "it-IT": "È lontano da qui?",
+            "th-TH": "ไกลจากที่นี่ไหมครับ",
+            "pl-PL": "Czy to daleko stąd?",
+            "nl-NL": "Is het ver vanaf hier?",
+            "ga-IE": "An bhfuil sé i bhfad uainn?"
+          }
+        },
+        {
+          "role": "them",
+          "lines": {
+            "en-US": "No, it's about a ten-minute walk.",
+            "zh-CN": "不远，大概走十分钟。",
+            "zh-HK": "唔遠，行大概十分鐘。",
+            "hi-IN": "नहीं, लगभग दस मिनट की पैदल दूरी है।",
+            "es-ES": "No, son unos diez minutos a pie.",
+            "ar-SA": "لا، نحو عشر دقائق مشياً.",
+            "fr-FR": "Non, environ dix minutes à pied.",
+            "bn-IN": "না, প্রায় দশ মিনিট হাঁটা।",
+            "pt-BR": "Não, uns dez minutos a pé.",
+            "ru-RU": "Нет, минут десять пешком.",
+            "id-ID": "Tidak, kira-kira sepuluh menit jalan kaki.",
+            "de-DE": "Nein, etwa zehn Minuten zu Fuß.",
+            "ja-JP": "いいえ、歩いて十分ぐらいです。",
+            "tr-TR": "Hayır, yaklaşık on dakika yürüme.",
+            "vi-VN": "Không, khoảng mười phút đi bộ.",
+            "ko-KR": "아니요, 십 분쯤 걸으면 돼요.",
+            "it-IT": "No, circa dieci minuti a piedi.",
+            "th-TH": "ไม่ไกลครับ เดินสิบนาทีครับ",
+            "pl-PL": "Nie, około dziesięciu minut pieszo.",
+            "nl-NL": "Nee, ongeveer tien minuten lopen.",
+            "ga-IE": "Níl, siúlóid deich nóiméad."
+          }
+        },
+        {
+          "role": "you",
+          "lines": {
+            "en-US": "Do you know when it closes?",
+            "zh-CN": "你知道几点关门吗？",
+            "zh-HK": "你知唔知幾點關門？",
+            "hi-IN": "आप जानते हैं कब बंद होता है?",
+            "es-ES": "¿Sabe a qué hora cierra?",
+            "ar-SA": "هل تعرف متى يغلق؟",
+            "fr-FR": "Vous savez à quelle heure ça ferme ?",
+            "bn-IN": "কখন বন্ধ হয় জানেন?",
+            "pt-BR": "Você sabe a que horas fecha?",
+            "ru-RU": "Вы не знаете, до скольких открыто?",
+            "id-ID": "Anda tahu jam berapa tutup?",
+            "de-DE": "Wissen Sie, wann es schließt?",
+            "ja-JP": "何時まで開いていますか。",
+            "tr-TR": "Kaça kadar açık, biliyor musunuz?",
+            "vi-VN": "Bạn biết mấy giờ đóng cửa không?",
+            "ko-KR": "몇 시에 닫는지 아세요?",
+            "it-IT": "Sa a che ora chiude?",
+            "th-TH": "รู้ไหมปิดกี่โมงครับ",
+            "pl-PL": "Wie pan, do której jest otwarte?",
+            "nl-NL": "Weet u hoe laat het sluit?",
+            "ga-IE": "An bhfuil a fhios agat cén t-am a dhúnann sé?"
+          }
+        },
+        {
+          "role": "them",
+          "lines": {
+            "en-US": "It's open until six today.",
+            "zh-CN": "今天开到六点。",
+            "zh-HK": "今日開到六點。",
+            "hi-IN": "आज छह बजे तक खुला है।",
+            "es-ES": "Hoy abre hasta las seis.",
+            "ar-SA": "مفتوح حتى السادسة اليوم.",
+            "fr-FR": "C'est ouvert jusqu'à six heures aujourd'hui.",
+            "bn-IN": "আজ ছয়টা পর্যন্ত খোলা।",
+            "pt-BR": "Hoje abre até as seis.",
+            "ru-RU": "Сегодня до шести.",
+            "id-ID": "Hari ini buka sampai jam enam.",
+            "de-DE": "Heute hat es bis sechs offen.",
+            "ja-JP": "今日は六時まで開いています。",
+            "tr-TR": "Bugün altıya kadar açık.",
+            "vi-VN": "Hôm nay mở đến sáu giờ.",
+            "ko-KR": "오늘은 여섯 시까지 열어요.",
+            "it-IT": "Oggi è aperto fino alle sei.",
+            "th-TH": "วันนี้เปิดถึงหกโมงครับ",
+            "pl-PL": "Dziś do szóstej.",
+            "nl-NL": "Het is vandaag open tot zes uur.",
+            "ga-IE": "Tá sé oscailte go dtí a sé inniu."
+          }
+        },
+        {
+          "role": "you",
+          "lines": {
+            "en-US": "Thank you. That's plenty of time.",
+            "zh-CN": "谢谢。时间很充足。",
+            "zh-HK": "唔該。時間夠。",
+            "hi-IN": "धन्यवाद। समय काफ़ी है।",
+            "es-ES": "Gracias. Hay tiempo de sobra.",
+            "ar-SA": "شكراً. الوقت كافٍ.",
+            "fr-FR": "Merci. J'ai largement le temps.",
+            "bn-IN": "ধন্যবাদ। সময় যথেষ্ট।",
+            "pt-BR": "Obrigado. Dá tempo de sobra.",
+            "ru-RU": "Спасибо. Времени достаточно.",
+            "id-ID": "Terima kasih. Waktunya cukup.",
+            "de-DE": "Danke. Das ist genug Zeit.",
+            "ja-JP": "ありがとうございます。十分間に合います。",
+            "tr-TR": "Teşekkürler. Vakit yeter.",
+            "vi-VN": "Cảm ơn. Còn nhiều thời gian.",
+            "ko-KR": "감사합니다. 시간 충분해요.",
+            "it-IT": "Grazie. C'è abbastanza tempo.",
+            "th-TH": "ขอบคุณครับ เวลาพอครับ",
+            "pl-PL": "Dziękuję. Mam dość czasu.",
+            "nl-NL": "Dank u. Dat is ruim op tijd.",
+            "ga-IE": "Go raibh maith agat. Tá neart ama agam."
+          }
+        }
+      ]
+    }
+  ]
+}

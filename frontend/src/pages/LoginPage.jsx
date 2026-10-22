@@ -116,6 +116,36 @@ export default function LoginPage() {
         </section>
       ) : null}
 
+      {webMarketing ? (
+        <section className="studio-promo" id="language-studio">
+          <div className="marketing-wrap">
+            <h2>{t('marketing.studioTitle')}</h2>
+            <p className="sub">{t('marketing.studioSub')}</p>
+            <figure className="studio-intro-demo" aria-hidden="true">
+              <div className="studio-intro-demo-head">
+                <strong>{t('studio.introDemoEyebrow')}</strong>
+                <span className="studio-pill">A2</span>
+              </div>
+              <div className="studio-chat">
+                <div className="studio-bubble is-them">
+                  <p className="studio-speaker">{t('studio.introDemoThem')}</p>
+                  <p className="studio-line">{t('studio.introDemoThemLine')}</p>
+                  <p className="muted">{t('studio.introDemoThemMeaning')}</p>
+                </div>
+                <div className="studio-bubble is-you">
+                  <p className="studio-speaker">{t('studio.introDemoYou')}</p>
+                  <p className="studio-line">{t('studio.introDemoYouLine')}</p>
+                  <p className="muted">{t('studio.introDemoYouMeaning')}</p>
+                </div>
+              </div>
+            </figure>
+            <Link className="btn primary" to="/language-conversations">
+              {t('marketing.studioCta')}
+            </Link>
+          </div>
+        </section>
+      ) : null}
+
       <section className="ai-cases" id="ai">
         <div className="marketing-wrap">
           <h2>{t('marketing.aiTitle')}</h2>

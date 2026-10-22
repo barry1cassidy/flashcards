@@ -53,6 +53,8 @@ export default function RememberHub() {
       </div>
       <p className="compare-more">
         <Link to="/quizlet-alternative">A free Quizlet alternative</Link>
+        {' · '}
+        <Link to="/language-conversations">AI language conversations</Link>
       </p>
     </article>
   )

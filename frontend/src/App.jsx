@@ -39,6 +39,10 @@ import OfflineDecksPage from './pages/OfflineDecksPage'
 import OfflineListenPage from './pages/OfflineListenPage'
 import OfflineStudyPage from './pages/OfflineStudyPage'
 import ListenPage from './pages/ListenPage'
+import LanguageStudioPage from './pages/LanguageStudioPage'
+import LanguageStudioCreate from './pages/LanguageStudioCreate'
+import LanguageStudioPractice from './pages/LanguageStudioPractice'
+import LanguageStudioSamples from './pages/LanguageStudioSamples'
 import SavingIndicator from './pages/SavingIndicator'
 import { getToken } from './api'
 import { clearLibraryReturn, pathAfterAuth, peekJoinInvite, shouldResumeJoinInvite } from './authRedirect'
@@ -49,6 +53,7 @@ import { IncomingLinks } from './incomingLinks'
 const RememberPages = webMarketing ? lazy(() => import('./pages/remember/RememberPages.jsx')) : null
 const QuizletAlternativePage = webMarketing ? lazy(() => import('./pages/QuizletAlternativePage.jsx')) : null
 const AudioFlashcardsPage = webMarketing ? lazy(() => import('./pages/AudioFlashcardsPage.jsx')) : null
+const LanguageConversationsPage = webMarketing ? lazy(() => import('./pages/LanguageConversationsPage.jsx')) : null
 
 function AnalyticsPageViews() {
   const { pathname, search } = useLocation()
@@ -112,7 +117,10 @@ function DocumentLang() {
   useEffect(() => {
     const library = pathname.startsWith('/library')
     const remember =
-      pathname.startsWith('/memorize') || pathname === '/quizlet-alternative' || pathname === '/audio-flashcards'
+      pathname.startsWith('/memorize') ||
+      pathname === '/quizlet-alternative' ||
+      pathname === '/audio-flashcards' ||
+      pathname === '/language-conversations'
     const splash = !user && (pathname === '/' || pathname === '/login' || pathname === '/register')
     const privacy = pathname === '/privacy'
     const join = pathname.startsWith('/join/')
@@ -412,6 +420,7 @@ export default function App() {
         {webMarketing ? <Route path="/memorize/*" element={<WebArticleGate>{RememberPages ? <RememberPages /> : null}</WebArticleGate>} /> : null}
         {webMarketing ? <Route path="/quizlet-alternative" element={<WebArticleGate>{QuizletAlternativePage ? <QuizletAlternativePage /> : null}</WebArticleGate>} /> : null}
         {webMarketing ? <Route path="/audio-flashcards" element={<WebArticleGate>{AudioFlashcardsPage ? <AudioFlashcardsPage /> : null}</WebArticleGate>} /> : null}
+        {webMarketing ? <Route path="/language-conversations" element={<WebArticleGate>{LanguageConversationsPage ? <LanguageConversationsPage /> : null}</WebArticleGate>} /> : null}
         <Route element={<LibraryGate />}>
           <Route path="/library" element={<LibraryPage />} />
           <Route path="/library/groups/:id" element={<LibraryGroupPage />} />
@@ -433,6 +442,11 @@ export default function App() {
           <Route path="/mixes/:id" element={<MixEditorPage />} />
           <Route path="/mixes" element={<MixesPage />} />
           <Route path="/listen" element={<ListenPage />} />
+          <Route path="/language-studio/new" element={<LanguageStudioCreate />} />
+          <Route path="/language-studio/samples/:slug" element={<LanguageStudioPractice />} />
+          <Route path="/language-studio/samples" element={<LanguageStudioSamples />} />
+          <Route path="/language-studio/:id" element={<LanguageStudioPractice />} />
+          <Route path="/language-studio" element={<LanguageStudioPage />} />
           <Route path="/pro" element={<ProPage />} />
           <Route path="/verify" element={<VerifyEmailPage />} />
           <Route path="/help" element={<HelpPage />} />

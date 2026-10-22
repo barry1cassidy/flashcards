@@ -2,20 +2,20 @@ package com.flashcards.agent;
 
 import java.util.Locale;
 
-final class AgentModelErrors {
+public final class AgentModelErrors {
 
-    static final String BUSY = "The AI is busy right now. You were not charged. Try again in a minute.";
-    static final String QUOTA = "The AI is out of quota for today. You were not charged. Try again tomorrow.";
-    static final String FAILED = "Could not create the deck. You were not charged. Try again.";
-    static final String NO_DECK = "The AI did not create a deck. You were not charged.";
-    static final String NO_CARDS =
+    public static final String BUSY = "The AI is busy right now. You were not charged. Try again in a minute.";
+    public static final String QUOTA = "The AI is out of quota for today. You were not charged. Try again tomorrow.";
+    public static final String FAILED = "Could not create the deck. You were not charged. Try again.";
+    public static final String NO_DECK = "The AI did not create a deck. You were not charged.";
+    public static final String NO_CARDS =
             "The AI didn't add any cards. You were not charged. Try again with a short prompt that names both languages, or set Front and Back Language.";
-    static final int MAX_ATTEMPTS = 3;
+    public static final int MAX_ATTEMPTS = 3;
 
     private AgentModelErrors() {
     }
 
-    static boolean isQuota(Throwable error) {
+    public static boolean isQuota(Throwable error) {
         for (Throwable current = error; current != null; current = current.getCause()) {
             String message = current.getMessage() == null ? "" : current.getMessage().toLowerCase(Locale.ROOT);
             if (message.contains("quota")
@@ -29,7 +29,7 @@ final class AgentModelErrors {
         return false;
     }
 
-    static boolean isBusy(Throwable error) {
+    public static boolean isBusy(Throwable error) {
         if (isQuota(error)) {
             return false;
         }
@@ -49,14 +49,14 @@ final class AgentModelErrors {
         return false;
     }
 
-    static String userMessage(Throwable error) {
+    public static String userMessage(Throwable error) {
         if (isQuota(error)) {
             return QUOTA;
         }
         return isBusy(error) ? BUSY : FAILED;
     }
 
-    static long retryWaitMs(int attempt) {
+    public static long retryWaitMs(int attempt) {
         return 2000L * attempt;
     }
 

@@ -1,4 +1,5 @@
 import { api } from './api'
+import { conversationToListenQueue } from './languageStudio'
 import { listOfflinePacks } from './offlinePacks'
 import { normalizeSpeechLanguage } from './speechLanguages'
 
@@ -27,7 +28,7 @@ async function loadDeck(id) {
   }
 }
 
-export async function loadListenQueue({ source, id, ids }) {
+export async function loadListenQueue({ source, id, ids, nativeLanguage, targetLanguage }) {
   if (source === 'deck') {
     const deck = await loadDeck(id)
     return { title: deck.name, decks: [deck] }
@@ -47,6 +48,22 @@ export async function loadListenQueue({ source, id, ids }) {
       decks.push(await loadDeck(deckId))
     }
     return { title: mix.name, decks }
+  }
+  if (source === 'studio') {
+    const conversation = await api(`/api/language-studio/conversations/${id}`)
+    return conversationToListenQueue(conversation)
+  }
+  if (source === 'studio-sample') {
+    const sample = await api(
+      `/api/language-studio/samples/${encodeURIComponent(id)}?nativeLanguage=${encodeURIComponent(nativeLanguage)}&targetLanguage=${encodeURIComponent(targetLanguage)}`,
+    )
+    return conversationToListenQueue({
+      id: sample.slug,
+      title: sample.title,
+      nativeLanguage: sample.nativeLanguage,
+      targetLanguage: sample.targetLanguage,
+      turns: sample.turns || [],
+    })
   }
   if (source === 'offline') {
     const wanted = new Set(ids || [])

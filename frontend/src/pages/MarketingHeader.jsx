@@ -68,12 +68,21 @@ export default function MarketingHeader({ showLoginForm = false, loginOpen, onLo
           <Brand />
         </Link>
         <div className="marketing-links">
-          <Link to="/#modes">{t('marketing.studyModes')}</Link>
-          {webMarketing ? <Link to="/memorize">{t('marketing.rememberNav')}</Link> : null}
-          {webMarketing ? <Link to="/library">{t('library.title')}</Link> : null}
-          {webMarketing ? <Link to="/audio-flashcards">{t('marketing.listenNav')}</Link> : null}
-          <Link to="/#ai">{t('marketing.aiNav')}</Link>
-          <Link to="/#stat">{t('marketing.whyItWorks')}</Link>
+          {webMarketing ? (
+            <>
+              <Link to="/memorize">{t('marketing.rememberNav')}</Link>
+              <Link to="/library">{t('library.title')}</Link>
+              <Link to="/audio-flashcards">{t('marketing.listenNav')}</Link>
+              <Link to="/language-conversations">{t('marketing.studioNav')}</Link>
+              <Link to="/#ai">{t('marketing.aiNav')}</Link>
+            </>
+          ) : (
+            <>
+              <Link to="/#modes">{t('marketing.studyModes')}</Link>
+              <Link to="/#ai">{t('marketing.aiNav')}</Link>
+              <Link to="/#stat">{t('marketing.whyItWorks')}</Link>
+            </>
+          )}
         </div>
         <div className="marketing-auth" ref={authRef}>
           {!user && hasOffline ? (
@@ -216,6 +225,11 @@ export function MarketingFooter() {
         {webMarketing ? (
           <Link className="site-end-link" to="/quizlet-alternative">
             {t('marketing.quizletHomeTitle')}
+          </Link>
+        ) : null}
+        {webMarketing ? (
+          <Link className="site-end-link" to="/language-conversations">
+            {t('marketing.studioNav')}
           </Link>
         ) : null}
         <Link className="site-end-link" to="/privacy">

@@ -304,6 +304,9 @@ export default function QuizletAlternativePage() {
           <Link className="btn" to="/library">
             Browse sample sets
           </Link>
+          <Link className="btn" to="/language-conversations">
+            AI language conversations
+          </Link>
         </div>
       </div>
 

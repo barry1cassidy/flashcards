@@ -106,6 +106,9 @@ export default function AudioFlashcardsPage() {
         <Link className="btn primary" to="/register">
           Create your first deck
         </Link>
+        <p className="compare-more">
+          <Link to="/language-conversations">AI language conversations</Link>
+        </p>
       </section>
     </article>
   )

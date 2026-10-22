@@ -19,6 +19,7 @@ export default function SideMenu() {
   const agentActive = location.pathname.startsWith('/create-with-ai')
   const mixActive = location.pathname.startsWith('/mixes')
   const listenActive = location.pathname.startsWith('/listen')
+  const studioActive = location.pathname.startsWith('/language-studio')
   const libraryActive = location.pathname.startsWith('/library')
   const classesActive = location.pathname.startsWith('/classes')
   const setsActive = location.pathname.startsWith('/sets') || location.pathname.startsWith('/groups')
@@ -75,6 +76,11 @@ export default function SideMenu() {
           <NavLink to="/listen" className={() => menuLinkClass(listenActive)} onClick={close}>
             <MenuIcon name="listen" />
             <span className="menu-link-text">{t('listen.menu')}</span>
+            {!pro ? <span className="menu-pro-tag">{badge}</span> : null}
+          </NavLink>
+          <NavLink to="/language-studio" className={() => menuLinkClass(studioActive)} onClick={close}>
+            <MenuIcon name="studio" />
+            <span className="menu-link-text">{t('studio.menu')}</span>
             {!pro ? <span className="menu-pro-tag">{badge}</span> : null}
           </NavLink>
           <NavLink to="/pro" className={() => menuLinkClass(proActive)} onClick={close}>

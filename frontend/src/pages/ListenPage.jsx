@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Capacitor } from '@capacitor/core'
-import { Link, useSearchParams } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { api } from '../api'
 import { useAuth } from '../AuthContext'
@@ -26,6 +26,7 @@ const SOURCES = [
   { id: 'deck', icon: 'decks' },
   { id: 'set', icon: 'groups' },
   { id: 'mix', icon: 'mix' },
+  { id: 'studio', icon: 'studio' },
   { id: 'offline', icon: 'offline' },
 ]
 const PAGE_SIZE = 8
@@ -38,11 +39,14 @@ function itemColor(item) {
 export default function ListenPage() {
   const { t } = useTranslation()
   const { user, setListenPrefs } = useAuth()
+  const navigate = useNavigate()
   const pro = isProLicensed(user)
   const [params, setParams] = useSearchParams()
   const sourceParam = params.get('source')
-  const source = SOURCES.some((item) => item.id === sourceParam) ? sourceParam : ''
-  const id = params.get('id') || ''
+  const source = SOURCES.some((item) => item.id === sourceParam) || sourceParam === 'studio-sample' ? sourceParam : ''
+  const id = params.get('id') || params.get('slug') || ''
+  const nativeLanguage = params.get('native') || ''
+  const targetLanguage = params.get('target') || ''
   const [items, setItems] = useState(null)
   const [selectedOffline, setSelectedOffline] = useState(null)
   const [prefs, setPrefs] = useState(() => listenPrefsFromUser(user))
@@ -75,15 +79,22 @@ export default function ListenPage() {
     sessionRef.current = null
     setPlaying(false)
     setPlayback(null)
-  }, [source, id, selectedOffline])
+  }, [source, id, nativeLanguage, targetLanguage, selectedOffline])
 
   useEffect(() => {
-    if (!pro || !source || source === 'offline' || id) {
+    if (!pro || !source || source === 'offline' || source === 'studio-sample' || id) {
       return undefined
     }
     let cancelled = false
     setItems(null)
-    const path = source === 'deck' ? '/api/decks' : source === 'set' ? '/api/groups' : '/api/mixes'
+    const path =
+      source === 'deck'
+        ? '/api/decks'
+        : source === 'set'
+          ? '/api/groups'
+          : source === 'mix'
+            ? '/api/mixes'
+            : '/api/language-studio/conversations'
     api(path)
       .then((found) => {
         if (!cancelled) {
@@ -133,6 +144,8 @@ export default function ListenPage() {
       (source === 'deck' && id) ||
       (source === 'set' && id) ||
       (source === 'mix' && id) ||
+      (source === 'studio' && id) ||
+      (source === 'studio-sample' && id && nativeLanguage && targetLanguage) ||
       (source === 'offline' && offlineIds.length > 0)
     if (!canLoad) {
       setQueue(null)
@@ -142,7 +155,7 @@ export default function ListenPage() {
     let cancelled = false
     setLoadingQueue(true)
     setQueueError('')
-    loadListenQueue({ source, id, ids: offlineIds })
+    loadListenQueue({ source, id, ids: offlineIds, nativeLanguage, targetLanguage })
       .then((loaded) => {
         if (!cancelled) {
           setQueue(loaded)
@@ -159,7 +172,7 @@ export default function ListenPage() {
     return () => {
       cancelled = true
     }
-  }, [pro, source, id, selectedOffline])
+  }, [pro, source, id, nativeLanguage, targetLanguage, selectedOffline])
 
   useEffect(() => () => sessionRef.current?.stop(), [])
 
@@ -270,15 +283,15 @@ export default function ListenPage() {
   }
 
   const showOptions = source === 'offline' ? offlineIds.length > 0 : Boolean(id)
-  const sourceMeta = SOURCES.find((item) => item.id === source)
+  const sourceMeta = SOURCES.find((item) => item.id === source) || (source === 'studio-sample' ? { id: 'studio-sample', icon: 'studio' } : undefined)
+  const showBrowse = source && source !== 'studio-sample' && (source === 'offline' || !id)
   const needle = query.trim().toLowerCase()
   const filteredItems = (items || []).filter(
-    (item) => !needle || String(item.name || '').toLowerCase().includes(needle),
+    (item) => !needle || String(item.name || item.title || '').toLowerCase().includes(needle),
   )
   const totalPages = Math.max(1, Math.ceil(filteredItems.length / PAGE_SIZE))
   const safePage = Math.min(page, totalPages)
   const pageItems = filteredItems.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE)
-  const showBrowse = source && (source === 'offline' || !id)
 
   return (
     <div className="page">
@@ -335,7 +348,9 @@ export default function ListenPage() {
                     ? 'listen.emptySets'
                     : source === 'mix'
                       ? 'listen.emptyMixes'
-                      : 'listen.emptyOffline',
+                      : source === 'studio'
+                        ? 'listen.emptyStudio'
+                        : 'listen.emptyOffline',
               )}
             </p>
           ) : null}
@@ -349,11 +364,13 @@ export default function ListenPage() {
                 const count =
                   source === 'deck' || source === 'offline'
                     ? t('listen.cards', { count: source === 'offline' ? item.cards?.length || 0 : item.cardCount || 0 })
-                    : t('listen.decks', { count: item.deckCount || item.deckIds?.length || 0 })
+                    : source === 'studio'
+                      ? t('studio.turns', { count: item.turnCount || 0 })
+                      : t('listen.decks', { count: item.deckCount || item.deckIds?.length || 0 })
                 const body = (
                   <span>
                     {color ? <span className="listen-swatch" style={{ background: color }} /> : null}
-                    <strong>{item.name}</strong>
+                    <strong>{item.name || item.title}</strong>
                     <span className="muted">{count}</span>
                   </span>
                 )
@@ -395,7 +412,17 @@ export default function ListenPage() {
       {showOptions ? (
         <div className="listen-setup">
           {source !== 'offline' ? (
-            <button className="page-back" type="button" onClick={() => chooseSource(source)}>
+            <button
+              className="page-back"
+              type="button"
+              onClick={() => {
+                if (source === 'studio-sample') {
+                  navigate('/language-studio/samples')
+                  return
+                }
+                chooseSource(source)
+              }}
+            >
               {t('listen.back')}
             </button>
           ) : null}

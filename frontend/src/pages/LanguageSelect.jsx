@@ -1,6 +1,6 @@
 import { SPEECH_LANGUAGES } from '../speechLanguages'
 
-export default function LanguageSelect({ id, label, value, onChange, disabled, autoLabel }) {
+export default function LanguageSelect({ id, label, value, onChange, disabled, autoLabel, languages = SPEECH_LANGUAGES }) {
   return (
     <label htmlFor={id}>
       {label}
@@ -11,7 +11,7 @@ export default function LanguageSelect({ id, label, value, onChange, disabled, a
         onChange={(event) => onChange(event.target.value)}
       >
         {autoLabel ? <option value="">{autoLabel}</option> : null}
-        {SPEECH_LANGUAGES.map((language) => (
+        {languages.map((language) => (
           <option key={language.code} value={language.code}>
             {language.name}
           </option>
