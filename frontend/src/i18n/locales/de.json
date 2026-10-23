@@ -1198,6 +1198,7 @@
     "setupSceneIntro": "Wählen Sie einen Ort, dann sagen Sie, was passieren soll. Wer Sie sind, was Sie brauchen, jedes Extra — je genauer, desto näher kommt das Gespräch.",
     "stepProgress": "{{current}} von {{total}}",
     "pairs": "Sprachen",
+    "pairFilter": "Sprachenpaar",
     "levelTitleA1": "Anfänger",
     "levelTitleA2": "Alltag",
     "levelTitleB1": "Gespräch",

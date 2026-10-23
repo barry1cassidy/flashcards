@@ -1228,6 +1228,7 @@
     "setupSceneIntro": "Wybierz miejsce, potem powiedz, co ma się wydarzyć. Kim jesteś, czego potrzebujesz, każdy extra szczegół — im konkretniej, tym bliżej będzie rozmowa.",
     "stepProgress": "{{current}} z {{total}}",
     "pairs": "Języki",
+    "pairFilter": "Para języków",
     "levelTitleA1": "Początkujący",
     "levelTitleA2": "Codzienny",
     "levelTitleB1": "Rozmowa",

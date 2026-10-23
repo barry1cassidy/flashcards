@@ -14,6 +14,7 @@ import {
   conversationIsGraded,
   findStudioPair,
   studioGradeKind,
+  studioPairKey,
   studioPairLabel,
   studioStatusLabel,
 } from '../languageStudio'
@@ -151,35 +152,50 @@ export default function LanguageStudioPage() {
             <div>
               <h1>{t('studio.title')}</h1>
               <p className="muted">{t('studio.subtitle')}</p>
-              <p className="muted">{selectedPair ? studioPairLabel(selectedPair, t) : t('studio.schedule')}</p>
-              {selectedPair ? <p className="muted">{t('studio.schedule')}</p> : null}
+              {pairs.length <= 1 && selectedPair ? (
+                <p className="muted">{studioPairLabel(selectedPair, t)}</p>
+              ) : null}
+              <p className="muted">{t('studio.schedule')}</p>
             </div>
-            <div className="page-title-actions">
-              <button className="btn" type="button" onClick={() => navigate(samplesHref)}>
-                {t('studio.samples')}
-              </button>
+            <div className="page-title-actions studio-title-actions">
               <button className="btn primary" type="button" onClick={() => navigate(newHref)}>
                 {t('studio.new')}
+              </button>
+              <button className="btn ghost studio-samples-link" type="button" onClick={() => navigate(samplesHref)}>
+                {t('studio.samples')}
+                <MenuIcon name="next" />
               </button>
             </div>
           </div>
 
           {pairs.length > 1 ? (
-            <div className="listen-choice-row studio-filters" role="radiogroup" aria-label={t('studio.pairs')}>
-              {pairs.map((pair) => (
-                <button
-                  key={pair.id}
-                  className={`btn${selectedPair?.id === pair.id ? ' primary' : ''}`}
-                  type="button"
-                  aria-pressed={selectedPair?.id === pair.id}
-                  onClick={() =>
-                    setParams({ native: pair.nativeLanguage, target: pair.targetLanguage })
+            <label className="studio-pair-filter" htmlFor="studio-pair-filter">
+              {t('studio.pairFilter')}
+              <select
+                id="studio-pair-filter"
+                value={
+                  selectedPair
+                    ? studioPairKey(selectedPair.nativeLanguage, selectedPair.targetLanguage)
+                    : ''
+                }
+                onChange={(event) => {
+                  const [native, target] = event.target.value.split('::')
+                  const next = findStudioPair(pairs, native, target)
+                  if (next) {
+                    setParams({ native: next.nativeLanguage, target: next.targetLanguage })
                   }
-                >
-                  {studioPairLabel(pair, t)}
-                </button>
-              ))}
-            </div>
+                }}
+              >
+                {pairs.map((pair) => (
+                  <option
+                    key={pair.id}
+                    value={studioPairKey(pair.nativeLanguage, pair.targetLanguage)}
+                  >
+                    {studioPairLabel(pair, t)}
+                  </option>
+                ))}
+              </select>
+            </label>
           ) : null}
 
           <div className="listen-choice-row studio-filters" role="radiogroup" aria-label={t('studio.filters')}>

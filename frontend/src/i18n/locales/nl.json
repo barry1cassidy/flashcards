@@ -1198,6 +1198,7 @@
     "setupSceneIntro": "Kies een plek, zeg dan wat er moet gebeuren. Wie je bent, wat je nodig hebt, extra detail — hoe specifieker, hoe dichter het gesprek ernaartoe komt.",
     "stepProgress": "{{current}} van {{total}}",
     "pairs": "Talen",
+    "pairFilter": "Talenpaar",
     "levelTitleA1": "Beginner",
     "levelTitleA2": "Alledaags",
     "levelTitleB1": "Gesprek",

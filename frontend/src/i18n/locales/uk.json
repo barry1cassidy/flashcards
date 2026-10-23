@@ -1228,6 +1228,7 @@
     "setupSceneIntro": "Pick a setting, then say what you want to happen. Who you are, what you need, any extra detail — the more specific you are, the closer the conversation will match.",
     "stepProgress": "{{current}} of {{total}}",
     "pairs": "Languages",
+    "pairFilter": "Мовна пара",
     "levelTitleA1": "Beginner",
     "levelTitleA2": "Everyday",
     "levelTitleB1": "Conversational",

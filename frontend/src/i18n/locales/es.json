@@ -983,6 +983,7 @@
     "setupSceneIntro": "Elige un lugar y luego di qué quieres que pase. Quién eres, qué necesitas, cualquier detalle extra: cuanto más concreto seas, más se parecerá la conversación.",
     "stepProgress": "{{current}} de {{total}}",
     "pairs": "Idiomas",
+    "pairFilter": "Par de idiomas",
     "levelTitleA1": "Principiante",
     "levelTitleA2": "Cotidiano",
     "levelTitleB1": "Conversacional",

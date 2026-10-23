@@ -1198,6 +1198,7 @@
     "setupSceneIntro": "Choisissez un lieu, puis dites ce que vous voulez qu’il se passe. Qui vous êtes, ce dont vous avez besoin, tout détail en plus — plus vous êtes précis, plus la conversation collera.",
     "stepProgress": "{{current}} sur {{total}}",
     "pairs": "Langues",
+    "pairFilter": "Paire de langues",
     "levelTitleA1": "Débutant",
     "levelTitleA2": "Du quotidien",
     "levelTitleB1": "Conversation",
