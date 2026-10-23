@@ -20,6 +20,8 @@ spring:
       - optional:file:./backend/stripe.yml
       - optional:file:./google-play.yml
       - optional:file:./backend/google-play.yml
+      - optional:file:./azure.yml
+      - optional:file:./backend/azure.yml
   datasource:
     url: jdbc:mysql://localhost:3306/flashcards?characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
     username: flashcards
@@ -89,6 +91,13 @@ app:
     max-pdf-chars: 40000
   google:
     client-id: ${GOOGLE_CLIENT_ID:}
+  translate:
+    # url is only used by the paused LibreTranslate client. See README.
+    url: ${TRANSLATE_URL:http://localhost:5000}
+    azure:
+      key: ${AZURE_TRANSLATOR_KEY:}
+      region: ${AZURE_TRANSLATOR_REGION:}
+      endpoint: ${AZURE_TRANSLATOR_ENDPOINT:https://api.cognitive.microsofttranslator.com}
   mail:
     resend-api-key: ${RESEND_API_KEY:}
     from: "${APP_MAIL_FROM:Zipdeck <onboarding@resend.dev>}"

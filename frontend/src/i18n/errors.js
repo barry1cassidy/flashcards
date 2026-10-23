@@ -1,5 +1,9 @@
 const ERROR_KEYS = {
   'Unsupported language': 'errors.unsupportedLanguage',
+  'Enter text to translate': 'errors.translateEmpty',
+  'That text is too long to translate': 'errors.translateTooLong',
+  'Translation is not available for that language': 'errors.translateLanguage',
+  'Translation is not available right now.': 'errors.translateUnavailable',
   'An account with that email already exists': 'errors.emailExists',
   'Invalid email or password': 'errors.invalidCredentials',
   'Not authenticated': 'errors.notAuthenticated',

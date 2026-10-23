@@ -66,6 +66,11 @@ services:
       AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-}
       AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-}
       AWS_REGION: ${CARD_IMAGES_S3_REGION:-us-east-1}
+      AZURE_TRANSLATOR_KEY: ${AZURE_TRANSLATOR_KEY:-}
+      AZURE_TRANSLATOR_REGION: ${AZURE_TRANSLATOR_REGION:-}
+      AZURE_TRANSLATOR_ENDPOINT: ${AZURE_TRANSLATOR_ENDPOINT:-https://api.cognitive.microsofttranslator.com}
+      # Used only if card translation is switched back to the LibreTranslate container.
+      TRANSLATE_URL: http://translate:5000
     volumes:
       - ${GOOGLE_PLAY_CREDENTIALS_HOST_PATH:-/opt/zipdeck/google-play.json}:/app/google-play.json:ro
     depends_on:
@@ -91,8 +96,23 @@ services:
     networks:
       - internal
 
+  # Paused. Card translation uses Azure. See README “LibreTranslate (paused)”.
+  # Off unless started with `--profile translate`. Needs about 8 GB of RAM
+  # and a few GB of disk for the language models. Do not start this on the 2 GB instance.
+  translate:
+    image: libretranslate/libretranslate
+    profiles: ["translate"]
+    restart: unless-stopped
+    environment:
+      LT_LOAD_ONLY: en,zh,zt,hi,es,ar,fr,bn,pt,pb,ru,id,de,ja,tr,vi,ko,it,th,pl,nl,uk,sv,el,he,ga,da,fi,cs,ro,tl,nb,hu
+    volumes:
+      - flashcards-translate:/home/libretranslate/.local
+    networks:
+      - internal
+
 volumes:
   flashcards-mysql:
+  flashcards-translate:
 
 networks:
   internal:

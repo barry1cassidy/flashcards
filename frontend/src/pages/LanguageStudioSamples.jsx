@@ -10,6 +10,7 @@ import {
   STUDIO_LOCATION_ICONS,
   STUDIO_SAMPLE_LANGUAGES,
   defaultStudioSamplePair,
+  studioLibraryPath,
   studioPairLabel,
 } from '../languageStudio'
 import { SPEECH_LANGUAGES } from '../speechLanguages'
@@ -129,13 +130,18 @@ export default function LanguageStudioSamples() {
 
   return (
     <div className="page">
-      <button className="page-back" type="button" onClick={() => navigate('/language-studio')}>
+      <button
+        className="page-back"
+        type="button"
+        onClick={() => navigate(studioLibraryPath({ nativeLanguage, targetLanguage }))}
+      >
         {t('studio.back')}
       </button>
       <div className="page-title">
         <div>
           <h1>{t('studio.samplesTitle')}</h1>
           <p className="muted">{t('studio.samplesIntro')}</p>
+          <p className="muted">{t('studio.schedule')}</p>
         </div>
       </div>
       {error ? <div className="error">{translateError(t, error)}</div> : null}

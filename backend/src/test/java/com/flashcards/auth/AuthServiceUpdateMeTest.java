@@ -58,7 +58,7 @@ class AuthServiceUpdateMeTest {
 
         UserResponse response = authService.updateMe(
                 USER_ID,
-                new UpdateMeRequest(null, null, null, null, null, null, true, null, null, null, null, null, null));
+                new UpdateMeRequest(null, null, null, null, null, null, true, null, null, null, null, null, null, null, null));
 
         assertTrue(user.isTeacherMode());
         assertTrue(response.teacherMode());
@@ -71,15 +71,19 @@ class AuthServiceUpdateMeTest {
 
         UserResponse response = authService.updateMe(
                 USER_ID,
-                new UpdateMeRequest(null, null, null, null, null, null, null, null, 12, ListenSideFirst.BACK, true, false, 30));
+                new UpdateMeRequest(null, null, null, null, null, null, null, null, 12, ListenSideFirst.BACK, true, false, 30, 1.25, true));
 
         assertEquals(12, user.getListenPauseSeconds());
         assertEquals(ListenSideFirst.BACK, user.getListenSideFirst());
         assertTrue(user.isListenRepeat());
         assertFalse(user.isListenAnnounce());
         assertEquals(30, user.getListenSleepMinutes());
+        assertEquals(1.25, user.getListenSpeechRate(), 1e-6);
+        assertTrue(user.isListenQuestionTwice());
         assertEquals(12, response.listenPauseSeconds());
         assertEquals(30, response.listenSleepMinutes());
+        assertEquals(1.25, response.listenSpeechRate(), 1e-6);
+        assertTrue(response.listenQuestionTwice());
     }
 
     @Test
@@ -89,8 +93,19 @@ class AuthServiceUpdateMeTest {
 
         assertThrows(ApiException.class, () -> authService.updateMe(
                 USER_ID,
-                new UpdateMeRequest(null, null, null, null, null, null, null, null, 4, null, null, null, 20)));
+                new UpdateMeRequest(null, null, null, null, null, null, null, null, 4, null, null, null, 20, null, null)));
         assertEquals(0, user.getListenSleepMinutes());
+    }
+
+    @Test
+    void rejectsASpeechRateOutsideTheRange() {
+        User user = listener();
+        when(userRepository.findById(USER_ID)).thenReturn(Optional.of(user));
+
+        assertThrows(ApiException.class, () -> authService.updateMe(
+                USER_ID,
+                new UpdateMeRequest(null, null, null, null, null, null, null, null, null, null, null, null, null, 1.5, null)));
+        assertEquals(1.0, user.getListenSpeechRate(), 1e-6);
     }
 
     private static User listener() {

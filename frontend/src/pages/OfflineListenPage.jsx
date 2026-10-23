@@ -3,7 +3,7 @@ import { Capacitor } from '@capacitor/core'
 import { Link, useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { flattenListenCards, loadListenQueue } from '../listenQueue'
-import { defaultListenPrefs, normalizeListenPrefs } from '../listenPrefs'
+import { LISTEN_SLEEP_EXTEND_MS, defaultListenPrefs, normalizeListenPrefs } from '../listenPrefs'
 import { createListenSession } from '../listenSession'
 import { listOfflinePacks } from '../offlinePacks'
 import ListenOptions, { listenPrefsSummary } from './ListenOptions'
@@ -100,6 +100,15 @@ export default function OfflineListenPage() {
     setPrefs(next)
   }
 
+  function changeLivePrefs(partial) {
+    changePrefs(partial)
+    const next = prefsRef.current
+    sessionRef.current?.setWaitMs(next.pauseSeconds * 1000)
+    sessionRef.current?.setLoop(next.loop)
+    sessionRef.current?.setRate(next.rate)
+    sessionRef.current?.setQuestionTwice(next.questionTwice)
+  }
+
   function toggle(packId) {
     setSelected((current) => {
       const next = new Set(current || [])
@@ -126,6 +135,8 @@ export default function OfflineListenPage() {
         loop: chosen.loop,
         announce: multi && chosen.announce,
         sleepMs: chosen.sleepMinutes * 60 * 1000,
+        rate: chosen.rate,
+        questionTwice: chosen.questionTwice,
       },
       onChange: setPlayback,
     })
@@ -148,6 +159,9 @@ export default function OfflineListenPage() {
           playback={playback}
           title={queue?.title || playback.card?.deckName}
           loop={prefs.loop}
+          prefs={prefs}
+          onChangePrefs={changeLivePrefs}
+          onExtendSleep={() => sessionRef.current?.extendSleep(LISTEN_SLEEP_EXTEND_MS)}
           onBack={stopToOptions}
           onPause={() => sessionRef.current?.pause()}
           onResume={() => sessionRef.current?.resume()}

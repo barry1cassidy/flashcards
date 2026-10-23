@@ -82,6 +82,12 @@ public class User {
     @Column(name = "listen_sleep_minutes", nullable = false)
     private int listenSleepMinutes;
 
+    @Column(name = "listen_speech_rate", nullable = false, columnDefinition = "decimal(3,2)")
+    private double listenSpeechRate = 1.0;
+
+    @Column(name = "listen_question_twice", nullable = false)
+    private boolean listenQuestionTwice;
+
     @Column(name = "pro_licensed", nullable = false)
     private boolean proLicensed;
 
@@ -140,6 +146,9 @@ public class User {
         }
         if (listenPauseSeconds < 0 || listenPauseSeconds > 60) {
             listenPauseSeconds = 4;
+        }
+        if (listenSpeechRate < 0.5 || listenSpeechRate > 1.25) {
+            listenSpeechRate = 1.0;
         }
     }
 }

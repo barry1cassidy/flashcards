@@ -8,7 +8,7 @@ import { isProLicensed } from '../pro'
 import { translateError } from '../i18n/errors'
 import { listOfflinePacks } from '../offlinePacks'
 import { flattenListenCards, loadListenQueue } from '../listenQueue'
-import { listenPrefsFromUser, normalizeListenPrefs } from '../listenPrefs'
+import { LISTEN_SLEEP_EXTEND_MS, listenPrefsFromUser, normalizeListenPrefs } from '../listenPrefs'
 import { createListenSession } from '../listenSession'
 import ListenOptions, { listenPrefsSummary } from './ListenOptions'
 import ListenPlayer from './ListenPlayer'
@@ -67,6 +67,15 @@ export default function ListenPage() {
     prefsRef.current = next
     setPrefs(next)
     setListenPrefs(next).catch(() => {})
+  }
+
+  function changeLivePrefs(partial) {
+    changePrefs(partial)
+    const next = prefsRef.current
+    sessionRef.current?.setWaitMs(next.pauseSeconds * 1000)
+    sessionRef.current?.setLoop(next.loop)
+    sessionRef.current?.setRate(next.rate)
+    sessionRef.current?.setQuestionTwice(next.questionTwice)
   }
 
   const offlineIds = source === 'offline' ? [...(selectedOffline || [])] : []
@@ -216,6 +225,8 @@ export default function ListenPage() {
         loop: chosen.loop,
         announce: multi && chosen.announce,
         sleepMs: chosen.sleepMinutes * 60 * 1000,
+        rate: chosen.rate,
+        questionTwice: chosen.questionTwice,
       },
       onChange: setPlayback,
     })
@@ -270,6 +281,9 @@ export default function ListenPage() {
           playback={playback}
           title={queue?.title || playback.card?.deckName}
           loop={prefs.loop}
+          prefs={prefs}
+          onChangePrefs={changeLivePrefs}
+          onExtendSleep={() => sessionRef.current?.extendSleep(LISTEN_SLEEP_EXTEND_MS)}
           onBack={stopToOptions}
           onPause={() => sessionRef.current?.pause()}
           onResume={() => sessionRef.current?.resume()}

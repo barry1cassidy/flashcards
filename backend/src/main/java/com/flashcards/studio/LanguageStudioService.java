@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.ai.openai.OpenAiChatOptions;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,8 +43,14 @@ public class LanguageStudioService {
     private static final Set<String> SCENARIOS =
             Set.of("cafe", "airport", "doctor", "hotel", "pharmacy", "interview", "custom");
     private static final int LEARNED_CONTEXT_CHARS = 4000;
+    static final int LEARNED_CONTEXT_SCENES = 5;
+    private static final int LEARNED_CONTEXT_YOU_LINES = 4;
+    private static final int IN_PROGRESS_CONTEXT_CHARS = 2000;
+    static final int IN_PROGRESS_CONTEXT_SCENES = 8;
+    private static final int IN_PROGRESS_CONTEXT_YOU_LINES = 2;
 
     private final LanguageConversationRepository conversationRepository;
+    private final LanguageStudioPairService pairService;
     private final UserRepository userRepository;
     private final AgentCreditService creditService;
     private final AgentProperties properties;
@@ -55,11 +62,13 @@ public class LanguageStudioService {
 
     public LanguageStudioService(
             LanguageConversationRepository conversationRepository,
+            LanguageStudioPairService pairService,
             UserRepository userRepository,
             AgentCreditService creditService,
             AgentProperties properties,
             ExpiredStoreSubscriptionRefresh expiredStoreSubscriptionRefresh) {
         this.conversationRepository = conversationRepository;
+        this.pairService = pairService;
         this.userRepository = userRepository;
         this.creditService = creditService;
         this.properties = properties;
@@ -68,11 +77,18 @@ public class LanguageStudioService {
     }
 
     @Transactional(readOnly = true)
-    public List<LanguageConversationResponse> list(UUID userId) {
+    public List<LanguageConversationResponse> list(UUID userId, String nativeLanguage, String targetLanguage) {
         User user = requireProUser(userId);
-        return conversationRepository.findByUser_IdOrderByUpdatedAtDesc(user.getId()).stream()
-                .map(row -> toResponse(row, false))
-                .toList();
+        List<LanguageConversation> rows;
+        if (nativeLanguage != null && !nativeLanguage.isBlank() && targetLanguage != null && !targetLanguage.isBlank()) {
+            String nativeCode = CardLanguages.normalize(nativeLanguage, CardLanguages.fromUserLocale(user.getLocale()));
+            String targetCode = CardLanguages.normalize(targetLanguage, CardLanguages.DEFAULT);
+            rows = conversationRepository.findByUser_IdAndNativeLanguageAndTargetLanguageOrderByUpdatedAtDesc(
+                    user.getId(), nativeCode, targetCode);
+        } else {
+            rows = conversationRepository.findByUser_IdOrderByUpdatedAtDesc(user.getId());
+        }
+        return rows.stream().map(row -> toResponse(row, false)).toList();
     }
 
     @Transactional(readOnly = true)
@@ -83,7 +99,10 @@ public class LanguageStudioService {
     @Transactional
     public LanguageConversationResponse rate(UUID userId, UUID conversationId, LanguageStudioRateRequest request) {
         LanguageConversation conversation = requireOwned(requireProUser(userId).getId(), conversationId);
-        conversation.setStatus(LanguageSceneStatus.from(request.status()));
+        LanguageSceneStatus status = LanguageSceneStatus.from(request.status());
+        conversation.setStatus(status);
+        conversation.setLearnedAt(status == LanguageSceneStatus.LEARNED ? Instant.now() : null);
+        conversation.setRatedAt(Instant.now());
         conversationRepository.save(conversation);
         return toResponse(conversation, true);
     }
@@ -91,7 +110,10 @@ public class LanguageStudioService {
     @Transactional
     public void delete(UUID userId, UUID conversationId) {
         LanguageConversation conversation = requireOwned(requireProUser(userId).getId(), conversationId);
+        String nativeLanguage = conversation.getNativeLanguage();
+        String targetLanguage = conversation.getTargetLanguage();
         conversationRepository.delete(conversation);
+        pairService.forgetIfEmpty(userId, nativeLanguage, targetLanguage);
     }
 
     public LanguageStudioJobResponse startGenerate(UUID userId, LanguageStudioCreateRequest request) {
@@ -126,10 +148,21 @@ public class LanguageStudioService {
         LanguageStudioJob job = new LanguageStudioJob(jobId, userId, credits.remainingCredits());
         jobs.put(jobId, job);
         job.step("starting");
-        String learned = request.useLearned() ? learnedContext(userId) : "";
+        String learned = request.useLearned() ? learnedContext(userId, nativeLanguage, targetLanguage) : "";
+        String inProgress = inProgressContext(userId, nativeLanguage, targetLanguage);
         jobExecutor.execute(() -> {
             try {
-                runGenerate(job, userId, nativeLanguage, targetLanguage, scenario, customPrompt, level, request.useLearned(), learned);
+                runGenerate(
+                        job,
+                        userId,
+                        nativeLanguage,
+                        targetLanguage,
+                        scenario,
+                        customPrompt,
+                        level,
+                        request.useLearned(),
+                        learned,
+                        inProgress);
             } finally {
                 activeByUser.remove(userId, jobId);
             }
@@ -155,7 +188,8 @@ public class LanguageStudioService {
             String customPrompt,
             LanguageLevel level,
             boolean useLearned,
-            String learned) {
+            String learned,
+            String inProgress) {
         job.step("callingModel");
         try {
             String reply = null;
@@ -165,7 +199,8 @@ public class LanguageStudioService {
                     log.info("[studio {}] calling model {} attempt={}", job.id(), properties.model(), attempt);
                     reply = chatClient.prompt()
                             .system(systemPrompt())
-                            .user(userMessage(nativeLanguage, targetLanguage, scenario, customPrompt, level, learned))
+                            .user(userMessage(
+                                    nativeLanguage, targetLanguage, scenario, customPrompt, level, learned, inProgress))
                             .call()
                             .content();
                     log.info(
@@ -248,34 +283,69 @@ public class LanguageStudioService {
             turns.add(turn);
         }
         conversation.setTurns(turns);
-        return conversationRepository.save(conversation);
+        LanguageConversation saved = conversationRepository.save(conversation);
+        pairService.touch(user, nativeLanguage, targetLanguage, level);
+        return saved;
     }
 
-    private String learnedContext(UUID userId) {
-        List<LanguageConversation> learned =
-                conversationRepository.findByUser_IdAndStatusOrderByUpdatedAtDesc(userId, LanguageSceneStatus.LEARNED);
-        if (learned.isEmpty()) {
+    String learnedContext(UUID userId, String nativeLanguage, String targetLanguage) {
+        List<LanguageConversation> learned = conversationRepository
+                .findByUser_IdAndStatusAndNativeLanguageAndTargetLanguageOrderByLearnedAtDescUpdatedAtDesc(
+                        userId,
+                        LanguageSceneStatus.LEARNED,
+                        nativeLanguage,
+                        targetLanguage,
+                        PageRequest.of(0, LEARNED_CONTEXT_SCENES));
+        return appendSceneLines(learned, LEARNED_CONTEXT_YOU_LINES, LEARNED_CONTEXT_CHARS);
+    }
+
+    String inProgressContext(UUID userId, String nativeLanguage, String targetLanguage) {
+        List<LanguageConversation> inProgress = conversationRepository
+                .findByUser_IdAndNativeLanguageAndTargetLanguageAndStatusNotOrderByUpdatedAtDesc(
+                        userId,
+                        nativeLanguage,
+                        targetLanguage,
+                        LanguageSceneStatus.LEARNED,
+                        PageRequest.of(0, IN_PROGRESS_CONTEXT_SCENES));
+        return appendSceneLines(inProgress, IN_PROGRESS_CONTEXT_YOU_LINES, IN_PROGRESS_CONTEXT_CHARS);
+    }
+
+    private static String appendSceneLines(List<LanguageConversation> scenes, int youLines, int charCap) {
+        if (scenes == null || scenes.isEmpty()) {
             return "";
         }
         StringBuilder out = new StringBuilder();
-        for (LanguageConversation conversation : learned) {
-            out.append("- ").append(conversation.getTitle()).append(" (").append(conversation.getLevel()).append(")\n");
+        for (LanguageConversation conversation : scenes) {
+            out.append("- ")
+                    .append(conversation.getTitle())
+                    .append(" [")
+                    .append(conversation.getScenario())
+                    .append(", ")
+                    .append(conversation.getLevel())
+                    .append("]\n");
             int used = 0;
-            for (LanguageTurn turn : conversation.getTurns()) {
-                if (turn.getRole() != LanguageTurnRole.YOU) {
-                    continue;
-                }
-                out.append("  ").append(turn.getTargetText()).append('\n');
-                used++;
-                if (used >= 4) {
-                    break;
+            List<LanguageTurn> turns = conversation.getTurns();
+            if (turns != null) {
+                for (LanguageTurn turn : turns) {
+                    if (turn.getRole() != LanguageTurnRole.YOU) {
+                        continue;
+                    }
+                    String line = turn.getTargetText();
+                    if (line == null || line.isBlank()) {
+                        continue;
+                    }
+                    out.append("  ").append(line).append('\n');
+                    used++;
+                    if (used >= youLines) {
+                        break;
+                    }
                 }
             }
-            if (out.length() >= LEARNED_CONTEXT_CHARS) {
+            if (out.length() >= charCap) {
                 break;
             }
         }
-        return out.length() > LEARNED_CONTEXT_CHARS ? out.substring(0, LEARNED_CONTEXT_CHARS) : out.toString();
+        return out.length() > charCap ? out.substring(0, charCap) : out.toString();
     }
 
     private LanguageConversation requireOwned(UUID userId, UUID conversationId) {
@@ -320,6 +390,7 @@ public class LanguageStudioService {
                 conversation.getSampleScene() == null ? null : conversation.getSampleScene().getSlug(),
                 conversation.getTurns() == null ? 0 : conversation.getTurns().size(),
                 turns,
+                conversation.getRatedAt(),
                 conversation.getCreatedAt(),
                 conversation.getUpdatedAt());
     }
@@ -345,6 +416,8 @@ public class LanguageStudioService {
                 YOU turns are the line the learner should say in the target language.
                 Write 8 turns when you can, never fewer than 6 or more than 12.
                 Alternate speakers. Keep lines speakable aloud, not written essays.
+                If the user lists known lines, recycle a few of those words in a new situation; do not remake the old scene.
+                If the user lists in-progress scenes, do not copy them or treat their lines as known.
                 """;
     }
 
@@ -354,20 +427,39 @@ public class LanguageStudioService {
             String scenario,
             String customPrompt,
             LanguageLevel level,
-            String learned) {
+            String learned,
+            String inProgress) {
         String extra = customPrompt.isBlank() ? "" : " Extra details: " + customPrompt;
-        String learnedBlock = learned.isBlank()
-                ? ""
-                : """
-
-                  The learner already knows these scenes. Reuse words and phrases from them when they fit, without copying a whole scene:
-                  """
-                        + learned;
         return "I speak " + nativeLanguage + ". I am learning " + targetLanguage + ". "
                 + LanguageStudioDraftParser.levelHint(level) + " The scene is "
                 + LanguageStudioDraftParser.scenarioLabel(scenario) + "." + extra
                 + " I play the visitor, customer, patient, guest, or applicant as the scene requires."
-                + learnedBlock;
+                + historyBlock(learned, inProgress);
+    }
+
+    static String historyBlock(String learned, String inProgress) {
+        StringBuilder out = new StringBuilder();
+        if (inProgress != null && !inProgress.isBlank()) {
+            out.append("""
+
+                    These scenes are still in progress. The learner has not mastered them.
+                    Do not remake their plot, roles, or sentences. Do not recycle their phrases as known vocabulary.
+                    If the new scene is the same kind of place, give it a clearly different task and different lines.
+
+                    """);
+            out.append(inProgress);
+        }
+        if (learned != null && !learned.isBlank()) {
+            out.append("""
+
+                    The learner can already say these YOU lines. Treat them as vocabulary they can handle, not as a script to remake.
+                    Write a different situation. Recycle about 3 to 6 of those words or short chunks inside new YOU lines, with different surrounding language, then add new related language at the requested level.
+                    Prefer content words and short useful chunks, not whole clauses. Spread recycled words across the dialogue. Do not copy sentences, roles, or the plot of a known scene.
+
+                    """);
+            out.append(learned);
+        }
+        return out.toString();
     }
 
     private OpenAiChatModel openAiChatModel() {

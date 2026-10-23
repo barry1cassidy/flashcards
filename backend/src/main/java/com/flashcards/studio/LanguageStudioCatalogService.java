@@ -21,16 +21,19 @@ public class LanguageStudioCatalogService {
 
     private final StudioSampleSceneRepository sceneRepository;
     private final LanguageConversationRepository conversationRepository;
+    private final LanguageStudioPairService pairService;
     private final UserRepository userRepository;
     private final ExpiredStoreSubscriptionRefresh expiredStoreSubscriptionRefresh;
 
     public LanguageStudioCatalogService(
             StudioSampleSceneRepository sceneRepository,
             LanguageConversationRepository conversationRepository,
+            LanguageStudioPairService pairService,
             UserRepository userRepository,
             ExpiredStoreSubscriptionRefresh expiredStoreSubscriptionRefresh) {
         this.sceneRepository = sceneRepository;
         this.conversationRepository = conversationRepository;
+        this.pairService = pairService;
         this.userRepository = userRepository;
         this.expiredStoreSubscriptionRefresh = expiredStoreSubscriptionRefresh;
     }
@@ -100,7 +103,9 @@ public class LanguageStudioCatalogService {
             turns.add(turn);
         }
         conversation.setTurns(turns);
-        return conversationRepository.save(conversation);
+        LanguageConversation saved = conversationRepository.save(conversation);
+        pairService.touch(user, pair.nativeLanguage(), pair.targetLanguage(), null);
+        return saved;
     }
 
     private LanguageStudioSampleSummary toSummary(StudioSampleScene scene, Pair pair, UUID userId) {

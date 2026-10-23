@@ -27,7 +27,7 @@ function pickVoice(lang) {
   )
 }
 
-export function speakCue(text, lang, { signal, onProgress, immediate = false } = {}) {
+export function speakCue(text, lang, { signal, onProgress, immediate = false, rate = 1 } = {}) {
   const spoken = String(text || '').trim()
   if (!spoken) {
     onProgress?.(1)
@@ -37,7 +37,8 @@ export function speakCue(text, lang, { signal, onProgress, immediate = false } =
     return Promise.reject(abortError())
   }
 
-  const estimate = Math.max(700, (spoken.length / 13) * 1000)
+  const speechRate = Number.isFinite(Number(rate)) && Number(rate) > 0 ? Number(rate) : 1
+  const estimate = Math.max(700, ((spoken.length / 13) * 1000) / speechRate)
   const started = performance.now()
   let timer = 0
   let settled = false
@@ -80,7 +81,7 @@ export function speakCue(text, lang, { signal, onProgress, immediate = false } =
           TextToSpeech.speak({
             text: spoken,
             lang: lang || 'en-US',
-            rate: 1,
+            rate: speechRate,
             pitch: 1,
             volume: 1,
             category: 'playback',
@@ -97,6 +98,7 @@ export function speakCue(text, lang, { signal, onProgress, immediate = false } =
     }
     const utterance = new SpeechSynthesisUtterance(spoken)
     utterance.lang = lang || 'en-US'
+    utterance.rate = speechRate
     const voice = pickVoice(utterance.lang)
     if (voice) {
       utterance.voice = voice

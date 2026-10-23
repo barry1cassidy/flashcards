@@ -89,6 +89,12 @@ public class LanguageConversation {
     @OrderColumn(name = "position")
     private List<LanguageTurn> turns = new ArrayList<>();
 
+    @Column(name = "learned_at")
+    private Instant learnedAt;
+
+    @Column(name = "rated_at")
+    private Instant ratedAt;
+
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 

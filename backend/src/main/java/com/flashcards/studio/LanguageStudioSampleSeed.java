@@ -57,7 +57,7 @@ public class LanguageStudioSampleSeed implements ApplicationRunner {
         scene.setPosition(sceneNode.path("position").asInt(0));
         scene.getTexts().clear();
         scene.getTurns().clear();
-        sceneRepository.save(scene);
+        sceneRepository.saveAndFlush(scene);
 
         JsonNode meta = sceneNode.path("meta");
         for (String language : StudioSampleLanguages.CODES) {

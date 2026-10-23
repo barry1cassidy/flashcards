@@ -25,6 +25,7 @@ import com.flashcards.user.UserRepository;
 public class AuthService {
 
     private static final Set<Integer> LISTEN_SLEEP_MINUTES = Set.of(0, 5, 10, 15, 30, 45, 60);
+    private static final double[] LISTEN_SPEECH_RATES = {0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.25};
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -166,6 +167,16 @@ public class AuthService {
             }
             user.setListenSleepMinutes(minutes);
         }
+        if (request.listenSpeechRate() != null) {
+            double rate = request.listenSpeechRate();
+            if (rate < 0.5 || rate > 1.25) {
+                throw new ApiException(HttpStatus.BAD_REQUEST, "Validation failed");
+            }
+            user.setListenSpeechRate(nearestListenSpeechRate(rate));
+        }
+        if (request.listenQuestionTwice() != null) {
+            user.setListenQuestionTwice(request.listenQuestionTwice());
+        }
         return toUserResponse(user);
     }
 
@@ -208,6 +219,7 @@ public class AuthService {
         int listenSleepMinutes = LISTEN_SLEEP_MINUTES.contains(user.getListenSleepMinutes())
                 ? user.getListenSleepMinutes()
                 : 0;
+        double listenSpeechRate = nearestListenSpeechRate(user.getListenSpeechRate());
         return new UserResponse(
                 user.getId(),
                 user.getEmail(),
@@ -228,7 +240,25 @@ public class AuthService {
                 listenSideFirst,
                 user.isListenRepeat(),
                 user.isListenAnnounce(),
-                listenSleepMinutes);
+                listenSleepMinutes,
+                listenSpeechRate,
+                user.isListenQuestionTwice());
+    }
+
+    private static double nearestListenSpeechRate(double rate) {
+        if (rate < 0.5 || rate > 1.25 || Double.isNaN(rate)) {
+            return 1.0;
+        }
+        double best = 1.0;
+        double bestDelta = Double.MAX_VALUE;
+        for (double step : LISTEN_SPEECH_RATES) {
+            double delta = Math.abs(step - rate);
+            if (delta < bestDelta) {
+                best = step;
+                bestDelta = delta;
+            }
+        }
+        return best;
     }
 
     private static String displayNameFrom(GoogleTokenService.GoogleProfile profile, String email) {

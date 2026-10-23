@@ -6,6 +6,7 @@ import { downloadBlob, csvFilename } from '../download'
 import { formatDate } from '../i18n/format'
 import { translateError } from '../i18n/errors'
 import { SPEECH_LANGUAGES, normalizeSpeechLanguage } from '../speechLanguages'
+import { canTranslate } from '../translationLanguages'
 import ConfirmModal from './ConfirmModal'
 import ShareModal from './ShareModal'
 import MenuIcon from './MenuIcon'
@@ -57,6 +58,7 @@ export default function DeckDetailPage() {
   const [cardFormOpen, setCardFormOpen] = useState(false)
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
+  const [translating, setTranslating] = useState(false)
   const [confirm, setConfirm] = useState(null)
   const [editingDeck, setEditingDeck] = useState(false)
   const [editingCards, setEditingCards] = useState(false)
@@ -484,10 +486,34 @@ export default function DeckDetailPage() {
   }
 
   function closeCardForm() {
-    if (busy) {
+    if (busy || translating) {
       return
     }
     resetCardForm()
+  }
+
+  const frontLanguage = normalizeSpeechLanguage(deck?.frontLanguage, 'en-US')
+  const backLanguage = normalizeSpeechLanguage(deck?.backLanguage, 'en-US')
+  const hasCards = cards.length > 0
+
+  async function translateFront() {
+    const text = front.trim()
+    if (!text || translating || busy || !canTranslate(frontLanguage, backLanguage)) {
+      return
+    }
+    setError('')
+    setTranslating(true)
+    try {
+      const result = await api('/api/translate', {
+        method: 'POST',
+        body: JSON.stringify({ text, source: frontLanguage, target: backLanguage }),
+      })
+      setBack(result.text || '')
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setTranslating(false)
+    }
   }
 
   if (!deck) {
@@ -507,9 +533,6 @@ export default function DeckDetailPage() {
     stats.push(t('decks.lastStudiedInline', { date: formatDate(deck.lastStudiedAt) }))
   }
 
-  const frontLanguage = normalizeSpeechLanguage(deck.frontLanguage, 'en-US')
-  const backLanguage = normalizeSpeechLanguage(deck.backLanguage, 'en-US')
-
   return (
     <div className="page">
       <div className="page-title">
@@ -524,35 +547,43 @@ export default function DeckDetailPage() {
         </div>
         {editingDeck || editingCards ? null : (
           <div className="header-actions deck-hero-actions">
-            <button
-              className={`btn ghost icon-btn offline-download-btn${offlinePack ? ' is-saved' : ''}`}
-              type="button"
-              disabled={offlineBusy}
-              aria-pressed={Boolean(offlinePack)}
-              aria-label={offlinePack ? t('offline.iconUpdate') : t('offline.iconDownload')}
-              title={
-                offlinePack
-                  ? t('offline.savedOn', { date: formatDate(offlinePack.downloadedAt) })
-                  : t('offline.iconDownload')
-              }
-              onClick={downloadOffline}
-            >
-              <MenuIcon name="offline" />
-            </button>
-            <button
-              className="btn ghost icon-btn"
-              type="button"
-              onClick={() => setShareOpen(true)}
-              aria-label={t('share.share')}
-            >
-              <MenuIcon name="share" />
-            </button>
-            <button className="btn" type="button" onClick={() => navigate(`/listen?source=deck&id=${id}`)}>
-              {t('listen.menu')}
-            </button>
-            <button className="btn primary" type="button" onClick={() => setStudyOpen(true)}>
-              {t('decks.studyDeck')}
-            </button>
+            {hasCards ? (
+              <button
+                className={`btn ghost icon-btn offline-download-btn${offlinePack ? ' is-saved' : ''}`}
+                type="button"
+                disabled={offlineBusy}
+                aria-pressed={Boolean(offlinePack)}
+                aria-label={offlinePack ? t('offline.iconUpdate') : t('offline.iconDownload')}
+                title={
+                  offlinePack
+                    ? t('offline.savedOn', { date: formatDate(offlinePack.downloadedAt) })
+                    : t('offline.iconDownload')
+                }
+                onClick={downloadOffline}
+              >
+                <MenuIcon name="offline" />
+              </button>
+            ) : null}
+            {hasCards ? (
+              <button
+                className="btn ghost icon-btn"
+                type="button"
+                onClick={() => setShareOpen(true)}
+                aria-label={t('share.share')}
+              >
+                <MenuIcon name="share" />
+              </button>
+            ) : null}
+            {hasCards ? (
+              <button className="btn" type="button" onClick={() => navigate(`/listen?source=deck&id=${id}`)}>
+                {t('listen.menu')}
+              </button>
+            ) : null}
+            {hasCards ? (
+              <button className="btn primary" type="button" onClick={() => setStudyOpen(true)}>
+                {t('decks.studyDeck')}
+              </button>
+            ) : null}
             <button className="btn" type="button" onClick={beginEdit}>
               {t('decks.editDeck')}
             </button>
@@ -688,19 +719,25 @@ export default function DeckDetailPage() {
                 </>
               ) : (
                 <>
-                  <button className="btn" type="button" onClick={beginCardEdit}>
-                    {t('decks.editCards')}
-                  </button>
+                  {hasCards ? (
+                    <button className="btn" type="button" onClick={beginCardEdit}>
+                      {t('decks.editCards')}
+                    </button>
+                  ) : null}
                   <button className="btn" type="button" onClick={() => fileRef.current?.click()}>
                     {t('decks.importCsv')}
                   </button>
-                  <button className="btn ai-edit-btn" type="button" onClick={() => setAiEditOpen(true)}>
-                    <MenuIcon name="agent" />
-                    {t('agent.edit.button')}
-                  </button>
-                  <button className="btn" type="button" onClick={exportCsv}>
-                    {t('decks.exportCsv')}
-                  </button>
+                  {hasCards ? (
+                    <button className="btn ai-edit-btn" type="button" onClick={() => setAiEditOpen(true)}>
+                      <MenuIcon name="agent" />
+                      {t('agent.edit.button')}
+                    </button>
+                  ) : null}
+                  {hasCards ? (
+                    <button className="btn" type="button" onClick={exportCsv}>
+                      {t('decks.exportCsv')}
+                    </button>
+                  ) : null}
                 </>
               )}
             </div>
@@ -708,7 +745,12 @@ export default function DeckDetailPage() {
           <input ref={fileRef} type="file" accept=".csv,text/csv" hidden onChange={importCsv} />
         </div>
         {cards.length === 0 ? (
-          <div className="empty">{t('decks.emptyCards')}</div>
+          <div className="empty empty-cards">
+            <p>{t('decks.emptyCards')}</p>
+            <button className="btn primary" type="button" onClick={openAddCard}>
+              {t('decks.addCard')}
+            </button>
+          </div>
         ) : (
           <>
             {editingCards ? <p className="muted">{t('decks.reorderHint')}</p> : null}
@@ -810,14 +852,14 @@ export default function DeckDetailPage() {
           className="card-edit-modal"
           title={editing ? t('decks.editCardTitle') : t('decks.addCard')}
           onClose={closeCardForm}
-          closeDisabled={busy}
+          closeDisabled={busy || translating}
           onSubmit={saveCard}
           footer={
             <div className="modal-actions">
-              <button className="btn primary" type="submit" disabled={busy}>
+              <button className="btn primary" type="submit" disabled={busy || translating}>
                 {editing ? t('decks.saveCard') : t('decks.addCard')}
               </button>
-              <button className="btn ghost" type="button" disabled={busy} onClick={closeCardForm}>
+              <button className="btn ghost" type="button" disabled={busy || translating} onClick={closeCardForm}>
                 {t('common.cancel')}
               </button>
             </div>
@@ -849,6 +891,19 @@ export default function DeckDetailPage() {
               onError={setError}
             />
           </div>
+          {canTranslate(frontLanguage, backLanguage) ? (
+            <button
+              className="btn card-translate"
+              type="button"
+              disabled={busy || translating || !front.trim()}
+              onClick={translateFront}
+            >
+              <MenuIcon name="translate" />
+              {translating
+                ? t('decks.translating')
+                : t('decks.translateTo', { language: languageName(backLanguage) })}
+            </button>
+          ) : null}
           <div className="card-side-block">
             <label>
               {t('decks.back')}

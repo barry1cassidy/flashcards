@@ -1,0 +1,7 @@
+# Copy this file to azure.yml in this same folder (backend/).
+# azure.yml is gitignored. Paste Key 1 from the Translator resource.
+app:
+  translate:
+    azure:
+      key: YOUR_KEY_1
+      region: westus2

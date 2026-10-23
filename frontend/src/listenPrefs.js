@@ -2,6 +2,11 @@ export const LISTEN_PAUSE_MIN = 0
 export const LISTEN_PAUSE_MAX = 60
 export const LISTEN_PAUSE_DEFAULT = 4
 export const LISTEN_SLEEP_CHOICES = [0, 5, 10, 15, 30, 45, 60]
+export const LISTEN_SLEEP_EXTEND_MS = 5 * 60 * 1000
+export const LISTEN_RATE_MIN = 0.5
+export const LISTEN_RATE_MAX = 1.25
+export const LISTEN_RATE_DEFAULT = 1
+export const LISTEN_RATE_STEPS = [0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1, 1.2, 1.25]
 
 const STORAGE_KEY = 'zipdeck.listenPrefs'
 
@@ -12,6 +17,8 @@ export function defaultListenPrefs() {
     loop: false,
     announce: true,
     sleepMinutes: 0,
+    rate: LISTEN_RATE_DEFAULT,
+    questionTwice: false,
   }
 }
 
@@ -28,6 +35,36 @@ export function clampListenSleep(value) {
   return LISTEN_SLEEP_CHOICES.includes(parsed) ? parsed : 0
 }
 
+export function clampListenRate(value) {
+  const parsed = Number(value)
+  if (!Number.isFinite(parsed)) {
+    return LISTEN_RATE_DEFAULT
+  }
+  const clamped = Math.min(LISTEN_RATE_MAX, Math.max(LISTEN_RATE_MIN, parsed))
+  let best = LISTEN_RATE_DEFAULT
+  let bestDelta = Number.POSITIVE_INFINITY
+  for (const step of LISTEN_RATE_STEPS) {
+    const delta = Math.abs(step - clamped)
+    if (delta < bestDelta) {
+      best = step
+      bestDelta = delta
+    }
+  }
+  return best
+}
+
+export function stepListenRate(current, direction) {
+  const value = clampListenRate(current)
+  const index = LISTEN_RATE_STEPS.findIndex((step) => Math.abs(step - value) < 0.001)
+  const at = index < 0 ? LISTEN_RATE_STEPS.indexOf(1) : index
+  return LISTEN_RATE_STEPS[Math.min(LISTEN_RATE_STEPS.length - 1, Math.max(0, at + direction))]
+}
+
+export function formatListenRate(rate) {
+  const value = clampListenRate(rate)
+  return value === 1.25 ? '1.25' : value.toFixed(1)
+}
+
 export function normalizeListenPrefs(source) {
   const base = defaultListenPrefs()
   if (!source || typeof source !== 'object') {
@@ -38,18 +75,32 @@ export function normalizeListenPrefs(source) {
   const loop = source.loop ?? source.listenRepeat
   const announce = source.announce ?? source.listenAnnounce
   const sleep = source.sleepMinutes ?? source.listenSleepMinutes
+  const rate = source.rate ?? source.listenSpeechRate
+  const twice = source.questionTwice ?? source.listenQuestionTwice
   return {
     pauseSeconds: clampListenPause(pause ?? base.pauseSeconds),
     side,
     loop: Boolean(loop),
     announce: announce !== false && announce !== 0,
     sleepMinutes: clampListenSleep(sleep ?? 0),
+    rate: clampListenRate(rate ?? base.rate),
+    questionTwice: twice === true || twice === 1,
   }
 }
 
 export function listenPrefsFromUser(user) {
   if (user && Number.isFinite(Number(user.listenPauseSeconds))) {
-    return normalizeListenPrefs(user)
+    const fromUser = normalizeListenPrefs(user)
+    const stored = readStoredListenPrefs()
+    if (stored) {
+      if (!Number.isFinite(Number(user.listenSpeechRate))) {
+        fromUser.rate = stored.rate
+      }
+      if (user.listenQuestionTwice == null) {
+        fromUser.questionTwice = stored.questionTwice
+      }
+    }
+    return fromUser
   }
   return readStoredListenPrefs() || defaultListenPrefs()
 }
@@ -62,14 +113,23 @@ export function listenPrefsToApi(prefs) {
     listenRepeat: normalized.loop,
     listenAnnounce: normalized.announce,
     listenSleepMinutes: normalized.sleepMinutes,
+    listenSpeechRate: normalized.rate,
+    listenQuestionTwice: normalized.questionTwice,
   }
 }
 
 export function mergeListenResponse(updated, sent) {
-  if (updated && Number.isFinite(Number(updated.listenPauseSeconds))) {
-    return updated
+  if (!updated || !Number.isFinite(Number(updated.listenPauseSeconds))) {
+    return { ...updated, ...sent }
   }
-  return { ...updated, ...sent }
+  const merged = { ...updated }
+  if (!Number.isFinite(Number(updated.listenSpeechRate)) && Number.isFinite(Number(sent?.listenSpeechRate))) {
+    merged.listenSpeechRate = sent.listenSpeechRate
+  }
+  if (updated.listenQuestionTwice == null && typeof sent?.listenQuestionTwice === 'boolean') {
+    merged.listenQuestionTwice = sent.listenQuestionTwice
+  }
+  return merged
 }
 
 export function readStoredListenPrefs() {

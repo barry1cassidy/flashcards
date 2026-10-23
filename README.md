@@ -16,6 +16,8 @@ With Docker:
 docker compose up -d
 ```
 
+That starts MySQL only. Card translation calls Azure Translator. See **Card translation** below. A LibreTranslate container is still defined for later and stays off unless you start that profile.
+
 Without Docker, create a MySQL 8 database and user:
 
 ```sql
@@ -28,6 +30,62 @@ FLUSH PRIVILEGES;
 The API expects `localhost:3306`, database `flashcards`, user `flashcards`, password `flashcards`. Override with standard Spring datasource environment variables if needed.
 
 Email verification needs `RESEND_API_KEY` (see **Email verification (Resend)** below). Without it, new email/password accounts are created but no code is mailed.
+
+## Card translation
+
+Translate on a card calls Azure Translator from the API. The free F0 plan includes 2 million characters a month and then stops. It does not start charging. The card form shows “Translation is not available right now.” when the key is missing, Azure is down, or the monthly limit is used up.
+
+Create the key:
+
+1. Sign in at [https://portal.azure.com](https://portal.azure.com). A new Microsoft account can start a free Azure subscription from that page.
+2. Search for **Translators** and choose **Create**.
+3. Pick the subscription and a resource group. Region: **Global**. Pricing tier: **Free F0**. One F0 resource is allowed per subscription.
+4. After it deploys, open the resource and choose **Keys and Endpoint**. Copy **Key 1**.
+
+Local API — copy `backend/azure.yml.example` to `backend/azure.yml` and paste Key 1. `azure.yml` is gitignored. Restart the API after saving. For this resource the region is West US 2:
+
+```yaml
+app:
+  translate:
+    azure:
+      key: YOUR_KEY_1
+      region: westus2
+```
+
+Leave `region` blank only for a Global resource.
+
+On the Lightsail host, add the same variables to `.env` and recreate the API container (a restart does not pick up new env vars):
+
+```bash
+sudo docker compose -f docker-compose.prod.yml up -d api
+```
+
+## LibreTranslate (paused)
+
+This worked locally in Docker and is kept so it can replace Azure when traffic justifies an 8 GB instance. The client is `backend/src/main/java/com/flashcards/translate/LibreTranslateClient.java`. It is not a Spring bean. `TranslateService` is the live Azure client.
+
+What that integration did:
+
+- `POST /api/translate` stays the same. The button stays hidden when the front and back languages are the same.
+- `LibreTranslateClient` posts `{ "q", "source", "target", "format": "text" }` to `{TRANSLATE_URL}/translate` and reads `translatedText`.
+- Deck speech codes map to Argos codes inside that class. Brazilian Portuguese is `pb`. Hong Kong Chinese is written traditional `zt`, not spoken Cantonese. Welsh and Swahili have no Argos model, so that client refuses them.
+- The container is the `translate` service in `docker-compose.yml` and `docker-compose.prod.yml`, behind the `translate` profile. Models live in the `flashcards-translate` volume. Production does not publish the port. The API would call `http://translate:5000` through `TRANSLATE_URL`.
+
+Local, from `C:\flashcards`, after Docker is installed. This starts only the translator, not a second MySQL:
+
+```bash
+docker compose up -d translate
+```
+
+The first start downloads a few GB of models. When `http://127.0.0.1:5000/languages` answers, the container is ready.
+
+Production, only on an 8 GB instance:
+
+```bash
+sudo docker compose -f docker-compose.prod.yml --profile translate up -d translate
+```
+
+To make it the live translator again, point `TranslateService` at `LibreTranslateClient` and restore the Argos language map in `TranslationLanguages.java` and `frontend/src/translationLanguages.js` from `LibreTranslateClient`. Leave `AZURE_TRANSLATOR_KEY` empty.
 
 ## Run the API
 
@@ -187,8 +245,8 @@ mitochondria,powerhouse of the cell
 ```
 backend/    Spring Boot REST API
 frontend/   React (Vite) app + Capacitor Android project
-docker-compose.yml          MySQL for local development
-docker-compose.prod.yml     Nginx + API + MySQL for a small VM
+docker-compose.yml          MySQL for local development, plus a paused LibreTranslate profile
+docker-compose.prod.yml     Nginx + API + MySQL for a small VM, plus a paused LibreTranslate profile
 ```
 
 ## Deploy (cheap VM)
@@ -196,6 +254,8 @@ docker-compose.prod.yml     Nginx + API + MySQL for a small VM
 The production compose file runs Nginx (the React build + `/api` proxy), Spring Boot, and MySQL on one host. The frontend already calls `/api` with relative URLs. Production Nginx listens on 80 and 443 and redirects HTTP to `https://zipdeck.app`.
 
 Recommended box: **AWS Lightsail $10/month (2 GB RAM)**. Java 21 + MySQL is uncomfortable on 1 GB. Skip GCP e2-micro until the app is tiny and tuned.
+
+Card translation calls Azure from the API. The `translate` profile in this file is the paused LibreTranslate container. Leave it off on the 2 GB box. See **LibreTranslate (paused)** below.
 
 On a fresh Ubuntu instance:
 

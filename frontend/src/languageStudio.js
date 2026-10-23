@@ -85,6 +85,10 @@ export function sampleToConversation(sample) {
   }
 }
 
+export function studioPairKey(nativeLanguage, targetLanguage) {
+  return `${nativeLanguage || ''}::${targetLanguage || ''}`
+}
+
 export function studioPairLabel(conversation, t) {
   if (!conversation) {
     return ''
@@ -95,7 +99,44 @@ export function studioPairLabel(conversation, t) {
   })
 }
 
-export function studioStatusLabel(status, t) {
+export function findStudioPair(pairs, nativeLanguage, targetLanguage) {
+  return (pairs || []).find(
+    (pair) => pair.nativeLanguage === nativeLanguage && pair.targetLanguage === targetLanguage,
+  )
+}
+
+export function studioLibraryPath(pair) {
+  if (!pair?.nativeLanguage || !pair?.targetLanguage) {
+    return '/language-studio'
+  }
+  return `/language-studio?native=${encodeURIComponent(pair.nativeLanguage)}&target=${encodeURIComponent(pair.targetLanguage)}`
+}
+
+export const STUDIO_RATE_KINDS = {
+  LEARNING: 'again',
+  GETTING: 'hard',
+  READY: 'good',
+  LEARNED: 'easy',
+}
+
+export function conversationIsGraded(conversation) {
+  if (!conversation || !Object.prototype.hasOwnProperty.call(conversation, 'ratedAt')) {
+    return true
+  }
+  return Boolean(conversation.ratedAt)
+}
+
+export function studioGradeKind(conversation) {
+  if (!conversationIsGraded(conversation)) {
+    return ''
+  }
+  return STUDIO_RATE_KINDS[conversation.status] || ''
+}
+
+export function studioStatusLabel(status, t, graded = true) {
+  if (!graded) {
+    return t('studio.statusUngraded')
+  }
   const key = {
     LEARNING: 'studio.statusLearning',
     GETTING: 'studio.statusGetting',

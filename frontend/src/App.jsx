@@ -49,11 +49,29 @@ import { clearLibraryReturn, pathAfterAuth, peekJoinInvite, shouldResumeJoinInvi
 import { webMarketing } from './webOnly'
 import { BackNavigation } from './backNavigation'
 import { IncomingLinks } from './incomingLinks'
+import { stopSpeaking } from './tts'
 
 const RememberPages = webMarketing ? lazy(() => import('./pages/remember/RememberPages.jsx')) : null
 const QuizletAlternativePage = webMarketing ? lazy(() => import('./pages/QuizletAlternativePage.jsx')) : null
 const AudioFlashcardsPage = webMarketing ? lazy(() => import('./pages/AudioFlashcardsPage.jsx')) : null
 const LanguageConversationsPage = webMarketing ? lazy(() => import('./pages/LanguageConversationsPage.jsx')) : null
+
+function isListenPath(path) {
+  return path === '/listen' || path.startsWith('/listen/') || path === '/offline/listen'
+}
+
+function StopListenSpeechOnLeave() {
+  const { pathname } = useLocation()
+  const previous = useRef(pathname)
+  useEffect(() => {
+    const wasListen = isListenPath(previous.current)
+    previous.current = pathname
+    if (wasListen && !isListenPath(pathname)) {
+      stopSpeaking()
+    }
+  }, [pathname])
+  return null
+}
 
 function AnalyticsPageViews() {
   const { pathname, search } = useLocation()
@@ -382,6 +400,7 @@ export default function App() {
         <IncomingLinks />
         <DocumentLang />
         {webMarketing ? <AnalyticsPageViews /> : null}
+        <StopListenSpeechOnLeave />
         <SavingIndicator />
         <InviteResume />
         <Routes>

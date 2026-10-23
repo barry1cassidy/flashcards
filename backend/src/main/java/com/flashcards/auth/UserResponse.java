@@ -30,5 +30,7 @@ public record UserResponse(
         ListenSideFirst listenSideFirst,
         boolean listenRepeat,
         boolean listenAnnounce,
-        int listenSleepMinutes) {
+        int listenSleepMinutes,
+        double listenSpeechRate,
+        boolean listenQuestionTwice) {
 }

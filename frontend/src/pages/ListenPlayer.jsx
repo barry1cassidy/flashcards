@@ -4,11 +4,15 @@ import { useTranslation } from 'react-i18next'
 import AudioTrack from './AudioTrack'
 import { formatSleepLeft } from '../listenPrefs'
 import { canListenSpeak } from '../listenSpeech'
+import { ListenLiveOptions, listenLiveSummary } from './ListenOptions'
 
 export default function ListenPlayer({
   playback,
   title,
   loop,
+  prefs,
+  onChangePrefs,
+  onExtendSleep,
   onPause,
   onResume,
   onNext,
@@ -23,6 +27,7 @@ export default function ListenPlayer({
   const phase = playback?.phase || 'question'
   const speaking = phase === 'announce' || phase === 'question' || phase === 'answer'
   const finished = phase === 'done' || phase === 'slept'
+  const [optionsOpen, setOptionsOpen] = useState(false)
   const [now, setNow] = useState(() => Date.now())
   useEffect(() => {
     if (!playback?.sleepDeadline || finished) {
@@ -86,7 +91,7 @@ export default function ListenPlayer({
             : t('listen.question')
 
   return (
-    <div className="listen-player">
+    <div className={`listen-player${optionsOpen && !finished ? ' is-options-open' : ''}`}>
       <button className="page-back" type="button" onClick={onBack}>
         {t('listen.back')}
       </button>
@@ -117,6 +122,10 @@ export default function ListenPlayer({
             </button>
           </div>
         </section>
+      ) : optionsOpen ? (
+        <p className="admin-sr" aria-live="polite">
+          {phaseLabel}. {line}
+        </p>
       ) : (
         <section className="listen-stage" aria-live="polite">
           <p className="eyebrow">{phaseLabel}</p>
@@ -148,6 +157,27 @@ export default function ListenPlayer({
               <span>{t('listen.next')}</span>
             </button>
           </div>
+          {prefs && onChangePrefs && onExtendSleep ? (
+            <>
+              <button
+                className="listen-options-toggle"
+                type="button"
+                aria-expanded={optionsOpen}
+                onClick={() => setOptionsOpen((open) => !open)}
+              >
+                <span>{optionsOpen ? t('listen.optionsHide') : t('listen.options')}</span>
+                <span className="muted">{listenLiveSummary(prefs, sleepLeft, t)}</span>
+              </button>
+              {optionsOpen ? (
+                <ListenLiveOptions
+                  prefs={prefs}
+                  sleepLeft={sleepLeft}
+                  onChange={onChangePrefs}
+                  onExtendSleep={onExtendSleep}
+                />
+              ) : null}
+            </>
+          ) : null}
           <button className="btn listen-restart" type="button" onClick={onRestart}>
             <TransportIcon name="restart" />
             <span>{t('listen.restart')}</span>

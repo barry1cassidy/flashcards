@@ -24,5 +24,7 @@ public record UpdateMeRequest(
         ListenSideFirst listenSideFirst,
         Boolean listenRepeat,
         Boolean listenAnnounce,
-        Integer listenSleepMinutes) {
+        Integer listenSleepMinutes,
+        Double listenSpeechRate,
+        Boolean listenQuestionTwice) {
 }

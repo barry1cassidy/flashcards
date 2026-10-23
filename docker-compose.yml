@@ -17,5 +17,18 @@ services:
       timeout: 5s
       retries: 20
 
+  # Paused. Card translation uses Azure. See README “LibreTranslate (paused)”.
+  # First start downloads a few GB of models and wants about 8 GB of RAM.
+  translate:
+    image: libretranslate/libretranslate
+    profiles: ["translate"]
+    ports:
+      - "5000:5000"
+    environment:
+      LT_LOAD_ONLY: en,zh,zt,hi,es,ar,fr,bn,pt,pb,ru,id,de,ja,tr,vi,ko,it,th,pl,nl,uk,sv,el,he,ga,da,fi,cs,ro,tl,nb,hu
+    volumes:
+      - flashcards-translate:/home/libretranslate/.local
+
 volumes:
   flashcards-mysql:
+  flashcards-translate:

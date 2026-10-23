@@ -23,6 +23,7 @@ backend/google-play.yml
 backend/google-play.json
 backend/agent.yml
 backend/stripe.yml
+backend/azure.yml
 backend/src/main/resources/application-local.yml
 *.pem
 *client_secret*.json

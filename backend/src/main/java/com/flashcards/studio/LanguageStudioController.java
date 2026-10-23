@@ -28,17 +28,29 @@ import jakarta.validation.Valid;
 public class LanguageStudioController {
 
     private final LanguageStudioService studioService;
+    private final LanguageStudioPairService pairService;
     private final LanguageStudioCatalogService catalogService;
 
     public LanguageStudioController(
-            LanguageStudioService studioService, LanguageStudioCatalogService catalogService) {
+            LanguageStudioService studioService,
+            LanguageStudioPairService pairService,
+            LanguageStudioCatalogService catalogService) {
         this.studioService = studioService;
+        this.pairService = pairService;
         this.catalogService = catalogService;
     }
 
+    @GetMapping("/pairs")
+    public List<LanguageStudioPairResponse> listPairs(Authentication authentication) {
+        return pairService.list(AuthSupport.requireUser(authentication).id());
+    }
+
     @GetMapping("/conversations")
-    public List<LanguageConversationResponse> list(Authentication authentication) {
-        return studioService.list(AuthSupport.requireUser(authentication).id());
+    public List<LanguageConversationResponse> list(
+            Authentication authentication,
+            @RequestParam(required = false) String nativeLanguage,
+            @RequestParam(required = false) String targetLanguage) {
+        return studioService.list(AuthSupport.requireUser(authentication).id(), nativeLanguage, targetLanguage);
     }
 
     @PostMapping("/conversations")

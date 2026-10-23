@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { api } from '../api'
@@ -7,7 +7,14 @@ import { isProLicensed } from '../pro'
 import { useResumeExpiredSubscription } from '../useResumeExpiredSubscription'
 import { translateError } from '../i18n/errors'
 import { languageName } from '../speechLanguages'
-import { STUDIO_STATUSES, sampleToConversation, studioPairLabel, studioStatusLabel } from '../languageStudio'
+import {
+  STUDIO_RATE_KINDS,
+  STUDIO_STATUSES,
+  sampleToConversation,
+  studioLibraryPath,
+  studioPairLabel,
+  studioStatusLabel,
+} from '../languageStudio'
 import MenuIcon from './MenuIcon'
 import SpeakButton from './SpeakButton'
 
@@ -34,6 +41,7 @@ export default function LanguageStudioPractice() {
   const [revealed, setRevealed] = useState(false)
   const [rating, setRating] = useState(false)
   const [saving, setSaving] = useState(false)
+  const barRef = useRef(null)
 
   useEffect(() => {
     if (!pro) {
@@ -58,6 +66,20 @@ export default function LanguageStudioPractice() {
       })
       .catch((err) => setError(err.message))
   }, [pro, id, slug, nativeLanguage, targetLanguage])
+
+  const playing = Boolean(pro && conversation) && !rating
+
+  useLayoutEffect(() => {
+    if (!playing) {
+      return undefined
+    }
+    function pinLatest() {
+      barRef.current?.scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: 'auto' })
+    }
+    pinLatest()
+    const frame = requestAnimationFrame(pinLatest)
+    return () => cancelAnimationFrame(frame)
+  }, [playing, turn, revealed])
 
   if (!pro) {
     return (
@@ -117,7 +139,7 @@ export default function LanguageStudioPractice() {
         method: 'PATCH',
         body: JSON.stringify({ status }),
       })
-      navigate('/language-studio')
+      navigate(studioLibraryPath(owned))
     } catch (err) {
       setError(err.message)
       setSaving(false)
@@ -129,7 +151,13 @@ export default function LanguageStudioPractice() {
       <button
         className="page-back"
         type="button"
-        onClick={() => navigate(slug ? '/language-studio/samples' : '/language-studio')}
+        onClick={() =>
+          navigate(
+            slug
+              ? '/language-studio/samples'
+              : studioLibraryPath(conversation),
+          )
+        }
       >
         {t('studio.back')}
       </button>
@@ -144,19 +172,21 @@ export default function LanguageStudioPractice() {
               <p className="muted">{t('studio.rateIntro')}</p>
             </div>
           </div>
-          <div className="studio-rate-list">
+          <div className="rating-row studio-ratings">
             {STUDIO_STATUSES.map((status) => (
-              <article key={status} className="studio-card">
-                <div className="studio-card-copy">
-                  <h2>{studioStatusLabel(status, t)}</h2>
-                  <p className="muted">{t(RATE_HINTS[status])}</p>
-                </div>
-                <button className="btn" type="button" disabled={saving} onClick={() => choose(status)}>
-                  {t('studio.choose')}
-                </button>
-              </article>
+              <button
+                key={status}
+                className={`btn rating ${STUDIO_RATE_KINDS[status]}`}
+                type="button"
+                disabled={saving}
+                onClick={() => choose(status)}
+              >
+                <span className="rating-label">{studioStatusLabel(status, t)}</span>
+                <span className="rating-hint">{t(RATE_HINTS[status])}</span>
+              </button>
             ))}
           </div>
+          <p className="muted studio-rate-note">{t('studio.rateLearnedNote')}</p>
         </>
       ) : null}
 
@@ -215,7 +245,7 @@ export default function LanguageStudioPractice() {
             })}
           </div>
 
-          <div className="studio-practice-bar">
+          <div className="studio-practice-bar" ref={barRef}>
             {mine && !revealed ? (
               <AdvanceButton
                 icon="reveal"
@@ -229,7 +259,6 @@ export default function LanguageStudioPractice() {
                 onClick={nextTurn}
               />
             )}
-            <p className="muted">{t('studio.schedule')}</p>
           </div>
         </>
       ) : null}

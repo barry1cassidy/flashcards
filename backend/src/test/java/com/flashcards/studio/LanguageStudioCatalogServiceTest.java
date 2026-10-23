@@ -29,6 +29,8 @@ class LanguageStudioCatalogServiceTest {
     @Mock
     private LanguageConversationRepository conversationRepository;
     @Mock
+    private LanguageStudioPairService pairService;
+    @Mock
     private UserRepository userRepository;
     @Mock
     private ExpiredStoreSubscriptionRefresh expiredStoreSubscriptionRefresh;
@@ -39,7 +41,7 @@ class LanguageStudioCatalogServiceTest {
     @BeforeEach
     void setUp() {
         catalogService = new LanguageStudioCatalogService(
-                sceneRepository, conversationRepository, userRepository, expiredStoreSubscriptionRefresh);
+                sceneRepository, conversationRepository, pairService, userRepository, expiredStoreSubscriptionRefresh);
         user = new User();
         user.setId(USER_ID);
         user.setProLicensed(true);

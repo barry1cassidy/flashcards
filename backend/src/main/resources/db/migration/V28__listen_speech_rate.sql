@@ -1,0 +1,2 @@
+ALTER TABLE users
+    ADD COLUMN listen_speech_rate DECIMAL(3,2) NOT NULL DEFAULT 1.00;

@@ -1,0 +1,10 @@
+package com.flashcards.translate;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
+public record TranslateRequest(
+        @NotBlank @Size(max = 4000) String text,
+        @NotBlank @Size(max = 16) String source,
+        @NotBlank @Size(max = 16) String target) {
+}

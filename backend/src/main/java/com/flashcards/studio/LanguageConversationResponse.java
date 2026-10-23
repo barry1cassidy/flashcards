@@ -20,6 +20,7 @@ public record LanguageConversationResponse(
         String sampleSlug,
         int turnCount,
         List<LanguageTurnResponse> turns,
+        Instant ratedAt,
         Instant createdAt,
         Instant updatedAt) {
 }

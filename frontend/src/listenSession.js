@@ -1,5 +1,8 @@
+import { clampListenRate } from './listenPrefs'
 import { bindListenPlayback, startListenPlayback, stopListenPlayback, updateListenPlayback } from './listenPlayback'
 import { listenBed, speakCue, stopCue, waitCue } from './listenSpeech'
+
+const FRONT_TWICE_GAP_MS = 2000
 
 function sideText(card, side) {
   return side === 'back' ? card.back : card.front
@@ -9,7 +12,7 @@ function sideLang(card, side) {
   return side === 'back' ? card.backLanguage : card.frontLanguage
 }
 
-export function createListenSession({ cards, options, onChange }) {
+export function createListenSession({ cards, options: inputOptions, onChange }) {
   let index = 0
   let lastDeck = null
   let paused = false
@@ -20,9 +23,19 @@ export function createListenSession({ cards, options, onChange }) {
   let resumeResolve = null
   let shownLine = ''
   let shownPrompt = ''
+  let shownPhase = 'question'
   let sleepTimer = 0
   let sleepDeadline = 0
-  const sleepMs = Number(options.sleepMs) > 0 ? Number(options.sleepMs) : 0
+  let sleepArmed = false
+  const options = {
+    waitMs: Math.max(0, Number(inputOptions?.waitMs) || 0),
+    side: inputOptions?.side === 'back' ? 'back' : 'front',
+    loop: Boolean(inputOptions?.loop),
+    announce: Boolean(inputOptions?.announce),
+    rate: clampListenRate(inputOptions?.rate),
+    questionTwice: Boolean(inputOptions?.questionTwice),
+  }
+  const sleepMs = Number(inputOptions?.sleepMs) > 0 ? Number(inputOptions.sleepMs) : 0
   const bed = listenBed()
   const deckIds = new Set(cards.map((card) => card.deckId))
   const multi = deckIds.size > 1 && options.announce
@@ -73,6 +86,9 @@ export function createListenSession({ cards, options, onChange }) {
     if (Object.hasOwn(extra, 'prompt')) {
       shownPrompt = extra.prompt
     }
+    if (Object.hasOwn(extra, 'phase') && extra.phase) {
+      shownPhase = extra.phase
+    }
     onChange({
       index,
       total: cards.length,
@@ -81,6 +97,7 @@ export function createListenSession({ cards, options, onChange }) {
       multi,
       line: shownLine,
       prompt: shownPrompt,
+      phase: shownPhase,
       sleepDeadline,
       ...extra,
     })
@@ -114,18 +131,41 @@ export function createListenSession({ cards, options, onChange }) {
     publish({ phase: 'slept', line: '', prompt: '', progress: 0 })
   }
 
-  function armSleep(push) {
+  function scheduleSleep(push) {
     disarmSleep()
-    if (sleepMs > 0) {
-      sleepDeadline = Date.now() + sleepMs
-      const delay = Math.max(0, sleepDeadline - Date.now())
-      sleepTimer = window.setTimeout(endForSleep, delay)
+    if (sleepDeadline > Date.now()) {
+      sleepArmed = true
+      sleepTimer = window.setTimeout(endForSleep, sleepDeadline - Date.now())
     } else {
       sleepDeadline = 0
+      sleepArmed = false
     }
     if (push) {
       updateListenPlayback({ ...playbackLabel(), paused, sleepAt: sleepDeadline })
     }
+  }
+
+  function armSleep(push) {
+    if (sleepMs > 0) {
+      sleepDeadline = Date.now() + sleepMs
+    } else {
+      sleepDeadline = 0
+    }
+    scheduleSleep(push)
+  }
+
+  function extendSleep(extraMs) {
+    if (stopped) {
+      return
+    }
+    const extra = Math.max(0, Number(extraMs) || 0)
+    if (extra <= 0) {
+      return
+    }
+    const base = sleepDeadline > Date.now() ? sleepDeadline : Date.now()
+    sleepDeadline = base + extra
+    scheduleSleep(true)
+    publish({})
   }
 
   function sleepDue() {
@@ -182,6 +222,7 @@ export function createListenSession({ cards, options, onChange }) {
       return speakCue(text, lang, {
         signal,
         immediate: useNow,
+        rate: options.rate,
         onProgress: (progress) => publish({ phase, line, prompt, progress }),
       })
     }
@@ -199,6 +240,16 @@ export function createListenSession({ cards, options, onChange }) {
       await say(question, sideLang(card, firstSide), 'question', question, '')
       if (!keepGoing()) {
         return false
+      }
+      if (options.questionTwice) {
+        await waitCue(FRONT_TWICE_GAP_MS, signal)
+        if (!keepGoing()) {
+          return false
+        }
+        await say(question, sideLang(card, firstSide), 'question', question, '')
+        if (!keepGoing()) {
+          return false
+        }
       }
     }
     if (answer && answer !== question) {
@@ -226,7 +277,11 @@ export function createListenSession({ cards, options, onChange }) {
       return
     }
     running = true
-    armSleep(false)
+    if (!sleepArmed) {
+      armSleep(false)
+    } else if (sleepDeadline > Date.now() && !sleepTimer) {
+      scheduleSleep(false)
+    }
     bed.start()
     startListenPlayback({ ...playbackLabel(), sleepAt: sleepDeadline }).then(() => bed.kick())
     try {
@@ -250,6 +305,7 @@ export function createListenSession({ cards, options, onChange }) {
           }
           disarmSleep()
           sleepDeadline = 0
+          sleepArmed = false
           publish({ phase: 'done', line: '', prompt: '', progress: 0 })
           return
         }
@@ -349,6 +405,7 @@ export function createListenSession({ cards, options, onChange }) {
       lastDeck = null
       paused = false
       stopped = false
+      sleepArmed = false
       const wake = resumeResolve
       resumeResolve = null
       wake?.()
@@ -359,11 +416,25 @@ export function createListenSession({ cards, options, onChange }) {
         armSleep(true)
       }
     },
+    setWaitMs(ms) {
+      options.waitMs = Math.max(0, Number(ms) || 0)
+    },
+    setLoop(loop) {
+      options.loop = Boolean(loop)
+    },
+    setRate(rate) {
+      options.rate = clampListenRate(rate)
+    },
+    setQuestionTwice(twice) {
+      options.questionTwice = Boolean(twice)
+    },
+    extendSleep,
     stop() {
       stopped = true
       paused = false
       disarmSleep()
       sleepDeadline = 0
+      sleepArmed = false
       playbackClosed = true
       detachPlayback()
       detachPlayback = () => {}
