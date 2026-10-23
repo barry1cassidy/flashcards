@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { api } from '../api'
@@ -63,6 +63,7 @@ export default function DecksPage() {
   const [groupFilter, setGroupFilter] = useState(readGroupFilter)
   const [creating, setCreating] = useState(false)
   const [name, setName] = useState('')
+  const nameRef = useRef(null)
   const [description, setDescription] = useState('')
   const [frontLanguage, setFrontLanguage] = useState('en-US')
   const [backLanguage, setBackLanguage] = useState('en-US')
@@ -163,12 +164,25 @@ export default function DecksPage() {
 
   async function createDeck(event) {
     event.preventDefault()
+    if (!name.trim()) {
+      nameRef.current?.focus()
+      return
+    }
     setError('')
     setBusy(true)
     try {
+      const filteredGroup = decks.length > 0
+        ? groups.find((group) => String(group.id) === groupFilter)
+        : null
       const deck = await api('/api/decks', {
         method: 'POST',
-        body: JSON.stringify({ name, description, groupId: null, frontLanguage, backLanguage }),
+        body: JSON.stringify({
+          name,
+          description,
+          groupId: filteredGroup ? filteredGroup.id : null,
+          frontLanguage,
+          backLanguage,
+        }),
       })
       setName('')
       setDescription('')
@@ -370,6 +384,7 @@ export default function DecksPage() {
           title={t('decks.createDeckTitle')}
           onClose={closeCreate}
           closeDisabled={busy}
+          noValidate
           onSubmit={createDeck}
           footer={
             <div className="modal-actions">
@@ -385,7 +400,7 @@ export default function DecksPage() {
           {error ? <div className="error">{translateError(t, error)}</div> : null}
           <label>
             {t('decks.deckName')}
-            <input value={name} onChange={(event) => setName(event.target.value)} required autoFocus />
+            <input ref={nameRef} value={name} onChange={(event) => setName(event.target.value)} required />
           </label>
           <label>
             {t('decks.description')}

@@ -723,7 +723,11 @@ export default function DeckDetailPage() {
                     <button className="btn" type="button" onClick={beginCardEdit}>
                       {t('decks.editCards')}
                     </button>
-                  ) : null}
+                  ) : (
+                    <button className="btn primary" type="button" onClick={openAddCard}>
+                      {t('decks.addCard')}
+                    </button>
+                  )}
                   <button className="btn" type="button" onClick={() => fileRef.current?.click()}>
                     {t('decks.importCsv')}
                   </button>
@@ -747,9 +751,6 @@ export default function DeckDetailPage() {
         {cards.length === 0 ? (
           <div className="empty empty-cards">
             <p>{t('decks.emptyCards')}</p>
-            <button className="btn primary" type="button" onClick={openAddCard}>
-              {t('decks.addCard')}
-            </button>
           </div>
         ) : (
           <>

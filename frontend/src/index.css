@@ -3751,6 +3751,19 @@ button.agent-preset:disabled {
     min-width: 0;
   }
 
+  .deck-hero-actions:has(> .btn:only-child) {
+    width: 100%;
+  }
+
+  .deck-hero-actions:has(> .btn:only-child) .btn {
+    flex: 1 1 auto;
+    width: 100%;
+    max-width: none;
+    padding-left: 16px;
+    padding-right: 16px;
+    font-size: 1rem;
+  }
+
   .deck-detail-actions {
     display: flex;
     flex-wrap: wrap;
@@ -3778,6 +3791,12 @@ button.agent-preset:disabled {
 
   .user-menu {
     align-self: auto;
+  }
+}
+
+@media (min-width: 701px) {
+  .page-title:has(.deck-hero-actions > .btn:only-child) {
+    align-items: center;
   }
 }
 
