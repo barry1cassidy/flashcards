@@ -14,6 +14,7 @@ import {
   conversationIsGraded,
   findStudioPair,
   studioGradeKind,
+  studioLibraryPath,
   studioPairKey,
   studioPairLabel,
   studioStatusLabel,
@@ -249,7 +250,11 @@ export default function LanguageStudioPage() {
                       <button
                         className="btn studio-mode-btn"
                         type="button"
-                        onClick={() => navigate(`/listen?source=studio&id=${item.id}`)}
+                        onClick={() =>
+                          navigate(`/listen?source=studio&id=${item.id}`, {
+                            state: { listenReturn: studioLibraryPath(selectedPair) },
+                          })
+                        }
                       >
                         <MenuIcon name="listen" />
                         {t('listen.menu')}

@@ -1,12 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
 import { Capacitor } from '@capacitor/core'
-import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { api } from '../api'
 import { useAuth } from '../AuthContext'
 import { isProLicensed } from '../pro'
 import { translateError } from '../i18n/errors'
 import { listOfflinePacks } from '../offlinePacks'
+import { studioLibraryPath, studioListenReturnPath, studioSamplesPath } from '../languageStudio'
 import { flattenListenCards, loadListenQueue } from '../listenQueue'
 import { LISTEN_SLEEP_EXTEND_MS, listenPrefsFromUser, normalizeListenPrefs } from '../listenPrefs'
 import { createListenSession } from '../listenSession'
@@ -36,10 +37,26 @@ function itemColor(item) {
   return typeof raw === 'string' && /^#[0-9A-Fa-f]{6}$/.test(raw.trim()) ? raw.trim() : ''
 }
 
+function externalListenReturn(path) {
+  const studio = studioListenReturnPath(path)
+  if (studio) {
+    return studio
+  }
+  if (
+    typeof path === 'string' &&
+    /^\/decks\/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/.test(path)
+  ) {
+    return path
+  }
+  return ''
+}
+
 export default function ListenPage() {
   const { t } = useTranslation()
   const { user, setListenPrefs } = useAuth()
   const navigate = useNavigate()
+  const location = useLocation()
+  const listenReturn = externalListenReturn(location.state?.listenReturn)
   const pro = isProLicensed(user)
   const [params, setParams] = useSearchParams()
   const sourceParam = params.get('source')
@@ -57,6 +74,8 @@ export default function ListenPage() {
   const [loadingQueue, setLoadingQueue] = useState(false)
   const [playing, setPlaying] = useState(false)
   const [playback, setPlayback] = useState(null)
+  const [ratingBusy, setRatingBusy] = useState(false)
+  const [ratingError, setRatingError] = useState('')
   const [query, setQuery] = useState('')
   const [page, setPage] = useState(1)
   const sessionRef = useRef(null)
@@ -88,6 +107,8 @@ export default function ListenPage() {
     sessionRef.current = null
     setPlaying(false)
     setPlayback(null)
+    setRatingBusy(false)
+    setRatingError('')
   }, [source, id, nativeLanguage, targetLanguage, selectedOffline])
 
   useEffect(() => {
@@ -242,6 +263,77 @@ export default function ListenPage() {
     setPlayback(null)
   }
 
+  const conversationListen = source === 'studio' || source === 'studio-sample'
+
+  function conversationHome() {
+    const remembered = listenReturn
+    if (remembered) {
+      return remembered
+    }
+    if (source === 'studio-sample') {
+      return studioSamplesPath(nativeLanguage, targetLanguage)
+    }
+    const deck = queue?.decks?.[0]
+    return studioLibraryPath({
+      nativeLanguage: queue?.nativeLanguage || deck?.frontLanguage,
+      targetLanguage: queue?.targetLanguage || deck?.backLanguage,
+    })
+  }
+
+  function leaveToStudio() {
+    sessionRef.current?.stop()
+    sessionRef.current = null
+    navigate(conversationHome())
+  }
+
+  function backFromSession() {
+    if (listenReturn) {
+      sessionRef.current?.stop()
+      sessionRef.current = null
+      navigate(listenReturn)
+      return
+    }
+    if (conversationListen) {
+      leaveToStudio()
+      return
+    }
+    stopToOptions()
+  }
+
+  async function rateConversation(status) {
+    if (!conversationListen || ratingBusy) {
+      return
+    }
+    setRatingBusy(true)
+    setRatingError('')
+    try {
+      let ownedId = source === 'studio' ? id : ''
+      let pair = {
+        nativeLanguage: queue?.nativeLanguage || queue?.decks?.[0]?.frontLanguage,
+        targetLanguage: queue?.targetLanguage || queue?.decks?.[0]?.backLanguage,
+      }
+      if (source === 'studio-sample') {
+        const copied = await api(`/api/language-studio/samples/${encodeURIComponent(id)}/copy`, {
+          method: 'POST',
+          skipSaving: true,
+          body: JSON.stringify({ nativeLanguage, targetLanguage }),
+        })
+        ownedId = copied.id
+        pair = copied
+      }
+      await api(`/api/language-studio/conversations/${ownedId}`, {
+        method: 'PATCH',
+        body: JSON.stringify({ status }),
+      })
+      sessionRef.current?.stop()
+      sessionRef.current = null
+      navigate(studioLibraryPath(pair))
+    } catch (err) {
+      setRatingError(err.message)
+      setRatingBusy(false)
+    }
+  }
+
   if (!pro) {
     return (
       <div className="page">
@@ -284,13 +376,19 @@ export default function ListenPage() {
           prefs={prefs}
           onChangePrefs={changeLivePrefs}
           onExtendSleep={() => sessionRef.current?.extendSleep(LISTEN_SLEEP_EXTEND_MS)}
-          onBack={stopToOptions}
+          onBack={backFromSession}
           onPause={() => sessionRef.current?.pause()}
           onResume={() => sessionRef.current?.resume()}
           onNext={() => sessionRef.current?.next()}
           onPrevious={() => sessionRef.current?.previous()}
           onReplay={() => sessionRef.current?.replay()}
-          onRestart={() => sessionRef.current?.restart()}
+          onRestart={() => {
+            setRatingError('')
+            sessionRef.current?.restart()
+          }}
+          onRate={conversationListen ? rateConversation : undefined}
+          ratingBusy={ratingBusy}
+          ratingError={ratingError}
         />
       </div>
     )
@@ -430,8 +528,8 @@ export default function ListenPage() {
               className="page-back"
               type="button"
               onClick={() => {
-                if (source === 'studio-sample') {
-                  navigate('/language-studio/samples')
+                if (listenReturn || source === 'studio-sample') {
+                  navigate(listenReturn || conversationHome())
                   return
                 }
                 chooseSource(source)

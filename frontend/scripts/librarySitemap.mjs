@@ -40,6 +40,7 @@ export async function writeLibrarySitemap({ root }) {
     entry('/quizlet-alternative', 'monthly', '0.8'),
     entry('/audio-flashcards', 'monthly', '0.8'),
     entry('/language-conversations', 'monthly', '0.8'),
+    entry('/teachers', 'monthly', '0.8'),
     entry('/help', 'monthly', '0.6'),
     entry('/privacy', 'yearly', '0.3'),
   ]

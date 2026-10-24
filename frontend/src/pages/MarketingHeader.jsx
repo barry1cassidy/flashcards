@@ -19,10 +19,31 @@ export default function MarketingHeader({ showLoginForm = false, loginOpen, onLo
   const location = useLocation()
   const [internalOpen, setInternalOpen] = useState(() => location.pathname === '/login')
   const [hasOffline, setHasOffline] = useState(false)
+  const [navMenu, setNavMenu] = useState(null)
   const controlled = typeof onLoginOpenChange === 'function'
   const open = controlled ? Boolean(loginOpen) : internalOpen
   const setOpen = controlled ? onLoginOpenChange : setInternalOpen
   const authRef = useRef(null)
+  const navRef = useRef(null)
+  const studyItems = [
+    { to: '/#modes', label: t('marketing.studyModes') },
+    { to: '/audio-flashcards', label: t('marketing.listenNav') },
+    { to: '/memorize', label: t('marketing.rememberNav') },
+  ]
+  const createItems = webMarketing
+    ? [
+        { to: '/#ai', label: t('marketing.createCardsNav') },
+        { to: '/language-conversations', label: t('marketing.studioMenuNav') },
+      ]
+    : [
+        { to: '/#ai', label: t('marketing.createCardsNav') },
+        { to: '/#language-studio', label: t('marketing.studioMenuNav') },
+      ]
+
+  function toggleNav(id) {
+    setOpen(false)
+    setNavMenu((current) => (current === id ? null : id))
+  }
 
   useEffect(() => {
     if (user) {
@@ -44,6 +65,9 @@ export default function MarketingHeader({ showLoginForm = false, loginOpen, onLo
 
   useEffect(() => {
     function onPointerDown(event) {
+      if (navRef.current && !navRef.current.contains(event.target)) {
+        setNavMenu(null)
+      }
       if (authRef.current && !authRef.current.contains(event.target)) {
         setOpen(false)
       }
@@ -51,6 +75,7 @@ export default function MarketingHeader({ showLoginForm = false, loginOpen, onLo
     function onKeyDown(event) {
       if (event.key === 'Escape') {
         setOpen(false)
+        setNavMenu(null)
       }
     }
     document.addEventListener('pointerdown', onPointerDown)
@@ -67,22 +92,29 @@ export default function MarketingHeader({ showLoginForm = false, loginOpen, onLo
         <Link to="/" className="marketing-logo">
           <Brand />
         </Link>
-        <div className="marketing-links">
+        <div className="marketing-links" ref={navRef}>
           {webMarketing ? (
-            <>
-              <Link to="/memorize">{t('marketing.rememberNav')}</Link>
-              <Link to="/library">{t('library.title')}</Link>
-              <Link to="/audio-flashcards">{t('marketing.listenNav')}</Link>
-              <Link to="/language-conversations">{t('marketing.studioNav')}</Link>
-              <Link to="/#ai">{t('marketing.aiNav')}</Link>
-            </>
+            <NavMenu
+              id="study-menu"
+              label={t('marketing.studyNav')}
+              open={navMenu === 'study'}
+              onToggle={() => toggleNav('study')}
+              onNavigate={() => setNavMenu(null)}
+              items={studyItems}
+            />
           ) : (
-            <>
-              <Link to="/#modes">{t('marketing.studyModes')}</Link>
-              <Link to="/#ai">{t('marketing.aiNav')}</Link>
-              <Link to="/#stat">{t('marketing.whyItWorks')}</Link>
-            </>
+            <Link to="/#modes">{t('marketing.studyNav')}</Link>
           )}
+          <NavMenu
+            id="create-menu"
+            label={t('marketing.createNav')}
+            open={navMenu === 'create'}
+            onToggle={() => toggleNav('create')}
+            onNavigate={() => setNavMenu(null)}
+            items={createItems}
+          />
+          {webMarketing ? <Link to="/library">{t('library.title')}</Link> : null}
+          <Link to={webMarketing ? '/teachers' : '/#teachers'}>{t('marketing.teachersNav')}</Link>
         </div>
         <div className="marketing-auth" ref={authRef}>
           {!user && hasOffline ? (
@@ -101,7 +133,10 @@ export default function MarketingHeader({ showLoginForm = false, loginOpen, onLo
                 type="button"
                 aria-expanded={open}
                 aria-controls="login-panel"
-                onClick={() => setOpen((value) => !value)}
+                onClick={() => {
+                  setNavMenu(null)
+                  setOpen((value) => !value)
+                }}
               >
                 {t('auth.signIn')}
               </button>
@@ -211,6 +246,33 @@ function LoginFields() {
   )
 }
 
+function NavMenu({ id, label, open, onToggle, onNavigate, items }) {
+  return (
+    <div className={`marketing-menu${open ? ' is-open' : ''}`}>
+      <button
+        className="marketing-menu-trigger"
+        type="button"
+        aria-expanded={open}
+        aria-haspopup="menu"
+        aria-controls={id}
+        onClick={onToggle}
+      >
+        <span>{label}</span>
+        <span className="marketing-menu-caret" aria-hidden="true" />
+      </button>
+      {open ? (
+        <div id={id} className="marketing-menu-panel" role="menu">
+          {items.map((item) => (
+            <Link key={item.to} to={item.to} role="menuitem" onClick={onNavigate}>
+              {item.label}
+            </Link>
+          ))}
+        </div>
+      ) : null}
+    </div>
+  )
+}
+
 export function MarketingFooter() {
   const { t } = useTranslation()
   return (
@@ -222,6 +284,11 @@ export function MarketingFooter() {
         <a className="site-end-link" href={SUPPORT_MAILTO}>
           {t('nav.support')}
         </a>
+        {webMarketing ? (
+          <Link className="site-end-link" to="/teachers">
+            {t('marketing.teachersFooter')}
+          </Link>
+        ) : null}
         {webMarketing ? (
           <Link className="site-end-link" to="/quizlet-alternative">
             {t('marketing.quizletHomeTitle')}

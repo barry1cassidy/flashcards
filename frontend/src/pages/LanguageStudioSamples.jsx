@@ -12,6 +12,7 @@ import {
   defaultStudioSamplePair,
   studioLibraryPath,
   studioPairLabel,
+  studioSamplesPath,
 } from '../languageStudio'
 import { SPEECH_LANGUAGES } from '../speechLanguages'
 import LanguageSelect from './LanguageSelect'
@@ -193,6 +194,7 @@ export default function LanguageStudioSamples() {
                       onClick={() =>
                         navigate(
                           `/listen?source=studio-sample&slug=${encodeURIComponent(item.slug)}&native=${encodeURIComponent(nativeLanguage)}&target=${encodeURIComponent(targetLanguage)}`,
+                          { state: { listenReturn: studioSamplesPath(nativeLanguage, targetLanguage) } },
                         )
                       }
                     >

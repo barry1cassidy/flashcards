@@ -52,6 +52,10 @@ export default function SideMenu() {
             <MenuIcon name="library" />
             <span className="menu-link-text">{t('library.title')}</span>
           </NavLink>
+          <NavLink to="/classes" className={() => menuLinkClass(classesActive)} onClick={close}>
+            <MenuIcon name="classes" />
+            <span className="menu-link-text">{t('classes.title')}</span>
+          </NavLink>
           <NavLink to="/offline" className={() => menuLinkClass(offlineActive)} onClick={close}>
             <MenuIcon name="offline" />
             <span className="menu-link-text">{t('offline.menu')}</span>
@@ -91,19 +95,12 @@ export default function SideMenu() {
             <MenuIcon name="pro" />
             <span className="menu-link-text">{pro ? t('pro.menuAccount') : t('pro.menuUpgrade')}</span>
           </NavLink>
-          <hr className="side-menu-divider" />
         </>
       ) : null}
       {!verified ? (
         <NavLink to="/library" className={() => menuLinkClass(libraryActive)} onClick={close}>
           <MenuIcon name="library" />
           <span className="menu-link-text">{t('library.title')}</span>
-        </NavLink>
-      ) : null}
-      {verified ? (
-        <NavLink to="/classes" className={() => menuLinkClass(classesActive)} onClick={close}>
-          <MenuIcon name="classes" />
-          <span className="menu-link-text">{t('classes.title')}</span>
         </NavLink>
       ) : null}
       <hr className="side-menu-divider" />

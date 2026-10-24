@@ -59,7 +59,7 @@ const FAQS = [
   },
   {
     q: 'Can I listen to an AI conversation like audio flashcards?',
-    a: 'Yes. After a scene exists, Listen plays both sides with the pause you already use for decks. Listening does not grade the scene. Practice is the mode that asks you to say your line first.',
+    a: 'Yes. After a scene exists, Listen plays both sides with the pause you already use for decks. When it finishes, you grade the whole scene the same way as Practice. Practice is the mode that asks you to say your line first.',
   },
 ]
 
@@ -244,7 +244,7 @@ export default function LanguageConversationsPage() {
             <h3>Listen</h3>
             <p>
               The same pause, repeat, and sleep timer you already use for decks. Both sides play out
-              loud. Listening does not grade the scene.
+              loud. When it finishes, you grade the whole scene the same way as Practice.
             </p>
           </article>
         </div>

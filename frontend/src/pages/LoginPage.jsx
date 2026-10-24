@@ -4,8 +4,15 @@ import { useTranslation } from 'react-i18next'
 import MarketingHeader, { MarketingFooter } from './MarketingHeader'
 import { webMarketing } from '../webOnly'
 import AudioTrack from './AudioTrack'
+import MenuIcon from './MenuIcon'
 
 const MODE_KEYS = ['flip', 'quiz', 'write', 'match', 'audio']
+
+const TEACHER_STEPS = [
+  { icon: 'teacher', titleKey: 'marketing.teachersStep1Title', bodyKey: 'marketing.teachersStep1Body' },
+  { icon: 'joinCode', titleKey: 'marketing.teachersStep2Title', bodyKey: 'marketing.teachersStep2Body' },
+  { icon: 'deckCopy', titleKey: 'marketing.teachersStep3Title', bodyKey: 'marketing.teachersStep3Body' },
+]
 
 const AI_CASES = [
   { key: 'speech', titleKey: 'marketing.aiSpeechTitle', bodyKey: 'marketing.aiSpeechBody' },
@@ -116,35 +123,69 @@ export default function LoginPage() {
         </section>
       ) : null}
 
-      {webMarketing ? (
-        <section className="studio-promo" id="language-studio">
-          <div className="marketing-wrap">
-            <h2>{t('marketing.studioTitle')}</h2>
-            <p className="sub">{t('marketing.studioSub')}</p>
-            <figure className="studio-intro-demo" aria-hidden="true">
-              <div className="studio-intro-demo-head">
-                <strong>{t('studio.introDemoEyebrow')}</strong>
-                <span className="studio-pill">A2</span>
+      <section className="studio-promo" id="language-studio">
+        <div className="marketing-wrap">
+          <h2>{t('marketing.studioTitle')}</h2>
+          <p className="sub">{t('marketing.studioSub')}</p>
+          <figure className="studio-intro-demo" aria-hidden="true">
+            <div className="studio-intro-demo-head">
+              <strong>{t('studio.introDemoEyebrow')}</strong>
+              <span className="studio-pill">A2</span>
+            </div>
+            <div className="studio-chat">
+              <div className="studio-bubble is-them">
+                <p className="studio-speaker">{t('studio.introDemoThem')}</p>
+                <p className="studio-line">{t('studio.introDemoThemLine')}</p>
+                <p className="muted">{t('studio.introDemoThemMeaning')}</p>
               </div>
-              <div className="studio-chat">
-                <div className="studio-bubble is-them">
-                  <p className="studio-speaker">{t('studio.introDemoThem')}</p>
-                  <p className="studio-line">{t('studio.introDemoThemLine')}</p>
-                  <p className="muted">{t('studio.introDemoThemMeaning')}</p>
-                </div>
-                <div className="studio-bubble is-you">
-                  <p className="studio-speaker">{t('studio.introDemoYou')}</p>
-                  <p className="studio-line">{t('studio.introDemoYouLine')}</p>
-                  <p className="muted">{t('studio.introDemoYouMeaning')}</p>
-                </div>
+              <div className="studio-bubble is-you">
+                <p className="studio-speaker">{t('studio.introDemoYou')}</p>
+                <p className="studio-line">{t('studio.introDemoYouLine')}</p>
+                <p className="muted">{t('studio.introDemoYouMeaning')}</p>
               </div>
-            </figure>
+            </div>
+          </figure>
+          {webMarketing ? (
             <Link className="btn primary" to="/language-conversations">
               {t('marketing.studioCta')}
             </Link>
-          </div>
-        </section>
-      ) : null}
+          ) : (
+            <Link className="btn primary" to="/register">
+              {t('marketing.createFirstDeck')}
+            </Link>
+          )}
+        </div>
+      </section>
+
+      <section className="teachers-promo" id="teachers">
+        <div className="marketing-wrap">
+          <h2>{t('marketing.teachersTitle')}</h2>
+          <p className="sub">{t('marketing.teachersSub')}</p>
+          <ol className="class-how-strip" aria-label={t('classes.howHeading')}>
+            {TEACHER_STEPS.map((step) => (
+              <li className="class-how-step" key={step.icon}>
+                <span className="class-how-icon" aria-hidden="true">
+                  <MenuIcon name={step.icon} />
+                </span>
+                <span className="class-how-copy">
+                  <strong>{t(step.titleKey)}</strong>
+                  <span className="muted">{t(step.bodyKey)}</span>
+                </span>
+              </li>
+            ))}
+          </ol>
+          <p className="teachers-student">{t('marketing.teachersStudent')}</p>
+          {webMarketing ? (
+            <Link className="btn primary" to="/teachers">
+              {t('marketing.teachersCta')}
+            </Link>
+          ) : (
+            <Link className="btn primary" to="/register">
+              {t('marketing.createFirstDeck')}
+            </Link>
+          )}
+        </div>
+      </section>
 
       <section className="ai-cases" id="ai">
         <div className="marketing-wrap">

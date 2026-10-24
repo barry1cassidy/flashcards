@@ -112,6 +112,20 @@ export function studioLibraryPath(pair) {
   return `/language-studio?native=${encodeURIComponent(pair.nativeLanguage)}&target=${encodeURIComponent(pair.targetLanguage)}`
 }
 
+export function studioSamplesPath(nativeLanguage, targetLanguage) {
+  if (!nativeLanguage || !targetLanguage) {
+    return '/language-studio/samples'
+  }
+  return `/language-studio/samples?native=${encodeURIComponent(nativeLanguage)}&target=${encodeURIComponent(targetLanguage)}`
+}
+
+export function studioListenReturnPath(path) {
+  if (typeof path !== 'string' || !path.startsWith('/language-studio') || path.startsWith('//') || path.includes('://')) {
+    return ''
+  }
+  return path
+}
+
 export const STUDIO_RATE_KINDS = {
   LEARNING: 'again',
   GETTING: 'hard',
@@ -157,6 +171,8 @@ export function conversationToListenQueue(conversation) {
   }))
   return {
     title: conversation.title || '',
+    nativeLanguage: native,
+    targetLanguage: target,
     decks: [
       {
         id: conversation.id,

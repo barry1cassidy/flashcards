@@ -9,6 +9,7 @@ Allow: /memorize/
 Allow: /quizlet-alternative
 Allow: /audio-flashcards
 Allow: /language-conversations
+Allow: /teachers
 Allow: /login
 Allow: /register
 

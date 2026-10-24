@@ -7,23 +7,10 @@ import { isProLicensed } from '../pro'
 import { useResumeExpiredSubscription } from '../useResumeExpiredSubscription'
 import { translateError } from '../i18n/errors'
 import { languageName } from '../speechLanguages'
-import {
-  STUDIO_RATE_KINDS,
-  STUDIO_STATUSES,
-  sampleToConversation,
-  studioLibraryPath,
-  studioPairLabel,
-  studioStatusLabel,
-} from '../languageStudio'
+import { sampleToConversation, studioLibraryPath, studioPairLabel } from '../languageStudio'
 import MenuIcon from './MenuIcon'
 import SpeakButton from './SpeakButton'
-
-const RATE_HINTS = {
-  LEARNING: 'studio.rateLearningHint',
-  GETTING: 'studio.rateGettingHint',
-  READY: 'studio.rateReadyHint',
-  LEARNED: 'studio.rateLearnedHint',
-}
+import StudioRatePanel from './StudioRatePanel'
 
 export default function LanguageStudioPractice() {
   const { t } = useTranslation()
@@ -164,31 +151,7 @@ export default function LanguageStudioPractice() {
       {error ? <div className="error">{translateError(t, error)}</div> : null}
       {!conversation && !error ? <p>{t('app.loading')}</p> : null}
 
-      {conversation && rating ? (
-        <>
-          <div className="page-title">
-            <div>
-              <h1>{t('studio.rateTitle')}</h1>
-              <p className="muted">{t('studio.rateIntro')}</p>
-            </div>
-          </div>
-          <div className="rating-row studio-ratings">
-            {STUDIO_STATUSES.map((status) => (
-              <button
-                key={status}
-                className={`btn rating ${STUDIO_RATE_KINDS[status]}`}
-                type="button"
-                disabled={saving}
-                onClick={() => choose(status)}
-              >
-                <span className="rating-label">{studioStatusLabel(status, t)}</span>
-                <span className="rating-hint">{t(RATE_HINTS[status])}</span>
-              </button>
-            ))}
-          </div>
-          <p className="muted studio-rate-note">{t('studio.rateLearnedNote')}</p>
-        </>
-      ) : null}
+      {conversation && rating ? <StudioRatePanel saving={saving} onChoose={choose} /> : null}
 
       {conversation && !rating ? (
         <>

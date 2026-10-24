@@ -402,6 +402,15 @@ h1 {
     flex-shrink: 0;
   }
 
+  .deck-hero-actions .btn.with-icon {
+    gap: 6px;
+  }
+
+  .deck-hero-actions .btn.with-icon .menu-icon {
+    width: 16px;
+    height: 16px;
+  }
+
   .deck-hero-actions .btn:not(.icon-btn) {
     flex: 0 1 auto;
     min-width: min-content;
@@ -1428,6 +1437,18 @@ a.library-suggestion {
   padding: 0;
   font-size: 1.15rem;
   line-height: 1;
+}
+
+.btn.with-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn.with-icon .menu-icon {
+  width: 18px;
+  height: 18px;
 }
 
 .offline-download-btn.is-saved {
@@ -3834,9 +3855,83 @@ button.agent-preset:disabled {
 
 .marketing-links {
   display: flex;
-  gap: 20px;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  gap: 48px;
   font-size: 0.95rem;
   color: var(--muted);
+}
+
+.marketing-menu {
+  position: relative;
+}
+
+.marketing-menu-trigger {
+  background: none;
+  border: 0;
+  color: inherit;
+  font: inherit;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.marketing-menu-trigger:hover,
+.marketing-menu.is-open .marketing-menu-trigger {
+  color: var(--text);
+}
+
+.marketing-menu-caret {
+  width: 0;
+  height: 0;
+  border-inline-start: 4px solid transparent;
+  border-inline-end: 4px solid transparent;
+  border-top: 5px solid currentColor;
+  opacity: 0.75;
+}
+
+.marketing-menu.is-open .marketing-menu-caret {
+  transform: rotate(180deg);
+}
+
+.marketing-menu-panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  inset-inline-start: 0;
+  z-index: 70;
+  display: grid;
+  gap: 4px;
+  min-width: min(260px, calc(100vw - 32px));
+  padding: 10px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+}
+
+.marketing-menu-panel a {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  border-radius: 8px;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.marketing-menu-panel a:hover,
+.marketing-menu-panel a:focus-visible {
+  background: color-mix(in srgb, var(--text) 6%, transparent);
+}
+
+.marketing-menu-trigger:focus-visible {
+  outline: 2px solid var(--cobalt);
+  outline-offset: 2px;
 }
 
 .marketing-links a {
@@ -4145,6 +4240,7 @@ button.agent-preset:disabled {
 .modes,
 .library,
 .ai-cases,
+.teachers-promo,
 .stat-band,
 .footer-cta {
   padding: 90px 0;
@@ -4154,7 +4250,8 @@ button.agent-preset:disabled {
 
 .modes h2,
 .library h2,
-.ai-cases h2 {
+.ai-cases h2,
+.teachers-promo h2 {
   font-size: clamp(1.8rem, 3vw, 2.2rem);
   font-weight: 700;
   margin: 0 0 12px;
@@ -4168,6 +4265,41 @@ button.agent-preset:disabled {
 .ai-cases .sub {
   margin: 0 0 46px;
   max-width: 62ch;
+}
+
+.teachers-promo .sub,
+.teachers-promo .teachers-student {
+  max-width: 40rem;
+  margin: 0 0 24px;
+}
+
+.teachers-promo .teachers-student {
+  color: var(--muted);
+}
+
+.teachers-code-card {
+  display: grid;
+  gap: 8px;
+  justify-items: start;
+  align-content: start;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface);
+}
+
+.teachers-code-card p {
+  margin: 0;
+}
+
+.teachers-code {
+  font-family: var(--font-mono);
+  font-size: 2rem;
+  letter-spacing: 0.18em;
+}
+
+.teachers-article .class-paths {
+  margin-top: 8px;
 }
 
 .ai-case-grid {
@@ -4443,12 +4575,14 @@ button.agent-preset:disabled {
   .marketing-links {
     order: 3;
     flex: 1 0 100%;
-    gap: 8px;
-    overflow-x: auto;
+    gap: 8px 28px;
+    flex-wrap: wrap;
+    overflow: visible;
     padding-bottom: 4px;
   }
 
-  .marketing-links a {
+  .marketing-links > a,
+  .marketing-menu-trigger {
     flex: 0 0 auto;
     padding: 0 12px;
   }
@@ -6291,6 +6425,31 @@ button.agent-preset:disabled {
   margin-bottom: 0;
   overflow: auto;
   align-content: start;
+}
+
+.listen-player.is-studio-end .listen-studio-end {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding-bottom: 8px;
+}
+
+.listen-play-again {
+  display: flex;
+  justify-content: center;
+  width: min(100%, 640px);
+  margin-top: 18px;
+}
+
+.listen-play-again .btn {
+  min-height: 48px;
+  padding: 14px 28px;
+}
+
+.card-form .listen-play-again {
+  width: 100%;
+  margin-top: 0;
+  padding-top: 8px;
 }
 
 .listen-controls {

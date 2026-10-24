@@ -2,9 +2,11 @@ import { Capacitor } from '@capacitor/core'
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import AudioTrack from './AudioTrack'
+import { translateError } from '../i18n/errors'
 import { formatSleepLeft } from '../listenPrefs'
 import { canListenSpeak } from '../listenSpeech'
 import { ListenLiveOptions, listenLiveSummary } from './ListenOptions'
+import StudioRatePanel from './StudioRatePanel'
 
 export default function ListenPlayer({
   playback,
@@ -20,6 +22,9 @@ export default function ListenPlayer({
   onReplay,
   onRestart,
   onBack,
+  onRate,
+  ratingBusy = false,
+  ratingError = '',
 }) {
   const { t } = useTranslation()
   const actions = useRef({})
@@ -27,6 +32,7 @@ export default function ListenPlayer({
   const phase = playback?.phase || 'question'
   const speaking = phase === 'announce' || phase === 'question' || phase === 'answer'
   const finished = phase === 'done' || phase === 'slept'
+  const studioEnd = finished && typeof onRate === 'function'
   const [optionsOpen, setOptionsOpen] = useState(false)
   const [now, setNow] = useState(() => Date.now())
   useEffect(() => {
@@ -91,10 +97,29 @@ export default function ListenPlayer({
             : t('listen.question')
 
   return (
-    <div className={`listen-player${optionsOpen && !finished ? ' is-options-open' : ''}`}>
+    <div className={`listen-player${optionsOpen && !finished ? ' is-options-open' : ''}${studioEnd ? ' is-studio-end' : ''}`}>
       <button className="page-back" type="button" onClick={onBack}>
         {t('listen.back')}
       </button>
+      {studioEnd ? (
+        <div className="listen-studio-end">
+          {ratingError ? <div className="error">{translateError(t, ratingError)}</div> : null}
+          <StudioRatePanel
+            saving={ratingBusy}
+            onChoose={onRate}
+            lead={phase === 'slept' ? <p className="muted">{t('listen.sleptTitle')}</p> : null}
+            footer={
+              <div className="listen-play-again">
+                <button className="btn primary" type="button" disabled={ratingBusy} onClick={onRestart}>
+                  {t('listen.again')}
+                </button>
+              </div>
+            }
+          />
+        </div>
+      ) : null}
+      {studioEnd ? null : (
+      <>
       <div className="page-title">
         <div>
           <h1>{title || card?.deckName || t('listen.menu')}</h1>
@@ -113,12 +138,9 @@ export default function ListenPlayer({
         <section className="card-form">
           <h2 className="section-heading">{t(phase === 'slept' ? 'listen.sleptTitle' : 'listen.doneTitle')}</h2>
           <p className="muted">{t('listen.doneBody')}</p>
-          <div className="header-actions">
+          <div className="listen-play-again">
             <button className="btn primary" type="button" onClick={onRestart}>
               {t('listen.again')}
-            </button>
-            <button className="btn" type="button" onClick={onBack}>
-              {t('listen.back')}
             </button>
           </div>
         </section>
@@ -183,6 +205,8 @@ export default function ListenPlayer({
             <span>{t('listen.restart')}</span>
           </button>
         </div>
+      )}
+      </>
       )}
     </div>
   )

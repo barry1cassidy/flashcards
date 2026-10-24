@@ -3,6 +3,7 @@ import { bindListenPlayback, startListenPlayback, stopListenPlayback, updateList
 import { listenBed, speakCue, stopCue, waitCue } from './listenSpeech'
 
 const FRONT_TWICE_GAP_MS = 2000
+const CARD_GAP_MS = 2000
 
 function sideText(card, side) {
   return side === 'back' ? card.back : card.front
@@ -265,7 +266,7 @@ export function createListenSession({ cards, options: inputOptions, onChange }) 
         return false
       }
     }
-    await waitCue(450, signal)
+    await waitCue(CARD_GAP_MS, signal)
     if (!keepGoing()) {
       return false
     }

@@ -575,7 +575,16 @@ export default function DeckDetailPage() {
               </button>
             ) : null}
             {hasCards ? (
-              <button className="btn" type="button" onClick={() => navigate(`/listen?source=deck&id=${id}`)}>
+              <button
+                className="btn with-icon"
+                type="button"
+                onClick={() =>
+                  navigate(`/listen?source=deck&id=${id}`, {
+                    state: { listenReturn: `/decks/${id}` },
+                  })
+                }
+              >
+                <MenuIcon name="listen" />
                 {t('listen.menu')}
               </button>
             ) : null}

@@ -27,23 +27,71 @@ function pickVoice(lang) {
   )
 }
 
-export function speakCue(text, lang, { signal, onProgress, immediate = false, rate = 1 } = {}) {
-  const spoken = String(text || '').trim()
-  if (!spoken) {
-    onProgress?.(1)
-    return Promise.resolve()
-  }
-  if (signal?.aborted) {
-    return Promise.reject(abortError())
-  }
+// One speak at a time. Next used to stop and speak again before the engine had
+// left the previous language, so a Chinese line kept the English voice.
+const SETTLE_MS = 120
+let chain = Promise.resolve()
+let depth = 0
+let turn = 0
 
-  const speechRate = Number.isFinite(Number(rate)) && Number(rate) > 0 ? Number(rate) : 1
-  const estimate = Math.max(700, ((spoken.length / 13) * 1000) / speechRate)
-  const started = performance.now()
-  let timer = 0
-  let settled = false
+function claimTurn() {
+  turn += 1
+  return turn
+}
 
+function stale(myTurn, signal) {
+  return Boolean(signal?.aborted) || myTurn !== turn
+}
+
+function enqueue(task) {
+  depth += 1
+  const run = chain.then(task, task)
+  chain = run.then(
+    () => {},
+    () => {},
+  )
+  chain.finally(() => {
+    depth -= 1
+  })
+  return run
+}
+
+async function engineStop() {
+  if (Capacitor.isNativePlatform()) {
+    await TextToSpeech.stop().catch(() => {})
+    return
+  }
+  stopSpeaking()
+}
+
+function settle(ms, signal) {
   return new Promise((resolve, reject) => {
+    if (signal?.aborted) {
+      reject(abortError())
+      return
+    }
+    const timer = window.setTimeout(() => {
+      signal?.removeEventListener('abort', onAbort)
+      resolve()
+    }, ms)
+    const onAbort = () => {
+      window.clearTimeout(timer)
+      reject(abortError())
+    }
+    signal?.addEventListener('abort', onAbort, { once: true })
+  })
+}
+
+function speakEngine(spoken, lang, speechRate, signal, onProgress, estimate, myTurn) {
+  return new Promise((resolve, reject) => {
+    if (stale(myTurn, signal)) {
+      reject(abortError())
+      return
+    }
+    let settled = false
+    let timer = 0
+    let stopPromise = null
+    const started = performance.now()
     const finish = (error) => {
       if (settled) {
         return
@@ -58,13 +106,27 @@ export function speakCue(text, lang, { signal, onProgress, immediate = false, ra
         resolve()
       }
     }
-    const onAbort = () => {
-      if (Capacitor.isNativePlatform()) {
-        TextToSpeech.stop().catch(() => {})
-      } else if (webSpeechOk()) {
-        window.speechSynthesis.cancel()
+    // The promise is stored before stop() runs. Web cancel() can fire the
+    // utterance error in that same call, and the next speak must wait for it.
+    const beginStop = () => {
+      if (!stopPromise) {
+        let release
+        stopPromise = new Promise((resolveStop) => {
+          release = resolveStop
+        })
+        engineStop().finally(release)
       }
-      finish(abortError())
+      return stopPromise
+    }
+    const onAbort = () => {
+      beginStop().finally(() => finish(abortError()))
+    }
+    const ended = (error) => {
+      if (stopPromise || stale(myTurn, signal)) {
+        beginStop().finally(() => finish(abortError()))
+        return
+      }
+      finish(error)
     }
     signal?.addEventListener('abort', onAbort, { once: true })
     timer = window.setInterval(() => {
@@ -72,23 +134,16 @@ export function speakCue(text, lang, { signal, onProgress, immediate = false, ra
     }, 80)
 
     if (Capacitor.isNativePlatform()) {
-      TextToSpeech.stop()
-        .catch(() => {})
-        .finally(() => {
-          if (signal?.aborted) {
-            return
-          }
-          TextToSpeech.speak({
-            text: spoken,
-            lang: lang || 'en-US',
-            rate: speechRate,
-            pitch: 1,
-            volume: 1,
-            category: 'playback',
-          })
-            .then(() => finish(signal?.aborted ? abortError() : null))
-            .catch((error) => finish(signal?.aborted ? abortError() : error))
-        })
+      TextToSpeech.speak({
+        text: spoken,
+        lang: lang || 'en-US',
+        rate: speechRate,
+        pitch: 1,
+        volume: 1,
+        category: 'playback',
+      })
+        .then(() => ended(null))
+        .catch((error) => ended(error))
       return
     }
 
@@ -103,37 +158,68 @@ export function speakCue(text, lang, { signal, onProgress, immediate = false, ra
     if (voice) {
       utterance.voice = voice
     }
-    utterance.onend = () => finish(signal?.aborted ? abortError() : null)
+    utterance.onend = () => ended(null)
     utterance.onerror = (event) => {
       const reason = event?.error || 'speech'
       if (reason === 'interrupted' || reason === 'canceled') {
-        finish(abortError())
+        ended(abortError())
         return
       }
-      finish(new Error(reason))
+      ended(new Error(reason))
     }
-    const start = () => {
-      if (signal?.aborted || settled) {
-        return
-      }
-      window.speechSynthesis.speak(utterance)
-      if (window.speechSynthesis.paused) {
-        window.speechSynthesis.resume()
-      }
-    }
-    if (immediate) {
-      start()
-    } else {
-      window.setTimeout(start, 50)
+    window.speechSynthesis.speak(utterance)
+    if (window.speechSynthesis.paused) {
+      window.speechSynthesis.resume()
     }
   })
 }
 
-export function stopCue() {
-  stopSpeaking()
-  if (Capacitor.isNativePlatform()) {
-    TextToSpeech.stop().catch(() => {})
+async function runCue({ myTurn, signal, spoken, lang, speechRate, onProgress, estimate }) {
+  if (stale(myTurn, signal)) {
+    throw abortError()
   }
+  await engineStop()
+  await settle(SETTLE_MS, signal)
+  if (stale(myTurn, signal)) {
+    throw abortError()
+  }
+  await speakEngine(spoken, lang, speechRate, signal, onProgress, estimate, myTurn)
+}
+
+export function speakCue(text, lang, { signal, onProgress, immediate = false, rate = 1 } = {}) {
+  const spoken = String(text || '').trim()
+  if (!spoken) {
+    onProgress?.(1)
+    return Promise.resolve()
+  }
+  if (signal?.aborted) {
+    return Promise.reject(abortError())
+  }
+
+  const speechRate = Number.isFinite(Number(rate)) && Number(rate) > 0 ? Number(rate) : 1
+  const estimate = Math.max(700, ((spoken.length / 13) * 1000) / speechRate)
+  const myTurn = claimTurn()
+
+  // The first line has to call speak() inside the tap. Later lines wait until stop has finished.
+  if (immediate && depth === 0) {
+    depth += 1
+    const run = speakEngine(spoken, lang, speechRate, signal, onProgress, estimate, myTurn)
+    chain = run.then(
+      () => {},
+      () => {},
+    )
+    chain.finally(() => {
+      depth -= 1
+    })
+    return run
+  }
+
+  return enqueue(() => runCue({ myTurn, signal, spoken, lang, speechRate, onProgress, estimate }))
+}
+
+export function stopCue() {
+  claimTurn()
+  enqueue(() => engineStop())
 }
 
 export function waitCue(ms, signal) {
