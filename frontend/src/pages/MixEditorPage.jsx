@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useLayoutEffect, useMemo, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { api } from '../api'
@@ -10,6 +10,14 @@ import { sortDecks } from '../deckSort'
 import { MIX_STUDY_ORDERS, normalizeMixStudyOrder } from '../studySettings'
 import ConfirmModal from './ConfirmModal'
 import { GroupBadge } from './ColorPicker'
+
+function scrollEditorToTop() {
+  const scrolling = document.scrollingElement
+  if (scrolling) {
+    scrolling.scrollTop = 0
+  }
+  window.scrollTo(0, 0)
+}
 
 export default function MixEditorPage() {
   const { t } = useTranslation()
@@ -30,6 +38,22 @@ export default function MixEditorPage() {
   const [busy, setBusy] = useState(false)
   const [confirmDelete, setConfirmDelete] = useState(false)
   const pro = isProLicensed(user)
+
+  useLayoutEffect(() => {
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual'
+    }
+    scrollEditorToTop()
+  }, [id])
+
+  useEffect(() => {
+    const frame = window.requestAnimationFrame(scrollEditorToTop)
+    const later = window.setTimeout(scrollEditorToTop, 80)
+    return () => {
+      window.cancelAnimationFrame(frame)
+      window.clearTimeout(later)
+    }
+  }, [id])
 
   useEffect(() => {
     if (!pro) {

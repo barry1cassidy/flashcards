@@ -39,6 +39,11 @@ export default function MarketingHeader({ showLoginForm = false, loginOpen, onLo
         { to: '/#ai', label: t('marketing.createCardsNav') },
         { to: '/#language-studio', label: t('marketing.studioMenuNav') },
       ]
+  const compactItems = [
+    { to: '/#modes', label: t('marketing.studyNav') },
+    { to: '/#ai', label: t('marketing.createNav') },
+    { to: webMarketing ? '/teachers' : '/#teachers', label: t('marketing.teachersNav') },
+  ]
 
   function toggleNav(id) {
     setOpen(false)
@@ -92,29 +97,50 @@ export default function MarketingHeader({ showLoginForm = false, loginOpen, onLo
         <Link to="/" className="marketing-logo">
           <Brand />
         </Link>
-        <div className="marketing-links" ref={navRef}>
-          {webMarketing ? (
+        <div className={`marketing-links${navMenu === 'compact' ? ' is-open' : ''}`} ref={navRef}>
+          <button
+            className="marketing-compact-toggle"
+            type="button"
+            aria-expanded={navMenu === 'compact'}
+            aria-controls="marketing-compact-panel"
+            aria-label={navMenu === 'compact' ? t('nav.closeMenu') : t('nav.openMenu')}
+            onClick={() => toggleNav('compact')}
+          >
+            <span className="menu-toggle-bars" />
+          </button>
+          {navMenu === 'compact' ? (
+            <div id="marketing-compact-panel" className="marketing-compact-panel" role="menu">
+              {compactItems.map((item) => (
+                <Link key={item.to} to={item.to} role="menuitem" onClick={() => setNavMenu(null)}>
+                  {item.label}
+                </Link>
+              ))}
+            </div>
+          ) : null}
+          <div className="marketing-bar">
+            {webMarketing ? (
+              <NavMenu
+                id="study-menu"
+                label={t('marketing.studyNav')}
+                open={navMenu === 'study'}
+                onToggle={() => toggleNav('study')}
+                onNavigate={() => setNavMenu(null)}
+                items={studyItems}
+              />
+            ) : (
+              <Link to="/#modes">{t('marketing.studyNav')}</Link>
+            )}
             <NavMenu
-              id="study-menu"
-              label={t('marketing.studyNav')}
-              open={navMenu === 'study'}
-              onToggle={() => toggleNav('study')}
+              id="create-menu"
+              label={t('marketing.createNav')}
+              open={navMenu === 'create'}
+              onToggle={() => toggleNav('create')}
               onNavigate={() => setNavMenu(null)}
-              items={studyItems}
+              items={createItems}
             />
-          ) : (
-            <Link to="/#modes">{t('marketing.studyNav')}</Link>
-          )}
-          <NavMenu
-            id="create-menu"
-            label={t('marketing.createNav')}
-            open={navMenu === 'create'}
-            onToggle={() => toggleNav('create')}
-            onNavigate={() => setNavMenu(null)}
-            items={createItems}
-          />
-          {webMarketing ? <Link to="/library">{t('library.title')}</Link> : null}
-          <Link to={webMarketing ? '/teachers' : '/#teachers'}>{t('marketing.teachersNav')}</Link>
+            {webMarketing ? <Link to="/library">{t('library.title')}</Link> : null}
+            <Link to={webMarketing ? '/teachers' : '/#teachers'}>{t('marketing.teachersNav')}</Link>
+          </div>
         </div>
         <div className="marketing-auth" ref={authRef}>
           {!user && hasOffline ? (

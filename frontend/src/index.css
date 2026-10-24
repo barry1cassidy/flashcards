@@ -1295,6 +1295,7 @@ a.library-suggestion {
   background: transparent;
   color: var(--muted);
   cursor: pointer;
+  text-decoration: none;
 }
 
 .listing-action .menu-icon {
@@ -1318,6 +1319,11 @@ a.library-suggestion {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+}
+
+.deck-card-actions .btn.with-icon .menu-icon {
+  width: 16px;
+  height: 16px;
 }
 
 .deck-card h2 {
@@ -3436,6 +3442,22 @@ button.agent-preset:disabled {
   align-content: start;
 }
 
+.mix-card .listing-action + .listing-action {
+  margin-inline-start: -16px;
+}
+
+.mix-card .deck-card-actions {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+}
+
+.mix-card .deck-card-actions .btn {
+  width: auto;
+  flex: 0 0 auto;
+  padding-inline: 16px;
+}
+
 .menu-icon {
   width: 22px;
   height: 22px;
@@ -3861,6 +3883,15 @@ button.agent-preset:disabled {
   gap: 48px;
   font-size: 0.95rem;
   color: var(--muted);
+}
+
+.marketing-bar {
+  display: contents;
+}
+
+.marketing-compact-toggle,
+.marketing-compact-panel {
+  display: none;
 }
 
 .marketing-menu {
@@ -4565,7 +4596,7 @@ button.agent-preset:disabled {
   }
 
   .marketing-nav {
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
   }
 
   .marketing-auth {
@@ -4573,18 +4604,62 @@ button.agent-preset:disabled {
   }
 
   .marketing-links {
-    order: 3;
-    flex: 1 0 100%;
-    gap: 8px 28px;
-    flex-wrap: wrap;
+    position: relative;
+    flex: 1 1 auto;
+    justify-content: flex-end;
+    gap: 0;
+    flex-wrap: nowrap;
     overflow: visible;
-    padding-bottom: 4px;
+    padding-bottom: 0;
   }
 
-  .marketing-links > a,
-  .marketing-menu-trigger {
-    flex: 0 0 auto;
-    padding: 0 12px;
+  .marketing-bar {
+    display: none;
+  }
+
+  .marketing-compact-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--card);
+    color: var(--text);
+    cursor: pointer;
+    touch-action: manipulation;
+  }
+
+  .marketing-compact-panel {
+    position: absolute;
+    top: calc(100% + 8px);
+    inset-inline-end: 0;
+    z-index: 70;
+    display: grid;
+    gap: 4px;
+    min-width: min(240px, calc(100vw - 32px));
+    padding: 10px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+  }
+
+  .marketing-compact-panel a {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    border-radius: 8px;
+    color: var(--text);
+    white-space: nowrap;
+  }
+
+  .marketing-compact-panel a:hover,
+  .marketing-compact-panel a:focus-visible {
+    background: color-mix(in srgb, var(--text) 6%, transparent);
   }
 
   .scatter {

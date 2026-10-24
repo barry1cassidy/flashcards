@@ -8,6 +8,8 @@ import { useResumeExpiredSubscription } from '../useResumeExpiredSubscription'
 import { translateError } from '../i18n/errors'
 import { MIX_STUDY_ORDERS, normalizeMixStudyOrder } from '../studySettings'
 import StudyModeModal from './StudyModeModal'
+import MenuIcon from './MenuIcon'
+import ConfirmModal from './ConfirmModal'
 
 export default function MixesPage() {
   const { t } = useTranslation()
@@ -17,6 +19,8 @@ export default function MixesPage() {
   const [mixes, setMixes] = useState([])
   const [error, setError] = useState('')
   const [studyMix, setStudyMix] = useState(null)
+  const [deleteMix, setDeleteMix] = useState(null)
+  const [deleting, setDeleting] = useState(false)
   const pro = isProLicensed(user)
 
   useEffect(() => {
@@ -27,6 +31,24 @@ export default function MixesPage() {
       .then(setMixes)
       .catch((err) => setError(err.message))
   }, [pro])
+
+  async function removeMix() {
+    if (!deleteMix || deleting) {
+      return
+    }
+    setDeleting(true)
+    setError('')
+    try {
+      await api(`/api/mixes/${deleteMix.id}`, { method: 'DELETE' })
+      setMixes((current) => current.filter((mix) => mix.id !== deleteMix.id))
+      setDeleteMix(null)
+    } catch (err) {
+      setError(err.message)
+      setDeleteMix(null)
+    } finally {
+      setDeleting(false)
+    }
+  }
 
   return (
     <div className="page">
@@ -64,25 +86,57 @@ export default function MixesPage() {
         <div className="deck-grid">
           {mixes.map((mix) => (
             <article key={mix.id} className="deck-card mix-card">
-              <Link to={`/mixes/${mix.id}`} className="deck-card-main">
-                <h2 title={mix.name}>{mix.name}</h2>
+              <div className="listing-actions">
+                <Link
+                  className="listing-action"
+                  to={`/mixes/${mix.id}`}
+                  aria-label={`${t('common.edit')} ${mix.name}`}
+                  onClick={() => window.scrollTo(0, 0)}
+                >
+                  <MenuIcon name="edit" />
+                </Link>
+                <button
+                  className="listing-action danger"
+                  type="button"
+                  aria-label={t('common.deleteNamed', { name: mix.name })}
+                  onClick={() => setDeleteMix(mix)}
+                >
+                  <MenuIcon name="trash" />
+                </button>
+              </div>
+              <Link to={`/mixes/${mix.id}`} className="deck-card-main" onClick={() => window.scrollTo(0, 0)}>
+                <h2 className="deck-card-title" title={mix.name}>{mix.name}</h2>
                 <p className="muted">{summary(t, mix)}</p>
                 <p className="muted">{t('mix.dueCount', { count: mix.dueCount })}</p>
               </Link>
               <div className="deck-card-actions">
-                <button className="btn" type="button" onClick={() => navigate(`/listen?source=mix&id=${mix.id}`)}>
+                <button className="btn with-icon" type="button" onClick={() => navigate(`/listen?source=mix&id=${mix.id}`)}>
+                  <MenuIcon name="listen" />
                   {t('listen.menu')}
                 </button>
-                <button className="btn primary" type="button" onClick={() => setStudyMix(mix)}>
+                <button className="btn primary with-icon" type="button" onClick={() => setStudyMix(mix)}>
+                  <MenuIcon name="decks" />
                   {t('decks.study')}
                 </button>
-                <Link className="btn" to={`/mixes/${mix.id}`}>
-                  {t('common.edit')}
-                </Link>
               </div>
             </article>
           ))}
         </div>
+      ) : null}
+
+      {deleteMix ? (
+        <ConfirmModal
+          title={t('mix.deleteTitle')}
+          message={t('mix.deleteMessage')}
+          confirmLabel={t('common.delete')}
+          danger
+          onConfirm={removeMix}
+          onCancel={() => {
+            if (!deleting) {
+              setDeleteMix(null)
+            }
+          }}
+        />
       ) : null}
 
       {studyMix ? (

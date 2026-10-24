@@ -58,7 +58,7 @@ export default function DeckWelcome({ onCreate, shareOpen, onShowShare, shareFor
           type="search"
           value={query}
           onChange={(event) => setQuery(event.target.value)}
-          placeholder={t('library.searchPlaceholder')}
+          placeholder={t('decks.welcomeSearch')}
           aria-label={t('decks.welcomeSearch')}
           autoComplete="off"
           enterKeyHint="search"
