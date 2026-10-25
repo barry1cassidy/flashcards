@@ -3442,20 +3442,28 @@ button.agent-preset:disabled {
   align-content: start;
 }
 
-.mix-card .listing-action + .listing-action {
-  margin-inline-start: -16px;
+.mix-card .listing-actions {
+  top: 18px;
 }
 
-.mix-card .deck-card-actions {
-  display: flex;
-  flex-wrap: nowrap;
-  justify-content: center;
+.mix-card-lead {
+  padding-right: 44px;
 }
 
-.mix-card .deck-card-actions .btn {
-  width: auto;
-  flex: 0 0 auto;
-  padding-inline: 16px;
+.mix-mark {
+  display: grid;
+  place-items: center;
+  flex: 0 0 36px;
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  background: linear-gradient(160deg, var(--cobalt), #2f8bff);
+  color: #fff;
+}
+
+.mix-mark .menu-icon {
+  width: 18px;
+  height: 18px;
 }
 
 .menu-icon {

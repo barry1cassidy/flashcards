@@ -7,7 +7,6 @@ import { isProLicensed } from '../pro'
 import { useResumeExpiredSubscription } from '../useResumeExpiredSubscription'
 import { translateError } from '../i18n/errors'
 import { MIX_STUDY_ORDERS, normalizeMixStudyOrder } from '../studySettings'
-import StudyModeModal from './StudyModeModal'
 import MenuIcon from './MenuIcon'
 import ConfirmModal from './ConfirmModal'
 
@@ -18,7 +17,6 @@ export default function MixesPage() {
   const navigate = useNavigate()
   const [mixes, setMixes] = useState([])
   const [error, setError] = useState('')
-  const [studyMix, setStudyMix] = useState(null)
   const [deleteMix, setDeleteMix] = useState(null)
   const [deleting, setDeleting] = useState(false)
   const pro = isProLicensed(user)
@@ -87,14 +85,6 @@ export default function MixesPage() {
           {mixes.map((mix) => (
             <article key={mix.id} className="deck-card mix-card">
               <div className="listing-actions">
-                <Link
-                  className="listing-action"
-                  to={`/mixes/${mix.id}`}
-                  aria-label={`${t('common.edit')} ${mix.name}`}
-                  onClick={() => window.scrollTo(0, 0)}
-                >
-                  <MenuIcon name="edit" />
-                </Link>
                 <button
                   className="listing-action danger"
                   type="button"
@@ -105,20 +95,19 @@ export default function MixesPage() {
                 </button>
               </div>
               <Link to={`/mixes/${mix.id}`} className="deck-card-main" onClick={() => window.scrollTo(0, 0)}>
-                <h2 className="deck-card-title" title={mix.name}>{mix.name}</h2>
+                <div className="deck-card-lead mix-card-lead">
+                  <span className="mix-mark" aria-hidden="true">
+                    <MenuIcon name="mix" />
+                  </span>
+                </div>
+                <h2 title={mix.name}>{mix.name}</h2>
                 <p className="muted">{summary(t, mix)}</p>
-                <p className="muted">{t('mix.dueCount', { count: mix.dueCount })}</p>
+                <div className="stat-row">
+                  <span>{t('decks.cards', { count: mix.cardCount || 0 })}</span>
+                  <span className="due-badge">{t('decks.due', { count: mix.dueCount || 0 })}</span>
+                  <span>{t('groups.decks', { count: mix.deckCount || 0 })}</span>
+                </div>
               </Link>
-              <div className="deck-card-actions">
-                <button className="btn with-icon" type="button" onClick={() => navigate(`/listen?source=mix&id=${mix.id}`)}>
-                  <MenuIcon name="listen" />
-                  {t('listen.menu')}
-                </button>
-                <button className="btn primary with-icon" type="button" onClick={() => setStudyMix(mix)}>
-                  <MenuIcon name="decks" />
-                  {t('decks.study')}
-                </button>
-              </div>
             </article>
           ))}
         </div>
@@ -139,18 +128,6 @@ export default function MixesPage() {
         />
       ) : null}
 
-      {studyMix ? (
-        <StudyModeModal
-          hardCount={studyMix.hardCount || 0}
-          againCount={studyMix.againCount || 0}
-          onSelect={(mode, filter) => {
-            const path = `/mixes/${studyMix.id}/study/${mode}`
-            setStudyMix(null)
-            navigate(filter === 'hard' || filter === 'again' ? `${path}?filter=${filter}` : path)
-          }}
-          onCancel={() => setStudyMix(null)}
-        />
-      ) : null}
     </div>
   )
 }
