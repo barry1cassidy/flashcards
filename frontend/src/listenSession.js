@@ -2,7 +2,7 @@ import { clampListenRate } from './listenPrefs'
 import { bindListenPlayback, startListenPlayback, stopListenPlayback, updateListenPlayback } from './listenPlayback'
 import { listenBed, speakCue, stopCue, waitCue } from './listenSpeech'
 
-const FRONT_TWICE_GAP_MS = 2000
+const SIDE_TWICE_GAP_MS = 2000
 const CARD_GAP_MS = 2000
 
 function sideText(card, side) {
@@ -35,6 +35,7 @@ export function createListenSession({ cards, options: inputOptions, onChange }) 
     announce: Boolean(inputOptions?.announce),
     rate: clampListenRate(inputOptions?.rate),
     questionTwice: Boolean(inputOptions?.questionTwice),
+    answerTwice: Boolean(inputOptions?.answerTwice),
   }
   const sleepMs = Number(inputOptions?.sleepMs) > 0 ? Number(inputOptions.sleepMs) : 0
   const bed = listenBed()
@@ -237,20 +238,30 @@ export function createListenSession({ cards, options: inputOptions, onChange }) 
     }
     const question = sideText(card, firstSide)
     const answer = sideText(card, secondSide)
-    if (question) {
-      await say(question, sideLang(card, firstSide), 'question', question, '')
+    const speakSide = async (side, phase, prompt) => {
+      const text = sideText(card, side)
+      if (!text) {
+        return true
+      }
+      await say(text, sideLang(card, side), phase, text, prompt)
       if (!keepGoing()) {
         return false
       }
-      if (options.questionTwice) {
-        await waitCue(FRONT_TWICE_GAP_MS, signal)
-        if (!keepGoing()) {
-          return false
-        }
-        await say(question, sideLang(card, firstSide), 'question', question, '')
-        if (!keepGoing()) {
-          return false
-        }
+      const twice = side === 'front' ? options.questionTwice : options.answerTwice
+      if (!twice) {
+        return true
+      }
+      await waitCue(SIDE_TWICE_GAP_MS, signal)
+      if (!keepGoing()) {
+        return false
+      }
+      await say(text, sideLang(card, side), phase, text, prompt)
+      return keepGoing()
+    }
+    if (question) {
+      const spoke = await speakSide(firstSide, 'question', '')
+      if (!spoke) {
+        return false
       }
     }
     if (answer && answer !== question) {
@@ -261,8 +272,8 @@ export function createListenSession({ cards, options: inputOptions, onChange }) 
           return false
         }
       }
-      await say(answer, sideLang(card, secondSide), 'answer', answer, question)
-      if (!keepGoing()) {
+      const spoke = await speakSide(secondSide, 'answer', question)
+      if (!spoke) {
         return false
       }
     }
@@ -428,6 +439,9 @@ export function createListenSession({ cards, options: inputOptions, onChange }) 
     },
     setQuestionTwice(twice) {
       options.questionTwice = Boolean(twice)
+    },
+    setAnswerTwice(twice) {
+      options.answerTwice = Boolean(twice)
     },
     extendSleep,
     stop() {

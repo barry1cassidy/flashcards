@@ -1153,7 +1153,9 @@
     "sleepAdd": "+ 5 মিনিট",
     "sleepAddLabel": "ঘুমের টাইমারে ৫ মিনিট যোগ করুন",
     "questionTwice": "সামনে দুবার চালান",
-    "questionTwiceSummary": "সামনে দুবার"
+    "questionTwiceSummary": "সামনে দুবার",
+    "answerTwice": "পেছনে দুবার চালান",
+    "answerTwiceSummary": "পেছনে দুবার"
   },
   "studio": {
     "menu": "Language Studio",

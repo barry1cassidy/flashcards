@@ -1183,7 +1183,9 @@
     "sleepAdd": "+ 5 хв",
     "sleepAddLabel": "Додати 5 хвилин до таймера сну",
     "questionTwice": "Відтворити лицьовий бік двічі",
-    "questionTwiceSummary": "Лицьовий двічі"
+    "questionTwiceSummary": "Лицьовий двічі",
+    "answerTwice": "Відтворити зворотний бік двічі",
+    "answerTwiceSummary": "Зворотний двічі"
   },
   "studio": {
     "menu": "Language Studio",

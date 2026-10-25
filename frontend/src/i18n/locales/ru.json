@@ -1183,7 +1183,9 @@
     "sleepAdd": "+ 5 мин",
     "sleepAddLabel": "Добавить 5 минут к таймеру сна",
     "questionTwice": "Проиграть лицевую сторону дважды",
-    "questionTwiceSummary": "Лицевая дважды"
+    "questionTwiceSummary": "Лицевая дважды",
+    "answerTwice": "Проиграть обратную сторону дважды",
+    "answerTwiceSummary": "Обратная дважды"
   },
   "studio": {
     "menu": "Language Studio",

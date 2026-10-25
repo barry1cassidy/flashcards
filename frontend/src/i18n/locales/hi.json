@@ -1153,7 +1153,9 @@
     "sleepAdd": "+ 5 मिनट",
     "sleepAddLabel": "स्लीप टाइमर में 5 मिनट जोड़ें",
     "questionTwice": "आगे दो बार चलाएँ",
-    "questionTwiceSummary": "आगे दो बार"
+    "questionTwiceSummary": "आगे दो बार",
+    "answerTwice": "पीछे दो बार चलाएँ",
+    "answerTwiceSummary": "पीछे दो बार"
   },
   "studio": {
     "menu": "Language Studio",

@@ -1153,7 +1153,9 @@
     "sleepAdd": "+ 5 min",
     "sleepAddLabel": "5 minuten toevoegen aan de slaaptimer",
     "questionTwice": "De voorkant twee keer afspelen",
-    "questionTwiceSummary": "Voorkant twee keer"
+    "questionTwiceSummary": "Voorkant twee keer",
+    "answerTwice": "De achterkant twee keer afspelen",
+    "answerTwiceSummary": "Achterkant twee keer"
   },
   "studio": {
     "menu": "Taalstudio",

@@ -938,7 +938,9 @@
     "sleepAdd": "+ 5 min",
     "sleepAddLabel": "Añadir 5 minutos al temporizador de sueño",
     "questionTwice": "Reproducir el frente dos veces",
-    "questionTwiceSummary": "Frente dos veces"
+    "questionTwiceSummary": "Frente dos veces",
+    "answerTwice": "Reproducir el reverso dos veces",
+    "answerTwiceSummary": "Reverso dos veces"
   },
   "studio": {
     "menu": "Estudio de Idiomas",

@@ -107,6 +107,7 @@ export default function OfflineListenPage() {
     sessionRef.current?.setLoop(next.loop)
     sessionRef.current?.setRate(next.rate)
     sessionRef.current?.setQuestionTwice(next.questionTwice)
+    sessionRef.current?.setAnswerTwice(next.answerTwice)
   }
 
   function toggle(packId) {
@@ -137,6 +138,7 @@ export default function OfflineListenPage() {
         sleepMs: chosen.sleepMinutes * 60 * 1000,
         rate: chosen.rate,
         questionTwice: chosen.questionTwice,
+        answerTwice: chosen.answerTwice,
       },
       onChange: setPlayback,
     })

@@ -1153,7 +1153,9 @@
     "sleepAdd": "+ 5분",
     "sleepAddLabel": "수면 타이머에 5분 추가",
     "questionTwice": "앞면을 두 번 재생",
-    "questionTwiceSummary": "앞면 두 번"
+    "questionTwiceSummary": "앞면 두 번",
+    "answerTwice": "뒷면을 두 번 재생",
+    "answerTwiceSummary": "뒷면 두 번"
   },
   "studio": {
     "menu": "Language Studio",

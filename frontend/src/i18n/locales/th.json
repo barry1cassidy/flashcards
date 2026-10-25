@@ -1153,7 +1153,9 @@
     "sleepAdd": "+ 5 นาที",
     "sleepAddLabel": "เพิ่ม 5 นาทีให้ตัวตั้งเวลานอน",
     "questionTwice": "เล่นด้านหน้าสองครั้ง",
-    "questionTwiceSummary": "ด้านหน้าสองครั้ง"
+    "questionTwiceSummary": "ด้านหน้าสองครั้ง",
+    "answerTwice": "เล่นด้านหลังสองครั้ง",
+    "answerTwiceSummary": "ด้านหลังสองครั้ง"
   },
   "studio": {
     "menu": "Language Studio",

@@ -1213,7 +1213,9 @@
     "sleepAdd": "+ ٥ دقائق",
     "sleepAddLabel": "أضف ٥ دقائق إلى مؤقت النوم",
     "questionTwice": "تشغيل الواجهة مرتين",
-    "questionTwiceSummary": "الواجهة مرتين"
+    "questionTwiceSummary": "الواجهة مرتين",
+    "answerTwice": "تشغيل الخلف مرتين",
+    "answerTwiceSummary": "الخلف مرتين"
   },
   "studio": {
     "menu": "Language Studio",

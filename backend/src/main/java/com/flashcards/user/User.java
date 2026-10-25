@@ -88,6 +88,9 @@ public class User {
     @Column(name = "listen_question_twice", nullable = false)
     private boolean listenQuestionTwice;
 
+    @Column(name = "listen_answer_twice", nullable = false)
+    private boolean listenAnswerTwice;
+
     @Column(name = "pro_licensed", nullable = false)
     private boolean proLicensed;
 

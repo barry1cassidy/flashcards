@@ -934,7 +934,9 @@
     "sleepAdd": "+ 5 min",
     "sleepAddLabel": "Add 5 minutes to the sleep timer",
     "questionTwice": "Play the front twice",
-    "questionTwiceSummary": "Front twice"
+    "questionTwiceSummary": "Front twice",
+    "answerTwice": "Play the back twice",
+    "answerTwiceSummary": "Back twice"
   },
   "studio": {
     "menu": "Language Studio",
@@ -1174,7 +1176,7 @@
     "proTurnOn": "Turn On Pro (test)",
     "proTurnOff": "Turn Off Pro (test)",
     "listen": "Listen",
-    "listenHint": "These are the starting choices on Listen. You can change them there before you press play, and the pause, repeat, speed, and sleep timer during playback.",
+    "listenHint": "These are the starting choices on Listen. You can change them there before you press play, and the pause, repeat, speed, playing the front or back twice, and the sleep timer during playback.",
     "listenPause": "Pause after the question",
     "listenPauseHint": "How long to wait so you can recall the answer. 0 to 60 seconds.",
     "listenSide": "Which side first",
@@ -1345,7 +1347,7 @@
     "listenSchedule": "Listening does not grade the cards. Ratings you already gave stay on the study schedule.",
     "listenLockAndroid": "On Android, the first time you press Play the phone may ask to allow notifications. Allow it. That notification is the player on the lock screen, so listening can continue while the phone is locked. Zipdeck does not send other alerts from Listen. If the phone also has a battery setting named Allow background usage for Zipdeck, leave that on.",
     "listenLockIos": "On iPhone and iPad, listening continues when the device is locked. No extra permission is required. The lock screen shows play, pause, and skip while a session is running. Force-quitting Zipdeck stops playback.",
-    "listenSleep": "Playback options set the pause in seconds, which side you hear first, whether the cards repeat, playback speed, whether the question is spoken twice, and a sleep timer. Settings stores the same choices as the defaults. While listening you can still change the pause, whether it repeats, the speed, whether the question is spoken twice, and the sleep timer. + 5 min adds time to the sleep timer. The sleep timer ends the session when the time is up, on the website and in both apps, including while the phone is locked.",
+    "listenSleep": "Playback options set the pause in seconds, which side you hear first, whether the cards repeat, playback speed, whether the front or the back is spoken twice, and a sleep timer. Settings stores the same choices as the defaults. While listening you can still change the pause, whether it repeats, the speed, whether the front or the back is spoken twice, and the sleep timer. + 5 min adds time to the sleep timer. The sleep timer ends the session when the time is up, on the website and in both apps, including while the phone is locked.",
     "classesIntro": "Anyone can join a class with a 6-character code. Teachers turn on Teacher Mode, create a class, and assign decks. Students get a copy in My Decks, so their ratings are their own.",
     "contactTitle": "Contact",
     "contactBody": "Questions, billing issues, or something this page does not cover — email us and we will get back to you."

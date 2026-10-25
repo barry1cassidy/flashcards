@@ -27,10 +27,7 @@ export function listenPrefsSummary(prefs, t, showAnnounce) {
   if (showAnnounce && !prefs.announce) {
     parts.splice(3, 0, t('listen.announceOff'))
   }
-  if (prefs.questionTwice) {
-    parts.splice(-1, 0, t('listen.questionTwiceSummary'))
-  }
-  return parts.join(' · ')
+  return withTwiceSummaries(parts, prefs, t).join(' · ')
 }
 
 export function listenLiveSummary(prefs, sleepLeft, t) {
@@ -41,10 +38,21 @@ export function listenLiveSummary(prefs, sleepLeft, t) {
     t('listen.speedValue', { rate: formatListenRate(prefs.rate) }),
     sleep,
   ]
+  return withTwiceSummaries(parts, prefs, t).join(' · ')
+}
+
+function withTwiceSummaries(parts, prefs, t) {
+  const extras = []
   if (prefs.questionTwice) {
-    parts.splice(-1, 0, t('listen.questionTwiceSummary'))
+    extras.push(t('listen.questionTwiceSummary'))
   }
-  return parts.join(' · ')
+  if (prefs.answerTwice) {
+    extras.push(t('listen.answerTwiceSummary'))
+  }
+  if (extras.length > 0) {
+    parts.splice(-1, 0, ...extras)
+  }
+  return parts
 }
 
 function PausePanel({ prefs, onChange }) {
@@ -137,19 +145,20 @@ function FinishPanel({ prefs, onChange }) {
   )
 }
 
-function QuestionTwicePanel({ prefs, onChange }) {
+function TwicePanel({ prefs, onChange, field, labelKey }) {
   const { t } = useTranslation()
+  const label = t(labelKey)
   return (
     <fieldset className="listen-panel listen-sleep-panel">
-      <legend>{t('listen.questionTwice')}</legend>
-      <div className="listen-choice-row" role="radiogroup" aria-label={t('listen.questionTwice')}>
+      <legend>{label}</legend>
+      <div className="listen-choice-row" role="radiogroup" aria-label={label}>
         {[false, true].map((item) => (
           <button
             key={item ? 'on' : 'off'}
-            className={`btn${prefs.questionTwice === item ? ' primary' : ''}`}
+            className={`btn${prefs[field] === item ? ' primary' : ''}`}
             type="button"
-            aria-pressed={prefs.questionTwice === item}
-            onClick={() => onChange({ questionTwice: item })}
+            aria-pressed={prefs[field] === item}
+            onClick={() => onChange({ [field]: item })}
           >
             {t(item ? 'listen.on' : 'listen.off')}
           </button>
@@ -205,7 +214,8 @@ export function ListenLiveOptions({ prefs, sleepLeft, onChange, onExtendSleep })
       <PausePanel prefs={prefs} onChange={onChange} />
       <FinishPanel prefs={prefs} onChange={onChange} />
       <SpeedPanel prefs={prefs} onChange={onChange} />
-      <QuestionTwicePanel prefs={prefs} onChange={onChange} />
+      <TwicePanel prefs={prefs} onChange={onChange} field="questionTwice" labelKey="listen.questionTwice" />
+      <TwicePanel prefs={prefs} onChange={onChange} field="answerTwice" labelKey="listen.answerTwice" />
     </div>
   )
 }
@@ -272,7 +282,8 @@ export default function ListenOptions({ prefs, onChange, showAnnounce = true }) 
         </div>
         <p className="muted">{t('listen.sleepHint')}</p>
       </fieldset>
-      <QuestionTwicePanel prefs={prefs} onChange={onChange} />
+      <TwicePanel prefs={prefs} onChange={onChange} field="questionTwice" labelKey="listen.questionTwice" />
+      <TwicePanel prefs={prefs} onChange={onChange} field="answerTwice" labelKey="listen.answerTwice" />
     </div>
   )
 }

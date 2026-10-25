@@ -95,6 +95,7 @@ export default function ListenPage() {
     sessionRef.current?.setLoop(next.loop)
     sessionRef.current?.setRate(next.rate)
     sessionRef.current?.setQuestionTwice(next.questionTwice)
+    sessionRef.current?.setAnswerTwice(next.answerTwice)
   }
 
   const offlineIds = source === 'offline' ? [...(selectedOffline || [])] : []
@@ -248,6 +249,7 @@ export default function ListenPage() {
         sleepMs: chosen.sleepMinutes * 60 * 1000,
         rate: chosen.rate,
         questionTwice: chosen.questionTwice,
+        answerTwice: chosen.answerTwice,
       },
       onChange: setPlayback,
     })

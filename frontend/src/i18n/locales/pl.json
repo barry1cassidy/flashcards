@@ -1183,7 +1183,9 @@
     "sleepAdd": "+ 5 min",
     "sleepAddLabel": "Dodaj 5 minut do wyłącznika czasowego",
     "questionTwice": "Odtwórz przód dwa razy",
-    "questionTwiceSummary": "Przód dwa razy"
+    "questionTwiceSummary": "Przód dwa razy",
+    "answerTwice": "Odtwórz tył dwa razy",
+    "answerTwiceSummary": "Tył dwa razy"
   },
   "studio": {
     "menu": "Studio językowe",

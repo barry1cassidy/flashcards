@@ -1153,7 +1153,9 @@
     "sleepAdd": "+ 5 mnt",
     "sleepAddLabel": "Tambah 5 menit ke pengatur waktu tidur",
     "questionTwice": "Putar sisi depan dua kali",
-    "questionTwiceSummary": "Depan dua kali"
+    "questionTwiceSummary": "Depan dua kali",
+    "answerTwice": "Putar sisi belakang dua kali",
+    "answerTwiceSummary": "Belakang dua kali"
   },
   "studio": {
     "menu": "Language Studio",

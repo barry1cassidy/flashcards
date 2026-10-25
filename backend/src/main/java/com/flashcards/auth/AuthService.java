@@ -177,6 +177,9 @@ public class AuthService {
         if (request.listenQuestionTwice() != null) {
             user.setListenQuestionTwice(request.listenQuestionTwice());
         }
+        if (request.listenAnswerTwice() != null) {
+            user.setListenAnswerTwice(request.listenAnswerTwice());
+        }
         return toUserResponse(user);
     }
 
@@ -242,7 +245,8 @@ public class AuthService {
                 user.isListenAnnounce(),
                 listenSleepMinutes,
                 listenSpeechRate,
-                user.isListenQuestionTwice());
+                user.isListenQuestionTwice(),
+                user.isListenAnswerTwice());
     }
 
     private static double nearestListenSpeechRate(double rate) {

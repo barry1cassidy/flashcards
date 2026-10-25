@@ -1153,7 +1153,9 @@
     "sleepAdd": "+ 5 min",
     "sleepAddLabel": "Aggiungi 5 minuti al timer di sonno",
     "questionTwice": "Riproduci il fronte due volte",
-    "questionTwiceSummary": "Fronte due volte"
+    "questionTwiceSummary": "Fronte due volte",
+    "answerTwice": "Riproduci il retro due volte",
+    "answerTwiceSummary": "Retro due volte"
   },
   "studio": {
     "menu": "Studio linguistico",

@@ -19,6 +19,7 @@ export function defaultListenPrefs() {
     sleepMinutes: 0,
     rate: LISTEN_RATE_DEFAULT,
     questionTwice: false,
+    answerTwice: false,
   }
 }
 
@@ -77,6 +78,7 @@ export function normalizeListenPrefs(source) {
   const sleep = source.sleepMinutes ?? source.listenSleepMinutes
   const rate = source.rate ?? source.listenSpeechRate
   const twice = source.questionTwice ?? source.listenQuestionTwice
+  const backTwice = source.answerTwice ?? source.listenAnswerTwice
   return {
     pauseSeconds: clampListenPause(pause ?? base.pauseSeconds),
     side,
@@ -85,6 +87,7 @@ export function normalizeListenPrefs(source) {
     sleepMinutes: clampListenSleep(sleep ?? 0),
     rate: clampListenRate(rate ?? base.rate),
     questionTwice: twice === true || twice === 1,
+    answerTwice: backTwice === true || backTwice === 1,
   }
 }
 
@@ -98,6 +101,9 @@ export function listenPrefsFromUser(user) {
       }
       if (user.listenQuestionTwice == null) {
         fromUser.questionTwice = stored.questionTwice
+      }
+      if (user.listenAnswerTwice == null) {
+        fromUser.answerTwice = stored.answerTwice
       }
     }
     return fromUser
@@ -115,6 +121,7 @@ export function listenPrefsToApi(prefs) {
     listenSleepMinutes: normalized.sleepMinutes,
     listenSpeechRate: normalized.rate,
     listenQuestionTwice: normalized.questionTwice,
+    listenAnswerTwice: normalized.answerTwice,
   }
 }
 
@@ -128,6 +135,9 @@ export function mergeListenResponse(updated, sent) {
   }
   if (updated.listenQuestionTwice == null && typeof sent?.listenQuestionTwice === 'boolean') {
     merged.listenQuestionTwice = sent.listenQuestionTwice
+  }
+  if (updated.listenAnswerTwice == null && typeof sent?.listenAnswerTwice === 'boolean') {
+    merged.listenAnswerTwice = sent.listenAnswerTwice
   }
   return merged
 }

@@ -1153,7 +1153,9 @@
     "sleepAdd": "+ 5分",
     "sleepAddLabel": "スリープタイマーに5分追加",
     "questionTwice": "表を2回再生",
-    "questionTwiceSummary": "表2回"
+    "questionTwiceSummary": "表2回",
+    "answerTwice": "裏を2回再生",
+    "answerTwiceSummary": "裏2回"
   },
   "studio": {
     "menu": "Language Studio",
