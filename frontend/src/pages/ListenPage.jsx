@@ -11,9 +11,10 @@ import { studioLibraryPath, studioListenReturnPath, studioSamplesPath } from '..
 import { flattenListenCards, loadListenQueue } from '../listenQueue'
 import { LISTEN_SLEEP_EXTEND_MS, listenPrefsFromUser, normalizeListenPrefs } from '../listenPrefs'
 import { createListenSession } from '../listenSession'
-import ListenOptions, { listenPrefsSummary } from './ListenOptions'
+import ListenOptions, { ListenOptionsToggle, listenPrefsSummary } from './ListenOptions'
 import ListenPlayer from './ListenPlayer'
 import { UseScene } from './ListenScenes'
+import SpeechLanguagesNote from './SpeechLanguagesNote'
 import MenuIcon from './MenuIcon'
 
 const GATE_SCENES = [
@@ -360,6 +361,7 @@ export default function ListenPage() {
               </figure>
             ))}
           </div>
+          <SpeechLanguagesNote className="listen-gate-speech" />
           <Link className="btn primary" to="/pro">
             {t('pro.goToPro')}
           </Link>
@@ -555,15 +557,11 @@ export default function ListenPage() {
               {t('listen.play')}
             </button>
           </div>
-          <button
-            className="listen-options-toggle"
-            type="button"
-            aria-expanded={optionsOpen}
-            onClick={() => setOptionsOpen((open) => !open)}
-          >
-            <span>{optionsOpen ? t('listen.optionsHide') : t('listen.options')}</span>
-            <span className="muted">{listenPrefsSummary(prefs, t, multi)}</span>
-          </button>
+          <ListenOptionsToggle
+            open={optionsOpen}
+            onToggle={() => setOptionsOpen((open) => !open)}
+            summary={listenPrefsSummary(prefs, t, multi)}
+          />
           {optionsOpen ? <ListenOptions prefs={prefs} onChange={changePrefs} showAnnounce={multi} /> : null}
           {loadingQueue ? <p>{t('listen.loading')}</p> : null}
           {!loadingQueue && queue && cards.length === 0 ? <p>{t('listen.emptyCards')}</p> : null}

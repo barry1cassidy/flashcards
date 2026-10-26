@@ -1,6 +1,7 @@
 import { Capacitor } from '@capacitor/core'
 import { TextToSpeech } from '@capacitor-community/text-to-speech'
-import { stopSpeaking } from './tts'
+import { speakMissingLanguages } from './speechPrefs'
+import { deviceLanguage, deviceVoiceAvailable, fallbackVoice, nativeVoiceAvailable, stopSpeaking } from './tts'
 
 function abortError() {
   return new DOMException('Aborted', 'AbortError')
@@ -20,9 +21,13 @@ function pickVoice(lang) {
     return null
   }
   const wanted = (lang || 'en-US').toLowerCase()
+  const base = wanted.split('-')[0]
   return (
     voices.find((voice) => voice.lang.toLowerCase() === wanted) ||
-    voices.find((voice) => voice.lang.toLowerCase().startsWith(wanted.split('-')[0])) ||
+    voices.find((voice) => {
+      const code = voice.lang.toLowerCase()
+      return code === base || code.startsWith(`${base}-`)
+    }) ||
     null
   )
 }
@@ -134,16 +139,26 @@ function speakEngine(spoken, lang, speechRate, signal, onProgress, estimate, myT
     }, 80)
 
     if (Capacitor.isNativePlatform()) {
-      TextToSpeech.speak({
-        text: spoken,
-        lang: lang || 'en-US',
-        rate: speechRate,
-        pitch: 1,
-        volume: 1,
-        category: 'playback',
+      nativeVoiceAvailable(lang || 'en-US').then((supported) => {
+        if (stale(myTurn, signal)) {
+          ended(abortError())
+          return
+        }
+        if (!supported && !speakMissingLanguages()) {
+          ended(new Error('voice-unsupported'))
+          return
+        }
+        TextToSpeech.speak({
+          text: spoken,
+          lang: supported ? lang || 'en-US' : deviceLanguage(),
+          rate: speechRate,
+          pitch: 1,
+          volume: 1,
+          category: 'playback',
+        })
+          .then(() => ended(null))
+          .catch((error) => ended(error))
       })
-        .then(() => ended(null))
-        .catch((error) => ended(error))
       return
     }
 
@@ -151,12 +166,19 @@ function speakEngine(spoken, lang, speechRate, signal, onProgress, estimate, myT
       finish(new Error('speech-unavailable'))
       return
     }
+    const voiceReady = deviceVoiceAvailable(lang || 'en-US')
+    if (voiceReady === false && !speakMissingLanguages()) {
+      finish(new Error('voice-unsupported'))
+      return
+    }
     const utterance = new SpeechSynthesisUtterance(spoken)
-    utterance.lang = lang || 'en-US'
     utterance.rate = speechRate
-    const voice = pickVoice(utterance.lang)
+    const voice = voiceReady === false ? fallbackVoice() : pickVoice(lang || 'en-US')
     if (voice) {
       utterance.voice = voice
+      utterance.lang = voiceReady === false ? voice.lang || deviceLanguage() : lang || 'en-US'
+    } else {
+      utterance.lang = voiceReady === false ? deviceLanguage() : lang || 'en-US'
     }
     utterance.onend = () => ended(null)
     utterance.onerror = (event) => {

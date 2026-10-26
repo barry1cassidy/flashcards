@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { canSpeak, speak, stopSpeaking } from '../tts'
 import RatingRow from './RatingRow'
@@ -16,26 +16,26 @@ export default function AudioReviewStudy({
 }) {
   const { t } = useTranslation()
   const speechOk = canSpeak()
+  const [voiceNote, setVoiceNote] = useState(false)
+  const spokenText = revealed ? card?.back : card?.front
+  const spokenLang = revealed ? card?.backLanguage : card?.frontLanguage
 
   useEffect(() => {
-    if (!card || revealed || !speechOk) {
+    if (!card || !speechOk) {
       return undefined
     }
-    speak(card.front, card.frontLanguage)
+    let cancelled = false
+    setVoiceNote(false)
+    Promise.resolve(speak(spokenText, spokenLang)).then((result) => {
+      if (!cancelled) {
+        setVoiceNote(result === 'unsupported')
+      }
+    })
     return () => {
+      cancelled = true
       stopSpeaking()
     }
-  }, [card, revealed, speechOk])
-
-  useEffect(() => {
-    if (!card || !revealed || !speechOk) {
-      return undefined
-    }
-    speak(card.back, card.backLanguage)
-    return () => {
-      stopSpeaking()
-    }
-  }, [card, revealed, speechOk])
+  }, [card, speechOk, spokenText, spokenLang])
 
   return (
     <div className="study-session">
@@ -45,14 +45,19 @@ export default function AudioReviewStudy({
             <button
               className="audio-play"
               type="button"
-              onClick={() => speak(revealed ? card.back : card.front, revealed ? card.backLanguage : card.frontLanguage)}
+              onClick={() => {
+                Promise.resolve(speak(spokenText, spokenLang)).then((result) => {
+                  setVoiceNote(result === 'unsupported')
+                })
+              }}
               aria-label={t('study.replay')}
             >
               <PlayIcon />
             </button>
           ) : null}
+          {voiceNote ? <p className="speak-voice-note is-block">{t('study.voiceUnsupported')}</p> : null}
           <div className="eyebrow">{revealed ? t('study.answer') : t('study.question')}</div>
-          {revealed || !speechOk ? (
+          {revealed || !speechOk || voiceNote ? (
             <>
               <h2>{revealed ? card.back : card.front}</h2>
               {revealed && card.hasBackImage ? (

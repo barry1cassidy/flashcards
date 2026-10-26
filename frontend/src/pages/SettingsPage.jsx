@@ -5,6 +5,7 @@ import { useAuth } from '../AuthContext'
 import { DECK_SORTS, normalizeDeckSort } from '../deckSort'
 import { listenPrefsFromUser } from '../listenPrefs'
 import ListenOptions from './ListenOptions'
+import { setSpeakMissingLanguages, speakMissingLanguages } from '../speechPrefs'
 import { RESTUDY_WAITS, STUDY_ORDERS, normalizeRestudyWait, normalizeStudyOrder } from '../studySettings'
 import { LOCALES, currentLocale } from '../i18n'
 import { translateError } from '../i18n/errors'
@@ -16,12 +17,19 @@ export default function SettingsPage() {
   const [searchParams] = useSearchParams()
   const { user, setTheme, setLocale, setDeckSort, setStudyOrder, setRestudyWait, setListenPrefs } = useAuth()
   const [error, setError] = useState('')
+  const [missingVoice, setMissingVoice] = useState(() => speakMissingLanguages())
 
   useEffect(() => {
-    if (location.hash !== '#study-options') {
+    const id =
+      location.hash === '#missing-voices'
+        ? 'missing-voices'
+        : location.hash === '#study-options'
+          ? 'study-options'
+          : ''
+    if (!id) {
       return
     }
-    document.getElementById('study-options')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }, [location.hash])
 
   if (searchParams.get('billing')) {
@@ -143,6 +151,21 @@ export default function SettingsPage() {
             </label>
           ))}
         </div>
+
+        <h3 className="settings-subhead" id="missing-voices">{t('settings.missingVoice')}</h3>
+        <p className="muted">{t('settings.missingVoiceHint')}</p>
+        <label className={`radio-row ${missingVoice ? 'selected' : ''}`}>
+          <input
+            type="checkbox"
+            checked={missingVoice}
+            onChange={(event) => {
+              const enabled = event.target.checked
+              setSpeakMissingLanguages(enabled)
+              setMissingVoice(enabled)
+            }}
+          />
+          {t('settings.missingVoiceOn')}
+        </label>
       </section>
 
       <section className="card-form" id="listen-options">

@@ -1,11 +1,12 @@
 import { Capacitor } from '@capacitor/core'
 import { useEffect, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import AudioTrack from './AudioTrack'
 import { translateError } from '../i18n/errors'
 import { formatSleepLeft } from '../listenPrefs'
 import { canListenSpeak } from '../listenSpeech'
-import { ListenLiveOptions, listenLiveSummary } from './ListenOptions'
+import { ListenLiveOptions, ListenOptionsToggle, listenLiveSummary } from './ListenOptions'
 import StudioRatePanel from './StudioRatePanel'
 
 export default function ListenPlayer({
@@ -30,7 +31,8 @@ export default function ListenPlayer({
   const actions = useRef({})
   actions.current = { onPause, onResume, onNext, onPrevious, onReplay, onRestart }
   const phase = playback?.phase || 'question'
-  const speaking = phase === 'announce' || phase === 'question' || phase === 'answer'
+  const speaking =
+    !playback?.voiceUnsupported && (phase === 'announce' || phase === 'question' || phase === 'answer')
   const finished = phase === 'done' || phase === 'slept'
   const studioEnd = finished && typeof onRate === 'function'
   const [optionsOpen, setOptionsOpen] = useState(false)
@@ -155,6 +157,14 @@ export default function ListenPlayer({
           {showPrompt ? <p className="listen-prompt muted">{playback.prompt}</p> : null}
           <h2>{line}</h2>
           {phase === 'blocked' ? <p className="muted">{t('listen.blocked')}</p> : null}
+          {playback?.voiceUnsupported ? (
+            <div className="speak-voice-block">
+              <p className="speak-voice-note is-block">{t('study.voiceUnsupported')}</p>
+              <Link className="speak-voice-link" to="/settings#missing-voices">
+                {t('study.voiceUnsupportedSettings')}
+              </Link>
+            </div>
+          ) : null}
           {!canListenSpeak() ? <p className="muted">{t('listen.speechOff')}</p> : null}
         </section>
       )}
@@ -181,15 +191,11 @@ export default function ListenPlayer({
           </div>
           {prefs && onChangePrefs && onExtendSleep ? (
             <>
-              <button
-                className="listen-options-toggle"
-                type="button"
-                aria-expanded={optionsOpen}
-                onClick={() => setOptionsOpen((open) => !open)}
-              >
-                <span>{optionsOpen ? t('listen.optionsHide') : t('listen.options')}</span>
-                <span className="muted">{listenLiveSummary(prefs, sleepLeft, t)}</span>
-              </button>
+              <ListenOptionsToggle
+                open={optionsOpen}
+                onToggle={() => setOptionsOpen((open) => !open)}
+                summary={listenLiveSummary(prefs, sleepLeft, t)}
+              />
               {optionsOpen ? (
                 <ListenLiveOptions
                   prefs={prefs}

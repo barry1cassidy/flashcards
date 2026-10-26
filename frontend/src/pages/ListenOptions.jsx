@@ -41,6 +41,28 @@ export function listenLiveSummary(prefs, sleepLeft, t) {
   return withTwiceSummaries(parts, prefs, t).join(' · ')
 }
 
+export function ListenOptionsToggle({ open, onToggle, summary }) {
+  const { t } = useTranslation()
+  return (
+    <button
+      className={`listen-options-toggle${open ? ' is-open' : ''}`}
+      type="button"
+      aria-expanded={open}
+      onClick={onToggle}
+    >
+      <span className="listen-options-toggle-copy">
+        <span>{open ? t('listen.optionsHide') : t('listen.options')}</span>
+        <span className="muted">{summary}</span>
+      </span>
+      <span className="listen-options-chevron" aria-hidden="true">
+        <svg viewBox="0 0 24 24">
+          <path d="M6 9l6 6 6-6" />
+        </svg>
+      </span>
+    </button>
+  )
+}
+
 function withTwiceSummaries(parts, prefs, t) {
   const extras = []
   if (prefs.questionTwice) {

@@ -16,20 +16,25 @@ import org.springframework.web.multipart.MultipartFile;
 import com.flashcards.card.Card;
 import com.flashcards.card.CardRepository;
 import com.flashcards.card.CardResponse;
+import com.flashcards.billing.ProAccess;
 import com.flashcards.card.CardService;
 import com.flashcards.common.ApiException;
 import com.flashcards.deck.Deck;
 import com.flashcards.deck.DeckService;
+import com.flashcards.user.User;
+import com.flashcards.user.UserRepository;
 
 @Service
 public class CsvService {
 
     private final DeckService deckService;
     private final CardRepository cardRepository;
+    private final UserRepository userRepository;
 
-    public CsvService(DeckService deckService, CardRepository cardRepository) {
+    public CsvService(DeckService deckService, CardRepository cardRepository, UserRepository userRepository) {
         this.deckService = deckService;
         this.cardRepository = cardRepository;
+        this.userRepository = userRepository;
     }
 
     @Transactional
@@ -84,6 +89,9 @@ public class CsvService {
 
     @Transactional(readOnly = true)
     public byte[] exportCsv(UUID userId, UUID deckId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ApiException(HttpStatus.UNAUTHORIZED, "Not authenticated"));
+        ProAccess.require(user);
         deckService.requireOwned(userId, deckId);
         StringBuilder csv = new StringBuilder("front,back,hint\n");
         for (Card card : cardRepository.findByDeckIdOrderByPositionAscIdAsc(deckId)) {

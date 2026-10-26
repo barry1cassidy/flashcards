@@ -74,6 +74,7 @@ export default function DeckDetailPage() {
   const [removeFrontImage, setRemoveFrontImage] = useState(false)
   const [removeBackImage, setRemoveBackImage] = useState(false)
   const [proModal, setProModal] = useState(false)
+  const [exportProOpen, setExportProOpen] = useState(false)
   const [offlinePack, setOfflinePack] = useState(null)
   const [offlineBusy, setOfflineBusy] = useState(false)
   const [offlineError, setOfflineError] = useState('')
@@ -336,6 +337,10 @@ export default function DeckDetailPage() {
   }
 
   async function exportCsv() {
+    if (!pro) {
+      setExportProOpen(true)
+      return
+    }
     setError('')
     try {
       const data = await api(`/api/decks/${id}/export`)
@@ -999,6 +1004,15 @@ export default function DeckDetailPage() {
             navigate(filter === 'hard' || filter === 'again' ? `${path}?filter=${filter}` : path)
           }}
           onCancel={() => setStudyOpen(false)}
+        />
+      ) : null}
+      {exportProOpen ? (
+        <ConfirmModal
+          title={t('decks.exportProTitle')}
+          message={t('decks.exportProMessage')}
+          confirmLabel={t('pro.goToPro')}
+          onConfirm={() => navigate('/pro')}
+          onCancel={() => setExportProOpen(false)}
         />
       ) : null}
       {proModal ? (

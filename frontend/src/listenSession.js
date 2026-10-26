@@ -25,6 +25,7 @@ export function createListenSession({ cards, options: inputOptions, onChange }) 
   let shownLine = ''
   let shownPrompt = ''
   let shownPhase = 'question'
+  let voiceUnsupported = false
   let sleepTimer = 0
   let sleepDeadline = 0
   let sleepArmed = false
@@ -91,6 +92,9 @@ export function createListenSession({ cards, options: inputOptions, onChange }) 
     if (Object.hasOwn(extra, 'phase') && extra.phase) {
       shownPhase = extra.phase
     }
+    if (Object.hasOwn(extra, 'voiceUnsupported')) {
+      voiceUnsupported = Boolean(extra.voiceUnsupported)
+    }
     onChange({
       index,
       total: cards.length,
@@ -101,6 +105,7 @@ export function createListenSession({ cards, options: inputOptions, onChange }) 
       prompt: shownPrompt,
       phase: shownPhase,
       sleepDeadline,
+      voiceUnsupported,
       ...extra,
     })
     if (extra.phase) {
@@ -217,16 +222,23 @@ export function createListenSession({ cards, options: inputOptions, onChange }) 
     const startedGeneration = generation
     const card = cards[index]
     let now = immediate
-    const say = (text, lang, phase, line, prompt) => {
+    const say = async (text, lang, phase, line, prompt) => {
       const useNow = now
       now = false
-      publish({ phase, line, prompt, progress: 0 })
-      return speakCue(text, lang, {
-        signal,
-        immediate: useNow,
-        rate: options.rate,
-        onProgress: (progress) => publish({ phase, line, prompt, progress }),
-      })
+      publish({ phase, line, prompt, progress: 0, voiceUnsupported: false })
+      try {
+        await speakCue(text, lang, {
+          signal,
+          immediate: useNow,
+          rate: options.rate,
+          onProgress: (progress) => publish({ phase, line, prompt, progress }),
+        })
+      } catch (error) {
+        if (error?.message !== 'voice-unsupported') {
+          throw error
+        }
+        publish({ phase, line, prompt, progress: 1, voiceUnsupported: true })
+      }
     }
     const keepGoing = () => !stopped && !sleepDue()
     if (multi && card.deckId !== lastDeck) {

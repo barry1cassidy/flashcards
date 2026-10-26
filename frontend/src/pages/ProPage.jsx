@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useAuth } from '../AuthContext'
 import { useAiCredits } from '../AiCreditsContext'
 import { isAdmin } from '../admin'
+import SpeechLanguagesNote from './SpeechLanguagesNote'
 import {
   completeCheckout,
   isAndroidApp,
@@ -323,8 +324,14 @@ function ProSection({ user, onError, onStub, refresh }) {
               <BenefitItem tone="mix" title={t('pro.featureMix')} detail={t('pro.featureMixDetail')} />
               <BenefitItem tone="images" title={t('pro.featureImages')} detail={t('pro.featureImagesDetail')} />
               <BenefitItem tone="offline" title={t('pro.featureOffline')} detail={t('pro.featureOfflineDetail')} />
-              <BenefitItem tone="listen" title={t('pro.featureListen')} detail={t('pro.featureListenDetail')} />
+              <BenefitItem
+                tone="listen"
+                title={t('pro.featureListen')}
+                detail={t('pro.featureListenDetail')}
+                extra={<SpeechLanguagesNote />}
+              />
               <BenefitItem tone="studio" title={t('pro.featureStudio')} detail={t('pro.featureStudioDetail')} />
+              <BenefitItem tone="export" title={t('pro.featureExport')} detail={t('pro.featureExportDetail')} />
               <BenefitItem
                 tone="credits"
                 title={t('pro.featureCredits', { count: billing?.monthlyAllowance || 10 })}
@@ -450,8 +457,13 @@ function ProSection({ user, onError, onStub, refresh }) {
               <FeatureItem title={t('pro.featureMix')} detail={t('pro.featureMixDetail')} />
               <FeatureItem title={t('pro.featureImages')} detail={t('pro.featureImagesDetail')} />
               <FeatureItem title={t('pro.featureOffline')} detail={t('pro.featureOfflineDetail')} />
-              <FeatureItem title={t('pro.featureListen')} detail={t('pro.featureListenDetail')} />
+              <FeatureItem
+                title={t('pro.featureListen')}
+                detail={t('pro.featureListenDetail')}
+                extra={<SpeechLanguagesNote />}
+              />
               <FeatureItem title={t('pro.featureStudio')} detail={t('pro.featureStudioDetail')} />
+              <FeatureItem title={t('pro.featureExport')} detail={t('pro.featureExportDetail')} />
             </ul>
           </section>
         </>
@@ -475,7 +487,7 @@ function PlanOption({ selected, badge, title, price, detail, onSelect }) {
   )
 }
 
-function BenefitItem({ tone, title, detail }) {
+function BenefitItem({ tone, title, detail, extra }) {
   return (
     <li className={`pro-benefit-item pro-benefit-item-${tone}`}>
       <span className="pro-benefit-icon" aria-hidden="true">
@@ -484,6 +496,7 @@ function BenefitItem({ tone, title, detail }) {
       <div>
         <strong>{title}</strong>
         <p className="muted">{detail}</p>
+        {extra}
       </div>
     </li>
   )
@@ -518,6 +531,14 @@ function benefitIcon(tone) {
     return (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
         <path d="M13 3L6 14h6l-1 7 7-11h-6l1-7z" fill="currentColor" />
+      </svg>
+    )
+  }
+  if (tone === 'export') {
+    return (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+        <path d="M7 3h7l5 5v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z" stroke="currentColor" strokeWidth="2" />
+        <path d="M14 3v5h5M12 11v6M9.5 14.5 12 17l2.5-2.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     )
   }
@@ -592,11 +613,12 @@ function RestorePurchases({ busy, hint, label, onRestore, result }) {
   )
 }
 
-function FeatureItem({ title, detail }) {
+function FeatureItem({ title, detail, extra }) {
   return (
     <li>
       <strong>{title}</strong>
       <p className="muted">{detail}</p>
+      {extra}
     </li>
   )
 }

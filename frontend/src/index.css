@@ -1019,6 +1019,10 @@ a.btn {
   background: linear-gradient(160deg, #2f8bff, #8b6cff);
 }
 
+.pro-benefit-item-export .pro-benefit-icon {
+  background: linear-gradient(160deg, #3d4fd4, #6d7bff);
+}
+
 .pro-benefit-item-credits .pro-benefit-icon {
   background: linear-gradient(160deg, var(--mint), #1f9d6a);
 }
@@ -3708,7 +3712,27 @@ button.agent-preset:disabled {
 .card-heading {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
+  min-width: 0;
+}
+
+.flip-toolbar .card-heading,
+.study-card > .card-heading {
+  flex: 1;
+  width: 100%;
+}
+
+.card-heading .speak-control {
+  margin-left: auto;
+  min-width: 0;
+}
+
+.card-heading .speak-btn {
+  flex: 0 0 auto;
+}
+
+.card-heading .speak-voice-note {
+  max-width: min(20rem, 100%);
 }
 
 .card-side-line {
@@ -3725,10 +3749,55 @@ button.agent-preset:disabled {
   overflow-wrap: anywhere;
 }
 
-.card-side-line .speak-btn {
+.card-side-line .speak-control {
   grid-column: 2;
   grid-row: 1;
   align-self: start;
+}
+
+.speak-control {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  max-width: 100%;
+}
+
+.speak-voice-note {
+  margin: 0;
+  max-width: 12rem;
+  color: var(--error-text);
+  font-size: 0.8rem;
+  font-weight: 650;
+  line-height: 1.25;
+  text-align: right;
+}
+
+.speak-voice-note.is-block {
+  max-width: 18rem;
+  text-align: center;
+}
+
+.speak-voice-block {
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+}
+
+.speak-voice-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 8px 12px;
+  color: var(--blue);
+  font-weight: 650;
+  text-align: center;
+  text-decoration: none;
+}
+
+#missing-voices {
+  scroll-margin-top: calc(12px + var(--safe-top));
 }
 
 .speak-btn {
@@ -6704,12 +6773,12 @@ button.agent-preset:disabled {
 
 .listen-options-toggle {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 4px;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
   width: 100%;
   min-height: 44px;
-  padding: 14px 16px;
+  padding: 14px 14px 14px 16px;
   text-align: start;
   border: 1px solid var(--line);
   border-radius: 14px;
@@ -6718,10 +6787,66 @@ button.agent-preset:disabled {
   font: inherit;
   font-weight: 650;
   cursor: pointer;
+  touch-action: manipulation;
+}
+
+.listen-options-toggle.is-open {
+  border-color: color-mix(in srgb, var(--cobalt) 55%, var(--line));
+}
+
+.listen-options-toggle:active {
+  background: var(--due-bg);
+}
+
+.listen-options-toggle-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
 }
 
 .listen-options-toggle .muted {
   font-weight: 500;
+}
+
+.listen-options-chevron {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  background: var(--due-bg);
+  color: var(--cobalt);
+}
+
+.listen-options-chevron svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 0.15s ease;
+}
+
+.listen-options-toggle.is-open .listen-options-chevron svg {
+  transform: rotate(180deg);
+}
+
+@media (max-width: 700px) {
+  .listen-options-chevron {
+    width: 44px;
+    height: 44px;
+  }
+
+  .listen-options-chevron svg {
+    width: 24px;
+    height: 24px;
+  }
 }
 
 .listen-stepper {
@@ -7195,6 +7320,27 @@ button.page-back {
 
 .listen-gate-uses figcaption {
   text-align: center;
+}
+
+.listen-gate-speech,
+.speech-languages-note {
+  margin: 0;
+  line-height: 1.45;
+}
+
+.listen-gate-speech a,
+.speech-languages-note a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--blue);
+  font-weight: 650;
+}
+
+.pro-benefit-item .speech-languages-note,
+.pro-feature-list .speech-languages-note {
+  margin-top: 6px;
+  color: var(--muted);
 }
 
 .listen-gate .btn {
