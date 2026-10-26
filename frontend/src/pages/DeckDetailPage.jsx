@@ -161,6 +161,7 @@ export default function DeckDetailPage() {
     event.preventDefault()
     setError('')
     setBusy(true)
+    const creating = !editing
     try {
       const saved = editing
         ? await api(`/api/cards/${editing.id}`, {
@@ -174,6 +175,11 @@ export default function DeckDetailPage() {
       await syncCardImage(saved.id, 'front', frontFile, removeFrontImage, editing?.hasFrontImage)
       await syncCardImage(saved.id, 'back', backFile, removeBackImage, editing?.hasBackImage)
       resetCardForm()
+      // A new card is the start of editing the deck, including the first card on an empty deck.
+      if (creating) {
+        setEditingDeck(false)
+        setEditingCards(true)
+      }
       await load()
     } catch (err) {
       setError(err.message)
