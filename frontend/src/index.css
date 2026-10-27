@@ -4673,6 +4673,7 @@ button.agent-preset:disabled {
   }
 
   .marketing-nav {
+    position: relative;
     flex-wrap: nowrap;
   }
 
@@ -4681,7 +4682,7 @@ button.agent-preset:disabled {
   }
 
   .marketing-links {
-    position: relative;
+    position: static;
     flex: 1 1 auto;
     justify-content: flex-end;
     gap: 0;
