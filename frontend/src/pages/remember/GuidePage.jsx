@@ -4,6 +4,13 @@ import { clearPageMeta, setPageMeta } from '../../seo'
 import ExampleDeck, { RichText } from './ExampleDeck'
 import { GUIDES, guideBySlug } from './guides'
 
+const GUIDE_ESSAYS = {
+  'chinese-flashcards': ['/blog/learn-chinese-with-flashcards', 'A first week of Chinese on Zipdeck'],
+  'wedding-speech': ['/blog/memorize-a-best-man-speech', 'Memorize a best man speech'],
+  'business-presentation': ['/blog/memorize-a-presentation', 'Memorize a presentation without reading the slides'],
+  'script-lines': ['/blog/learn-lines-for-a-play', 'Learn your lines for a play'],
+}
+
 export default function GuidePage() {
   const { slug } = useParams()
   const guide = guideBySlug(slug)
@@ -41,6 +48,7 @@ export default function GuidePage() {
   }
 
   const others = GUIDES.filter((item) => item.slug !== guide.slug)
+  const essay = GUIDE_ESSAYS[guide.slug]
 
   return (
     <article className="remember-page guide-page">
@@ -93,6 +101,11 @@ export default function GuidePage() {
             </Link>
           ) : null}
         </div>
+        {essay ? (
+          <p>
+            <Link to={essay[0]}>{essay[1]}</Link>
+          </p>
+        ) : null}
       </div>
 
       <section className="guide-section">

@@ -7,6 +7,7 @@ const CHECKED = 'October 12, 2026'
 const QUIZLET_STUDY = 'https://help.quizlet.com/hc/en-us/articles/360030841732-Studying-on-Quizlet'
 const QUIZLET_TEST = 'https://help.quizlet.com/hc/en-us/articles/360030642972-Studying-with-Test'
 const QUIZLET_EXPORT = 'https://help.quizlet.com/hc/en-us/articles/360034345672-Exporting-your-sets'
+const QUIZLET_SRS = 'https://help.quizlet.com/hc/en-us/articles/48324742264077-Studying-with-Spaced-Repetition'
 const PCMAG = 'https://au.pcmag.com/language-learning/41677/quizlet'
 
 function Source({ href, children }) {
@@ -46,8 +47,8 @@ const ROWS = [
     zipdeck: 'Included. A card comes back when you are about to forget it.',
     quizlet: (
       <>
-        Paid. Spaced repetition is for subscribers.{' '}
-        <Source href={PCMAG}>Source: PCMag 2026</Source>
+        Inside Flashcards on the website. Their help center says it is not in the mobile apps.{' '}
+        <Source href={QUIZLET_SRS}>Source: Quizlet Help</Source>
       </>
     ),
   },
@@ -330,6 +331,12 @@ export default function QuizletAlternativePage() {
               Quizlet Help, Exporting your sets
             </a>
             {' '}— checked {CHECKED}
+          </li>
+          <li>
+            <a href={QUIZLET_SRS} target="_blank" rel="noreferrer">
+              Quizlet Help, Studying with Spaced Repetition
+            </a>
+            {' '}— rechecked October 27, 2026. Website only.
           </li>
           <li>
             <a href={PCMAG} target="_blank" rel="noreferrer">

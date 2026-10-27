@@ -55,6 +55,8 @@ export default function RememberHub() {
         <Link to="/quizlet-alternative">A free Quizlet alternative</Link>
         {' · '}
         <Link to="/language-conversations">AI language conversations</Link>
+        {' · '}
+        <Link to="/blog">Blog</Link>
       </p>
     </article>
   )

@@ -3,11 +3,12 @@ const DEFAULT_TITLE = 'Zipdeck — Flashcards for language learning & exam study
 const DEFAULT_DESCRIPTION =
   'Zipdeck is a free flashcard app at zipdeck.app for language learning, exam prep, and memorization. Study with flip, quiz, write, match, and audio — plus spaced repetition and Create with AI.'
 
-export function setPageMeta({ title, description, path, index = true, jsonLd = null }) {
+export function setPageMeta({ title, description, path, index = true, jsonLd = null, type = 'website' }) {
   const url = `${ORIGIN}${path}`
   const summary = clip(description)
   document.title = title
   setMeta('name', 'description', summary)
+  setMeta('property', 'og:type', type)
   setMeta('property', 'og:title', title)
   setMeta('property', 'og:description', summary)
   setMeta('property', 'og:url', url)

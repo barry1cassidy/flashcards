@@ -264,6 +264,14 @@ const ICONS = {
       <path d="M5 18h14" />
     </>
   ),
+  blog: (
+    <>
+      <path d="M6 4h9l4 4v12a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1z" />
+      <path d="M15 4v4h4" />
+      <path d="M8 12h8" />
+      <path d="M8 16h6" />
+    </>
+  ),
   help: (
     <>
       <circle cx="12" cy="12" r="9" />

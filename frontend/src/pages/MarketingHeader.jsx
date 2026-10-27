@@ -45,6 +45,7 @@ export default function MarketingHeader({ showLoginForm = false, loginOpen, onLo
         ...createItems,
         { to: '/library', label: t('library.title') },
         { to: '/teachers', label: t('marketing.teachersNav') },
+        { to: '/blog', label: t('marketing.blogNav') },
       ]
     : [
         { to: '/#modes', label: t('marketing.studyNav') },
@@ -147,6 +148,7 @@ export default function MarketingHeader({ showLoginForm = false, loginOpen, onLo
             />
             {webMarketing ? <Link to="/library">{t('library.title')}</Link> : null}
             <Link to={webMarketing ? '/teachers' : '/#teachers'}>{t('marketing.teachersNav')}</Link>
+            {webMarketing ? <Link to="/blog">{t('marketing.blogNav')}</Link> : null}
           </div>
         </div>
         <div className="marketing-auth" ref={authRef}>
@@ -320,6 +322,11 @@ export function MarketingFooter() {
         {webMarketing ? (
           <Link className="site-end-link" to="/teachers">
             {t('marketing.teachersFooter')}
+          </Link>
+        ) : null}
+        {webMarketing ? (
+          <Link className="site-end-link" to="/blog">
+            {t('marketing.blogNav')}
           </Link>
         ) : null}
         {webMarketing ? (

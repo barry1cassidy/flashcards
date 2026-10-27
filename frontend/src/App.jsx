@@ -56,6 +56,7 @@ const QuizletAlternativePage = webMarketing ? lazy(() => import('./pages/Quizlet
 const AudioFlashcardsPage = webMarketing ? lazy(() => import('./pages/AudioFlashcardsPage.jsx')) : null
 const LanguageConversationsPage = webMarketing ? lazy(() => import('./pages/LanguageConversationsPage.jsx')) : null
 const TeachersPage = webMarketing ? lazy(() => import('./pages/TeachersPage.jsx')) : null
+const BlogPages = webMarketing ? lazy(() => import('./pages/blog/BlogPages.jsx')) : null
 
 function isListenPath(path) {
   return path === '/listen' || path.startsWith('/listen/') || path === '/offline/listen'
@@ -140,7 +141,8 @@ function DocumentLang() {
       pathname === '/quizlet-alternative' ||
       pathname === '/audio-flashcards' ||
       pathname === '/language-conversations' ||
-      pathname === '/teachers'
+      pathname === '/teachers' ||
+      pathname.startsWith('/blog')
     const splash = !user && (pathname === '/' || pathname === '/login' || pathname === '/register')
     const privacy = pathname === '/privacy'
     const join = pathname.startsWith('/join/')
@@ -443,6 +445,7 @@ export default function App() {
         {webMarketing ? <Route path="/audio-flashcards" element={<WebArticleGate>{AudioFlashcardsPage ? <AudioFlashcardsPage /> : null}</WebArticleGate>} /> : null}
         {webMarketing ? <Route path="/language-conversations" element={<WebArticleGate>{LanguageConversationsPage ? <LanguageConversationsPage /> : null}</WebArticleGate>} /> : null}
         {webMarketing ? <Route path="/teachers" element={<WebArticleGate>{TeachersPage ? <TeachersPage /> : null}</WebArticleGate>} /> : null}
+        {webMarketing ? <Route path="/blog/*" element={<WebArticleGate>{BlogPages ? <BlogPages /> : null}</WebArticleGate>} /> : null}
         <Route element={<LibraryGate />}>
           <Route path="/library" element={<LibraryPage />} />
           <Route path="/library/groups/:id" element={<LibraryGroupPage />} />

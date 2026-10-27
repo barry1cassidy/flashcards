@@ -1,6 +1,7 @@
 import { access, readdir, readFile, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { POSTS } from '../src/pages/blog/catalog.js'
 
 const origin = 'https://zipdeck.app'
 
@@ -41,6 +42,8 @@ export async function writeLibrarySitemap({ root }) {
     entry('/audio-flashcards', 'monthly', '0.8'),
     entry('/language-conversations', 'monthly', '0.8'),
     entry('/teachers', 'monthly', '0.8'),
+    entry('/blog', 'weekly', '0.8', newestPostDate()),
+    ...POSTS.map((post) => entry(`/blog/${post.slug}`, 'monthly', '0.7', post.date)),
     entry('/help', 'monthly', '0.6'),
     entry('/privacy', 'yearly', '0.3'),
   ]
@@ -83,9 +86,14 @@ async function findCatalog(root) {
   return null
 }
 
-function entry(pathname, changefreq, priority) {
+function newestPostDate() {
+  return POSTS.reduce((latest, post) => (post.date > latest ? post.date : latest), '')
+}
+
+function entry(pathname, changefreq, priority, lastmod) {
+  const modified = lastmod ? `\n    <lastmod>${lastmod}</lastmod>` : ''
   return `  <url>
-    <loc>${origin}${pathname}</loc>
+    <loc>${origin}${pathname}</loc>${modified}
     <changefreq>${changefreq}</changefreq>
     <priority>${priority}</priority>
   </url>`
