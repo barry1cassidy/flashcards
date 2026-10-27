@@ -39,11 +39,18 @@ export default function MarketingHeader({ showLoginForm = false, loginOpen, onLo
         { to: '/#ai', label: t('marketing.createCardsNav') },
         { to: '/#language-studio', label: t('marketing.studioMenuNav') },
       ]
-  const compactItems = [
-    { to: '/#modes', label: t('marketing.studyNav') },
-    { to: '/#ai', label: t('marketing.createNav') },
-    { to: webMarketing ? '/teachers' : '/#teachers', label: t('marketing.teachersNav') },
-  ]
+  const compactItems = webMarketing
+    ? [
+        ...studyItems,
+        ...createItems,
+        { to: '/library', label: t('library.title') },
+        { to: '/teachers', label: t('marketing.teachersNav') },
+      ]
+    : [
+        { to: '/#modes', label: t('marketing.studyNav') },
+        { to: '/#ai', label: t('marketing.createNav') },
+        { to: '/#teachers', label: t('marketing.teachersNav') },
+      ]
 
   function toggleNav(id) {
     setOpen(false)

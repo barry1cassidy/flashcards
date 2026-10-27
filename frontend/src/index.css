@@ -4717,7 +4717,9 @@ button.agent-preset:disabled {
     z-index: 70;
     display: grid;
     gap: 4px;
+    width: max-content;
     min-width: min(240px, calc(100vw - 32px));
+    max-width: calc(100vw - 32px);
     padding: 10px;
     background: var(--surface);
     border: 1px solid var(--line);
