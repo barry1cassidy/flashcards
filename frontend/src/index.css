@@ -1705,6 +1705,10 @@ a.library-suggestion {
   min-height: 44px;
 }
 
+.flip-toolbar:has(.speak-voice-note) {
+  align-items: flex-start;
+}
+
 .study-rehearse-note {
   margin: 0;
   font-size: 0.9rem;
@@ -3712,19 +3716,17 @@ button.agent-preset:disabled {
 .card-heading {
   display: flex;
   align-items: center;
-  gap: 12px;
+  flex-wrap: wrap;
+  gap: 8px;
   min-width: 0;
 }
 
-.flip-toolbar .card-heading,
-.study-card > .card-heading {
+.flip-toolbar .card-heading {
   flex: 1;
-  width: 100%;
 }
 
 .card-heading .speak-control {
-  margin-left: auto;
-  min-width: 0;
+  display: contents;
 }
 
 .card-heading .speak-btn {
@@ -3732,7 +3734,12 @@ button.agent-preset:disabled {
 }
 
 .card-heading .speak-voice-note {
-  max-width: min(20rem, 100%);
+  order: 1;
+  flex: 1 0 100%;
+  min-width: 0;
+  max-width: 100%;
+  text-align: left;
+  overflow-wrap: anywhere;
 }
 
 .card-side-line {
