@@ -3,6 +3,7 @@ package com.flashcards.library;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,9 +70,7 @@ public class LibrarySeed implements ApplicationRunner {
     @Override
     @Transactional
     public void run(ApplicationArguments args) throws Exception {
-        if (groupRepository.findBySlug("spanish").isEmpty()) {
-            loadCatalog(PHRASEBOOKS);
-        }
+        loadCatalog(PHRASEBOOKS);
         loadCatalog(PHRASEBOOKS_MORE);
         for (String catalog : SUBJECT_CATALOGS) {
             loadCatalog(catalog);
@@ -90,6 +89,7 @@ public class LibrarySeed implements ApplicationRunner {
             int addedGroups = 0;
             int addedDecks = 0;
             int addedCards = 0;
+            int replacedDecks = 0;
             for (JsonNode groupNode : groups) {
                 if (groupNode.path("decks").isEmpty()) {
                     continue;
@@ -98,19 +98,21 @@ public class LibrarySeed implements ApplicationRunner {
                 addedGroups += result.groups();
                 addedDecks += result.decks();
                 addedCards += result.cards();
+                replacedDecks += result.replacedDecks();
             }
-            if (addedGroups > 0 || addedDecks > 0) {
+            if (addedGroups > 0 || addedDecks > 0 || replacedDecks > 0) {
                 log.info(
-                        "Seeded library catalog {}: {} groups, {} decks, {} cards",
+                        "Seeded library catalog {}: {} groups, {} decks, {} cards, {} decks refreshed",
                         classpath,
                         addedGroups,
                         addedDecks,
-                        addedCards);
+                        addedCards,
+                        replacedDecks);
             }
         }
     }
 
-    private SeedResult seedGroup(JsonNode groupNode) {
+    SeedResult seedGroup(JsonNode groupNode) {
         String slug = groupNode.path("slug").asText();
         LibraryGroup group = groupRepository.findBySlug(slug).orElse(null);
         int groupsCreated = 0;
@@ -134,14 +136,19 @@ public class LibrarySeed implements ApplicationRunner {
                 + 1;
         int decksCreated = 0;
         int cardsCreated = 0;
+        int replacedDecks = 0;
         int jsonPosition = 0;
         for (JsonNode deckNode : groupNode.path("decks")) {
             String deckSlug = deckNode.path("slug").asText();
-            if (deckRepository.findByGroup_IdAndSlug(group.getId(), deckSlug).isPresent()) {
+            LibraryDeck deck = deckRepository.findByGroup_IdAndSlug(group.getId(), deckSlug).orElse(null);
+            if (deck != null) {
+                if (replaceCardsIfChanged(deck, deckNode)) {
+                    replacedDecks += 1;
+                }
                 jsonPosition += 1;
                 continue;
             }
-            LibraryDeck deck = new LibraryDeck();
+            deck = new LibraryDeck();
             deck.setGroup(group);
             deck.setSlug(deckSlug);
             deck.setName(deckNode.path("name").asText());
@@ -149,26 +156,73 @@ public class LibrarySeed implements ApplicationRunner {
             deck.setDescription(description == null || description.isBlank() ? null : description);
             deck.setPosition(groupsCreated == 1 ? deckNode.path("position").asInt(jsonPosition) : nextPosition++);
             deckRepository.save(deck);
-            int cardPosition = 0;
-            List<LibraryCard> cards = new ArrayList<>();
-            for (JsonNode cardNode : deckNode.path("cards")) {
-                LibraryCard card = new LibraryCard();
-                card.setDeck(deck);
-                card.setFront(cardNode.path("front").asText());
-                card.setBack(cardNode.path("back").asText());
-                String hint = cardNode.path("hint").asText(null);
-                card.setHint(hint == null || hint.isBlank() ? null : hint);
-                card.setPosition(cardPosition++);
-                cards.add(card);
-            }
+            List<LibraryCard> cards = cardsFrom(deck, deckNode);
             cardRepository.saveAll(cards);
             decksCreated += 1;
             cardsCreated += cards.size();
             jsonPosition += 1;
         }
-        return new SeedResult(groupsCreated, decksCreated, cardsCreated);
+        return new SeedResult(groupsCreated, decksCreated, cardsCreated, replacedDecks);
     }
 
-    private record SeedResult(int groups, int decks, int cards) {
+    private boolean replaceCardsIfChanged(LibraryDeck deck, JsonNode deckNode) {
+        if (!deckNode.path("cards").isArray() || deckNode.path("cards").isEmpty()) {
+            return false;
+        }
+        List<LibraryCard> desired = cardsFrom(deck, deckNode);
+        List<LibraryCard> existing = cardRepository.findByDeckIdOrderByPositionAscIdAsc(deck.getId());
+        if (sameCards(existing, desired)) {
+            return false;
+        }
+        cardRepository.deleteAll(existing);
+        cardRepository.flush();
+        cardRepository.saveAll(desired);
+        return true;
+    }
+
+    private static List<LibraryCard> cardsFrom(LibraryDeck deck, JsonNode deckNode) {
+        List<LibraryCard> cards = new ArrayList<>();
+        int position = 0;
+        for (JsonNode cardNode : deckNode.path("cards")) {
+            LibraryCard card = new LibraryCard();
+            card.setDeck(deck);
+            card.setFront(cardNode.path("front").asText());
+            card.setBack(cardNode.path("back").asText());
+            card.setHint(hintText(cardNode.path("hint")));
+            card.setPosition(position++);
+            cards.add(card);
+        }
+        return cards;
+    }
+
+    private static boolean sameCards(List<LibraryCard> existing, List<LibraryCard> desired) {
+        if (existing.size() != desired.size()) {
+            return false;
+        }
+        for (int i = 0; i < existing.size(); i++) {
+            LibraryCard left = existing.get(i);
+            LibraryCard right = desired.get(i);
+            if (left.getPosition() != right.getPosition()
+                    || !left.getFront().equals(right.getFront())
+                    || !left.getBack().equals(right.getBack())
+                    || !Objects.equals(normalize(left.getHint()), normalize(right.getHint()))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private static String hintText(JsonNode hint) {
+        if (hint.isMissingNode() || hint.isNull()) {
+            return null;
+        }
+        return normalize(hint.asText());
+    }
+
+    private static String normalize(String value) {
+        return value == null || value.isBlank() ? null : value;
+    }
+
+    record SeedResult(int groups, int decks, int cards, int replacedDecks) {
     }
 }

@@ -253,26 +253,36 @@ export default function DecksPage() {
 
   return (
     <div className="page">
-      <div className="page-title">
-        <div>
-          <h1>{t('decks.title')}</h1>
-          {loaded && !showWelcome ? <p className="muted">{t('decks.subtitle')}</p> : null}
-        </div>
-        {isAdmin(user) || (loaded && !showWelcome) ? (
-          <div className="page-title-actions">
-            {isAdmin(user) ? (
-              <button className="btn" type="button" onClick={() => navigate('/create-with-ai')}>
-                {t('agent.menu')}
-              </button>
-            ) : null}
-            {loaded && !showWelcome ? (
-              <button className="btn primary" type="button" onClick={openCreate}>
-                {t('decks.createDeck')}
-              </button>
-            ) : null}
+      {!showWelcome ? (
+        <div className="page-title">
+          <div>
+            <h1>{t('decks.title')}</h1>
+            {loaded ? <p className="muted">{t('decks.subtitle')}</p> : null}
           </div>
-        ) : null}
-      </div>
+          {isAdmin(user) || loaded ? (
+            <div className="page-title-actions">
+              {isAdmin(user) ? (
+                <button className="btn" type="button" onClick={() => navigate('/create-with-ai')}>
+                  {t('agent.menu')}
+                </button>
+              ) : null}
+              {loaded ? (
+                <button className="btn primary" type="button" onClick={openCreate}>
+                  {t('decks.createDeck')}
+                </button>
+              ) : null}
+            </div>
+          ) : null}
+        </div>
+      ) : isAdmin(user) ? (
+        <div className="page-title">
+          <div className="page-title-actions">
+            <button className="btn" type="button" onClick={() => navigate('/create-with-ai')}>
+              {t('agent.menu')}
+            </button>
+          </div>
+        </div>
+      ) : null}
       {!loaded && !error ? <p className="muted">{t('app.loading')}</p> : null}
       {error && !creating ? <div className="error">{translateError(t, error)}</div> : null}
       {showWelcome ? (

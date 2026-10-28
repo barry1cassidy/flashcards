@@ -1,6 +1,6 @@
 import { readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
-import { fileURLToPath } from 'node:url'
+import { fileURLToPath, pathToFileURL } from 'node:url'
 
 const USER_AGENT = 'FlashcardsLibraryBot/1.0 (localhost; educational Wikivoyage reuse)'
 const CARD_LIMIT = 20
@@ -58,45 +58,182 @@ const DECKS = [
   { slug: 'help-emergencies', name: 'Help & emergencies', description: 'Lost, sick, police, and asking for help.' },
 ]
 
-function stripInfoboxes(wikitext) {
-  let out = ''
-  let i = 0
-  while (i < wikitext.length) {
-    const start = wikitext.indexOf('{{', i)
-    if (start < 0) {
-      out += wikitext.slice(i)
+// Wiki italic/bold uses runs of apostrophes. A single apostrophe inside a word
+// (na'am, Dziękuję, traveler's) must not end the span. Bold is '''term''';
+// italics are ''pronunciation''. Matching '' first would treat bold as italics
+// and throw the term away, leaving a stray quote on each side.
+const WIKI_BI = /'''''((?:[^']|'(?!'))+?)'''''/g
+const WIKI_BOLD = /'''((?:[^']|'(?!'))+?)'''/g
+const WIKI_ITALIC = /''((?:[^']|'(?!'))+?)''/g
+const FOREIGN_SCRIPT = {
+  'ar-SA': /[\u0600-\u06FF]/,
+  'he-IL': /[\u0590-\u05FF]/,
+  'el-GR': /[\u0370-\u03FF]/,
+  'ru-RU': /[\u0400-\u04FF]/,
+  'uk-UA': /[\u0400-\u04FF]/,
+  'zh-CN': /[\u3400-\u9FFF]/,
+  'zh-HK': /[\u3400-\u9FFF]/,
+  'ja-JP': /[\u3040-\u30FF\u3400-\u9FFF]/,
+  'ko-KR': /[\uAC00-\uD7AF]/,
+  'hi-IN': /[\u0900-\u097F]/,
+  'th-TH': /[\u0E00-\u0E7F]/,
+}
+
+function expandTemplate(body) {
+  const parts = body.split('|').map((part) => part.trim())
+  const name = (parts[0] || '').toLowerCase()
+  // {{Lang|ar|سَلاَم}} is the translation. Dropping every template deletes it
+  // and leaves the comma that separated two alternatives.
+  if (name === 'lang' || name === 'ipa' || name === 'transl' || name.startsWith('lang-')) {
+    return parts.length > 1 ? parts[parts.length - 1] : ''
+  }
+  if (name === 'w' || name === 'wikt') {
+    return parts[1] || ''
+  }
+  return ''
+}
+
+export function prepareWikitext(wikitext) {
+  let out = String(wikitext || '')
+  for (let pass = 0; pass < 12; pass += 1) {
+    const next = out.replace(/\{\{([^{}]*)\}\}/g, (_, body) => expandTemplate(body))
+    if (next === out) {
       break
     }
-    out += wikitext.slice(i, start)
-    let depth = 0
-    let j = start
-    while (j < wikitext.length) {
-      if (wikitext.startsWith('{{', j)) {
-        depth += 1
-        j += 2
-        continue
-      }
-      if (wikitext.startsWith('}}', j)) {
-        depth -= 1
-        j += 2
-        if (depth === 0) {
-          break
-        }
-        continue
-      }
-      j += 1
+    out = next
+  }
+  return out.replace(/\[\[(?:file|image|media):[^\]]+\]\]/gi, ' ')
+}
+
+function unwrapBold(value) {
+  WIKI_BI.lastIndex = 0
+  WIKI_BOLD.lastIndex = 0
+  return String(value || '').replace(WIKI_BI, '$1').replace(WIKI_BOLD, '$1')
+}
+
+function italics(value) {
+  WIKI_ITALIC.lastIndex = 0
+  return [...unwrapBold(value).matchAll(WIKI_ITALIC)].map((match) => match[1].trim()).filter(Boolean)
+}
+
+function hasWords(value) {
+  return /[\p{L}\p{N}]/u.test(value)
+}
+
+function foreignScript(text, targetLanguage) {
+  const script = FOREIGN_SCRIPT[targetLanguage]
+  return script ? script.test(text) : false
+}
+
+function separatePronunciation(value, targetLanguage) {
+  const unwrapped = unwrapBold(value)
+  WIKI_ITALIC.lastIndex = 0
+  const hints = []
+  const text = unwrapped.replace(WIKI_ITALIC, (_, raw) => {
+    const trimmed = raw.trim()
+    if (!trimmed) {
+      return ' '
     }
-    i = j
+    if (foreignScript(trimmed, targetLanguage)) {
+      return ` ${trimmed} `
+    }
+    hints.push(trimmed)
+    return ' '
+  })
+  if (!hasWords(text) && hints.length > 0) {
+    return { text: hints.join(' / '), hints: [] }
+  }
+  return { text, hints }
+}
+
+function balanceParens(value) {
+  let out = ''
+  const opens = []
+  for (const ch of value) {
+    if (ch === '(') {
+      opens.push(out.length)
+      out += ch
+      continue
+    }
+    if (ch === ')') {
+      if (opens.length > 0) {
+        opens.pop()
+        out += ch
+      }
+      continue
+    }
+    out += ch
+  }
+  let trimmed = out
+  for (let i = opens.length - 1; i >= 0; i -= 1) {
+    trimmed = `${trimmed.slice(0, opens[i])}${trimmed.slice(opens[i] + 1)}`
+  }
+  return trimmed
+}
+
+function unwrapOuterParens(value) {
+  let out = value.trim()
+  while (out.startsWith('(') && out.endsWith(')')) {
+    let depth = 0
+    let wrapsAll = true
+    for (let i = 0; i < out.length; i += 1) {
+      if (out[i] === '(') {
+        depth += 1
+      } else if (out[i] === ')') {
+        depth -= 1
+      }
+      if (depth === 0 && i < out.length - 1) {
+        wrapsAll = false
+        break
+      }
+    }
+    if (!wrapsAll || depth !== 0) {
+      break
+    }
+    out = out.slice(1, -1).trim()
   }
   return out
 }
 
+function cleanHint(value) {
+  let hint = unwrapOuterParens(balanceParens(String(value || '')))
+  hint = hint.replace(/\s+/g, ' ').trim()
+  if (!hint || hint.length > 180 || !/\p{L}/u.test(hint)) {
+    return null
+  }
+  return hint
+}
+
+function joinHints(parts, back) {
+  const cleaned = []
+  const folded = back.toLowerCase()
+  for (const part of parts) {
+    const hint = cleanHint(part)
+    if (!hint || folded.includes(hint.toLowerCase())) {
+      continue
+    }
+    cleaned.push(hint)
+  }
+  if (cleaned.length === 0) {
+    return null
+  }
+  let joined = cleaned[0]
+  for (let i = 1; i < cleaned.length; i += 1) {
+    const next = `${joined}; ${cleaned[i]}`
+    if (next.length > 180) {
+      break
+    }
+    joined = next
+  }
+  return joined
+}
+
 function stripWiki(value) {
-  return String(value || '')
+  WIKI_ITALIC.lastIndex = 0
+  return unwrapBold(value)
+    .replace(WIKI_ITALIC, '$1')
     .replace(/\[\[[^\|\]]+\|([^\]]+)\]\]/g, '$1')
     .replace(/\[\[([^\]]+)\]\]/g, '$1')
-    .replace(/'''+([^']+)'''+/g, '$1')
-    .replace(/''([^']+)''/g, '$1')
     .replace(/<[^>]+>/g, '')
     .replace(/\{\{[^}]+\}\}/g, '')
     .replace(/&nbsp;/g, ' ')
@@ -104,12 +241,22 @@ function stripWiki(value) {
     .trim()
 }
 
-function italics(value) {
-  return [...String(value).matchAll(/''([^']+)''/g)].map((match) => match[1].trim()).filter(Boolean)
+function cleanBack(value) {
+  return balanceParens(value)
+    .replace(/\/[^/\n]*[^\u0000-\u007F][^/\n]*\//g, ' ')
+    .replace(/\(\s*[,/.\s]*\)/g, ' ')
+    .replace(/\(\s*\)/g, ' ')
+    .replace(/\s+Note:.*$/i, '')
+    .replace(/\s*\([^)]*\)\s*$/g, ' ')
+    .replace(/\s+,/g, ',')
+    .replace(/\s+([.!?؟])/g, '$1')
+    .replace(/\s+/g, ' ')
+    .replace(/^[\s,;:'"()]+|[\s,;:'"()]+$/g, '')
+    .trim()
 }
 
-function parsePhrase(line, targetLanguage) {
-  const match = line.match(/^;\s*(.+?)\s*:\s*(.+)$/)
+export function parsePhrase(line, targetLanguage) {
+  const match = prepareWikitext(line).match(/^;\s*(.+?)\s*:(?!\d)\s*(.+)$/)
   if (!match) {
     return null
   }
@@ -122,16 +269,17 @@ function parsePhrase(line, targetLanguage) {
     return null
   }
 
-  const spoken = italics(rawBack).find((part) => PINYIN.test(part) && part.length < 80)
-
   if (targetLanguage === 'zh-CN' || targetLanguage === 'zh-HK') {
+    const spoken = italics(rawBack).find((part) => PINYIN.test(part) && part.length < 80)
     const hint = spoken ? spoken.replace(/[.’']+$/g, '').trim() : null
-    let simplified = rawBack.replace(/''[^']+''/g, ' ').trim()
+    WIKI_ITALIC.lastIndex = 0
+    let simplified = unwrapBold(rawBack).replace(WIKI_ITALIC, ' ').trim()
     const splitTrad = simplified.match(/^(.*?)\s*[\(（]([\u3400-\u9FFF].*)$/)
     if (splitTrad) {
       simplified = splitTrad[1]
     }
     const back = simplified
+      .replace(/\(\s*\)/g, '')
       .replace(/[A-Za-züÜāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ].*$/g, '')
       .replace(/[,;:]+$/g, '')
       .replace(/\s+/g, '')
@@ -142,27 +290,36 @@ function parsePhrase(line, targetLanguage) {
     return { front, back, hint }
   }
 
-  let back = rawBack
-    .replace(/\s*\(''[^']+''\)\s*/g, ' ')
-    .replace(/''[^']+''/g, ' ')
-    .replace(/\s*\([^)]*\)\s*$/g, ' ')
-  back = stripWiki(back).replace(/^[:\-\s]+/, '').trim()
-  if (!back || back.length > 180) {
+  const separated = separatePronunciation(rawBack, targetLanguage)
+  const back = cleanBack(stripWiki(separated.text))
+  if (!back || back.length > 180 || /^[\s.,;:'"()[\]-]+$/.test(back)) {
     return null
   }
-  const hint = spoken && !back.toLowerCase().includes(spoken.toLowerCase()) ? spoken : null
+  const hint = joinHints(separated.hints, back)
   return { front, back, hint }
 }
 
-function phrasesBySection(wikitext) {
-  const cleaned = stripInfoboxes(wikitext)
+export function phrasesBySection(wikitext) {
+  const cleaned = prepareWikitext(wikitext)
   const start = cleaned.search(/^==\s*(phrase list|[^=]*phrases)\s*==/im)
   const body = start >= 0 ? cleaned.slice(start) : cleaned
   const sections = new Map()
   let current = 'other'
+  let pending = null
+  const flush = () => {
+    if (!pending) {
+      return
+    }
+    if (!sections.has(current)) {
+      sections.set(current, [])
+    }
+    sections.get(current).push(pending)
+    pending = null
+  }
   for (const rawLine of body.split(/\n/)) {
     const heading = rawLine.match(/^(={2,4})\s*([^=]+?)\s*\1\s*$/)
     if (heading) {
+      flush()
       const level = heading[1].length
       const title = heading[2].trim().toLowerCase()
       if (level === 2 && !title.includes('phrase')) {
@@ -174,14 +331,16 @@ function phrasesBySection(wikitext) {
       continue
     }
     const line = rawLine.trim()
-    if (!line.startsWith(';')) {
+    if (line.startsWith(';')) {
+      flush()
+      pending = line
       continue
     }
-    if (!sections.has(current)) {
-      sections.set(current, [])
+    if (pending && line.startsWith(':')) {
+      pending += ` ${line.replace(/^:+/, '').trim()}`
     }
-    sections.get(current).push(line)
   }
+  flush()
   return sections
 }
 
@@ -354,27 +513,33 @@ function mergeGroups(existing, incoming) {
   }
 }
 
-const root = dirname(fileURLToPath(import.meta.url))
-const defaultOut = join(root, '..', 'src', 'main', 'resources', 'library', 'phrasebooks.json')
-const defaultMoreOut = join(root, '..', 'src', 'main', 'resources', 'library', 'phrasebooks-more.json')
-const { more, morePath, onlySlug } = parseArgs(process.argv)
-const pool = more ? MORE_LANGUAGES : LANGUAGES
-const selected = onlySlug ? pool.filter((language) => language.slug === onlySlug) : pool
-if (onlySlug && selected.length === 0) {
-  throw new Error(`Unknown language slug: ${onlySlug}`)
-}
-const out = more ? morePath || defaultMoreOut : defaultOut
-const catalog = await ingest(selected, { skipFailures: more && !onlySlug })
-if (onlySlug || more) {
-  let existing = { source: 'Wikivoyage', license: 'CC BY-SA 4.0', groups: [] }
-  try {
-    existing = JSON.parse(readFileSync(out, 'utf8'))
-  } catch {
-    // New extra catalog or first merge into an empty file.
+async function main() {
+  const root = dirname(fileURLToPath(import.meta.url))
+  const defaultOut = join(root, '..', 'src', 'main', 'resources', 'library', 'phrasebooks.json')
+  const defaultMoreOut = join(root, '..', 'src', 'main', 'resources', 'library', 'phrasebooks-more.json')
+  const { more, morePath, onlySlug } = parseArgs(process.argv)
+  const pool = more ? MORE_LANGUAGES : LANGUAGES
+  const selected = onlySlug ? pool.filter((language) => language.slug === onlySlug) : pool
+  if (onlySlug && selected.length === 0) {
+    throw new Error(`Unknown language slug: ${onlySlug}`)
   }
-  const merged = mergeGroups(existing, catalog.groups)
-  writeFileSync(out, `${JSON.stringify(merged, null, 2)}\n`)
-} else {
-  writeFileSync(out, `${JSON.stringify(catalog, null, 2)}\n`)
+  const out = more ? morePath || defaultMoreOut : defaultOut
+  const catalog = await ingest(selected, { skipFailures: more && !onlySlug })
+  if (onlySlug || more) {
+    let existing = { source: 'Wikivoyage', license: 'CC BY-SA 4.0', groups: [] }
+    try {
+      existing = JSON.parse(readFileSync(out, 'utf8'))
+    } catch {
+      // New extra catalog or first merge into an empty file.
+    }
+    const merged = mergeGroups(existing, catalog.groups)
+    writeFileSync(out, `${JSON.stringify(merged, null, 2)}\n`)
+  } else {
+    writeFileSync(out, `${JSON.stringify(catalog, null, 2)}\n`)
+  }
+  process.stderr.write(`Wrote ${out}\n`)
 }
-process.stderr.write(`Wrote ${out}\n`)
+
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  await main()
+}

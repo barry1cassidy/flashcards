@@ -74,18 +74,18 @@
             },
             {
               "front": "I am ______",
-              "back": "(Yo) soy ______",
+              "back": "Yo) soy ______",
               "hint": "YOH SOY ______"
             },
             {
               "front": "I am ______",
-              "back": "(Yo) estoy ______",
+              "back": "Yo) estoy ______",
               "hint": "YOH eh-STOY ______"
             },
             {
               "front": "Nice to meet you",
               "back": "Encantado/a",
-              "hint": "ehn-kahn-TAH-doh"
+              "hint": "ehn-kahn-TAH-doh; ehn-kahn-TAH-dah"
             },
             {
               "front": "It's a pleasure to meet you",
@@ -163,7 +163,7 @@
             {
               "front": "Goodbye",
               "back": "Adiós / Hasta luego",
-              "hint": "ah-DYOHS"
+              "hint": "ah-DYOHS; AHS-tah LWEH-goh"
             },
             {
               "front": "I speak a little Spanish.",
@@ -193,7 +193,7 @@
             {
               "front": "Help!",
               "back": "¡Ayuda! / ¡Socorro!",
-              "hint": "ah-YOO-dah!"
+              "hint": "ah-YOO-dah!; soh-KOHR-roh!"
             },
             {
               "front": "Good morning",
@@ -388,7 +388,7 @@
             },
             {
               "front": "07",
-              "back": "10: las siete (y) diez (lahs see-EH-teh (ee) dee-EHS)",
+              "back": "10: las siete (y) diez (lahs see-EH-teh (ee) dee-EHS",
               "hint": null
             },
             {
@@ -452,7 +452,7 @@
             {
               "front": "car",
               "back": "carro (in Latin America), coche (in Spain), auto",
-              "hint": "KAHR-roh"
+              "hint": "KAHR-roh; KOH-cheh; OW-toh"
             },
             {
               "front": "taxi",
@@ -461,13 +461,13 @@
             },
             {
               "front": "bus",
-              "back": "autobús , guagua",
-              "hint": "ow-toh-BOOS"
+              "back": "autobús, guagua",
+              "hint": "ow-toh-BOOS; GWAH-gwah"
             },
             {
               "front": "van",
-              "back": "furgoneta , combi",
-              "hint": "foor-goh-NEH-tah"
+              "back": "furgoneta, combi",
+              "hint": "foor-goh-NEH-tah; KOHM-bee"
             },
             {
               "front": "truck/lorry",
@@ -476,8 +476,8 @@
             },
             {
               "front": "aeroplane/airline",
-              "back": "avión , aeroplano",
-              "hint": "ah-BYOHN"
+              "back": "avión, aeroplano",
+              "hint": "ah-BYOHN; ah-eh-roh-PLAH-noh"
             },
             {
               "front": "helicopter",
@@ -506,8 +506,8 @@
             },
             {
               "front": "trolley-bus",
-              "back": "trole , trolebús",
-              "hint": "TROH-leh"
+              "back": "trole, trolebús",
+              "hint": "TROH-leh; troh-leh-BOOS"
             },
             {
               "front": "boat",
@@ -521,17 +521,17 @@
             },
             {
               "front": "ferry",
-              "back": "transbordador , \"barco\" or \"ferry\" is also used, especially in Latin America",
+              "back": "transbordador, \"barco\" or \"ferry\" is also used, especially in Latin America",
               "hint": "trahns-bohr-dah-DOHR"
             },
             {
               "front": "bicycle",
-              "back": "bicicleta , bici",
+              "back": "bicicleta, bici",
               "hint": "bee-see-KLEH-tah"
             },
             {
               "front": "motorcycle",
-              "back": "motocicleta , moto",
+              "back": "motocicleta, moto",
               "hint": "moh-toh-see-KLEH-tah"
             },
             {
@@ -565,7 +565,7 @@
             {
               "front": "How much does a room cost for one person/two people?",
               "back": "¿Cuanto cuesta una habitación para una persona/para dos personas?",
-              "hint": null
+              "hint": "KWAHN-toh KWEHS-tah OO-nah ah-bee-tah-SYOHN PAH-rah OO-nah pehr-SOH-nah/PAH-rah dohs pehr-SOH-nahs?"
             },
             {
               "front": "Does the room come with...?",
@@ -673,7 +673,7 @@
             {
               "front": "Do you accept American/Australian/Canadian dollars?",
               "back": "¿Aceptan dólares estadounidenses/australianos/canadienses?",
-              "hint": null
+              "hint": "ah-SEHP-tahn DOH-lah-rehs ehs-tah-dow-oo-nee-DEHN-sehs/ows-trah-LYAH-nohs/kah-nah-DYEHN-sehs?"
             },
             {
               "front": "Do you accept British pounds?",
@@ -796,12 +796,12 @@
             {
               "front": "I'd like to reserve a table for tonight/tomorrow.",
               "back": "Me gustaría reservar una mesa para esta noche/mañana.",
-              "hint": null
+              "hint": "meh goo-stah-REE-ah reh-ser-BAR OO-na MEH-sah pah-rah eh-stah NOH-cheh / mah-NYAH-nah"
             },
             {
               "front": "Can I look at the menu, please?",
               "back": "Latin America: ¿Puedo ver el menú, por favor? ; Spain: ¿Puedo mirar la carta, por favor?",
-              "hint": "PWEH-doh behr ehl meh-NOO pohr fah-BOHR?"
+              "hint": "PWEH-doh behr ehl meh-NOO pohr fah-BOHR?; PWEH-doh mee-RAHR lah KAHR-tah, pohr fah-BOHR"
             },
             {
               "front": "Can I look in the kitchen?",
@@ -841,7 +841,7 @@
             {
               "front": "Can you make it \"lite\", please?",
               "back": "¿Puede poner poco aceite/poca mantequilla/poca grasa/manteca?",
-              "hint": null
+              "hint": "PWEH-deh poh-NEHR POH-koh ah-SAY-teh/POH-kah mahn-teh-KEE-yah/POH-kah GRAH-sah/mahn-TEH-kah?"
             }
           ]
         },
@@ -868,7 +868,7 @@
             },
             {
               "front": "Would you take ...?",
-              "back": "¿Tomaría ...?",
+              "back": "¿Tomaría...?",
               "hint": "toh-mah-REE-ah"
             },
             {
@@ -1080,8 +1080,8 @@
           "cards": [
             {
               "front": "Hello.",
-              "back": "Bonjour. (in the day) / Bonsoir. (in evening ( after 5 pm ) )",
-              "hint": "bawn-ZHOOR"
+              "back": "Bonjour. (in the day) / Bonsoir. (in evening ( after 5 pm",
+              "hint": "bawn-ZHOOR; bawn-SWAHR"
             },
             {
               "front": "Hello.",
@@ -1090,32 +1090,32 @@
             },
             {
               "front": "How are you?",
-              "back": "Comment allez-vous ?",
+              "back": "Comment allez-vous?",
               "hint": "koh-moh t-AH-lay VOO"
             },
             {
               "front": "How are you?",
-              "back": "Comment vas-tu ? ; Comment ça va ? : Ça va ?",
-              "hint": "koh-mahng va TUU"
+              "back": "Comment vas-tu? ; Comment ça va? : Ça va?",
+              "hint": "koh-mahng va TUU; koh-moh sah VAH"
             },
             {
               "front": "Fine, thank you.",
-              "back": "(Ça va) Bien, merci.",
+              "back": "Ça va) Bien, merci.",
               "hint": "byang, merr-SEE"
             },
             {
               "front": "What is your name?",
-              "back": "Comment vous appelez-vous ? ; lit. \"How do you call yourself?\"",
+              "back": "Comment vous appelez-vous? ; lit. \"How do you call yourself?\"",
               "hint": "koh-moh vooz AHP-lay VOO?"
             },
             {
               "front": "What is your name?",
-              "back": "Comment t'appelles-tu ? : Comments tu t'appelles ?",
+              "back": "Comment t'appelles-tu? : Comments tu t'appelles?",
               "hint": "koh-moh tah-pell TOO?"
             },
             {
               "front": "My name is ______ .",
-              "back": "Je m'appelle ______ .",
+              "back": "Je m'appelle ______.",
               "hint": "zhuh mah-PELL _____"
             },
             {
@@ -1126,7 +1126,7 @@
             {
               "front": "Please.",
               "back": "S'il vous plaît. ; Je vous prie.",
-              "hint": "seel voo PLEH"
+              "hint": "seel voo PLEH; zhuh voo PREE"
             },
             {
               "front": "Please.",
@@ -1140,8 +1140,8 @@
             },
             {
               "front": "You're welcome.",
-              "back": "De rien. , Bienvenue. [Quebec only]; Je vous en prie. (more polite); J't'en prie",
-              "hint": "duh RYEHNG"
+              "back": "De rien., Bienvenue. [Quebec only]; Je vous en prie. (more polite); J't'en prie",
+              "hint": "duh RYEHNG; bee-ain-veuh-nu; zhuh voo-zahn PREE"
             },
             {
               "front": "Yes.",
@@ -1156,16 +1156,16 @@
             {
               "front": "Excuse me.",
               "back": "Pardon. ( informal ); Excusez-moi.",
-              "hint": "pahr-DOHN"
+              "hint": "pahr-DOHN; ehk-SKEW-zay MWAH"
             },
             {
               "front": "(I am) Sorry.",
-              "back": "(Je suis) Désolé(e). ; Je m'excuse. Pardon",
-              "hint": "zhuh swee DAY-zoh-LAY"
+              "back": "Je suis) Désolé(e). ; Je m'excuse. Pardon",
+              "hint": "zhuh swee DAY-zoh-LAY; zhuh me-SKEWZ"
             },
             {
               "front": "Goodbye",
-              "back": "Au revoir. : Salut ( saa-LU )",
+              "back": "Au revoir. : Salut ( saa-LU",
               "hint": "oh ruh-VWAHR"
             },
             {
@@ -1188,22 +1188,22 @@
           "cards": [
             {
               "front": "Do you speak English?",
-              "back": "Parlez-vous anglais ?",
+              "back": "Parlez-vous anglais?",
               "hint": "par-lay VOO ahng-LEH?"
             },
             {
               "front": "Is there someone here who speaks English?",
-              "back": "Est-ce qu'il y a quelqu'un ici qui parle anglais ? / Y a-t-il quelqu'un ici qui parle anglais ?",
-              "hint": "ess keel-ee-AH kel-KUHN ee-see kee PAHRL ahng-LEH"
+              "back": "Est-ce qu'il y a quelqu'un ici qui parle anglais? / Y a-t-il quelqu'un ici qui parle anglais?",
+              "hint": "ess keel-ee-AH kel-KUHN ee-see kee PAHRL ahng-LEH; ee yah-TEEL kel-KUHN ee-see kee PAHRL ahng-LEH"
             },
             {
               "front": "Help!",
-              "back": "Au secours !",
+              "back": "Au secours!",
               "hint": "oh suh-KOOR"
             },
             {
               "front": "Look out!",
-              "back": "Attention !",
+              "back": "Attention!",
               "hint": "ah-tahn-SYONG"
             },
             {
@@ -1244,7 +1244,7 @@
             {
               "front": "I don't know.",
               "back": "Je (ne) sais pas. / J'sais pas",
-              "hint": "zhuh nuh say pah"
+              "hint": "zhuh nuh say pah; cheh pah"
             },
             {
               "front": "I can't.",
@@ -1253,27 +1253,27 @@
             },
             {
               "front": "Where is the toilet?",
-              "back": "Où sont les toilettes ?",
+              "back": "Où sont les toilettes?",
               "hint": "OOH sohn leh twah-LET?"
             },
             {
               "front": "What is it?",
-              "back": "Qu'est-ce que c'est ?",
+              "back": "Qu'est-ce que c'est?",
               "hint": "KES-kuh-SAY"
             },
             {
               "front": "How do you say _____ in French / in English?",
-              "back": "Comment dit-on _____ en français / en anglais ?",
+              "back": "Comment dit-on _____ en français / en anglais?",
               "hint": "koh-moh dee-TONG _____ ahn frahn-SEH / ahn ahng-LEH ?"
             },
             {
               "front": "What is this/that called?",
-              "back": "Comment appelle-t-on ça ?",
+              "back": "Comment appelle-t-on ça?",
               "hint": "koh-moh ah-pell-TONG SAH?"
             },
             {
               "front": "How is that spelt?",
-              "back": "Comment ça s'écrit ?",
+              "back": "Comment ça s'écrit?",
               "hint": "koh-moh sah SAY-cree?"
             }
           ]
@@ -1292,7 +1292,7 @@
             {
               "front": "1",
               "back": "un/une /",
-              "hint": "uhn"
+              "hint": "uhn; uun"
             },
             {
               "front": "2",
@@ -1459,7 +1459,7 @@
             },
             {
               "front": "What's the time?",
-              "back": "Quelle heure est-il ? ;",
+              "back": "Quelle heure est-il?",
               "hint": "kel euhr et-EEL?"
             },
             {
@@ -1474,23 +1474,23 @@
             },
             {
               "front": "From 1 minute past to 30 minutes past the hour",
-              "back": "[hour] + [number of minutes]",
-              "hint": null
+              "back": "[hour] + [number of minutes] Example: 10:20 or \"twenty past ten\" = 10h20; \"dix heures vingt\"",
+              "hint": "deez eur va(n)"
             },
             {
               "front": "For 31 minutes past to 59 minutes past the hour",
-              "back": "[next hour] + moins",
-              "hint": "mwa(n)"
+              "back": "[next hour] + moins Example: 10:40 or \"twenty to eleven\" = 10h40; \"onze heures moins vingt\"",
+              "hint": "mwa(n); onz eur mwa(n) va(n)"
             },
             {
               "front": "quarter past",
-              "back": "[hour] et quart",
-              "hint": "ay kahr"
+              "back": "[hour] et quart Example: 07:15 or \"quarter past seven\" = 7h15; \"sept heures et quart\"",
+              "hint": "ay kahr; set eur eh kahr"
             },
             {
               "front": "quarter to",
-              "back": "[hour] moins le quart",
-              "hint": "mwa(n) luh kahr"
+              "back": "[hour] moins le quart Example: 16:45 or \"quarter to five\" = 16h45; \"dix sept heures moins le quart\"",
+              "hint": "mwa(n) luh kahr; dee-set eur mwan luh kahr"
             }
           ]
         },
@@ -1502,7 +1502,7 @@
           "cards": [
             {
               "front": "car",
-              "back": "voiture / char (Quebec)",
+              "back": "voiture / char",
               "hint": "vwa-TOOR / shar"
             },
             {
@@ -1567,7 +1567,7 @@
             },
             {
               "front": "How much is a ticket to _____?",
-              "back": "Combien coûte le billet pour _____ ?",
+              "back": "Combien coûte le billet pour _____?",
               "hint": "kom-BYAN koot luh bee-YEH poor"
             },
             {
@@ -1577,17 +1577,17 @@
             },
             {
               "front": "Where does this train/bus go?",
-              "back": "Où va ce train/bus ?",
+              "back": "Où va ce train/bus?",
               "hint": "OO va suh trahn/boos?"
             },
             {
               "front": "Where is the train/bus to _____?",
-              "back": "Où est le train/bus pour _____ ?",
+              "back": "Où est le train/bus pour _____?",
               "hint": "OO eh luh trahn/buus poor ____"
             },
             {
               "front": "Does this train/bus stop in _____?",
-              "back": "Ce train/bus s'arrête-t-il à _____ ?",
+              "back": "Ce train/bus s'arrête-t-il à _____?",
               "hint": "suh trahn/buus sah-reh-tuh-TEEL ah _____"
             },
             {
@@ -1597,7 +1597,7 @@
             },
             {
               "front": "When will this train/bus arrive in _____?",
-              "back": "Quand ce train/bus arrivera à _____ ?",
+              "back": "Quand ce train/bus arrivera à _____?",
               "hint": "kahn suh trahn/buus ah-ree-vuh-RAH ah _____"
             }
           ]
@@ -1635,12 +1635,12 @@
             },
             {
               "front": "Do you have any rooms available?",
-              "back": "Avez-vous des chambres libres ?",
+              "back": "Avez-vous des chambres libres?",
               "hint": "ah-veh VOO day SHAHM-bruh leeb"
             },
             {
               "front": "How much is a room for one person/two people?",
-              "back": "Combien coûte une chambre pour une personne/deux personnes ?",
+              "back": "Combien coûte une chambre pour une personne/deux personnes?",
               "hint": "com-BYA(N) coot uun SHAHM-bruh poor uun PAIR-son / duh PAIR-son"
             },
             {
@@ -1650,47 +1650,47 @@
             },
             {
               "front": "...bedsheets?",
-              "back": "...des draps de lit ?",
+              "back": "...des draps de lit?",
               "hint": "...day dra duh lee?"
             },
             {
               "front": "...a bathroom?",
-              "back": "...une salle de bain ?",
+              "back": "...une salle de bain?",
               "hint": "...uun sal duh bah(n)?"
             },
             {
               "front": "...a telephone?",
-              "back": "...un téléphone ?",
+              "back": "...un téléphone?",
               "hint": "...u(n) teh-leh-fone?"
             },
             {
               "front": "...a TV?",
-              "back": "...une télévision ?",
+              "back": "...une télévision?",
               "hint": "...uun teh-leh-VEEZ-yo(n)?"
             },
             {
               "front": "...a refrigerator?",
-              "back": "...un réfrigérateur / un frigo ?",
+              "back": "...un réfrigérateur / un frigo?",
               "hint": "...u(n) ray-FREEZH-ay-rah-teur / u(n) FREE-go"
             },
             {
               "front": "...a kettle?",
-              "back": "...une bouilloire ?",
+              "back": "...une bouilloire?",
               "hint": "...uun boo-WEE-wah?"
             },
             {
               "front": "May I see the room first?",
-              "back": "Pourrais-je voir la chambre ?",
+              "back": "Pourrais-je voir la chambre?",
               "hint": "poo-RAY zhuh vwaah la SHAHM-bruh?"
             },
             {
               "front": "Do you have anything quieter?",
-              "back": "Avez-vous une chambre plus tranquille ?",
+              "back": "Avez-vous une chambre plus tranquille?",
               "hint": "ah-veh VOO uun SHAHM-bruh ploo trahn-KEE?"
             },
             {
               "front": "...bigger?",
-              "back": "...plus grande ?",
+              "back": "...plus grande?",
               "hint": "ploo grahnd?"
             },
             {
@@ -1718,52 +1718,52 @@
           "cards": [
             {
               "front": "Do you accept American/Australian/Canadian dollars?",
-              "back": "Acceptez-vous les dollars américains/australiens/canadiens ?",
+              "back": "Acceptez-vous les dollars américains/australiens/canadiens?",
               "hint": "ahk-sep-tay VOO leh doh-LAHR ah-may-ree-KANG/aws-trah-LYAHNG/kah-nah-DYAHNG?"
             },
             {
               "front": "Do you accept British pounds?",
-              "back": "Acceptez-vous les livres Sterling ?",
+              "back": "Acceptez-vous les livres Sterling?",
               "hint": "ahk-sep-tay VOO leh leevr stehr-LING?"
             },
             {
               "front": "Do you accept euros?",
-              "back": "Acceptez-vous les euros ?",
+              "back": "Acceptez-vous les euros?",
               "hint": "ahk-sep-tay VOO lehz-OO-roh"
             },
             {
               "front": "Do you accept credit cards?",
-              "back": "Acceptez-vous les cartes de crédit ?",
+              "back": "Acceptez-vous les cartes de crédit?",
               "hint": "ahk-sep-tay VOO leh kahrt duh kray-DEE?"
             },
             {
               "front": "Can you change it (the money) for me?",
-              "back": "Pouvez-vous me le faire changer ?",
+              "back": "Pouvez-vous me le faire changer?",
               "hint": "poo-vay-VOO muh luh fehr SHAHNZHAY?"
             },
             {
               "front": "Where can I get it (the money) changed?",
-              "back": "Où puis-je le faire changer ?",
+              "back": "Où puis-je le faire changer?",
               "hint": "oo PWEEZH luh fehr SHAHNZHAY?"
             },
             {
               "front": "Can you change a traveler's check for me?",
-              "back": "Pouvez-vous me faire le change sur un chèque de voyage ?",
+              "back": "Pouvez-vous me faire le change sur un chèque de voyage?",
               "hint": "poo-vay-VOO muh fehr luh SHAHNZH suur ung shek duh vwoy-AHZH?"
             },
             {
               "front": "Where can I get a traveler's check changed?",
-              "back": "Où puis-je changer un chèque de voyage ?",
+              "back": "Où puis-je changer un chèque de voyage?",
               "hint": "oo PWEEZH shahng-ZHAY ung shek duh vwoy-AHZH?"
             },
             {
               "front": "What is the exchange rate?",
-              "back": "Quel est le taux de change ?",
+              "back": "Quel est le taux de change?",
               "hint": "KELL eh luh TAW duh SHAHNZH?"
             },
             {
               "front": "Where can I find a cash point / ATM?",
-              "back": "Où puis-je trouver un distributeur de billets ?",
+              "back": "Où puis-je trouver un distributeur de billets?",
               "hint": "oo PWEEZH troo-VAY ung dees-tree-buu-TEUR duh bee-YAY?"
             }
           ]
@@ -1806,23 +1806,23 @@
             },
             {
               "front": "For here or to go?",
-              "back": "Sur place ou à emporter ?",
+              "back": "Sur place ou à emporter?",
               "hint": "syoor PLAS oo AH om-POR-tay?"
             },
             {
               "front": "breakfast",
-              "back": "' ' petit-déjeuner ; ' ': déjeuner",
-              "hint": "France:"
+              "back": "France: petit-déjeuner ; Switzerland/Belgium/Canada: déjeuner",
+              "hint": "ptee-day-zheu-NAY; day-zheu-NAY"
             },
             {
               "front": "lunch",
-              "back": "' ': déjeuner ; ' ': dîner",
-              "hint": "France"
+              "back": "France: déjeuner ; Elsewhere: dîner",
+              "hint": "day-zheu-NAY; dee-NAY"
             },
             {
               "front": "dinner/supper",
-              "back": "' ': dîner ; ' ': souper",
-              "hint": "France"
+              "back": "France: dîner ; Elsewhere: souper",
+              "hint": "dee-NAY; soo-PAY"
             },
             {
               "front": "I would like _____.",
@@ -1867,7 +1867,7 @@
             {
               "front": "pork",
               "back": "du porc / du cochon ( / ).",
-              "hint": "duu POHR"
+              "hint": "duu POHR; duu coh-SHONG"
             },
             {
               "front": "ham",
@@ -1884,12 +1884,12 @@
           "cards": [
             {
               "front": "Do you have this in my size?",
-              "back": "Avez-vous ceci dans ma taille ?",
+              "back": "Avez-vous ceci dans ma taille?",
               "hint": "AH-veh-VOO say-SEE dan sma THAI"
             },
             {
               "front": "How much (is this)?",
-              "back": "Combien (ça) coûte ?",
+              "back": "Combien (ça) coûte?",
               "hint": "COMM-bee-yan (SAH) coot"
             },
             {
@@ -1899,7 +1899,7 @@
             },
             {
               "front": "Would you take _____?",
-              "back": "Pourriez-vous accepter _____ ?",
+              "back": "Pourriez-vous accepter _____?",
               "hint": "poor-yay-VOOZ ahk-sep-TAY"
             },
             {
@@ -1910,7 +1910,7 @@
             {
               "front": "cheap",
               "back": "bon marché",
-              "hint": "bong mar-SHAY"
+              "hint": "bong mar-SHAY; Elles sont bon marché"
             },
             {
               "front": "I can't afford it.",
@@ -1939,12 +1939,12 @@
             },
             {
               "front": "Can I have a bag?",
-              "back": "Pourrais-je avoir un sac ?",
+              "back": "Pourrais-je avoir un sac?",
               "hint": "poo-REHZH ah-VWAR ung sahk"
             },
             {
               "front": "Do you ship (overseas)?",
-              "back": "Livrez-vous (outre-mer/à l'étranger) ?",
+              "back": "Livrez-vous (outre-mer/à l'étranger)?",
               "hint": "leev-ray-VOO ootr-MEHR/ah lay-trahn-ZHAY"
             },
             {
@@ -1979,8 +1979,8 @@
             },
             {
               "front": "...pain reliever.",
-              "back": "...d'un analgésique (''d'aspirine, d'ibuprofène'');.",
-              "hint": null
+              "back": "...d'un analgésique ;.",
+              "hint": "d'aspirine, d'ibuprofène; dun ah-nal-zhay-ZEEK (dahs-pee-REEN/dee-buu-proh-FEN)"
             }
           ]
         },
@@ -1992,17 +1992,17 @@
           "cards": [
             {
               "front": "Leave me alone.",
-              "back": "Laissez-moi tranquille !",
+              "back": "Laissez-moi tranquille!",
               "hint": "lay-say mwah trahn-KEEL!"
             },
             {
               "front": "Buzz off.",
-              "back": "Dégage ! / Va-t'en !",
-              "hint": "day-GAHZH!"
+              "back": "Dégage! / Va-t'en!",
+              "hint": "day-GAHZH!; va TAHN"
             },
             {
               "front": "Don't touch me!",
-              "back": "Ne me touchez pas !",
+              "back": "Ne me touchez pas!",
               "hint": "nuh muh TOOSH-ay PAH!"
             },
             {
@@ -2012,37 +2012,37 @@
             },
             {
               "front": "Police!",
-              "back": "Police !",
+              "back": "Police!",
               "hint": "poh-LEES"
             },
             {
               "front": "Stop! Thief!",
-              "back": "Arrêtez ! Au voleur !",
+              "back": "Arrêtez! Au voleur!",
               "hint": "ah-reh-TAY! oh vo-LEUR!"
             },
             {
               "front": "Stop! Rapist!",
-              "back": "Arrêtez ! Au viol !",
+              "back": "Arrêtez! Au viol!",
               "hint": "ah-reh-TAY! oh vee-YOL!"
             },
             {
               "front": "Help!",
-              "back": "Au secours !",
+              "back": "Au secours!",
               "hint": "oh suh-KOOR!"
             },
             {
               "front": "Fire!",
-              "back": "Au feu !",
+              "back": "Au feu!",
               "hint": "oh FEUH!"
             },
             {
               "front": "Help me, please!.",
-              "back": "Aidez-moi, s'il vous plaît !",
+              "back": "Aidez-moi, s'il vous plaît!",
               "hint": "aih-day MWAH, SEEL voo PLEH!"
             },
             {
               "front": "It's an emergency.",
-              "back": "C'est urgent !",
+              "back": "C'est urgent!",
               "hint": "seh toor-ZHAHN"
             },
             {
@@ -2116,13 +2116,13 @@
             },
             {
               "front": "Hello",
-              "back": "Hallo. (HAL-loo)NOTE: In Northern Germany, locals greet each other with . In Bavaria and Austria, they use or . In Switzerland, they use .",
-              "hint": "Moin, Moin"
+              "back": "Hallo. (HAL-loo)NOTE: In Northern Germany, locals greet each other with. In Bavaria and Austria, they use or. In Switzerland, they use.",
+              "hint": "Moin, Moin; MOH-een MOH-een; Servus; S-AIR-vus; Grüß Gott; GREW-SS gaw-t; Grüezi; GREW-tsee"
             },
             {
               "front": "How are you?",
               "back": "Wie geht's?",
-              "hint": "vee GATES?"
+              "hint": "vee GATES?; used as a real question, not a form of greeting."
             },
             {
               "front": "How are you?",
@@ -2146,7 +2146,7 @@
             },
             {
               "front": "My name is ______ .",
-              "back": "Ich heiße ______ . / Mein Name ist _____ .",
+              "back": "Ich heiße ______. / Mein Name ist _____.",
               "hint": "eekh HIGH-suh"
             },
             {
@@ -2235,7 +2235,7 @@
             {
               "front": "I can't speak German (well).",
               "back": "Ich kann nicht [so gut] Deutsch sprechen. (eekh ) better: Ich spreche kein Deutsch",
-              "hint": "kahn nikht [zo goot] doi-ch shprekhen"
+              "hint": "kahn nikht [zo goot] doi-ch shprekhen; eekh spreh-khuh kine doi-ch"
             },
             {
               "front": "Do you speak English?",
@@ -2289,7 +2289,7 @@
             },
             {
               "front": "Do you know where ... is?.",
-              "back": "Wissen Sie, wo ... ist?",
+              "back": "Wissen Sie, wo... ist?",
               "hint": "VEE-sun zee voh ... ist"
             }
           ]
@@ -2313,17 +2313,17 @@
             {
               "front": "2",
               "back": "zwei or zwo to distinguish with drei for three.",
-              "hint": "tsvigh"
+              "hint": "tsvigh; tsuoo"
             },
             {
               "front": "3",
               "back": "drei",
-              "hint": "drigh"
+              "hint": "drigh; dry"
             },
             {
               "front": "4",
               "back": "vier",
-              "hint": "fear"
+              "hint": "fear; fear"
             },
             {
               "front": "5",
@@ -2470,43 +2470,43 @@
             },
             {
               "front": "one o'clock AM (01",
-              "back": "00): ein Uhr",
+              "back": "00: ein Uhr",
               "hint": "IGHN oor"
             },
             {
               "front": "two o'clock AM (02",
-              "back": "00): zwei Uhr",
+              "back": "00: zwei Uhr",
               "hint": "TSVIGH oor"
             },
             {
               "front": "noon (12",
-              "back": "00): zwölf Uhr Mittag",
-              "hint": "or"
+              "back": "00: zwölf Uhr Mittag",
+              "hint": "or; TSVOOLF oor; MIT-tahk"
             },
             {
               "front": "one o'clock PM (13",
-              "back": "00): dreizehn Uhr",
+              "back": "00: dreizehn Uhr",
               "hint": "DRIGH-tsayn oor"
             },
             {
               "front": "two o'clock PM (14",
-              "back": "00): vierzehn Uhr",
+              "back": "00: vierzehn Uhr",
               "hint": "FEER-tsayn oor"
             },
             {
               "front": "midnight (00",
-              "back": "00 or 24:00): Mitternacht null Uhr vierundzwanzig Uhr",
-              "hint": null
+              "back": "00 or 24:00: Mitternacht null Uhr vierundzwanzig Uhr",
+              "hint": "MIT-er-nahkht; NOOL oor; FEER-oont-TSVAHN-tsikh oor"
             },
             {
               "front": "eight oh one AM or one past eight AM (08",
-              "back": "01): acht Uhr eins or eins nach acht",
-              "hint": "AKHT oor IGHNS"
+              "back": "01: acht Uhr eins or eins nach acht",
+              "hint": "AKHT oor IGHNS; IGHNS nakh AKHT"
             },
             {
               "front": "Seven fifty nine PM or one to eight PM (19",
-              "back": "59): neunzehn Uhr neunundfünfzig or eins vor acht",
-              "hint": "noin-ZEEN oor Fünf-und-noin-TSIG"
+              "back": "59: neunzehn Uhr neunundfünfzig or eins vor acht",
+              "hint": "noin-ZEEN oor Fünf-und-noin-TSIG; IGHNS for TSVAN-tsig"
             }
           ]
         },
@@ -2588,12 +2588,12 @@
             },
             {
               "front": "How do I get to _____ ?",
-              "back": "Wie komme ich nach _____ ?",
+              "back": "Wie komme ich nach _____?",
               "hint": "vee KOM-muh ikh nahkh _____?"
             },
             {
               "front": "How do I get to _____ ?",
-              "back": "Wie komme ich zum/zur _____ ?",
+              "back": "Wie komme ich zum/zur _____?",
               "hint": "vee KOM-muh ikh tsoom/tsoor _____?"
             },
             {
@@ -2604,7 +2604,7 @@
             {
               "front": "...the bus station / bus stop?",
               "back": "...zum Busbahnhof / zur Bushaltestelle?",
-              "hint": "tsoom BOOSS-BAHN-hohf"
+              "hint": "tsoom BOOSS-BAHN-hohf; tsoor BOOSS-hahl-tuh-shteh-luh?"
             },
             {
               "front": "...the airport?",
@@ -2691,8 +2691,8 @@
             },
             {
               "front": "I will stay for _____ night(s).",
-              "back": "Ich bleibe eine Nacht (_____ Nächte). Note: 'Nacht' 'Nächte'",
-              "hint": "ihk BLIGH-buh IGH-nuh nahkht/_____ NEKH-tuh"
+              "back": "Ich bleibe eine Nacht (_____ Nächte).",
+              "hint": "ihk BLIGH-buh IGH-nuh nahkht/_____ NEKH-tuh; The plural of; is"
             },
             {
               "front": "Can you suggest another hotel?",
@@ -2817,18 +2817,23 @@
             },
             {
               "front": "I'm a vegetarian.",
-              "back": "(men) Ich bin Vegetarier. (women) Ich bin Vegetarierin",
-              "hint": "ikh bin vay-gay-TAH-ree-er"
+              "back": "men) Ich bin Vegetarier. (women) Ich bin Vegetarierin",
+              "hint": "ikh bin vay-gay-TAH-ree-er; vay-gay-TAH-ree-er-een"
             },
             {
               "front": "I'm a vegan.",
-              "back": "(men) Ich bin Veganer. (women) Ich bin Veganerin",
-              "hint": "ikh bin vay-GAHN-er"
+              "back": "men) Ich bin Veganer. (women) Ich bin Veganerin",
+              "hint": "ikh bin vay-GAHN-er; vay-GAHN-er-een"
             },
             {
               "front": "I don't eat pork.",
               "back": "Ich esse kein Schweinefleisch.",
               "hint": "ikh ESS-uh kign SHVIGN-uh-flighsh"
+            },
+            {
+              "front": "I only eat kosher food.",
+              "back": "Ich esse nur koscher.",
+              "hint": "ikh ESS-uh noor KOH-sher"
             },
             {
               "front": "Can you make it \"light\", please?",
@@ -2837,12 +2842,12 @@
             },
             {
               "front": "fixed-price meal",
-              "back": "Tagesessen / Menü (meh-NUU) Note: While \"Tagesessen\" should be used in pubs and taverns, \"Menü\" is the correct word in classic restaurants.",
+              "back": "Tagesessen / Menü",
               "hint": "TAHG-ess-ess-en"
             },
             {
               "front": "Without, e.g. I would like spaghetti without cheese",
-              "back": "Ich möchte die Spaghetti, ohne Käse , \"Ohne\" being the key word here.",
+              "back": "Ich möchte die Spaghetti, ohne Käse, \"Ohne\" being the key word here.",
               "hint": "Ikh merkhte dee schpagetti, ohna kayze"
             },
             {
@@ -2853,12 +2858,12 @@
             {
               "front": "breakfast",
               "back": "Frühstück | Switzerland: Zmorge or Morgenässe",
-              "hint": "FRUU-shtuuk"
+              "hint": "FRUU-shtuuk; TSH-mor-geh; MOR-gen-aess-e"
             },
             {
               "front": "lunch",
               "back": "Mittagessen | Switzerland: Zmittag or Mittagässe",
-              "hint": "mit-TAHK-ess-en"
+              "hint": "mit-TAHK-ess-en; TSH-mit-tag; mit-TAHK-aess-e"
             },
             {
               "front": "tea",
@@ -2867,8 +2872,8 @@
             },
             {
               "front": "supper",
-              "back": "Abendessen Abendbrot ( or ) | Switzerland: Znacht or Nachtässe Note: \"Abendbrot\" is mainly used in rural areas. Most Germans, even the non-English speaking, understand as well.",
-              "hint": null
+              "back": "Abendessen Abendbrot ( or ) | Switzerland: Znacht or Nachtässe",
+              "hint": "AH-bent-ess-en; AH-bent-broht; TSH-nakht; NAKHT-aess-e; dinner"
             },
             {
               "front": "I would like _____.",
@@ -2877,13 +2882,8 @@
             },
             {
               "front": "I would like a dish containing ____",
-              "back": "Ich möchte etwas mit ____",
+              "back": "Ich möchte etwas mit ____ Literally means \"I want something with ____\"",
               "hint": "ikh MOOKH-tuh ett-vahss mit _____"
-            },
-            {
-              "front": "chicken",
-              "back": "Hähnchen Austria: Händel",
-              "hint": "HAEN-chen"
             }
           ]
         },
@@ -2901,7 +2901,7 @@
             {
               "front": "How much is this?",
               "back": "Was kostet das? or Wie viel kostet das?",
-              "hint": "vahss KOSS-tet dahss?"
+              "hint": "vahss KOSS-tet dahss?; vee FEEL koss-tet dahss"
             },
             {
               "front": "That's too expensive.",
@@ -2950,8 +2950,8 @@
             },
             {
               "front": "You're cheating me.",
-              "back": "Sie wollen mich abzocken. Note: Sie betrügen mich. abzocken",
-              "hint": "zee VOLL-en mikh AHP-tsock-en"
+              "back": "Sie wollen mich abzocken.",
+              "hint": "zee VOLL-en mikh AHP-tsock-en; Actually, the translation would be:; But that sounds too hard. The word; is a rather familiar use of language."
             },
             {
               "front": "I'm not interested.",
@@ -2976,7 +2976,7 @@
             {
               "front": "I need...",
               "back": "Ich brauche...",
-              "hint": "ikh BROW-khuh..."
+              "hint": "ikh BROW-khuh...; BROW; cow"
             },
             {
               "front": "...toothpaste.",
@@ -3048,8 +3048,8 @@
             },
             {
               "front": "I lost my wallet.",
-              "back": "Ich habe meinen Geldbeutel verloren. , or in Austria: Ich habe meine Geldtasche verloren.",
-              "hint": "eekh HAH-buh mighn geh-ld-boy-tehl fer-LOH-run"
+              "back": "Ich habe meinen Geldbeutel verloren., or in Austria: Ich habe meine Geldtasche verloren.",
+              "hint": "eekh HAH-buh mighn geh-ld-boy-tehl fer-LOH-run; eekh HAH-buh miney geh-ld-ta-chee fer-LOH-run"
             },
             {
               "front": "I'm sick.",
@@ -3078,8 +3078,8 @@
             },
             {
               "front": "Doctor",
-              "back": "(m) Arzt , (f) Ärztin",
-              "hint": "AHRTST"
+              "back": "m) Arzt, (f) Ärztin",
+              "hint": "AHRTST; ERTS-tin"
             },
             {
               "front": "Nurse",
@@ -3132,8 +3132,8 @@
             },
             {
               "front": "How are you?",
-              "back": "Come stai? , Come sta?",
-              "hint": "informal"
+              "back": "Come stai?, Come sta?",
+              "hint": "informal; koh-meh STAHEE?; formal; koh-meh STAH?"
             },
             {
               "front": "Fine, thank you.",
@@ -3142,23 +3142,23 @@
             },
             {
               "front": "What is your name?",
-              "back": "Come ti chiami? , Come si chiama?",
-              "hint": "informal"
+              "back": "Come ti chiami?, Come si chiama?",
+              "hint": "informal; KOH-meh tee kee-AH-mee?; formal; KOH-meh see kee-AH-mah?"
             },
             {
               "front": "My name is ______ .",
-              "back": "Mi chiamo ______ .",
+              "back": "Mi chiamo ______.",
               "hint": "mee kee-AH-moh _____"
             },
             {
               "front": "Nice to meet you.",
               "back": "Piacere di conoscerla. ; Piacere di conoscerti or just Ciao, piacere",
-              "hint": "formal"
+              "hint": "formal; pyah-CHEH-reh dee koh-noh-SHEHR-lah; pyah-CHEH-reh dee koh-noh-SHEHR-tee; informal"
             },
             {
               "front": "Please.",
               "back": "Per favore or Per piacere",
-              "hint": "PEHR fah-VOH-reh"
+              "hint": "PEHR fah-VOH-reh; pehr pyah-CHEH-reh"
             },
             {
               "front": "Thank you.",
@@ -3173,7 +3173,7 @@
             {
               "front": "No problem.",
               "back": "Non c'è problema or Nessun problema",
-              "hint": "non cheh proh-BLEH-mah"
+              "hint": "non cheh proh-BLEH-mah; neh-SOON proh-BLEM-mah"
             },
             {
               "front": "Yes",
@@ -3187,8 +3187,8 @@
             },
             {
               "front": "Excuse me",
-              "back": "Mi scusi. , Scusa",
-              "hint": "formal"
+              "back": "Mi scusi., Scusa",
+              "hint": "formal; mee SKOO-zee; informal; SKOO-zah"
             },
             {
               "front": "What's that?",
@@ -3218,7 +3218,7 @@
             {
               "front": "Sure.",
               "back": "Certamente, or Certo",
-              "hint": "cher-tah-MEN-teh"
+              "hint": "cher-tah-MEN-teh; CHEHR-toh"
             }
           ]
         },
@@ -3241,12 +3241,12 @@
             {
               "front": "Do you speak English?",
               "back": "Parla inglese? Parli inglese?",
-              "hint": "Formal"
+              "hint": "Formal; PAHR-lah een-GLEH-zeh?; Informal; PAHR-lee een-GLEH-zeh?"
             },
             {
               "front": "Speak more slowly, please.",
-              "back": "Parli più lentamente, per favore. , Parla più lentamente/piano (per favore).",
-              "hint": "formal"
+              "back": "Parli più lentamente, per favore., Parla più lentamente/piano (per favore).",
+              "hint": "formal; PAHR-lee pyoo lehn-tah-MEHN-teh, pehr fah-VOH-reh; informal; PAHR-lee pyoo lehn-tah-MEHN-teh/ PYAH-noh (pehr fah-VOH-reh)"
             },
             {
               "front": "I understand Italian a little.",
@@ -3295,8 +3295,8 @@
             },
             {
               "front": "Wait!",
-              "back": "Aspetti! , Aspetta!",
-              "hint": "formal"
+              "back": "Aspetti!, Aspetta!",
+              "hint": "formal; ahs-PEHT-tee; informal; ahs-PEHT-tah"
             },
             {
               "front": "I have a question.",
@@ -3305,8 +3305,8 @@
             },
             {
               "front": "Can you tell me...",
-              "back": "Può dirmi... , Puoi dirmi...",
-              "hint": "formal"
+              "back": "Può dirmi..., Puoi dirmi...",
+              "hint": "formal; pwoh DEER-mee; informal; pwoh-ee DEER-mee"
             },
             {
               "front": "How to get to...",
@@ -3447,7 +3447,7 @@
             {
               "front": "now",
               "back": "adesso / ora",
-              "hint": "ah-DEHSS-oh"
+              "hint": "ah-DEHSS-oh; OH-rah"
             },
             {
               "front": "later",
@@ -3462,7 +3462,7 @@
             {
               "front": "morning",
               "back": "mattino / mattina",
-              "hint": "mah-TEEN-oh"
+              "hint": "mah-TEEN-oh; mah-TEEN-ah"
             },
             {
               "front": "afternoon",
@@ -3560,7 +3560,7 @@
             {
               "front": "Bus",
               "back": "autobus or pullman",
-              "hint": "OW-toh-boos"
+              "hint": "OW-toh-boos; POOL-mahn"
             },
             {
               "front": "How much is a ticket to _____?",
@@ -3599,7 +3599,7 @@
             },
             {
               "front": "How do I get to _____ ?",
-              "back": "Come arrivo a _____ ?",
+              "back": "Come arrivo a _____?",
               "hint": "Koh-meh ahr-REE-voh ah...?"
             },
             {
@@ -3640,7 +3640,7 @@
             {
               "front": "...the American/Canadian/Australian/British consulate?",
               "back": "...al consolato americano/canadese/australiano/britannico?",
-              "hint": null
+              "hint": "...ahl kohn-soh-LAH-toh ameh-ree-KAH-noh/ kah-nah-DEH-zeh/ ows-trah-LYAH-noh/ bree-TAHN-nee-koh?"
             },
             {
               "front": "Where are there a lot of...",
@@ -3672,7 +3672,7 @@
             },
             {
               "front": "Does the room come with...",
-              "back": "La stanza ha ...",
+              "back": "La stanza ha...",
               "hint": "lah STAHN-tsah ah..."
             },
             {
@@ -3771,7 +3771,7 @@
             {
               "front": "Are American/Australian/Canadian dollars accepted here?",
               "back": "Si accettano dollari americani/australiani/canadesi qui?",
-              "hint": null
+              "hint": "see aht-CHEHT-tah-noh DOHL-lah-ree ah-meh-ree-KAH-nee/ ows-trah-LYAH-nee/ kah-nah-DEH-see kwee?"
             },
             {
               "front": "Are British pounds accepted?",
@@ -3796,7 +3796,7 @@
             {
               "front": "Can you change American/Australian/Canadian dollars for me?",
               "back": "Potrebbe cambiarmi dei dollari americani/australiani/canadesi?",
-              "hint": null
+              "hint": "poh-TREHB-beh kahm-BYAHR-mee day DOHL-lah-ree ah-meh-ree-KAH-nee/ ows-trah-LYAH-nee/ kah-nah-DEH-see?"
             },
             {
               "front": "Where can I get money changed?",
@@ -3888,8 +3888,8 @@
             },
             {
               "front": "Can you make it \"lite\", please?",
-              "back": "Potrebbe farlo leggero, per favore?",
-              "hint": "poh-TREHB-beh FAHR-loh lehd-JEH-roh, pehr fah-VOH-reh?"
+              "back": "Potrebbe farlo leggero, per favore? or Potrebbe farlo con pochi grassi? (with little fat) or Potrebbe farlo con poco olio? (with little oil",
+              "hint": "poh-TREHB-beh FAHR-loh lehd-JEH-roh, pehr fah-VOH-reh?; poh-TREHB-beh FAHR-loh kohn poh-KHEE GRAHS-see?; poh-TREHB-beh FAHR-loh kohn POH-koh OH-lyoh?"
             },
             {
               "front": "fixed-price meal",
@@ -3913,8 +3913,8 @@
             },
             {
               "front": "tea",
-              "back": "tè",
-              "hint": "teh"
+              "back": "tè meh-REHN-dah",
+              "hint": "teh; if you mean the meal at the 4 or 5 in the afternoon, in Italian this is called merenda; , but it usually is only for kids"
             },
             {
               "front": "supper",
@@ -3967,7 +3967,7 @@
             {
               "front": "Would you take _____?",
               "back": "Prenderebbe _____? Prenderesti _____? / Prendereste _____?",
-              "hint": "formal singular \"you\""
+              "hint": "formal singular \"you\"; prehn-deh-REB-beh....?; informal singular \"you\"; prehn-deh-REHS-tee....?; plural \"you\"; prehn-deh-REHS-teh....?"
             },
             {
               "front": "expensive",
@@ -4002,7 +4002,7 @@
             {
               "front": "I'm not interested.",
               "back": "Non son interessato.",
-              "hint": "male"
+              "hint": "male; nohn sohn een-teh-rehs-SAH-toh / Non son interessata."
             },
             {
               "front": "OK, I'll take it.",
@@ -4059,8 +4059,8 @@
           "cards": [
             {
               "front": "Leave me alone.",
-              "back": "Mi lasci in pace. (formal) / Lasciami in pace. (informal)",
-              "hint": "mee LAH-shee een PAH-cheh"
+              "back": "Mi lasci in pace. (formal) / Lasciami in pace. (informal",
+              "hint": "mee LAH-shee een PAH-cheh; ...STAH-reh"
             },
             {
               "front": "Don't touch me!",
@@ -4074,7 +4074,7 @@
             },
             {
               "front": "Help me!",
-              "back": "Aiutami! (informal)",
+              "back": "Aiutami! (informal",
               "hint": null
             },
             {
@@ -4104,8 +4104,8 @@
             },
             {
               "front": "I'm lost.",
-              "back": "Mi sono perso / Mi sono persa .",
-              "hint": "male"
+              "back": "Mi sono perso / Mi sono persa.",
+              "hint": "male; mee soh-noh PEHR-soh; female; mee soh-noh PEHR-sah"
             },
             {
               "front": "I lost my bag.",
@@ -4120,12 +4120,12 @@
             {
               "front": "I'm sick.",
               "back": "Sono malato. / Sono malata",
-              "hint": "male"
+              "hint": "male; SOH-noh mah-LAH-toh; female; SOH-noh mah-LAH-tah"
             },
             {
               "front": "I've been injured.",
               "back": "Sono ferito / Sono ferita",
-              "hint": "male"
+              "hint": "male; SOH-noh feh-REE-toh; female; SOH-noh feh-REE-tah"
             },
             {
               "front": "I need a doctor.",
@@ -4135,7 +4135,7 @@
             {
               "front": "Can I use your phone?",
               "back": "Posso usare il suo telefono? / Posso usare il tuo telefono?",
-              "hint": "formal"
+              "hint": "formal; POS-soh oo-ZAH-reh eel soo-oh teh-LEH-foh-noh?; informal; POS-soh oo-ZAH-reh eel too-oh teh-LEH-foh-noh?"
             },
             {
               "front": "I haven't done anything wrong.",
@@ -5283,7 +5283,7 @@
             {
               "front": "Good morning.",
               "back": "早安。",
-              "hint": null
+              "hint": "Zǎo'ān"
             },
             {
               "front": "Good evening.",
@@ -5293,7 +5293,7 @@
             {
               "front": "Good night.",
               "back": "晚安。",
-              "hint": null
+              "hint": "Wǎn'ān"
             },
             {
               "front": "I don't understand.",
@@ -5814,6 +5814,11 @@
           "position": 7,
           "cards": [
             {
+              "front": "Do you have an English menu? 你有没有英文菜单？ (你有沒有英文菜單？) nǐ yŏu méi yǒu yīngwén càidān? (Listen for... ;Yes, we have one.",
+              "back": "有",
+              "hint": "yǒu"
+            },
+            {
               "front": "I'm a vegetarian",
               "back": "我吃素",
               "hint": "wǒ chī sù"
@@ -5907,11 +5912,6 @@
               "front": "noodles",
               "back": "面条",
               "hint": "miàntiáo"
-            },
-            {
-              "front": "fried rice",
-              "back": "炒饭",
-              "hint": "chǎofàn"
             }
           ]
         },
@@ -6151,102 +6151,102 @@
             {
               "front": "Good afternoon.",
               "back": "こんにちは。",
-              "hint": "Konnichiwa."
+              "hint": "Konnichiwa.; kon-nee-chee-wah"
             },
             {
               "front": "How are you?",
               "back": "お元気ですか？",
-              "hint": "O-genki desu ka?"
+              "hint": "O-genki desu ka?; Oh-GEN-kee dess-ka?"
             },
             {
               "front": "Fine, thank you.",
               "back": "はい、元気です。",
-              "hint": "Hai, genki desu."
+              "hint": "Hai, genki desu.; Ha-ee, gen-kee dess"
             },
             {
               "front": "How about you?",
               "back": "~さんは？",
-              "hint": "-san wa?"
+              "hint": "-san wa?; -san wa"
             },
             {
               "front": "What's your name?",
-              "back": "お名前は？",
-              "hint": "O-namae wa?"
+              "back": "お名前は？ お名前は何とおっしゃいますか。",
+              "hint": "O-namae wa?; Oh-nah-mah-eh wah?; O-namae wa nan to osshaimasu ka?"
             },
             {
               "front": "My name is ... .",
-              "back": "... です。",
-              "hint": "... desu."
+              "back": "... です。... といいます。... と申します。",
+              "hint": "... desu.; ... dess.; to iimasu.; ... to mōshimasu."
             },
             {
               "front": "Nice to meet you.",
               "back": "始めまして。どうぞ宜しくお願いします。",
-              "hint": "Hajimemashite. Dōzo yoroshiku onegaishimasu."
+              "hint": "Hajimemashite. Dōzo yoroshiku onegaishimasu.; Hah-jee-meh-mash-teh dohh-zoh yoh-roh-sh-ku oh-neh-gah-ee shee-mah-ss"
             },
             {
               "front": "Please.",
               "back": "お願いします。",
-              "hint": "Onegai shimasu."
+              "hint": "Onegai shimasu.; oh-neh-gah-ee shee-mahs"
             },
             {
               "front": "Please.",
               "back": "どうぞ。",
-              "hint": "Dōzo."
+              "hint": "Dōzo.; Dohh-zoh"
             },
             {
               "front": "This person is ... .",
-              "back": "こちらは ...",
-              "hint": "Kochira wa ..."
+              "back": "こちらは...",
+              "hint": "Kochira wa ...; ko-chi-rah wah..."
             },
             {
               "front": "Thank you very much.",
               "back": "どうもありがとうございました。",
-              "hint": "Dōmo arigatō gozaimashita."
+              "hint": "Dōmo arigatō gozaimashita.; doh-moh ah-ree-GAH-toh go-ZAh-ee-mah-shi-tah"
             },
             {
               "front": "Thank you.",
               "back": "ありがとうございます。",
-              "hint": "Arigatō gozaimasu."
+              "hint": "Arigatō gozaimasu.; ah-ree-GAH-toh go-ZAh-ee-mahs"
             },
             {
               "front": "Thank you.",
               "back": "ありがとう。",
-              "hint": "Arigatō."
+              "hint": "Arigatō.; ah-ree-GAH-toh"
             },
             {
               "front": "Thanks.",
               "back": "どうも。",
-              "hint": "Dōmo."
+              "hint": "Dōmo.; doh-moh"
             },
             {
               "front": "Thanks.",
               "back": "おおきに。",
-              "hint": "Ōkini"
+              "hint": "Ōkini; ohh-KEE-nee"
             },
             {
               "front": "You're welcome.",
               "back": "どういたしまして。",
-              "hint": "Dō itashimashite."
+              "hint": "Dō itashimashite.; doh EE-tah-shee mah-shteh"
             },
             {
               "front": "yes",
               "back": "はい。",
-              "hint": "hai"
+              "hint": "hai; High"
             },
             {
               "front": "no",
               "back": "いいえ。",
-              "hint": "iie"
+              "hint": "iie; EE-eh"
             },
             {
               "front": "Excuse me.",
               "back": "すみません。",
-              "hint": "Sumimasen."
+              "hint": "Sumimasen.; soo-mee-mah-sen"
             },
             {
               "front": "I'm sorry.",
               "back": "ごめんなさい。",
-              "hint": "Gomen nasai."
+              "hint": "Gomen nasai.; goh-men-nah-sah-ee"
             }
           ]
         },
@@ -6259,67 +6259,67 @@
             {
               "front": "I'm sorry.",
               "back": "ごめん",
-              "hint": "Gomen."
+              "hint": "Gomen.; goh-men"
             },
             {
               "front": "Goodbye.",
               "back": "さようなら。",
-              "hint": "Sayōnara."
+              "hint": "Sayōnara.; sa-YOHH-nah-rah"
             },
             {
               "front": "Goodbye.",
               "back": "じゃね。",
-              "hint": "Ja ne."
+              "hint": "Ja ne.; Jah-neh"
             },
             {
               "front": "I can't speak Japanese (very well).",
               "back": "日本語が（よく）話せません。",
-              "hint": "Nihongo ga (yoku) hanasemasen."
+              "hint": "Nihongo ga (yoku) hanasemasen.; nee-hohn-goh gah (yo-koo) hah-nah-seh-mah-sen"
             },
             {
               "front": "Do you speak Japanese?",
               "back": "日本語が話せますか？",
-              "hint": "Nihongo ga hanasemasu ka?"
+              "hint": "Nihongo ga hanasemasu ka?; ni-HON-go gah hah-nah-se-mahs-KAH?"
             },
             {
               "front": "Yes, a little.",
               "back": "はい、少し。",
-              "hint": "Hai, sukoshi."
+              "hint": "Hai, sukoshi.; HIGH sko-shee"
             },
             {
               "front": "Do you speak English?",
               "back": "英語が話せますか？",
-              "hint": "Eigo ga hanasemasu ka?"
+              "hint": "Eigo ga hanasemasu ka?; EHH-goh gah hah-nah-seh-mahs-KAH?"
             },
             {
               "front": "Is there someone here who speaks English?",
               "back": "誰か英語が話せますか？",
-              "hint": "Dareka eigo ga hanasemasu ka?"
+              "hint": "Dareka eigo ga hanasemasu ka?; dah-reh-kah EHH-goh gah hah-nah-seh-moss-KAH?"
             },
             {
               "front": "Please speak slowly.",
               "back": "ゆっくり話してください。",
-              "hint": "Yukkuri hanashite kudasai."
+              "hint": "Yukkuri hanashite kudasai.; YOO-kuree hanash-teh koo-dah-sah-ee"
             },
             {
               "front": "Please say it again.",
               "back": "もう一度言ってください。",
-              "hint": "Mō ichido itte kudasai."
+              "hint": "Mō ichido itte kudasai.; mo EE-chee-doh ee-te koo-dah-sah-ee"
             },
             {
               "front": "Please help!",
               "back": "助けて！",
-              "hint": "Tasukete!"
+              "hint": "Tasukete!; tahs-keh-teh!"
             },
             {
               "front": "Look out!",
               "back": "危ない！",
-              "hint": "Abunai!"
+              "hint": "Abunai!; ah-boo-NIGH!"
             },
             {
               "front": "Good morning.",
               "back": "お早うございます。",
-              "hint": "Ohayō gozaimasu."
+              "hint": "Ohayō gozaimasu.; oh-hah-YOH go-zah-ee-mahs"
             },
             {
               "front": "Good morning.",
@@ -6329,12 +6329,12 @@
             {
               "front": "Good evening.",
               "back": "こんばんは。",
-              "hint": "Kombanwa."
+              "hint": "Kombanwa.; kohn-bahn-wah"
             },
             {
               "front": "Good night",
               "back": "お休みなさい。",
-              "hint": "Oyasuminasai."
+              "hint": "Oyasuminasai.; oh-yah-soo-mee-nah-sigh"
             },
             {
               "front": "Good night (to sleep)",
@@ -6344,17 +6344,17 @@
             {
               "front": "I don't understand.",
               "back": "分かりません。",
-              "hint": "Wakarimasen."
+              "hint": "Wakarimasen.; wah-kah-ree-mah-sen"
             },
             {
               "front": "I am not Japanese.",
               "back": "日本人ではありません。",
-              "hint": "Nihonjin dewa arimasen."
+              "hint": "Nihonjin dewa arimasen.; nee-hon-jin deh-wah a-ree-ma-sehn"
             },
             {
               "front": "Where is the toilet?",
               "back": "お手洗い・トイレはどこですか？",
-              "hint": "Otearai/toire wa doko desu ka?"
+              "hint": "Otearai/toire wa doko desu ka?; Oh-teh-ah-rah-ee/toh-ee-reh wah DOH-koh dess kah?"
             }
           ]
         },
@@ -6367,7 +6367,7 @@
             {
               "front": "0",
               "back": "ゼロ or 〇 / 零 in finance",
-              "hint": "zero"
+              "hint": "zero; maru; rei"
             },
             {
               "front": "1",
@@ -6387,7 +6387,7 @@
             {
               "front": "4",
               "back": "四",
-              "hint": "yon"
+              "hint": "yon; shi"
             },
             {
               "front": "5",
@@ -6402,7 +6402,7 @@
             {
               "front": "7",
               "back": "七",
-              "hint": "nana"
+              "hint": "nana; shichi"
             },
             {
               "front": "8",
@@ -6462,7 +6462,7 @@
             {
               "front": "19",
               "back": "十九 / 拾九",
-              "hint": "jū-kyū"
+              "hint": "jū-kyū; jū-ku"
             }
           ]
         },
@@ -6495,17 +6495,17 @@
             {
               "front": "morning",
               "back": "朝 (colloquial) / 午前",
-              "hint": "asa"
+              "hint": "asa; gozen"
             },
             {
               "front": "noon",
               "back": "昼 ( or ) / 正午",
-              "hint": "hiru"
+              "hint": "hiru; o-hiru; shōgo"
             },
             {
               "front": "afternoon",
               "back": "昼 ( or ) (colloquial) / 午後",
-              "hint": "hiru"
+              "hint": "hiru; hiruma; gogo"
             },
             {
               "front": "evening before sunset",
@@ -6549,8 +6549,8 @@
             },
             {
               "front": "midnight",
-              "back": "夜12時 , 零時 / 0時 , 24時",
-              "hint": "yoru jūniji"
+              "back": "夜12時, 零時 / 0時, 24時",
+              "hint": "yoru jūniji; rēji; nijū yo ji"
             },
             {
               "front": "_____ second(s)",
@@ -6560,7 +6560,7 @@
             {
               "front": "_____ minute(s)",
               "back": "_____ 分",
-              "hint": "fun"
+              "hint": "fun; pun"
             },
             {
               "front": "_____ hour(s)",
@@ -6569,8 +6569,8 @@
             },
             {
               "front": "_____ day(s)",
-              "back": "_____ 日間 ( or , see note above, except for 一日 (one day))",
-              "hint": "nichikan"
+              "back": "_____ 日間 ( or, see note above, except for 一日 (one day",
+              "hint": "nichikan; (k)kakan"
             }
           ]
         },
@@ -6705,7 +6705,7 @@
             },
             {
               "front": "Does the room come with...",
-              "back": "部屋は ... 付きですか?",
+              "back": "部屋は... 付きですか?",
               "hint": "Heya wa ___ tsuki desu ka?"
             },
             {
@@ -6823,13 +6823,13 @@
             },
             {
               "front": "Can you change a traveler's check for me?",
-              "back": "トラベラーズチェックを両替できますか？ (''Torabarāsu chekku (traveler's check) wo ryōgae dekimasu ka?'')",
-              "hint": null
+              "back": "トラベラーズチェックを両替できますか？",
+              "hint": "Torabarāsu chekku (traveler's check) wo ryōgae dekimasu ka?"
             },
             {
               "front": "Where can I get a traveler's check changed?",
-              "back": "トラベラーズチェックはどこで両替できますか？ (''Torabarāzu chekku (traveler's check) wa doko de ryōgae dekimasu ka?'')",
-              "hint": null
+              "back": "トラベラーズチェックはどこで両替できますか？",
+              "hint": "Torabarāzu chekku (traveler's check) wa doko de ryōgae dekimasu ka?"
             },
             {
               "front": "What is the exchange rate?",
@@ -6922,22 +6922,22 @@
             {
               "front": "breakfast",
               "back": "朝食 / 朝ご飯",
-              "hint": "chōshoku"
+              "hint": "chōshoku; asagohan"
             },
             {
               "front": "lunch",
               "back": "昼食 / 昼ご飯",
-              "hint": "chūshoku"
+              "hint": "chūshoku; hirugohan"
             },
             {
               "front": "light meal/snack",
               "back": "軽食 / おやつ",
-              "hint": "keishoku"
+              "hint": "keishoku; oyatsu"
             },
             {
               "front": "supper",
               "back": "夕食 / 晩ご飯",
-              "hint": "yūshoku"
+              "hint": "yūshoku; bangohan"
             },
             {
               "front": "Please bring _____.",
@@ -6999,7 +6999,7 @@
             },
             {
               "front": "You're cheating me, aren't you?",
-              "back": "騙してるでしょう？ ' '",
+              "back": "騙してるでしょう？ Use with caution!",
               "hint": "Damashiteru deshō?"
             },
             {
@@ -7015,7 +7015,7 @@
             {
               "front": "Can I have a bag?",
               "back": "袋を貰えますか？ or 袋をください",
-              "hint": "Fukuro o moraemasu ka?"
+              "hint": "Fukuro o moraemasu ka?; Fukuro o kudasai"
             },
             {
               "front": "Do you ship (overseas)?",
@@ -7049,8 +7049,8 @@
             },
             {
               "front": "...soap.",
-              "back": "洗剤( , liquid or powder ), 石鹸",
-              "hint": "senzai"
+              "back": "洗剤(, liquid or powder ), 石鹸",
+              "hint": "senzai; sekken"
             },
             {
               "front": "...shampoo.",
@@ -7262,11 +7262,11 @@
             {
               "front": "I'm sorry.",
               "back": "죄송합니다. or 미안해",
-              "hint": "joesonghamnida"
+              "hint": "joesonghamnida; mianhae"
             },
             {
               "front": "Goodbye",
-              "back": "안녕히 가십시오/계십시오. . The former expression is used by the person staying (e.g. the host), the latter by the person leaving (e.g. a guest).",
+              "back": "안녕히 가십시오/계십시오.. The former expression is used by the person staying (e.g. the host), the latter by the person leaving (e.g. a guest).",
               "hint": "annyeonghi gasipsio/gyesipsio"
             },
             {
@@ -7308,24 +7308,19 @@
               "hint": "jeoneun yeong-eoreul [jal] motamnida"
             },
             {
-              "front": "Do you speak {language}?",
-              "back": "____를 하십니까?",
-              "hint": "____reul hasimnikka?"
-            },
-            {
               "front": "Yes, a little.",
               "back": "네, 조금만요.",
               "hint": "ne, jogeummanyo"
             },
             {
               "front": "Help!",
-              "back": "도와주십시오! , 도와주세요!",
-              "hint": "dowajusipsio!"
+              "back": "도와주십시오!, 도와주세요!",
+              "hint": "dowajusipsio!; dowajuseyo!"
             },
             {
               "front": "Look out!",
-              "back": "조심하십시오! , 조심하세요!",
-              "hint": "josimhasipsio!"
+              "back": "조심하십시오!, 조심하세요!",
+              "hint": "josimhasipsio!; josimhaseyo!"
             },
             {
               "front": "Good morning.",
@@ -7391,6 +7386,11 @@
               "front": "How do you say _____ in Korean?",
               "back": "_____은 한국말로 어떻게 말합니까?",
               "hint": "____eun Han-gungmallo eotteoke malhamnikka?"
+            },
+            {
+              "front": "What is this/that called?",
+              "back": "이것은/저것은 무엇이라고 부릅니까?",
+              "hint": "igeoseun/jeogeoseun mueosirago bureumnikka?"
             }
           ]
         },
@@ -7601,12 +7601,12 @@
             {
               "front": "_____ week(s)",
               "back": "_____ 주 / _____ 주일",
-              "hint": "___ ju"
+              "hint": "___ ju; ___ ju-il"
             },
             {
               "front": "_____ month(s)",
-              "back": "_____ 달 / _____ 개월 ' ': 달 is used with native Korean numbers, while 개월 is used with Sino-Korean numbers",
-              "hint": "___ dal"
+              "back": "_____ 달 / _____ 개월",
+              "hint": "___ dal; ___ gaewol"
             }
           ]
         },
@@ -7736,13 +7736,13 @@
             },
             {
               "front": "Does the room come with...",
-              "back": "그 방에는 ...이/가 있습니까?",
+              "back": "그 방에는...이/가 있습니까?",
               "hint": "geu bang-eneun ...i/ga itseumnikka?"
             },
             {
               "front": "...bedsheets?",
-              "back": "침대보 , 침대 시트",
-              "hint": "chimdaebo"
+              "back": "침대보, 침대 시트",
+              "hint": "chimdaebo; chimdae siteu"
             },
             {
               "front": "...a bathroom?",
@@ -7936,19 +7936,9 @@
               "hint": "jeoneun Kosyeo eumsingman meokseumnida"
             },
             {
-              "front": "Can you make it \"lite\", please?",
-              "back": "...",
-              "hint": null
-            },
-            {
               "front": "fixed-price meal",
               "back": "정가 음식",
               "hint": "jeongga eumsik"
-            },
-            {
-              "front": "à la carte",
-              "back": "...",
-              "hint": null
             },
             {
               "front": "breakfast",
@@ -7984,6 +7974,16 @@
               "front": "meat",
               "back": "고기",
               "hint": "gogi"
+            },
+            {
+              "front": "beef",
+              "back": "소고기",
+              "hint": "sogogi"
+            },
+            {
+              "front": "pork",
+              "back": "돼지고기",
+              "hint": "dwaejigogi"
             }
           ]
         },
@@ -8010,8 +8010,8 @@
             },
             {
               "front": "Would you take _____?",
-              "back": "_____ 받으십니까? , _____도 됩니까?",
-              "hint": "_____ badeusimnikka?"
+              "back": "_____ 받으십니까?, _____도 됩니까?",
+              "hint": "_____ badeusimnikka?; _____do doemnikka?"
             },
             {
               "front": "expensive",
@@ -8055,12 +8055,12 @@
             },
             {
               "front": "Do you ship (overseas)?",
-              "back": "(해외로) 발송합니까?",
+              "back": "해외로) 발송합니까?",
               "hint": "(hae-oero) balsonghamnikka?"
             },
             {
               "front": "I need...",
-              "back": "저는 ...이 필요합니다",
+              "back": "저는...이 필요합니다",
               "hint": "jeoneun ...i piryohamnida"
             },
             {
@@ -8091,7 +8091,7 @@
             {
               "front": "...pain reliever.",
               "back": "...진통제.",
-              "hint": "아스피린 or 항 염증제"
+              "hint": "...jintongje. (aseupirin or hang yeomjeungje)"
             }
           ]
         },
@@ -8108,8 +8108,8 @@
             },
             {
               "front": "Don't touch me!",
-              "back": "만지지 마십시오! , 만지지 마!",
-              "hint": "manjiji masipsio!"
+              "back": "만지지 마십시오!, 만지지 마!",
+              "hint": "manjiji masipsio!; manjiji ma!"
             },
             {
               "front": "I'll call the police.",
@@ -8192,28 +8192,88 @@
           "cards": [
             {
               "front": "Hello",
-              "back": ",",
-              "hint": null
+              "back": "سَلاَم, مَرْحَبًا",
+              "hint": "salām; marḥaban"
+            },
+            {
+              "front": "Peace be with you.",
+              "back": "السَّلَامُ عَلَيْكُمْ",
+              "hint": "'as-salaamu 'alaikum"
+            },
+            {
+              "front": "How are you?",
+              "back": "كيف حالك؟",
+              "hint": "kayfa haalak? (male singular); kayfa haalik? (female singular); kayfa haalukum? (plural)"
             },
             {
               "front": "Please.",
-              "back": "(",
-              "hint": "min faDlak) (male)"
+              "back": "من فضلك",
+              "hint": "min faDlak (male); min faDlik (female)"
+            },
+            {
+              "front": "Thank you very much!",
+              "back": "شُكْرًا جَزِيلًا",
+              "hint": "shukran jazīlan"
             },
             {
               "front": "Yes.",
-              "back": "''na'am''",
-              "hint": null
+              "back": "نَعَمْ",
+              "hint": "na'am"
+            },
+            {
+              "front": "No.",
+              "back": "لا",
+              "hint": "laa"
+            },
+            {
+              "front": "Maybe.",
+              "back": "رُبَّمَا",
+              "hint": "rubbamaa"
+            },
+            {
+              "front": "Excuse me.",
+              "back": "إسمحلي",
+              "hint": "ismaHli"
+            },
+            {
+              "front": "Good morning.",
+              "back": "صباح الخير",
+              "hint": "sabaH al-khair"
             },
             {
               "front": "Good evening.",
-              "back": "''masaa' al-khair''",
-              "hint": null
+              "back": "مساء الخير",
+              "hint": "masaa' al-khair"
+            },
+            {
+              "front": "good",
+              "back": "جيد",
+              "hint": "jayyid."
+            },
+            {
+              "front": "very good",
+              "back": "جيد جدا",
+              "hint": "jayyid jiddan."
             },
             {
               "front": "Never mind.",
-              "back": ".",
+              "back": "لا يهم.",
               "hint": "laa yahummu."
+            },
+            {
+              "front": "Nothing.",
+              "back": "لا شيء",
+              "hint": "laa shay."
+            },
+            {
+              "front": "Fine, thank you.",
+              "back": "بخير,شكرا",
+              "hint": "bi-khair, shukran"
+            },
+            {
+              "front": "What is your name?",
+              "back": "ما اسمك؟",
+              "hint": "ma 'ismuka? (to a male); ma 'ismuki? (to a female)"
             },
             {
               "front": "My name is ______ .",
@@ -8227,68 +8287,8 @@
             },
             {
               "front": "You're welcome.",
-              "back": "عَفْوًا '",
+              "back": "عَفْوًا",
               "hint": "afwaan"
-            },
-            {
-              "front": "Excuse me.",
-              "back": "عذرا",
-              "hint": "eudhran"
-            },
-            {
-              "front": "I'm sorry.",
-              "back": "انا اسفه / انا اسف",
-              "hint": "ana aasif (male) / ana aasifah (female)"
-            },
-            {
-              "front": "Goodbye",
-              "back": "مع السلامة",
-              "hint": "ma`a as-salaamah"
-            },
-            {
-              "front": "Goodbye",
-              "back": "سلام",
-              "hint": "salaam"
-            },
-            {
-              "front": "I can't speak Arabic [well].",
-              "back": "[لا اتكلم العربية [جيدا",
-              "hint": "laa atakallam al-`arabiyyah [jayyidan]"
-            },
-            {
-              "front": "Do you speak English?",
-              "back": "هل تتكلم الانجليزية",
-              "hint": "hal tatakallam al-ingliziyyah?"
-            },
-            {
-              "front": "Is there someone here who speaks English?",
-              "back": "هل هنا اي شخص يتكلم الانجليزية؟",
-              "hint": "hal hunaa ayy shakhS yatakallam al-ingliziyya?"
-            },
-            {
-              "front": "Help!",
-              "back": "مساعدة",
-              "hint": "musaa`adah!"
-            },
-            {
-              "front": "Look out!",
-              "back": "انتبه",
-              "hint": "intabih"
-            },
-            {
-              "front": "Good night.",
-              "back": "تصبح على الخير",
-              "hint": "tiSbaH `alal-khair"
-            },
-            {
-              "front": "Good night",
-              "back": "وانت من اهل الخير",
-              "hint": "wa anta min ahl al-khair"
-            },
-            {
-              "front": "I don't understand.",
-              "back": "لا افهم",
-              "hint": "laa afham"
             }
           ]
         },
@@ -8298,6 +8298,11 @@
           "description": "When you do not understand, need the toilet, or need help.",
           "position": 1,
           "cards": [
+            {
+              "front": "Excuse me.",
+              "back": "لَوْ سَمَحْتَ : لَوْ سَمَحْتِ",
+              "hint": "law samaḥta (to male); law samaḥti (to female)"
+            },
             {
               "front": "Excuse me.",
               "back": "عذرا",
@@ -8482,7 +8487,7 @@
             {
               "front": "now",
               "back": "الآن",
-              "hint": null
+              "hint": "al-'aana"
             },
             {
               "front": "later",
@@ -8502,7 +8507,7 @@
             {
               "front": "afternoon",
               "back": "بعد ظهر",
-              "hint": null
+              "hint": "ba'ada Zuhur"
             },
             {
               "front": "evening",
@@ -8517,12 +8522,12 @@
             {
               "front": "one o'clock AM",
               "back": "one o'clock AM",
-              "hint": null
+              "hint": "sa'ati waHad"
             },
             {
               "front": "two o'clock AM",
               "back": "two o'clock AM",
-              "hint": null
+              "hint": "sa'ati ithnayn"
             },
             {
               "front": "noon",
@@ -8546,8 +8551,8 @@
             },
             {
               "front": "_____ minute(s)",
-              "back": "_____ (دقيقة (دقائق (''daqiiqah (daqaa'iq) '')",
-              "hint": null
+              "back": "_____ دقيقة دقائق",
+              "hint": "daqiiqah (daqaa'iq)"
             },
             {
               "front": "_____ hour(s)",
@@ -8556,7 +8561,7 @@
             },
             {
               "front": "_____ day(s)",
-              "back": "_____ يوم (أيام",
+              "back": "_____ يوم أيام",
               "hint": "yom (ayaam)"
             },
             {
@@ -8571,7 +8576,7 @@
             },
             {
               "front": "_____ year(s)",
-              "back": "_____ سنة (سنوات",
+              "back": "_____ سنة سنوات",
               "hint": "sanah (sanooaat)"
             },
             {
@@ -8678,14 +8683,14 @@
               "hint": "adash tazkara ila ____?"
             },
             {
-              "front": "Does this train/bus stop in _____?",
-              "back": "''hal biwa'ef hazal qitar/bus fi__ ?''",
+              "front": "One ticket to _____, please.",
+              "back": "Tazkara wahida ila ___ law samaht",
               "hint": null
             },
             {
-              "front": "How do I get to _____ ?",
-              "back": "How do I get to _____ ?",
-              "hint": "Kayf bawsal la __"
+              "front": "Where does this train/bus go?",
+              "back": "Hazal qitar/bus biyruh ila wayn? / Ila Ayn Yazhab haza Alkitar/autobis?",
+              "hint": null
             }
           ]
         },
@@ -8763,7 +8768,7 @@
             {
               "front": "I will stay for _____ night(s).",
               "back": "I will stay for _____ night(s).",
-              "hint": null
+              "hint": "Rah aba'a kaman ___ yom"
             },
             {
               "front": "Can you suggest another hotel?",
@@ -9037,7 +9042,7 @@
             {
               "front": "...toothpaste.",
               "back": "...toothpaste.",
-              "hint": null
+              "hint": "ma'ajoon asnan"
             },
             {
               "front": "...a toothbrush.",
@@ -9075,7 +9080,7 @@
             {
               "front": "Leave me alone.",
               "back": "اتركني / اتركيني",
-              "hint": "utrukni"
+              "hint": "utrukni; (to a male) / utrukiini; to a female"
             },
             {
               "front": "Don't touch me!",
@@ -9084,8 +9089,8 @@
             },
             {
               "front": "I'll call the police.",
-              "back": "سأتصل بالشرطة ''sa'ataSal bashurTah''",
-              "hint": null
+              "back": "سأتصل بالشرطة",
+              "hint": "sa'ataSal bashurTah"
             },
             {
               "front": "Police!",
@@ -9109,8 +9114,8 @@
             },
             {
               "front": "I'm lost.",
-              "back": "أضعت طريقي a''da'tu tareeqi''",
-              "hint": null
+              "back": "أضعت طريقي a",
+              "hint": "da'tu tareeqi"
             },
             {
               "front": "I lost my bag.",
@@ -9121,6 +9126,11 @@
               "front": "I lost my wallet.",
               "back": "محفظتي ضاعت",
               "hint": "maHafaZati Daa`at"
+            },
+            {
+              "front": "I'm sick.",
+              "back": "انا مريض / انا مريضة ana mariiD (male) / ana mariiDah",
+              "hint": null
             },
             {
               "front": "I've been injured.",
@@ -9145,7 +9155,7 @@
             {
               "front": "It was a misunderstanding.",
               "back": ".كان سوء فهم",
-              "hint": null
+              "hint": "kan su' fahum"
             },
             {
               "front": "Where are you taking me?",
@@ -9160,17 +9170,12 @@
             {
               "front": "I am an American/Australian/British/Canadian citizen.",
               "back": ".أنا موطن أمريكي/أوسترالي/بريطاني/كنادي",
-              "hint": "(Ana mowaten amiriki/australi/britani/kanadi)"
+              "hint": "Ana mowaten amiriki/australi/britani/kanadi"
             },
             {
               "front": "I want to talk to the American/Australian/British/Canadian embassy/consulate.",
               "back": ".اُوريد أن أتكام مع السفار/قنصلية الأمريكية/أسترالية/بريطانية/الكندية",
-              "hint": null
-            },
-            {
-              "front": "I want to talk to a lawyer.",
-              "back": ".أريد التحدوث مع محامي (",
-              "hint": "arid altahaduth ma muhami)"
+              "hint": "arid an atakalam ma al safara/qunsiluya al amirkiyah/australiyah/britanniyah/kanadiyah"
             }
           ]
         }
@@ -9204,7 +9209,7 @@
             {
               "front": "Hi.",
               "back": "Привет. [Privyet] Здорово. [Zdorovo]",
-              "hint": "pree-VYEHT"
+              "hint": "pree-VYEHT; Zduh-ROH-vuh"
             },
             {
               "front": "How are you?",
@@ -9223,13 +9228,13 @@
             },
             {
               "front": "My name is ______ .",
-              "back": "Меня зовут ______ . [Menya zovut ____]",
+              "back": "Меня зовут ______. [Menya zovut ____]",
               "hint": "mee-NYAH zah-VOOT ___"
             },
             {
               "front": "Nice to meet you.",
               "back": "Очень приятно. [Ochen' Priyatno]",
-              "hint": null
+              "hint": "OH-cheen' pree-YAHT-nuh"
             },
             {
               "front": "Please.",
@@ -9302,7 +9307,7 @@
             {
               "front": "Is there someone here who speaks English?",
               "back": "Кто-нибудь здесь говорит по-английски?",
-              "hint": null
+              "hint": "KTOH-nee-bood' zdyehs guh-vah-REET pah an-GLEES-kee?"
             },
             {
               "front": "Help!",
@@ -9362,7 +9367,7 @@
             {
               "front": "Big",
               "back": "Большой",
-              "hint": null
+              "hint": "bahl'-SHOY"
             },
             {
               "front": "Small",
@@ -9410,17 +9415,17 @@
             {
               "front": "0",
               "back": "ноль/нуль",
-              "hint": "nohl’"
+              "hint": "nohl’; nool’"
             },
             {
               "front": "1",
-              "back": "один , одна , одно (one can say раз (raz) when counting something)",
-              "hint": "ah-DEEN"
+              "back": "один, одна, одно (one can say раз (raz) when counting something",
+              "hint": "ah-DEEN; ahd-NAH; f; ahd-NOH"
             },
             {
               "front": "2",
-              "back": "два , две",
-              "hint": "dvah"
+              "back": "два, две",
+              "hint": "dvah; mn; dvyeh; f"
             },
             {
               "front": "3",
@@ -9650,7 +9655,7 @@
             },
             {
               "front": "When does the train/bus for _____ leave?",
-              "back": "Когда отходит поезд/автобус в _____ ?",
+              "back": "Когда отходит поезд/автобус в _____?",
               "hint": "kahg-DAH aht-KHOH-deet POH-eest / ahf-TOH-boos v _____?"
             },
             {
@@ -9690,7 +9695,7 @@
             },
             {
               "front": "How do I get to _____ ?",
-              "back": "Как добраться до_____ ?",
+              "back": "Как добраться до_____?",
               "hint": "kahk dah-BRAH-tsuh duh ___?"
             },
             {
@@ -9739,7 +9744,7 @@
             {
               "front": "How much is a room for one person/two people?",
               "back": "Сколько стоит комната на одного человека/двух человек?",
-              "hint": null
+              "hint": "SKOHL’-kuh STOH-eet KOM-nuh-tuh nah uhd-nah-VOH chee-lah-VYEH-kuh / dvookh chee-lah-VYEHK"
             },
             {
               "front": "Does the room come with...",
@@ -9809,7 +9814,7 @@
             {
               "front": "I will stay for _____ night(s).",
               "back": "Я останусь на _____ ночь (ночи/ночей).",
-              "hint": "yah ahs-TAH-noos’ nah _____ nohch’ (NOH-chee/nah-CHYAY"
+              "hint": "yah ahs-TAH-noos’ nah _____ nohch’ NOH-chee/nah-CHYAY"
             },
             {
               "front": "Can you suggest another hotel?",
@@ -9842,7 +9847,7 @@
             {
               "front": "Do you accept American/Australian/Canadian dollars?",
               "back": "Вы принимаете американские/австралийские/канадские доллары?",
-              "hint": null
+              "hint": "vyh pree-nee-MAH-ee-tyeh uh-mee-ree-KAHN-skee-yeh / uhv-struh-LEE-skee-yeh / kuh-NAHD-skee-yeh DOH-luhr-yh"
             },
             {
               "front": "Do you accept British pounds?",
@@ -9945,7 +9950,7 @@
             {
               "front": "Can you make it \"lite\", please?",
               "back": "Сделайте, пожалуйста, поменьше жира.",
-              "hint": null
+              "hint": "SDYEH-ligh-tyeh, puh-zhahl-uh-stuh, pah-MYEHN'-shyh zhyh-RAH"
             },
             {
               "front": "fixed-price meal",
@@ -9980,12 +9985,12 @@
             {
               "front": "I want _____.",
               "back": "Я хочу _____.",
-              "hint": "yah khah-CHOO"
+              "hint": "yah khah-CHOO; use first form below"
             },
             {
               "front": "I want a dish containing _____.",
               "back": "Я хочу блюдо с _____.",
-              "hint": "yah khah-CHOO BLYOO-duh s _____"
+              "hint": "yah khah-CHOO BLYOO-duh s _____; use second form"
             },
             {
               "front": "chicken",
@@ -10067,7 +10072,7 @@
             },
             {
               "front": "Do you ship (overseas)?",
-              "back": "У вас есть доставка (за границу)? (",
+              "back": "У вас есть доставка (за границу)?",
               "hint": "oo vahs yehst’ dahs-TAHF-kah (zah grah-NEET-sooh)"
             },
             {
@@ -10233,6 +10238,11 @@
           "position": 1,
           "cards": [
             {
+              "front": "Leave me alone.",
+              "back": "mujhe akela chhod do",
+              "hint": null
+            },
+            {
               "front": "Don't touch me!",
               "back": "मुझे मत छूओ ।",
               "hint": "mujhe chunā mat"
@@ -10244,12 +10254,12 @@
             },
             {
               "front": "Police!",
-              "back": "पोलीस ! पोलीस !",
+              "back": "पोलीस! पोलीस!",
               "hint": "police ! police !"
             },
             {
               "front": "Stop! Thief!",
-              "back": "रुको ! चोर !",
+              "back": "रुको! चोर!",
               "hint": "rukho! chor!"
             },
             {
@@ -10294,7 +10304,7 @@
             },
             {
               "front": "Can I use your phone?",
-              "back": "क्या मै फ़ोन कर सकता हूं ?",
+              "back": "क्या मै फ़ोन कर सकता हूं?",
               "hint": "kya main phone kar sakta hoon ?"
             }
           ]
@@ -10367,7 +10377,7 @@
             },
             {
               "front": "Where can I find (some)____",
-              "back": "(कुछ) ____ कहाँ मिलेंगे? &mdash; (kuch) ... kidharai?",
+              "back": "कुछ) ____ कहाँ मिलेंगे? &mdash; (kuch)... kidharai?",
               "hint": null
             },
             {
@@ -10744,17 +10754,17 @@
             },
             {
               "front": "Do you ship (overseas)?",
-              "back": "Do you ship (overseas)? parcel kar sakthe hoo",
+              "back": "Do you ship (overseas)? parcel kar sakte hoo",
               "hint": null
             },
             {
               "front": "I need...",
-              "back": "मुझे ...चाहिये &mdash; mujhe ... cāhiye",
+              "back": "मुझे...चाहिये &mdash; mujhe... cāhiye",
               "hint": null
             },
             {
               "front": "...toothpaste.",
-              "back": "(दँत) मंजन... &mdash; (dant) manjan",
+              "back": "दँत) मंजन... &mdash; (dant) manjan",
               "hint": null
             },
             {
@@ -10791,6 +10801,11 @@
           "position": 9,
           "cards": [
             {
+              "front": "Leave me alone.",
+              "back": "mujhe akela chhod do",
+              "hint": null
+            },
+            {
               "front": "Don't touch me!",
               "back": "मुझे मत छूओ ।",
               "hint": "mujhe chunā mat"
@@ -10802,12 +10817,12 @@
             },
             {
               "front": "Police!",
-              "back": "पोलीस ! पोलीस !",
+              "back": "पोलीस! पोलीस!",
               "hint": "police ! police !"
             },
             {
               "front": "Stop! Thief!",
-              "back": "रुको ! चोर !",
+              "back": "रुको! चोर!",
               "hint": "rukho! chor!"
             },
             {
@@ -10852,7 +10867,7 @@
             },
             {
               "front": "Can I use your phone?",
-              "back": "क्या मै फ़ोन कर सकता हूं ?",
+              "back": "क्या मै फ़ोन कर सकता हूं?",
               "hint": "kya main phone kar sakta hoon ?"
             },
             {
@@ -10884,11 +10899,6 @@
               "front": "I want to talk to the American/Australian/British/Canadian embassy/consulate.",
               "back": "I need to talk to the American/Australian/British/Canadian embassy/consulate.",
               "hint": ".Mujhe America/ Australia/Britain/Canada ke rajdoot se sampark karna hai.."
-            },
-            {
-              "front": "I want to talk to a lawyer.",
-              "back": "I want to talk to a lawyer.",
-              "hint": ".Mujhe apne vakil se baat karni hai.."
             }
           ]
         }
@@ -10951,8 +10961,8 @@
             },
             {
               "front": "My name is ______ .",
-              "back": "Adım _______ . Benim adım ______ .",
-              "hint": "Ad uhm _____ ."
+              "back": "Adım _______. Benim adım ______.",
+              "hint": "Ad uhm _____ .; Benn im ad uhm _____ ."
             },
             {
               "front": "Nice to meet you.",
@@ -11099,8 +11109,8 @@
             },
             {
               "front": "I don't understand.",
-              "back": "Anlamıyorum , Anlamadım",
-              "hint": "An-la-muh-yoor-uhm"
+              "back": "Anlamıyorum, Anlamadım",
+              "hint": "An-la-muh-yoor-uhm; An la ma duhm"
             },
             {
               "front": "Where is the toilet?",
@@ -11388,8 +11398,8 @@
             },
             {
               "front": "Where?",
-              "back": "(place) nerede?",
-              "hint": "nar edeh"
+              "back": "place) nerede? (direction) nereye?",
+              "hint": "nar edeh; nar eyeh"
             },
             {
               "front": "Left",
@@ -11486,7 +11496,7 @@
             },
             {
               "front": "Does the room come with _____",
-              "back": "Odada _____ var mı?",
+              "back": "Odada _____ var mı? ;...bedsheets? :...yatak çarşafı ;...a bathroom? :...banyo/duş ;...a telephone? :...telefon ;...a TV? :...televizyon",
               "hint": null
             },
             {
@@ -11496,7 +11506,7 @@
             },
             {
               "front": "Do you have anything quieter?",
-              "back": "Daha var mı?",
+              "back": "Daha var mı? ;...bigger? :...büyüğü? ;...cleaner? :...temizi? ;...cheaper? :...ucuzu?",
               "hint": "sessizi"
             },
             {
@@ -11516,7 +11526,7 @@
             },
             {
               "front": "Do you have a safe?",
-              "back": "var mı?",
+              "back": "var mı? ;...lockers? :...kilidiniz",
               "hint": "Kasanız"
             },
             {
@@ -11584,8 +11594,8 @@
             },
             {
               "front": "I'm a vegetarian.",
-              "back": "Ben vejeteryanım. , if that doesn't get the point across: Et yemem , literally \"I don't eat meat\".",
-              "hint": "BEHN vay zhay tehr yah nuhm"
+              "back": "Ben vejeteryanım., if that doesn't get the point across: Et yemem, literally \"I don't eat meat\".",
+              "hint": "BEHN vay zhay tehr yah nuhm; EHT yeh mehm"
             },
             {
               "front": "I don't eat pork.",
@@ -11663,7 +11673,7 @@
             {
               "front": "How much (money)?",
               "back": "Fiyatı nedir? (formal), Kaç para?",
-              "hint": "fee YAH tuh NEH deer"
+              "hint": "fee YAH tuh NEH deer; KACH pah rah"
             },
             {
               "front": "Cheap",
@@ -11683,7 +11693,7 @@
             {
               "front": "How much is this?",
               "back": "Bunun fiyatı nedir? (formal), Bu kaç para?",
-              "hint": "BOO noon fee yaht tuh neh deer"
+              "hint": "BOO noon fee yaht tuh neh deer; BOO kach pah rah"
             },
             {
               "front": "That's too expensive.",
@@ -11722,13 +11732,8 @@
             },
             {
               "front": "Do you ship (overseas)?",
-              "back": "(Yurtdışına) kargonuz var mı?",
+              "back": "Yurtdışına) kargonuz var mı?",
               "hint": null
-            },
-            {
-              "front": "I need...",
-              "back": "... ihtiyacım var.",
-              "hint": "eeh tee YAH juhm vahr"
             }
           ]
         },
@@ -11889,28 +11894,28 @@
             },
             {
               "front": "What is your name?",
-              "back": "Hoe heet je? , or Wat is jouw naam?",
-              "hint": "hoo HAYT yuh?"
+              "back": "Hoe heet je?, or Wat is jouw naam?",
+              "hint": "hoo HAYT yuh?; wat is yow NAHM?"
             },
             {
               "front": "My name is ______ .",
-              "back": "Ik heet ______ .",
-              "hint": "ick HAYT _____ ."
+              "back": "Ik heet ______. Mijn naam is ______.",
+              "hint": "ick HAYT _____ .; meyn NAHM is _____ ."
             },
             {
               "front": "Nice to meet you.",
-              "back": "Aangenaam kennis te maken.",
-              "hint": "AHN-guh-nahm KEH-nis tuh MAH-kun"
+              "back": "Aangenaam kennis te maken. Aangenaam.",
+              "hint": "AHN-guh-nahm KEH-nis tuh MAH-kun; AHN-guh-nahm"
             },
             {
               "front": "Please.",
-              "back": "(formal) Alstublieft.",
-              "hint": "AHL-stuu-BLEEFT"
+              "back": "formal) Alstublieft. (informal) Alsjeblieft.",
+              "hint": "AHL-stuu-BLEEFT; AHL-syuh-BLEEFT"
             },
             {
               "front": "Thank you.",
-              "back": "(formal) Dank u.",
-              "hint": "DAHNK uu"
+              "back": "formal) Dank u. (informal) Dank je.",
+              "hint": "DAHNK uu; DAHNK yuh"
             },
             {
               "front": "You're welcome.",
@@ -11934,8 +11939,8 @@
             },
             {
               "front": "Excuse me.",
-              "back": "Mag ik even uw aandacht?",
-              "hint": "mahg ick AY-vuhn uuw AHN-daght?"
+              "back": "Mag ik even uw aandacht? Pardon",
+              "hint": "mahg ick AY-vuhn uuw AHN-daght?; PAR-don"
             },
             {
               "front": "Excuse me.",
@@ -11944,8 +11949,8 @@
             },
             {
               "front": "I'm sorry.",
-              "back": "Het spijt me.",
-              "hint": "het SPAYT muh"
+              "back": "Het spijt me. Sorry.",
+              "hint": "het SPAYT muh; SOH-ree"
             },
             {
               "front": "Goodbye",
@@ -12218,28 +12223,28 @@
             },
             {
               "front": "a quarter past two (2",
-              "back": "15) : kwart over twee",
+              "back": "15 : kwart over twee",
               "hint": "kwahrt OH-fur TWAY"
             },
             {
               "front": "a quarter to four (3",
-              "back": "45) : kwart voor vier",
+              "back": "45 : kwart voor vier",
               "hint": "kwahrt VOHR veer"
             },
             {
               "front": "half past nine (9",
-              "back": "30) : half tien",
+              "back": "30 : half tien",
               "hint": "HEHLF teen"
             },
             {
               "front": "_____ minute(s)",
               "back": "_____ minuut / minuten",
-              "hint": "min-UUHT"
+              "hint": "min-UUHT; min-UUHT-uhn"
             },
             {
               "front": "_____ hour(s)",
               "back": "_____ uur / uren",
-              "hint": "UUHR"
+              "hint": "UUHR; UUHr-uhn"
             }
           ]
         },
@@ -12266,8 +12271,8 @@
             },
             {
               "front": "A round trip, please.",
-              "back": "{Flanders} Heen-en-terug, graag",
-              "hint": "HAYN-an-trugh ghrahg"
+              "back": "{Flanders} Heen-en-terug, graag {Netherlands} Een retourtje, graag",
+              "hint": "HAYN-an-trugh ghrahg; uhn ruh-TOUR-tyuh, ghrahg"
             },
             {
               "front": "Where does this train/bus go?",
@@ -12296,7 +12301,7 @@
             },
             {
               "front": "How do I get to ... ?",
-              "back": "Hoe kom ik bij ... ?",
+              "back": "Hoe kom ik bij...?",
               "hint": "HOO kum ick bey"
             },
             {
@@ -12336,7 +12341,7 @@
             },
             {
               "front": "Where are there a lot of ...",
-              "back": "Waar zijn er veel ...",
+              "back": "Waar zijn er veel...",
               "hint": "WAHR zayn er VAYL"
             },
             {
@@ -12374,7 +12379,7 @@
             },
             {
               "front": "Does the room come with...",
-              "back": "Is er een ... in de kamer?",
+              "back": "Is er een... in de kamer?",
               "hint": "is uhr uhn ... in duh KAH-mur"
             },
             {
@@ -12419,8 +12424,8 @@
             },
             {
               "front": "OK, I'll take it.",
-              "back": "Goed, ik neem deze.",
-              "hint": "ghoot ick name DAY-zuh"
+              "back": "Goed, ik neem deze. Akkoord.",
+              "hint": "ghoot ick name DAY-zuh; AH-cohrd"
             },
             {
               "front": "I will stay for _____ night(s).",
@@ -12439,8 +12444,8 @@
             },
             {
               "front": "...lockers?",
-              "back": "...baggagekastjes?",
-              "hint": "bah-GHAH-zuh-kass-tyus"
+              "back": "...baggagekastjes?...lockers?",
+              "hint": "bah-GHAH-zuh-kass-tyus; LOCK-kurs"
             },
             {
               "front": "Is breakfast/supper included?",
@@ -12468,7 +12473,7 @@
             {
               "front": "Do you accept American/Australian/Canadian dollars?",
               "back": "Kan ik met Amerikaanse/Australische/Canadese dollars betalen?",
-              "hint": null
+              "hint": "kahn ick met ah-MAY-ree-kahn-suh/aus-TRAH-lee-shuh/cah-NAH-day-suh DOH-lars buh-TAH-lun"
             },
             {
               "front": "Do you accept British pounds?",
@@ -12477,8 +12482,8 @@
             },
             {
               "front": "Do you accept credit cards?",
-              "back": "{Flanders} Kan ik met een kredietkaart betalen?",
-              "hint": "kahn ick met uhn kray-DEET-kahrt buh-TAH-lun"
+              "back": "{Flanders} Kan ik met een kredietkaart betalen? {Netherlands} Kan ik met een credit card betalen?",
+              "hint": "kahn ick met uhn kray-DEET-kahrt buh-TAH-lun; kahn ick met uhn KREH-dit kart buh-TAH-lun"
             },
             {
               "front": "Can you change money for me?",
@@ -12504,11 +12509,6 @@
               "front": "What is the exchange rate?",
               "back": "Wat is de wisselkoers?",
               "hint": "wat is duh WIS-ul-koors"
-            },
-            {
-              "front": "Where is an automatic teller machine (ATM)?",
-              "back": "Waar vind ik een geldautomaat?",
-              "hint": "wahr vint ick uhn GHELT-oh-toh-maht"
             }
           ]
         },
@@ -12693,7 +12693,7 @@
             },
             {
               "front": "I need...",
-              "back": "Ik heb ... nodig.",
+              "back": "Ik heb... nodig.",
               "hint": "ick hap ... NOH-digh"
             },
             {
@@ -12806,7 +12806,7 @@
             },
             {
               "front": "(There's a) fire!",
-              "back": "(Er is) brand!",
+              "back": "Er is) brand!",
               "hint": "(uhr is) BRAHNT!"
             },
             {
@@ -12855,88 +12855,88 @@
           "cards": [
             {
               "front": "Hello",
-              "back": "Informal - ' ' Formal - ' '",
-              "hint": "Cześć"
+              "back": "Informal - Cześć Formal - Dzień dobry",
+              "hint": "Tch-esh-ch; Jeyn Dob-ry"
             },
             {
               "front": "How are you?",
-              "back": "' '",
-              "hint": "Jak się masz?"
+              "back": "Jak się masz?",
+              "hint": "Yahk shye mah-sh"
             },
             {
               "front": "Fine, thank you",
-              "back": "' '",
-              "hint": "Dziękuję, dobrze."
+              "back": "Dziękuję, dobrze.",
+              "hint": "Jenkoo-yeng dob-zhe"
             },
             {
               "front": "What is your name?",
-              "back": "' ' Note: meaning in Polish 'What is your given name?'",
-              "hint": "Jak masz na imię?"
+              "back": "Jak masz na imię?",
+              "hint": "yahk mah-sh nah eem-ye"
             },
             {
               "front": "My name is ______ .",
-              "back": "' ' Note: in Polish when you introduce yourself you should start from given name followed by surname",
-              "hint": "Nazywam się ______."
+              "back": "Nazywam się ______.",
+              "hint": "Nah-zivam sheng ____"
             },
             {
               "front": "Please.",
-              "back": "' '",
-              "hint": "Proszę"
+              "back": "Proszę",
+              "hint": "PRO-she"
             },
             {
               "front": "Thank you.",
-              "back": "' '",
-              "hint": "Dziękuję."
+              "back": "Dziękuję.",
+              "hint": "Jenkoo-yen"
             },
             {
               "front": "You're welcome",
-              "back": "Informal - ' ' Formal - Proszę",
-              "hint": "Nie ma za co"
+              "back": "Informal - Nie ma za co Formal - Proszę",
+              "hint": "nye ma za tso; PRO-she"
             },
             {
               "front": "Yes.",
-              "back": "' '",
-              "hint": "Tak"
+              "back": "Tak",
+              "hint": "tahk"
             },
             {
               "front": "No.",
-              "back": "' '",
-              "hint": "Nie"
+              "back": "Nie",
+              "hint": "nye"
             },
             {
               "front": "Excuse me.",
-              "back": "(for getting attention) ' '",
-              "hint": "Przepraszam."
+              "back": "for getting attention) Przepraszam.",
+              "hint": "pshe-pra-sham"
             },
             {
               "front": "I'm sorry.",
-              "back": "' '",
-              "hint": "Przepraszam."
+              "back": "Przepraszam.",
+              "hint": "pshe-pra-sham"
             },
             {
               "front": "Goodbye",
-              "back": "Informal - ' ' (pah) Formal - ' '",
-              "hint": null
+              "back": "Informal - pa (pah) Formal - Do widzenia",
+              "hint": "do vee-dze-nya"
             },
             {
               "front": "I can't speak Polish [well].",
-              "back": "' '",
-              "hint": "Nie mówię [dobrze] po polsku."
+              "back": "Nie mówię [dobrze] po polsku.",
+              "hint": "nye moo-vye [dob-zhe] po pol-skoo"
             },
             {
               "front": "Do you speak English?",
-              "back": "' '",
-              "hint": "Czy mówisz po angielsku?"
+              "back": "Czy mówisz po angielsku?",
+              "hint": "chi moo-vish po ang-gyel-skoo?"
             },
             {
               "front": "Is there someone here who speaks English?",
-              "back": "' '",
-              "hint": "Czy ktoś tu mówi po angielsku?"
+              "back": "Czy ktoś tu mówi po angielsku?",
+              "hint": "tch-y ktosh too moo-vee po ang-yel-skoo"
             },
             {
               "front": "Help!",
-              "back": "' ' (po-mo-tsy) or ' '",
-              "hint": "Pomocy!"
+              "back": "Pomocy! (po-mo-tsy) or Ratunku!",
+              "hint": "ra-toon-koo"
             },
             {
               "front": "Good morning",
@@ -12950,8 +12950,8 @@
             },
             {
               "front": "Good night",
-              "back": "' '",
-              "hint": "Dobranoc."
+              "back": "Dobranoc.",
+              "hint": "doh-brah-nots"
             }
           ]
         },
@@ -12963,13 +12963,13 @@
           "cards": [
             {
               "front": "I don't understand",
-              "back": "' '",
-              "hint": "Nie rozumiem"
+              "back": "Nie rozumiem",
+              "hint": "Nyeh roh-zoom-yem"
             },
             {
               "front": "Where is the toilet?",
-              "back": "' '",
-              "hint": "Gdzie jest toaleta?"
+              "back": "Gdzie jest toaleta?",
+              "hint": "g-jeh yest toa-leta"
             },
             {
               "front": "Leave me alone.",
@@ -12979,7 +12979,7 @@
             {
               "front": "I'll call the police.",
               "back": "As in summoning - Zawołam policję! As in using a phone - Zadzwonię na policję",
-              "hint": "ZAH-voh-wam poh-litz-yeh"
+              "hint": "ZAH-voh-wam poh-litz-yeh; ZAH-dzvohn-yeh nah poh-litz-yeh"
             },
             {
               "front": "Police!",
@@ -13034,7 +13034,7 @@
             {
               "front": "Can I use (your) phone?",
               "back": "Czy mogę zadzwonić (od pana/pani)?",
-              "hint": "tshy moh-gheh zah-tzvoh-nitz (ohd pa-nih [fem.]/pah-nah [masc.]"
+              "hint": "tshy moh-gheh zah-tzvoh-nitz ohd pa-nih [fem.]/pah-nah [masc.]"
             }
           ]
         },
@@ -13101,7 +13101,7 @@
             },
             {
               "front": "11",
-              "back": "jedenaście (-nasty)",
+              "back": "jedenaście (-nasty",
               "hint": "yeh-deh-NAHSH-cheh"
             },
             {
@@ -13459,7 +13459,7 @@
             {
               "front": "Can you make it \"lite\", please?",
               "back": "Czy mogłoby to być podane \"dietetycznie\" (mniej oleju/masła/smalcu)?",
-              "hint": null
+              "hint": "Chih mo-GWO=bih to bihtch po=DAH-ne \"DJE-te-tihtch-nyeh\" (mnyeh o-LEY-oo/MA-swa/SHMAL-tsoo)"
             },
             {
               "front": "fixed-price meal",
@@ -13469,7 +13469,7 @@
             {
               "front": "à la carte",
               "back": "z karty, z menu",
-              "hint": "zeh KAR-tee"
+              "hint": "zeh KAR-tee; zeh ME-nee"
             },
             {
               "front": "breakfast",
@@ -13483,8 +13483,8 @@
             },
             {
               "front": "dinner",
-              "back": "obiad/kolacja(supper) (",
-              "hint": "ob-YAD/ko-LATS-ya)"
+              "back": "obiad/kolacja",
+              "hint": "ob-YAD/ko-LATS-ya"
             },
             {
               "front": "I want _____.",
@@ -13519,7 +13519,7 @@
             {
               "front": "sausage",
               "back": "parówką, kiełbasą",
-              "hint": "pa-ROV-koh"
+              "hint": "pa-ROV-koh; kjew-BA-sa"
             }
           ]
         },
@@ -13645,7 +13645,7 @@
             {
               "front": "I'll call the police.",
               "back": "As in summoning - Zawołam policję! As in using a phone - Zadzwonię na policję",
-              "hint": "ZAH-voh-wam poh-litz-yeh"
+              "hint": "ZAH-voh-wam poh-litz-yeh; ZAH-dzvohn-yeh nah poh-litz-yeh"
             },
             {
               "front": "Police!",
@@ -13700,7 +13700,7 @@
             {
               "front": "Can I use (your) phone?",
               "back": "Czy mogę zadzwonić (od pana/pani)?",
-              "hint": "tshy moh-gheh zah-tzvoh-nitz (ohd pa-nih [fem.]/pah-nah [masc.]"
+              "hint": "tshy moh-gheh zah-tzvoh-nitz ohd pa-nih [fem.]/pah-nah [masc.]"
             },
             {
               "front": "I haven't done anything wrong.",
@@ -13758,8 +13758,8 @@
           "cards": [
             {
               "front": "Hello.",
-              "back": "Hej. . Also hejsan . Informal, but nowadays used in most every context in Sweden. In informal contexts, you can also use tjena , or tja",
-              "hint": "HAY"
+              "back": "Hej.. Also hejsan. Informal, but nowadays used in most every context in Sweden. In informal contexts, you can also use tjena, or tja",
+              "hint": "HAY; haysan; Schenah – soft e; Scheh"
             },
             {
               "front": "How are you?",
@@ -13778,13 +13778,13 @@
             },
             {
               "front": "My name is ______ .",
-              "back": "Jag heter ______ .",
+              "back": "Jag heter ______.",
               "hint": "Yag HAY-tehr _____ ."
             },
             {
               "front": "Nice to meet you.",
-              "back": "Trevligt att träffa dig (singular) / er (plural)",
-              "hint": "TRAYV-leet at TREH-fa day"
+              "back": "Trevligt att träffa dig (singular) / er (plural",
+              "hint": "TRAYV-leet at TREH-fa day; ehr"
             },
             {
               "front": "Please.",
@@ -13849,7 +13849,7 @@
             {
               "front": "I can't speak 'Swedish' [well].",
               "back": "Jag kan inte tala 'svenska' [så bra]",
-              "hint": null
+              "hint": "Yaag can eenteh taahla 'svenskah' [sooh brah]"
             },
             {
               "front": "Do you speak English?",
@@ -13891,17 +13891,17 @@
             },
             {
               "front": "Good day.",
-              "back": "God dag . Formal.",
+              "back": "God dag. Formal.",
               "hint": "Good daag"
             },
             {
               "front": "Good afternoon.",
-              "back": "God eftermiddag . Ditto. Or jokingly (even more so than the previous).",
+              "back": "God eftermiddag. Ditto. Or jokingly (even more so than the previous).",
               "hint": "Good ef-ter-mee-dag"
             },
             {
               "front": "Good evening.",
-              "back": "God kväll . ... But you can use it.",
+              "back": "God kväll.... But you can use it.",
               "hint": "Good kvell"
             },
             {
@@ -14116,8 +14116,8 @@
               "hint": "qvahrt ee"
             },
             {
-              "front": "1",
-              "back": "30 pm : Halv två",
+              "front": "1:30 pm",
+              "back": "Halv två",
               "hint": "hahlv tvoo"
             },
             {
@@ -14160,7 +14160,7 @@
             },
             {
               "front": "Where does this train go?",
-              "back": "Vart går detta tåg ?",
+              "back": "Vart går detta tåg?",
               "hint": "vahrt goor dat a toog"
             },
             {
@@ -14190,7 +14190,7 @@
             },
             {
               "front": "How do I get to _____ ?",
-              "back": "Hur kommer jag till _____ ?",
+              "back": "Hur kommer jag till _____?",
               "hint": "Hoor koomar yag teel"
             },
             {
@@ -14220,7 +14220,7 @@
             },
             {
               "front": "...the _____ hotel?",
-              "back": "...hotellet _____ ?",
+              "back": "...hotellet _____?",
               "hint": "hootahlat"
             },
             {
@@ -14268,7 +14268,7 @@
             },
             {
               "front": "Does the room come with...",
-              "back": "Ingår ... i rummet",
+              "back": "Ingår... i rummet",
               "hint": "Ehngaar ... ee roomat"
             },
             {
@@ -14298,8 +14298,8 @@
             },
             {
               "front": "Do you have anything smaller?",
-              "back": "Finns det något ' '?",
-              "hint": "mindre"
+              "back": "Finns det något mindre?",
+              "hint": "feens dat noogot meendra?"
             },
             {
               "front": "...bigger?",
@@ -14402,7 +14402,7 @@
             {
               "front": "Where can I get a traveler's check changed?",
               "back": "Var kan jag växla en resecheck?",
-              "hint": "Vahr can yag vacslaa ahn rehsah chac"
+              "hint": "'Vahr can yag vacslaa ahn rehsah chac"
             },
             {
               "front": "What is the exchange rate?",
@@ -14495,7 +14495,7 @@
             {
               "front": "lunch",
               "back": "lunch or when in Skåne/Scania middag",
-              "hint": "loons"
+              "hint": "loons; meedag"
             },
             {
               "front": "tea",
@@ -14505,7 +14505,7 @@
             {
               "front": "supper",
               "back": "middag or when in Skåne/Scania kvällsmat",
-              "hint": "meedag"
+              "hint": "meedag; kvaellsmaat"
             },
             {
               "front": "I want _____.",
@@ -14627,8 +14627,8 @@
             },
             {
               "front": "...pain reliever. aspirin/ibuprofen",
-              "back": "...något smärtstillande ' '.",
-              "hint": "aspririn/ibuprofen"
+              "back": "...något smärtstillande aspririn/ibuprofen.",
+              "hint": "noogoot smahrt-steel-ahn-deh ahspeereen/eebooproofehn"
             }
           ]
         },
@@ -14736,7 +14736,7 @@
             {
               "front": "I want to talk to the American/Australian/British/Canadian embassy/consulate.",
               "back": "Jag vill tala med det amerikanska/australiensiska/brittiska/kanadensiska konsulatet.",
-              "hint": null
+              "hint": "'Yag veel tahla mehd dat americansca/aoostraaleeahnseesca/breeteesca/canahdehnseesca cohn-soo-lah-tat"
             }
           ]
         }
@@ -14769,7 +14769,7 @@
             },
             {
               "front": "How are you?",
-              "back": "Τι κάνετε;",
+              "back": "Τι κάνετε",
               "hint": "tee KAH-neh-teh?"
             },
             {
@@ -14779,18 +14779,18 @@
             },
             {
               "front": "What is your name?",
-              "back": "Πώς σε λένε;",
+              "back": "Πώς σε λένε",
               "hint": "pohs seh LEH-neh?"
             },
             {
               "front": "My name is ______ .",
-              "back": "Με λένε ______ . / Ονομάζομαι _____ .",
-              "hint": "Με LE-neh _____ . / Ono-MAH-zo-meh ____ ."
+              "back": "Με λένε ______. / Ονομάζομαι _____.",
+              "hint": null
             },
             {
               "front": "Nice to meet you.",
               "back": "Χάρηκα / Χαίρω πολύ.",
-              "hint": "HA-ree-ka / ΗEH-ro po-LEE"
+              "hint": null
             },
             {
               "front": "Please.",
@@ -14809,7 +14809,7 @@
             },
             {
               "front": "Yes.",
-              "back": "Ναι / Μάλιστα (polite) .",
+              "back": "Ναι / Μάλιστα (polite).",
               "hint": "neh / MAH-li-sta"
             },
             {
@@ -14819,8 +14819,8 @@
             },
             {
               "front": "Excuse me.",
-              "back": "Συγγνώμη / Με συγχωρείτε .",
-              "hint": "See-GHNO-mee"
+              "back": "Συγγνώμη / Με συγχωρείτε.",
+              "hint": "See-GHNO-mee; Meh seen-ho-REE-teh"
             },
             {
               "front": "Excuse me.",
@@ -14849,12 +14849,12 @@
             },
             {
               "front": "Do you speak English?",
-              "back": "Μιλάτε αγγλικά;",
+              "back": "Μιλάτε αγγλικά",
               "hint": "mee-LAH-teh ang-glee-KAH?"
             },
             {
               "front": "Is there someone here who speaks English?",
-              "back": "Μιλάει κανείς εδώ αγγλικά;",
+              "back": "Μιλάει κανείς εδώ αγγλικά",
               "hint": "Mee-LAH-ee ka-NEES e-DHO ang-glee-KAH?"
             }
           ]
@@ -14883,7 +14883,7 @@
             {
               "front": "Good night.",
               "back": "Καληνύχτα.",
-              "hint": "kah-lee-NEEKΗ-tah"
+              "hint": null
             },
             {
               "front": "I don't understand.",
@@ -14892,8 +14892,8 @@
             },
             {
               "front": "Where is the toilet?",
-              "back": "Που είναι η τουαλέτα;",
-              "hint": "poo ΕΕ-ne ee too-ah-LEH-tah?"
+              "back": "Που είναι η τουαλέτα",
+              "hint": null
             },
             {
               "front": "I love you",
@@ -15136,7 +15136,7 @@
           "cards": [
             {
               "front": "How much is a ticket to _____?",
-              "back": "Πόσο κάνει ένα εισιτήριο για _____;",
+              "back": "Πόσο κάνει ένα εισιτήριο για _____",
               "hint": null
             },
             {
@@ -15146,27 +15146,27 @@
             },
             {
               "front": "Where does this train/bus go?",
-              "back": "Που πάει αυτό το τραίνο/λεωφορείο;",
+              "back": "Που πάει αυτό το τραίνο/λεωφορείο",
               "hint": null
             },
             {
               "front": "Where is the train/bus to _____?",
-              "back": "Που είναι το τραίνο/λεωφορείο _____;",
+              "back": "Που είναι το τραίνο/λεωφορείο _____",
               "hint": null
             },
             {
               "front": "Does this train/bus stop in _____?",
-              "back": "Σταματάει το τραίνο στο _____;",
+              "back": "Σταματάει το τραίνο στο _____",
               "hint": null
             },
             {
               "front": "When does the train/bus for _____ leave?",
-              "back": "Πότε φεύγει το τραίνο/λεωφορείο για _____;",
+              "back": "Πότε φεύγει το τραίνο/λεωφορείο για _____",
               "hint": null
             },
             {
               "front": "When will this train/bus arrive in _____?",
-              "back": "Πότε θα φτάσει το τραίνο/λεωφορείο στο _____;",
+              "back": "Πότε θα φτάσει το τραίνο/λεωφορείο στο _____",
               "hint": null
             },
             {
@@ -15176,62 +15176,62 @@
             },
             {
               "front": "How do I get to _____ ?",
-              "back": "Πώς πηγαίνω στο/στην/στον(depending on gender) _____ ;",
+              "back": "Πώς πηγαίνω στο/στην/στον(depending on gender) _____",
               "hint": "pos pi-GEH-no sto/stin/ston"
             },
             {
               "front": "...the train station?",
-              "back": "...σιδηροδρομικό σταθμό;",
+              "back": "...σιδηροδρομικό σταθμό",
               "hint": null
             },
             {
               "front": "...the bus station?",
-              "back": "...στάση του λεωφορείου;",
+              "back": "...στάση του λεωφορείου",
               "hint": null
             },
             {
               "front": "...the airport?",
-              "back": "...αεροδρόμιο;",
+              "back": "...αεροδρόμιο",
               "hint": null
             },
             {
               "front": "...downtown?",
-              "back": "...κέντρο;",
+              "back": "...κέντρο",
               "hint": null
             },
             {
               "front": "...the youth hostel?",
-              "back": "...ξενώνα για νέους;",
+              "back": "...ξενώνα για νέους",
               "hint": null
             },
             {
               "front": "...the _____ hotel?",
-              "back": "...το _____ ξενοδοχείο;",
+              "back": "...το _____ ξενοδοχείο",
               "hint": null
             },
             {
               "front": "...the American/Canadian/Australian/British consulate?",
-              "back": "...τον Αμερικανό/Καναδό/Αυστραλό/Βρετανό πρόξενο;",
+              "back": "...τον Αμερικανό/Καναδό/Αυστραλό/Βρετανό πρόξενο",
               "hint": null
             },
             {
               "front": "Where are there a lot of...",
-              "back": "Πού υπάρχουν πολλά ...",
+              "back": "Πού υπάρχουν πολλά...",
               "hint": null
             },
             {
               "front": "...hotels?",
-              "back": "...ξενοδοχεία;",
+              "back": "...ξενοδοχεία",
               "hint": null
             },
             {
               "front": "...restaurants?",
-              "back": "...εστιατόρια;",
+              "back": "...εστιατόρια",
               "hint": null
             },
             {
               "front": "...bars?",
-              "back": "...μπαρ;",
+              "back": "...μπαρ",
               "hint": null
             }
           ]
@@ -15249,57 +15249,57 @@
             },
             {
               "front": "How much is a room for one person/two people?",
-              "back": "Πόσο έχει το μονόκλινο/δίκλινο;",
+              "back": "Πόσο έχει το μονόκλινο/δίκλινο",
               "hint": null
             },
             {
               "front": "Does the room come with...",
-              "back": "Στο δωμάτιο συμπεριλαμβάνεται και ...",
+              "back": "Στο δωμάτιο συμπεριλαμβάνεται και...",
               "hint": null
             },
             {
               "front": "...bedsheets?",
-              "back": "...σεντόνια;",
+              "back": "...σεντόνια",
               "hint": null
             },
             {
               "front": "...a bathroom?",
-              "back": "...ένα μπάνιο;",
+              "back": "...ένα μπάνιο",
               "hint": null
             },
             {
               "front": "...a telephone?",
-              "back": "...τηλέφωνο;",
+              "back": "...τηλέφωνο",
               "hint": null
             },
             {
               "front": "...a TV?",
-              "back": "...τηλεόραση;",
+              "back": "...τηλεόραση",
               "hint": null
             },
             {
               "front": "May I see the room first?",
-              "back": "Μπορώ να δω πρώτα το δωμάτιο;",
+              "back": "Μπορώ να δω πρώτα το δωμάτιο",
               "hint": null
             },
             {
               "front": "Do you have anything quieter?",
-              "back": "Έχετε κάτι ποιο ήσυχο;",
+              "back": "Έχετε κάτι ποιο ήσυχο",
               "hint": null
             },
             {
               "front": "...bigger?",
-              "back": "...μεγαλύτερο;",
+              "back": "...μεγαλύτερο",
               "hint": null
             },
             {
               "front": "...cleaner?",
-              "back": "...καθαρότερο;",
+              "back": "...καθαρότερο",
               "hint": null
             },
             {
               "front": "...cheaper?",
-              "back": "...φθηνότερο;",
+              "back": "...φθηνότερο",
               "hint": null
             },
             {
@@ -15314,27 +15314,27 @@
             },
             {
               "front": "Can you suggest another hotel?",
-              "back": "Μπορείτε να μου συστήσετε ένα άλλο ξενοδοχείο;",
+              "back": "Μπορείτε να μου συστήσετε ένα άλλο ξενοδοχείο",
               "hint": null
             },
             {
               "front": "Do you have a safe?",
-              "back": "Έχετε χρηματοκιβώτιο;",
+              "back": "Έχετε χρηματοκιβώτιο",
               "hint": null
             },
             {
               "front": "...lockers?",
-              "back": "...θυρίδες;",
+              "back": "...θυρίδες",
               "hint": null
             },
             {
               "front": "Is breakfast/supper included?",
-              "back": "Συμπεριλαμβάνεται πρωινό/γεύμα;",
+              "back": "Συμπεριλαμβάνεται πρωινό/γεύμα",
               "hint": null
             },
             {
               "front": "What time is breakfast/supper?",
-              "back": "Τι ώρα ειναι το πρωινό/γεύμα;",
+              "back": "Τι ώρα ειναι το πρωινό/γεύμα",
               "hint": null
             },
             {
@@ -15352,47 +15352,47 @@
           "cards": [
             {
               "front": "Do you accept American/Australian/Canadian dollars?",
-              "back": "Δέχεσθε αμερικανικά/αυστραλιανά/καναδικά δολάρια;",
+              "back": "Δέχεσθε αμερικανικά/αυστραλιανά/καναδικά δολάρια",
               "hint": null
             },
             {
               "front": "Do you accept British pounds?",
-              "back": "Δέχεσθε βρατανικές λίρες;",
+              "back": "Δέχεσθε βρατανικές λίρες",
               "hint": null
             },
             {
               "front": "Do you accept credit cards?",
-              "back": "Δέχεσθε πιστωτικές κάρτες;",
+              "back": "Δέχεσθε πιστωτικές κάρτες",
               "hint": null
             },
             {
               "front": "Can you change money for me?",
-              "back": "Μπορείτε να μου χαλάσετε/αλλάξετε χρήματα;",
+              "back": "Μπορείτε να μου χαλάσετε/αλλάξετε χρήματα",
               "hint": null
             },
             {
               "front": "Where can I get money changed?",
-              "back": "Πού μπορώ να χαλάσω/αλλάξω χρήματα;",
+              "back": "Πού μπορώ να χαλάσω/αλλάξω χρήματα",
               "hint": null
             },
             {
               "front": "Can you change a traveler's check for me?",
-              "back": "Μπορείτε να μου χαλάσετε μια ταξιδιωτική επιταγή;",
+              "back": "Μπορείτε να μου χαλάσετε μια ταξιδιωτική επιταγή",
               "hint": null
             },
             {
               "front": "Where can I get a traveler's check changed?",
-              "back": "Πού μπορώ να χαλάσω μια ταξιδιωτική επιταγή;",
+              "back": "Πού μπορώ να χαλάσω μια ταξιδιωτική επιταγή",
               "hint": null
             },
             {
               "front": "What is the exchange rate?",
-              "back": "Ποια είναι η τιμή συναλλάγματος;",
+              "back": "Ποια είναι η τιμή συναλλάγματος",
               "hint": null
             },
             {
               "front": "Where is an automatic teller machine (ATM)?",
-              "back": "Πού υπάρχει μια Αυτόματη Ταμειακή Μηχανή (ATM);",
+              "back": "Πού υπάρχει μια Αυτόματη Ταμειακή Μηχανή (ATM",
               "hint": null
             }
           ]
@@ -15410,22 +15410,22 @@
             },
             {
               "front": "Can I look at the menu, please?",
-              "back": "Μπορώ να έχω έναν κατάλογο, παρακαλώ;",
+              "back": "Μπορώ να έχω έναν κατάλογο, παρακαλώ",
               "hint": null
             },
             {
               "front": "Can I look in the kitchen?",
-              "back": "Μπορώ να επισκεφθώ την κουζίνα;",
+              "back": "Μπορώ να επισκεφθώ την κουζίνα",
               "hint": null
             },
             {
               "front": "Is there a house specialty?",
-              "back": "Yπάρχει καμιά σπιτική σπεσιαλιτέ;",
+              "back": "Yπάρχει καμιά σπιτική σπεσιαλιτέ",
               "hint": null
             },
             {
               "front": "Is there a local specialty?",
-              "back": "Υπάρχει καμιά τοπική σπεσιαλιτέ;",
+              "back": "Υπάρχει καμιά τοπική σπεσιαλιτέ",
               "hint": null
             },
             {
@@ -15445,7 +15445,7 @@
             },
             {
               "front": "Can you make it \"lite\", please?",
-              "back": "Μπορείτε να το μαγειρέψετε ελαφρά, παρακαλώ;",
+              "back": "Μπορείτε να το μαγειρέψετε ελαφρά, παρακαλώ",
               "hint": null
             },
             {
@@ -15470,7 +15470,7 @@
             },
             {
               "front": "tea",
-              "back": "απογευματινό (?)",
+              "back": "απογευματινό (?",
               "hint": null
             },
             {
@@ -15513,7 +15513,7 @@
           "cards": [
             {
               "front": "Do you have this in my size?",
-              "back": "To έχετε αυτό στο δικό μου νούμερο;",
+              "back": "To έχετε αυτό στο δικό μου νούμερο",
               "hint": null
             },
             {
@@ -15528,7 +15528,7 @@
             },
             {
               "front": "Would you take _____?",
-              "back": "Δέχεστε _____;",
+              "back": "Δέχεστε _____",
               "hint": null
             },
             {
@@ -15568,12 +15568,12 @@
             },
             {
               "front": "Can I have a bag?",
-              "back": "Μπορώ να έχω μία τσάντα;",
+              "back": "Μπορώ να έχω μία τσάντα",
               "hint": null
             },
             {
               "front": "Do you ship (overseas)?",
-              "back": "Κάνετε αποστολές (στο εξωτερικό);",
+              "back": "Κάνετε αποστολές (στο εξωτερικό",
               "hint": null
             },
             {
@@ -15671,7 +15671,7 @@
             },
             {
               "front": "I'm sick.",
-              "back": "Είμαι άρρωστος/τη .",
+              "back": "Είμαι άρρωστος/τη.",
               "hint": "EE-me hah-ROHS-tos/tee"
             },
             {
@@ -15686,7 +15686,7 @@
             },
             {
               "front": "Can I use your phone?",
-              "back": "Μπορώ να χρησιμοποιήσω το τηλέφωνό σας;",
+              "back": "Μπορώ να χρησιμοποιήσω το τηλέφωνό σας",
               "hint": "mboh-ROH nah khree-see-moh-pee-EEH-soh toh tee-LEH-foh-NOH sahs?"
             },
             {
@@ -15761,7 +15761,7 @@
             {
               "front": "Fine, thank you.",
               "back": "Tôi khoẻ, cảm ơn.",
-              "hint": "thoy"
+              "hint": "thoy; kweah, gam uhhn"
             },
             {
               "front": "What is your name? (formal, to a man (forties or older, depending on the sensitivity of the person you address))",
@@ -15780,7 +15780,7 @@
             },
             {
               "front": "My name is ______ .",
-              "back": "Tôi tên là ______ .",
+              "back": "Tôi tên là ______.",
               "hint": "Thoye theyn la _____ ."
             },
             {
@@ -15800,8 +15800,8 @@
             },
             {
               "front": "Yes.",
-              "back": "Vâng (affirmative). ; Dạ (affirmative, respectful) (''ya'a''); Đúng",
-              "hint": "vuhng"
+              "back": "Vâng (affirmative). ; Dạ (affirmative, respectful) ; Đúng",
+              "hint": "vuhng; ya'a; duhn"
             },
             {
               "front": "No.",
@@ -15816,17 +15816,17 @@
             {
               "front": "I'm sorry.",
               "back": "Xin lỗi.",
-              "hint": null
+              "hint": "seen loh'EE"
             },
             {
               "front": "Goodbye",
-              "back": "Chào. , Tạm biệt",
+              "back": "Chào., Tạm biệt",
               "hint": "jow"
             },
             {
               "front": "I can't speak Vietnamese [well].",
               "back": "Tôi không biết nói tiếng Việt [cho lắm].",
-              "hint": null
+              "hint": "thoy kohng bee-IT noh-Y thee-IHNG vee'it [chaw lahm]"
             },
             {
               "front": "Do you speak English?",
@@ -15859,7 +15859,7 @@
             {
               "front": "Look out!",
               "back": "Cẩn thận!",
-              "hint": null
+              "hint": "guhn tuh'n!"
             },
             {
               "front": "Good evening.",
@@ -15907,7 +15907,7 @@
             {
               "front": "1",
               "back": "một",
-              "hint": null
+              "hint": "mo'oht"
             },
             {
               "front": "2",
@@ -15957,7 +15957,7 @@
             {
               "front": "11",
               "back": "mười một",
-              "hint": null
+              "hint": "muh-uh-ee mo'oht"
             },
             {
               "front": "12",
@@ -16015,7 +16015,7 @@
             {
               "front": "later",
               "back": "lát nữa",
-              "hint": null
+              "hint": "laht? neu'uh?"
             },
             {
               "front": "before",
@@ -16034,8 +16034,8 @@
             },
             {
               "front": "evening, night",
-              "back": "tối , đêm",
-              "hint": "thoh-ee"
+              "back": "tối, đêm",
+              "hint": "thoh-ee; dehm"
             },
             {
               "front": "one o'clock AM",
@@ -16118,12 +16118,12 @@
             {
               "front": "How much is a ticket to _____?",
               "back": "Một vé đến _____ là bao nhiêu?",
-              "hint": null
+              "hint": "mo'oht veah? dehn? _____ lah... bao nyee-oh"
             },
             {
               "front": "One ticket to _____, please.",
               "back": "Xin cho tôi một vé đến _____.",
-              "hint": null
+              "hint": "seen jyaw thoh-ee mo'oht veah? dehn? _____"
             },
             {
               "front": "Where does this train/bus go?",
@@ -16138,21 +16138,21 @@
             {
               "front": "Does this train/bus stop in _____?",
               "back": "Tàu/xe này có dừng tại _____ không?",
-              "hint": null
+              "hint": "thoe.../seah nay...! goh? zeung... thah'ee _____ kohng"
             },
             {
               "front": "When does the train/bus for _____ leave?",
               "back": "Tàu/xe đi _____ chạy lúc nào?",
-              "hint": null
+              "hint": "thoe.../seah dee _____ jyah'ee loohk? nahh-oh..."
             },
             {
               "front": "When will this train/bus arrive in _____?",
               "back": "Khi nào tàu/xe này sẽ đến _____?",
-              "hint": null
+              "hint": "kee nahh-oh thoe.../seah nay...! seah'uh? dehn? _____"
             },
             {
               "front": "How do I get to _____ ?",
-              "back": "Làm cách nào để tôi đến _____ ?",
+              "back": "Làm cách nào để tôi đến _____?",
               "hint": null
             },
             {
@@ -16172,7 +16172,7 @@
             },
             {
               "front": "...downtown?",
-              "back": "...thành phố?",
+              "back": "...thành phố? Đường xuống phố như thế nào?",
               "hint": null
             },
             {
@@ -16235,7 +16235,7 @@
             },
             {
               "front": "Does the room come with...",
-              "back": "Trong phòng có ... không?",
+              "back": "Trong phòng có... không?",
               "hint": null
             },
             {
@@ -16245,7 +16245,7 @@
             },
             {
               "front": "...a bathroom?",
-              "back": "...phòng vệ sinh? ; ...phòng cầu tiêu",
+              "back": "...phòng vệ sinh? ;...phòng cầu tiêu",
               "hint": null
             },
             {
@@ -16471,12 +16471,12 @@
             },
             {
               "front": "chicken",
-              "back": "(thịt) gà",
+              "back": "thịt) gà",
               "hint": "teet. gah..."
             },
             {
               "front": "beef",
-              "back": "(thịt) bò",
+              "back": "thịt) bò",
               "hint": "teet. baw..."
             },
             {
@@ -16505,7 +16505,7 @@
             {
               "front": "Would you take _____?",
               "back": "Bạn lấy _____ được không?",
-              "hint": null
+              "hint": "ley? _____ deu'uhk kohng"
             },
             {
               "front": "expensive",
@@ -16683,17 +16683,17 @@
             {
               "front": "Where are you taking me?",
               "back": "Bạn đang dẫn tôi đi đâu?",
-              "hint": null
+              "hint": "bahn dahng yuh'n? thoh-ee dee duhw"
             },
             {
               "front": "I am an American/Australian/British/Canadian citizen.",
               "back": "Tôi là công dân Mỹ/Australia/Anh/Canada.",
-              "hint": null
+              "hint": "toh-ee lah... kohng yuhn mee'ee? / australia / ayng / kah-nah-dah"
             },
             {
               "front": "I want to talk to the (American/Australian/British/Canadian) (embassy/consulate).",
-              "back": "Tôi cần phải nói chuyện với (đại sứ quán/lãnh sự) (Mỹ/Australia/Anh/Canada). (''thoh-ee kuhn... fah...ee? naw-ee? cheu-ee'n vuh-ee? (dah'i seu? kwahn?/lay'ng? seu'eu)",
-              "hint": null
+              "back": "Tôi cần phải nói chuyện với (đại sứ quán/lãnh sự) (Mỹ/Australia/Anh/Canada).",
+              "hint": "thoh-ee kuhn... fah...ee? naw-ee? cheu-ee'n vuh-ee? (dah'i seu? kwahn?/lay'ng? seu'eu) mee'ee?/australia/ayng/kah-nah-dah"
             },
             {
               "front": "I want to talk to a lawyer.",
@@ -16850,7 +16850,7 @@
             {
               "front": "What?",
               "back": "อะไร",
-              "hint": null
+              "hint": "à'rai"
             },
             {
               "front": "When?",
@@ -16869,8 +16869,8 @@
             },
             {
               "front": "How much, how many?",
-              "back": "เท่าไหร่, กี่ (''thâo'rai''') or",
-              "hint": ") or ("
+              "back": "เท่าไหร่, กี่ ( ') or",
+              "hint": "thâo'rai; kii"
             },
             {
               "front": "What’s the matter?",
@@ -16943,7 +16943,7 @@
             {
               "front": "1",
               "back": "๑ หนึ่ง on its own, เอ็ด in compounds",
-              "hint": "nueng"
+              "hint": "nueng; et"
             },
             {
               "front": "2",
@@ -17136,7 +17136,7 @@
             {
               "front": "noon",
               "back": "เที่ยง or เที่ยงวัน",
-              "hint": "thîang"
+              "hint": "thîang; thîang wan"
             },
             {
               "front": "one o'clock PM",
@@ -17513,7 +17513,7 @@
             {
               "front": "I don't want it.",
               "back": "ผม/ดิฉันไม่ต้องการ",
-              "hint": "phŏm/dì-chăn mâi tông karn"
+              "hint": "'phŏm/dì-chăn mâi tông karn"
             },
             {
               "front": "You're cheating me.",
@@ -17595,7 +17595,7 @@
             },
             {
               "front": "Don't touch me!",
-              "back": "อย่าจับ ผม/ฉัน !",
+              "back": "อย่าจับ ผม/ฉัน!",
               "hint": "yàa jàp phŏm (men)/chan (for women)"
             },
             {
@@ -17646,7 +17646,7 @@
             {
               "front": "I'm sick.",
               "back": "ผม/ฉัน ไม่สบาย ผม/ฉัน ป่วย",
-              "hint": "phom/chan mai sabaai"
+              "hint": "phom/chan mai sabaai; phom/chan puai"
             },
             {
               "front": "I've been injured.",
@@ -17725,7 +17725,7 @@
             {
               "front": "Fine, thank you.",
               "back": "Baik, terima kasih.",
-              "hint": null
+              "hint": "bah-EE<nowiki>'</nowiki>, TREE-mah KAH-see"
             },
             {
               "front": "What is your name?",
@@ -17734,7 +17734,7 @@
             },
             {
               "front": "My name is ______ .",
-              "back": "Nama saya ______ .",
+              "back": "Nama saya ______.",
               "hint": "NAH-mah SAH-yah _____ ."
             },
             {
@@ -17774,8 +17774,8 @@
             },
             {
               "front": "No.",
-              "back": "Tidak",
-              "hint": "), Tak ("
+              "back": "Tidak, Tak",
+              "hint": "TEE-dah<nowiki>'</nowiki>; tah<nowiki>'</nowiki>"
             },
             {
               "front": "Excuse me.",
@@ -17822,8 +17822,8 @@
             },
             {
               "front": "Can you speak {language}?",
-              "back": "Bisakah Anda berbicara bahasa ____?",
-              "hint": "BEE-sah-kah AHN-dah buhr-bee-CHAH-rah ba-HAH-sah ____"
+              "back": "Bisakah Anda berbicara bahasa ____? ;English : Inggris ;Chinese : Mandarin / Tionghoa ;Dutch : Belanda ;Arabic : Arab ;Japanese : Jepang",
+              "hint": "BEE-sah-kah AHN-dah buhr-bee-CHAH-rah ba-HAH-sah ____; ING-griss; mahn-dah-RIN; buh-LAHN-dah; AH-rahb; JUH-pahng"
             },
             {
               "front": "What does ___ mean?",
@@ -17837,8 +17837,8 @@
             },
             {
               "front": "I can('t) speak Indonesian [well].",
-              "back": "Saya (tidak) bisa bicara bahasa Indonesia [dengan baik]. (''SAH-yah (TEE-dah') BEE-sah bee-CHA-rah ba-HAH-sah in-doh-NEE-zhah [DUHNG-an BAH-ee']'')",
-              "hint": null
+              "back": "Saya (tidak) bisa bicara bahasa Indonesia [dengan baik].",
+              "hint": "SAH-yah (TEE-dah<nowiki>'</nowiki>) BEE-sah bee-CHA-rah ba-HAH-sah in-doh-NEE-zhah [DUHNG-an BAH-ee<nowiki>'</nowiki>]"
             },
             {
               "front": "Speak more slowly, please",
@@ -17892,18 +17892,18 @@
             },
             {
               "front": "How do you say ...?",
-              "back": "Bagaimana Anda mengatakan ...?",
+              "back": "Bagaimana Anda mengatakan...?",
               "hint": "bah-GIGH-mah-nah AHN-dah muh-NGA-tah-kahn ...?"
             },
             {
               "front": "What is this/that called?",
               "back": "Ini/itu disebut apa? /Ini/itu namanya apa?",
-              "hint": "EE-nee/EE-too dee-suh-BUT AH-pah?"
+              "hint": "EE-nee/EE-too dee-suh-BUT AH-pah?; EE-nee/EE-too NAH-mah-nyah AH-pah?"
             },
             {
               "front": "I don't understand.",
               "back": "Saya tidak mengerti.",
-              "hint": null
+              "hint": "SAH-yah TEE-dah<nowiki>'</nowiki> muh-NGUHR-tee"
             },
             {
               "front": "Where is the toilet?",
@@ -17920,8 +17920,8 @@
           "cards": [
             {
               "front": "0",
-              "back": "nol . You will often hear the word meaning",
-              "hint": null
+              "back": "nol. You will often hear the word meaning",
+              "hint": "kosong; KO-song; empty"
             },
             {
               "front": "1",
@@ -18049,7 +18049,7 @@
             {
               "front": "What time is it now?",
               "back": "Jam berapa sekarang? or Pukul berapa sekarang?",
-              "hint": "JAM buh-RAH-pah suh-KAH-rahng?"
+              "hint": "JAM buh-RAH-pah suh-KAH-rahng?; POOH-kool buh-RAH-pah suh-KAH-rahng?"
             },
             {
               "front": "(Optional) Dawn",
@@ -18114,7 +18114,7 @@
             {
               "front": "02.45",
               "back": "jam tiga kurang seperempat/jam tiga kurang lima belas",
-              "hint": null
+              "hint": "jahm TEE-gah KOO-rahng suh-puhr-UHM-pa(t)/jahm TEE-gah KOO-rahng LEE-mah buh-LAHSS"
             },
             {
               "front": "12.00 noon",
@@ -18142,12 +18142,12 @@
             {
               "front": "How much is a ticket to _____?",
               "back": "Berapa harga karcis ke _____?",
-              "hint": "buh-RAH-pah  har-GAH  kar-CHIHSS  kuh _____?"
+              "hint": "buh-RAH-pah har-GAH kar-CHIHSS kuh _____?"
             },
             {
               "front": "I want to buy one ticket to _____, please.",
               "back": "Saya ingin membeli satu karcis ke _____.",
-              "hint": "SAH-yah IHNG-in muhm-BUH-lee SAH-too kar-CHIHSS  kuh _____"
+              "hint": "SAH-yah IHNG-in muhm-BUH-lee SAH-too kar-CHIHSS kuh _____"
             },
             {
               "front": "Where does this train/bus go?",
@@ -18176,7 +18176,7 @@
             },
             {
               "front": "How do I get to _____ ?",
-              "back": "Bagaimana saya pergi ke _____ ?",
+              "back": "Bagaimana saya pergi ke _____?",
               "hint": "Bah-GIGH-mah-nah SAH-yah puhr-GEE kuh ____"
             },
             {
@@ -18191,7 +18191,7 @@
             },
             {
               "front": "...the airport?",
-              "back": "...bandara? / ...bandar udara?",
+              "back": "...bandara? /...bandar udara?",
               "hint": "bahn-DAH-rah"
             },
             {
@@ -18201,18 +18201,18 @@
             },
             {
               "front": "...the _____ hotel?",
-              "back": "... hotel _____ ?",
+              "back": "... hotel _____?",
               "hint": "HO-tehl ____"
             },
             {
               "front": "...the American/Canadian/Australian/British embassy/consulate?",
-              "back": "... Kedutaan Besar/Konsulat Amerika/Kanada/Australia/Inggris ?",
+              "back": "... Kedutaan Besar/Konsulat Amerika/Kanada/Australia/Inggris?",
               "hint": "kuh-DOO-tah-ahn buh-SAR/KON-soo-lah(t) ..."
             },
             {
               "front": "Where are there a lot of...",
               "back": "Di mana ada banyak...",
-              "hint": null
+              "hint": "dee MAH-nah AH-dah BAHN-yah<nowiki>'</nowiki>"
             },
             {
               "front": "...hotels?",
@@ -18227,7 +18227,7 @@
             {
               "front": "...restaurants?",
               "back": "...rumah makan/restoran?",
-              "hint": "ROO-mah MAH-kahn"
+              "hint": "ROO-mah MAH-kahn; REHST-tor-ahn"
             },
             {
               "front": "...bars?",
@@ -18250,7 +18250,7 @@
             {
               "front": "How much is a room for one person/two people?",
               "back": "Berapa harga kamar untuk satu/dua orang?",
-              "hint": null
+              "hint": "buh-RAH-pah HAR-gah KAHM-ahr OON-too<nowiki>'</nowiki> SAH-too/DOO-ahO-rahng?"
             },
             {
               "front": "Does the room come with...",
@@ -18310,7 +18310,7 @@
             {
               "front": "OK, I'll take it.",
               "back": "Baik saya ambil.",
-              "hint": null
+              "hint": "bigh<nowiki>'</nowiki>, SAH-yah AHM-bihl"
             },
             {
               "front": "I will stay for _____ night(s).",
@@ -18353,7 +18353,7 @@
             {
               "front": "Do you accept American/Australian/Canadian dollars?",
               "back": "Apakah Anda menerima dollar Amerika/Australia/Kanada?",
-              "hint": null
+              "hint": "AH-pah-kah AHN-dah muh-nuh-REE-mah DO-lar ah-MEH-ree-kah/os-TRAH-lee-ah/KAH-nah-dah"
             },
             {
               "front": "Do you accept British pounds?",
@@ -18368,7 +18368,7 @@
             {
               "front": "Can you change money for me?",
               "back": "Bisakah Anda tukar uang untuk saya?",
-              "hint": null
+              "hint": "BEE-sah-kah AHN-dah TOO-kar OO-ahng OON-tu<nowiki>'</nowiki> SAH-yah"
             },
             {
               "front": "Where can I get money changed?",
@@ -18406,7 +18406,7 @@
             {
               "front": "A table for one person/two people, please.",
               "back": "Tolong beri saya satu meja untuk satu/dua orang.",
-              "hint": null
+              "hint": "TOH-long BUH-ree SAH-yah SAH-too MEH-jah OON-too<nowiki>'</nowiki> SAH-too/DOO-ah O-rahng"
             },
             {
               "front": "Can I look at the menu, please?",
@@ -18431,22 +18431,22 @@
             {
               "front": "I don't eat pork.",
               "back": "Saya tidak makan babi.",
-              "hint": null
+              "hint": "SAH-yah TEE-dah<nowiki>'</nowiki> MAH-kahn BAH-bee"
             },
             {
               "front": "I don't eat beef.",
               "back": "Saya tidak makan sapi.",
-              "hint": null
+              "hint": "SAH-yah TEE-dah<nowiki>'</nowiki> MAH-kahn SAH-pee"
             },
             {
               "front": "I don't eat seafood.",
-              "back": "Saya tidak makan hasil laut (''SAH-yah TEE-dah' MAH-kahn HAH-sihl LAH-oo(t)'')",
-              "hint": null
+              "back": "Saya tidak makan hasil laut",
+              "hint": "SAH-yah TEE-dah<nowiki>'</nowiki> MAH-kahn HAH-sihl LAH-oo(t)"
             },
             {
               "front": "Can you make it \"lite\", please?",
-              "back": "Bisakah dibuat dengan minyak sedikit saja? (''BEE-sah-kah dee-BU-ah(t) DUHNG-ahn MIN-yah' suh-DEE-ki(t) SAH-jah?'')",
-              "hint": null
+              "back": "Bisakah dibuat dengan minyak sedikit saja?",
+              "hint": "BEE-sah-kah dee-BU-ah(t) DUHNG-ahn MIN-yah<nowiki>'</nowiki> suh-DEE-ki(t) SAH-jah?"
             },
             {
               "front": "I want _____.",
@@ -18524,7 +18524,7 @@
             {
               "front": "Bargaining",
               "back": "Tawar",
-              "hint": "TAH-wahr"
+              "hint": "TAH-wahr; to offer"
             },
             {
               "front": "Do you have this in my size?",
@@ -18559,12 +18559,12 @@
             {
               "front": "I can't afford it.",
               "back": "Saya tidak mampu beli itu.",
-              "hint": null
+              "hint": "SAH-yah TEE-dah<nowiki>'</nowiki> MAHM-poo BUH-lee IH-too"
             },
             {
               "front": "I don't want it.",
               "back": "Saya tidak mau",
-              "hint": null
+              "hint": "SAH-yah TEE-dah<nowiki>'</nowiki> MAH-oo"
             },
             {
               "front": "You're cheating me.",
@@ -18574,12 +18574,12 @@
             {
               "front": "I'm not interested.",
               "back": "Saya tidak tertarik.",
-              "hint": null
+              "hint": "SAH-yah TEE-dah<nowiki>'</nowiki> tuhr-TAH-ri<nowiki>'</nowiki>"
             },
             {
               "front": "The quality is bad/not good.",
               "back": "Kualitasnya jelek/tidak bagus.",
-              "hint": null
+              "hint": "kwah-lee-TAHS-nyah JUH-leh<nowiki>'</nowiki>/TEE-dah<nowiki>'</nowiki> BAH-gooss"
             },
             {
               "front": "OK, I'll buy it.",
@@ -18599,7 +18599,7 @@
             {
               "front": "...toothpaste.",
               "back": "...pasta gigi/odol.",
-              "hint": "PAHS-tah GEE-gee"
+              "hint": "PAHS-tah GEE-gee; O-dol"
             },
             {
               "front": "...a toothbrush.",
@@ -18621,8 +18621,8 @@
           "cards": [
             {
               "front": "Foreigner",
-              "back": "Warga Negara Asing (literally: foreign citizen) or much more common by its acronym, WNA .",
-              "hint": "WAR-gah nuh-GAH-rah AH-sing"
+              "back": "Warga Negara Asing (literally: foreign citizen) or much more common by its acronym, WNA.",
+              "hint": "WAR-gah nuh-GAH-rah AH-sing; way-en-ah"
             },
             {
               "front": "Leave me alone.",
@@ -18707,7 +18707,7 @@
             {
               "front": "Nurse",
               "back": "Perawat or suster",
-              "hint": "PUH-rah-wah(t)"
+              "hint": "PUH-rah-wah(t); SUS-tuhr"
             },
             {
               "front": "Hospital",
@@ -18750,8 +18750,8 @@
             },
             {
               "front": "See you later",
-              "back": ".להתראות (''lehitra'ot - leh-hit-rah-'OHT'')The most common farewell greeting, besides the English \"Bye\". Again, the English \"Bye\" is also used.",
-              "hint": null
+              "back": ".להתראות The most common farewell greeting, besides the English \"Bye\". Again, the English \"Bye\" is also used.",
+              "hint": "lehitra'ot - leh-hit-rah-'OHT"
             },
             {
               "front": "Good morning",
@@ -18761,7 +18761,7 @@
             {
               "front": "Good afternoon",
               "back": ".צהריים טובים",
-              "hint": "tsohorayim tovim - tsoh-hoh-RAH-yeem toh-VEEM"
+              "hint": "tsohorayim tovim - tsoh-hoh-RAH-yeem toh-VEEM; a<u>h</u>ar tsohorayim tovim - aKHAR tsoh-hoh-RAH-yeem toh-VEEM"
             },
             {
               "front": "Good evening",
@@ -18775,17 +18775,17 @@
             },
             {
               "front": "How are you? (What's your wellbeing/peace?)- addressing to a man.",
-              "back": "&#8235;מה שלומך?&#8236;",
+              "back": "&#8235;מה שלומך?&#8236",
               "hint": "mah shlomkha? - mah shlom-KHAH"
             },
             {
               "front": "How are you? (What's your wellbeing/peace?)- addressing to a woman.",
-              "back": "&#8235;מה שלומך?&#8236;",
+              "back": "&#8235;מה שלומך?&#8236",
               "hint": "mah shlomekh? - mah shloh-MEKH"
             },
             {
               "front": "How are you? (What's being heard?).",
-              "back": "&#8235;מה נשמע?&#8236;",
+              "back": "&#8235;מה נשמע?&#8236",
               "hint": "mah nishma[`]? - mah nish-MAH"
             },
             {
@@ -18836,7 +18836,7 @@
             {
               "front": "What is your name? #2 (said to a man) (lit. \"How are you called?\").",
               "back": "?איך קוראים לך",
-              "hint": null
+              "hint": "ekh kor'im lekha"
             }
           ]
         },
@@ -18848,8 +18848,8 @@
           "cards": [
             {
               "front": "What is your name? #2 (said to a woman) (literally",
-              "back": "\"How are you called?\"). : ?איך קוראים לך",
-              "hint": null
+              "back": "\"How are you called?\". :?איך קוראים לך",
+              "hint": "eck kor'im lakh"
             },
             {
               "front": "My name is...",
@@ -18858,8 +18858,8 @@
             },
             {
               "front": "My name is #2 (literally",
-              "back": "I am called...) : קוראים לי",
-              "hint": null
+              "back": "I am called... : קוראים לי",
+              "hint": "kor'im li - kor-'EEM lee ..."
             },
             {
               "front": "How much is it?",
@@ -18873,27 +18873,27 @@
             },
             {
               "front": "Cash only",
-              "back": "מזומן בלבד ;",
+              "back": "מזומן בלבד",
               "hint": "mezuman bi-lvad - me-zu-MAN beel-VAD"
             },
             {
               "front": "Credit",
-              "back": "אשראי ;",
+              "back": "אשראי",
               "hint": "ashrai - ash-RYE"
             },
             {
               "front": "Leave me alone.",
-              "back": "When speaking to a male: עזוב אותי לנפשי :",
-              "hint": "azov oti lenafshi - ah-zov oh-ti le-na-fshi"
+              "back": "When speaking to a male: עזוב אותי לנפשי : When speaking to a female: עזבי אותי לנפשי",
+              "hint": "azov oti lenafshi - ah-zov oh-ti le-na-fshi; izvi oti lenafshi - ee-zvi oh-ti le-na-fshi"
             },
             {
               "front": "Don't touch me!",
-              "back": "When speaking to a male: אל תיגע בי! :",
-              "hint": "al tiga bee - al ti-gah bee"
+              "back": "When speaking to a male: אל תיגע בי! : When speaking to a female: אל תיגעי בי!",
+              "hint": "al tiga bee - al ti-gah bee; al tigeeh bee - al tig-eeh bee"
             },
             {
               "front": "I'll call the police.",
-              "back": "אני הולך/ת להתקשר למשטרה (.ani holekh (male) holekhet (female) le-hi-t-ka-sher la-mi-sh-ta-ra",
+              "back": "אני הולך/ת להתקשר למשטרה.ani holekh (male) holekhet (female) le-hi-t-ka-sher la-mi-sh-ta-ra",
               "hint": null
             },
             {
@@ -18908,7 +18908,7 @@
             },
             {
               "front": "I need your help.",
-              "back": "אני זקוק לעזרתך (ani zakuk(male) zkuka (female) lee-zrat-kha (male) ez-rat-ekh(female) (formal) ani tzarikh(male) tzrikha (female) et ezra-t-kha (male) ez-rat-ekh",
+              "back": "אני זקוק לעזרתך ani zakuk(male) zkuka (female) lee-zrat-kha (male) ez-rat-ekh(female) (formal) ani tzarikh(male) tzrikha (female) et ezra-t-kha (male) ez-rat-ekh",
               "hint": null
             },
             {
@@ -18933,7 +18933,7 @@
             },
             {
               "front": "I'm sick.",
-              "back": "אני חולה (Ani choleh (male)/ cholah)",
+              "back": "אני חולה (Ani choleh (male)/ cholah",
               "hint": null
             },
             {
@@ -18943,7 +18943,7 @@
             },
             {
               "front": "I need a doctor.",
-              "back": "אני זקוק/ה לרופא (Ani zakuk(male)zku-ka(female) lerofeh(formal) ani tzarikh'",
+              "back": "אני זקוק/ה לרופא Ani zakuk(male)zku-ka(female) lerofeh(formal) ani tzarikh'",
               "hint": null
             }
           ]
@@ -19007,7 +19007,7 @@
             {
               "front": "10",
               "back": "עשר",
-              "hint": "eser - EH-sehr"
+              "hint": "'eser - EH-sehr"
             },
             {
               "front": "11",
@@ -19027,7 +19027,7 @@
             {
               "front": "14",
               "back": "ארבע עשרה",
-              "hint": null
+              "hint": "arba'-`esreh - ar-bah es-REH"
             },
             {
               "front": "15",
@@ -19052,7 +19052,7 @@
             {
               "front": "19",
               "back": "תשע עשרה",
-              "hint": null
+              "hint": "tshah-'esreh - tshah es-REH"
             }
           ]
         },
@@ -19125,7 +19125,7 @@
             {
               "front": "_____ hour(s)",
               "back": "_____ שעה/ות",
-              "hint": null
+              "hint": "sha'ah/ot - sha-AH/OHT"
             },
             {
               "front": "_____ day(s)",
@@ -19172,12 +19172,12 @@
           "cards": [
             {
               "front": "Are there any rooms available?",
-              "back": "האם יש חדרים זמינים ?",
+              "back": "האם יש חדרים זמינים?",
               "hint": null
             },
             {
               "front": "How much is a room for one person/two people?",
-              "back": "כמה יעלה חדר לאדם אחד/שני בני אדם ?",
+              "back": "כמה יעלה חדר לאדם אחד/שני בני אדם?",
               "hint": null
             },
             {
@@ -19187,42 +19187,42 @@
             },
             {
               "front": "...bedsheets?",
-              "back": "...סדינים ?",
+              "back": "...סדינים?",
               "hint": null
             },
             {
               "front": "...a bathroom?",
-              "back": "...חדר אמבטיה ?",
+              "back": "...חדר אמבטיה?",
               "hint": null
             },
             {
               "front": "...a telephone?",
-              "back": "...טלפון ?",
+              "back": "...טלפון?",
               "hint": null
             },
             {
               "front": "...a TV?",
-              "back": "...טלוויזיה ?",
+              "back": "...טלוויזיה?",
               "hint": null
             },
             {
               "front": "May I see the room first?",
-              "back": "האם אוכל לראות את החדר ?",
-              "hint": null
+              "back": "האם אוכל לראות את החדר?",
+              "hint": "Ha’im u<u>h</u>al lirot et ha<u>h</u>eder - Ha-EEM oo-KHAHL lee-ROHT et ha-KHEH-der?"
             },
             {
               "front": "Do you have anything quieter?",
-              "back": "האם יש לכם חדר שקט יותר ?",
-              "hint": null
+              "back": "האם יש לכם חדר שקט יותר?",
+              "hint": "Ha’im yesh la<u>h</u>em <u>h</u>eder shaket yoter? - Ha-EEM yehsh lah-KHEHM KHEH-dehr shah-KEHT yoh-TEHR?"
             },
             {
               "front": "...bigger?",
-              "back": "...גדול יותר ?",
+              "back": "...גדול יותר?",
               "hint": "gadol yoter? - ga-DOHL yoh-TEHR?"
             },
             {
               "front": "...cleaner?",
-              "back": "...נקי יותר ?",
+              "back": "...נקי יותר?",
               "hint": "naki yoter - nah-KEE yoh-TEHR"
             },
             {
@@ -19247,17 +19247,17 @@
             },
             {
               "front": "Is there a safe?",
-              "back": "האם יש לכם כספת ?",
+              "back": "האם יש לכם כספת?",
               "hint": "ha-IM yesh le-khem cuh-SEH-phet?"
             },
             {
               "front": "Is breakfast/supper included?",
-              "back": "האם ארוחת בוקר/ערב כלולה במחיר ?",
+              "back": "האם ארוחת בוקר/ערב כלולה במחיר?",
               "hint": null
             },
             {
               "front": "What time is breakfast/supper?",
-              "back": "באיזה שעה ארוחת הבוקר/צהריים ? (",
+              "back": "באיזה שעה ארוחת הבוקר/צהריים?",
               "hint": null
             },
             {
@@ -19267,7 +19267,7 @@
             },
             {
               "front": "Can you wake me at _____?",
-              "back": "האם אפשר להעיר אותי בשעה _____ בבקשה ?",
+              "back": "האם אפשר להעיר אותי בשעה _____ בבקשה?",
               "hint": null
             }
           ]
@@ -19281,7 +19281,7 @@
             {
               "front": "A table for one person/two people, please.",
               "back": "בבקשה, שולחן לאחד /לשניים",
-              "hint": null
+              "hint": "b-vakasha shul<u>h</u>an l'e<u>h</u>ad/ lishnayim"
             },
             {
               "front": "Can I look at the menu, please?",
@@ -19290,17 +19290,17 @@
             },
             {
               "front": "I'm a vegetarian.",
-              "back": "אני צמחוני /אני צמחונית (Ani tsimhoni (masc)/ Ani tsimhonit (fem))",
+              "back": "אני צמחוני /אני צמחונית (Ani tsimhoni (masc)/ Ani tsimhonit (fem",
               "hint": null
             },
             {
               "front": "I don't eat beef.",
-              "back": "אני לא אוכל/ אני לא אוכלת בקר (Ani lo okhel bakar (masc)/ Ani lo okhelet bakar(fem))",
+              "back": "אני לא אוכל/ אני לא אוכלת בקר (Ani lo okhel bakar (masc)/ Ani lo okhelet bakar(fem",
               "hint": null
             },
             {
               "front": "I only eat kosher food.",
-              "back": "אני אוכל /אוכלת רק אוכל כשר (Ani okhel (masc)/okhelet (fem) raq okhel kasher)",
+              "back": "אני אוכל /אוכלת רק אוכל כשר (Ani okhel (masc)/okhelet (fem) raq okhel kasher",
               "hint": null
             },
             {
@@ -19325,7 +19325,7 @@
             },
             {
               "front": "I want _____.",
-              "back": "אני רוצה _____. (Ani rotseh (masc); Ani rotsah (fem))",
+              "back": "אני רוצה _____. (Ani rotseh (masc); Ani rotsah (fem",
               "hint": null
             },
             {
@@ -19388,7 +19388,7 @@
           "cards": [
             {
               "front": "How much is this?",
-              "back": "כמה זה עולה ?",
+              "back": "כמה זה עולה?",
               "hint": "Kamah zeh oleh? - KAH-mah zeh oh-LEH?"
             },
             {
@@ -19414,27 +19414,27 @@
             {
               "front": "I can't afford it.",
               "back": "אני לא יכול/ה להרשות את זה",
-              "hint": null
+              "hint": "Ani lo yachol/a leharshot et zeh. - ah-NEE loh ya-KHOHL/ya-choh-LAH le-har-SHOHT et zeh."
             },
             {
               "front": "I am looking for something cheaper.",
               "back": "אני מחפש/ת משהו זול יותר",
-              "hint": null
+              "hint": "Ani mechapes/et mashehu zol yoter. - ah-NEE mehkha-PEHS/et MAH-shu zohl yoh-TEHR."
             },
             {
               "front": "I don't want it.",
               "back": "אני לא מעוניין/ת בזה",
-              "hint": null
+              "hint": "Ani lo me'unyan/me'unyenet ba-zeh. - an-NEE loh me-oon-YAHN/mee-oon-YEN-net buh-ZEH."
             },
             {
               "front": "You're cheating me.",
               "back": "אתה מרמה אותי ( to a man) את מרמה אותי",
-              "hint": "Ata merame oti - a-TAH meh-ra-MEH oh-TEE"
+              "hint": "Ata merame oti - a-TAH meh-ra-MEH oh-TEE; At merama oti - aaht meh-ra-MAH oh-TEE"
             },
             {
               "front": "I'm not interested.",
               "back": "אני לא מעוניין/ת",
-              "hint": null
+              "hint": "Ani lo me'unyan/me'unyenet. - an-NEE loh me-oon-YAHN/mee-oon-YEN-net."
             },
             {
               "front": "OK, I'll take it.",
@@ -19444,11 +19444,11 @@
             {
               "front": "Can I have a bag?",
               "back": "אפשר בבקשה לקבל שקית?",
-              "hint": null
+              "hint": "Efshar b'vakasha lekabel sakit? - eff-SHAHR buh-VAH-kah-SHAH leh-kuh-BELL suh-KEET?"
             },
             {
               "front": "I need...",
-              "back": "אני זקוק/ה ל...",
+              "back": "-אני זקוק/ה ל...",
               "hint": "Ani zakuk le-... - ah-NEE zuh-KOOK le..."
             },
             {
@@ -19479,7 +19479,7 @@
             {
               "front": "...pain reliever.",
               "back": "...משכך כאבים",
-              "hint": null
+              "hint": "meshakech ke'evim - meh-shuh-KEKH keh-ev-EEM"
             },
             {
               "front": "...cold medicine.",
@@ -19496,17 +19496,17 @@
           "cards": [
             {
               "front": "Leave me alone.",
-              "back": "When speaking to a male: עזוב אותי לנפשי :",
-              "hint": "azov oti lenafshi - ah-zov oh-ti le-na-fshi"
+              "back": "When speaking to a male: עזוב אותי לנפשי : When speaking to a female: עזבי אותי לנפשי",
+              "hint": "azov oti lenafshi - ah-zov oh-ti le-na-fshi; izvi oti lenafshi - ee-zvi oh-ti le-na-fshi"
             },
             {
               "front": "Don't touch me!",
-              "back": "When speaking to a male: אל תיגע בי! :",
-              "hint": "al tiga bee - al ti-gah bee"
+              "back": "When speaking to a male: אל תיגע בי! : When speaking to a female: אל תיגעי בי!",
+              "hint": "al tiga bee - al ti-gah bee; al tigeeh bee - al tig-eeh bee"
             },
             {
               "front": "I'll call the police.",
-              "back": "אני הולך/ת להתקשר למשטרה (.ani holekh (male) holekhet (female) le-hi-t-ka-sher la-mi-sh-ta-ra",
+              "back": "אני הולך/ת להתקשר למשטרה.ani holekh (male) holekhet (female) le-hi-t-ka-sher la-mi-sh-ta-ra",
               "hint": null
             },
             {
@@ -19521,7 +19521,7 @@
             },
             {
               "front": "I need your help.",
-              "back": "אני זקוק לעזרתך (ani zakuk(male) zkuka (female) lee-zrat-kha (male) ez-rat-ekh(female) (formal) ani tzarikh(male) tzrikha (female) et ezra-t-kha (male) ez-rat-ekh",
+              "back": "אני זקוק לעזרתך ani zakuk(male) zkuka (female) lee-zrat-kha (male) ez-rat-ekh(female) (formal) ani tzarikh(male) tzrikha (female) et ezra-t-kha (male) ez-rat-ekh",
               "hint": null
             },
             {
@@ -19546,7 +19546,7 @@
             },
             {
               "front": "I'm sick.",
-              "back": "אני חולה (Ani choleh (male)/ cholah)",
+              "back": "אני חולה (Ani choleh (male)/ cholah",
               "hint": null
             },
             {
@@ -19556,12 +19556,12 @@
             },
             {
               "front": "I need a doctor.",
-              "back": "אני זקוק/ה לרופא (Ani zakuk(male)zku-ka(female) lerofeh(formal) ani tzarikh'",
+              "back": "אני זקוק/ה לרופא Ani zakuk(male)zku-ka(female) lerofeh(formal) ani tzarikh'",
               "hint": null
             },
             {
               "front": "Can I use your phone?",
-              "back": "האם אני יכול/ה בבקשה להשתמש בטלפון שלך? (Ha-im ani yachol/ yecholah\\ efshar(informal) bevakashah lehistamesh batelefon shelcha(male) shelach?)",
+              "back": "האם אני יכול/ה בבקשה להשתמש בטלפון שלך? (Ha-im ani yachol/ yecholah\\ efshar(informal) bevakashah lehistamesh batelefon shelcha(male) shelach?",
               "hint": null
             },
             {

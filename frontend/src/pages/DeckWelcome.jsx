@@ -52,7 +52,7 @@ export default function DeckWelcome({ onCreate, shareOpen, onShowShare, shareFor
 
   return (
     <section className="deck-welcome" aria-labelledby="deck-welcome-prompt">
-      <h2 id="deck-welcome-prompt">{t('decks.welcomePrompt')}</h2>
+      <h1 id="deck-welcome-prompt">{t('decks.welcomePrompt')}</h1>
       <form className="deck-welcome-search" onSubmit={searchSamples}>
         <input
           type="search"
@@ -67,35 +67,35 @@ export default function DeckWelcome({ onCreate, shareOpen, onShowShare, shareFor
           {t('library.search')}
         </button>
       </form>
-      <ChipGroup title={t('decks.welcomeLanguages')} groups={languages} />
-      <ChipGroup title={t('decks.welcomeSubjects')} groups={subjects} />
-      <div className="deck-welcome-actions">
-        <Link className="btn primary" to="/library">
-          {t('decks.welcomeSample')}
+      <ChipGroup title={t('decks.welcomeLanguages')} groups={languages} cap={3} />
+      <ChipGroup title={t('decks.welcomeSubjects')} groups={subjects} cap={2} />
+      <button className="btn deck-welcome-create" type="button" onClick={onCreate}>
+        <span className="deck-welcome-create-plus" aria-hidden="true">+</span>
+        {t('decks.welcomeCreate')}
+      </button>
+      <div className="deck-welcome-links">
+        <Link className="deck-welcome-browse" to="/library">
+          {t('decks.welcomeBrowse')}
         </Link>
-        <button className="btn" type="button" onClick={onCreate}>
-          {t('decks.welcomeCreate')}
-        </button>
+        {shareOpen ? null : (
+          <button className="btn ghost deck-welcome-share" type="button" onClick={onShowShare}>
+            {t('decks.welcomeShare')}
+          </button>
+        )}
       </div>
-      {shareOpen ? (
-        shareForm
-      ) : (
-        <button className="btn ghost deck-welcome-share" type="button" onClick={onShowShare}>
-          {t('decks.welcomeShare')}
-        </button>
-      )}
+      {shareOpen ? shareForm : null}
     </section>
   )
 }
 
-function ChipGroup({ title, groups }) {
+function ChipGroup({ title, groups, cap }) {
   if (!groups.length) {
     return null
   }
   return (
     <div className="deck-welcome-group">
       <h3>{title}</h3>
-      <div className="deck-welcome-chips">
+      <div className="deck-welcome-chips" data-cap={cap}>
         {groups.map((group) => (
           <Link key={group.id} className="library-suggestion" to={`/library/${group.slug}`}>
             {group.name}
