@@ -47,6 +47,11 @@ public class AuthController {
         return authService.loginWithGoogle(request);
     }
 
+    @PostMapping("/apple")
+    public AuthResponse loginWithApple(@Valid @RequestBody AppleLoginRequest request) {
+        return authService.loginWithApple(request);
+    }
+
     @GetMapping("/me")
     public UserResponse me(Authentication authentication) {
         UserPrincipal principal = AuthSupport.requireUser(authentication);

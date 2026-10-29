@@ -29,6 +29,7 @@ import LibraryPage from './pages/LibraryPage'
 import LibraryGroupPage from './pages/LibraryGroupPage'
 import LibraryDeckPage from './pages/LibraryDeckPage'
 import PrivacyPage from './pages/PrivacyPage'
+import TermsPage from './pages/TermsPage'
 import MarketingHeader, { MarketingFooter } from './pages/MarketingHeader'
 import ClassesPage from './pages/ClassesPage'
 import ClassDetailPage from './pages/ClassDetailPage'
@@ -145,6 +146,7 @@ function DocumentLang() {
       pathname.startsWith('/blog')
     const splash = !user && (pathname === '/' || pathname === '/login' || pathname === '/register')
     const privacy = pathname === '/privacy'
+    const terms = pathname === '/terms'
     const join = pathname.startsWith('/join/')
     const admin = Boolean(user) && pathname.startsWith('/admin')
     const billing = pathname.startsWith('/pro')
@@ -162,6 +164,8 @@ function DocumentLang() {
     }
     document.title = privacy
       ? `${t('privacy.title')} — ${t('app.name')}`
+      : terms
+        ? `${t('terms.title')} — ${t('app.name')}`
       : verify
         ? `${t('verify.title')} — ${t('app.name')}`
         : help
@@ -177,7 +181,7 @@ function DocumentLang() {
             : t('app.name')
     document.documentElement.lang = currentLocale()
     document.documentElement.dir = currentLocale() === 'ar' ? 'rtl' : 'ltr'
-    const publicPage = splash || privacy || help
+    const publicPage = splash || privacy || terms || help
     let robots = document.querySelector('meta[name="robots"]')
     if (!robots) {
       robots = document.createElement('meta')
@@ -190,6 +194,8 @@ function DocumentLang() {
       ? t('marketing.seoDescription')
       : privacy
         ? t('privacy.intro')
+        : terms
+          ? t('terms.intro')
         : help
           ? t('help.subtitle')
           : null
@@ -203,7 +209,7 @@ function DocumentLang() {
       meta.setAttribute('content', description)
     }
 
-    const canonicalPath = privacy ? '/privacy' : help ? '/help' : splash ? '/' : null
+    const canonicalPath = privacy ? '/privacy' : terms ? '/terms' : help ? '/help' : splash ? '/' : null
     let canonical = document.querySelector('link[rel="canonical"]')
     if (canonicalPath) {
       if (!canonical) {
@@ -433,6 +439,7 @@ export default function App() {
           }
         />
         <Route path="/privacy" element={<PrivacyPage />} />
+        <Route path="/terms" element={<TermsPage />} />
         <Route element={<OfflineGate />}>
           <Route path="/offline" element={<OfflineDecksPage />} />
           <Route path="/offline/listen" element={<OfflineListenPage />} />

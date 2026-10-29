@@ -18,10 +18,11 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import com.flashcards.auth.AppleProperties;
 import com.flashcards.auth.GoogleProperties;
 
 @Configuration
-@EnableConfigurationProperties({JwtProperties.class, GoogleProperties.class, CorsProperties.class})
+@EnableConfigurationProperties({JwtProperties.class, GoogleProperties.class, AppleProperties.class, CorsProperties.class})
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
@@ -44,7 +45,7 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.POST, "/api/auth/register", "/api/auth/login", "/api/auth/google")
+                        .requestMatchers(HttpMethod.POST, "/api/auth/register", "/api/auth/login", "/api/auth/google", "/api/auth/apple")
                                 .permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/auth/forgot-password", "/api/auth/reset-password")
                                 .permitAll()

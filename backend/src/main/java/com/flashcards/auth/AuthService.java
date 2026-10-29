@@ -31,6 +31,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final GoogleTokenService googleTokenService;
+    private final AppleTokenService appleTokenService;
     private final EmailVerificationService emailVerificationService;
 
     public AuthService(
@@ -38,11 +39,13 @@ public class AuthService {
             PasswordEncoder passwordEncoder,
             JwtService jwtService,
             GoogleTokenService googleTokenService,
+            AppleTokenService appleTokenService,
             EmailVerificationService emailVerificationService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
         this.googleTokenService = googleTokenService;
+        this.appleTokenService = appleTokenService;
         this.emailVerificationService = emailVerificationService;
     }
 
@@ -75,7 +78,9 @@ public class AuthService {
                 .orElseThrow(() -> new ApiException(HttpStatus.UNAUTHORIZED, "Invalid email or password"));
         String hash = user.getPasswordHash();
         if (hash == null || hash.isBlank()) {
-            throw new ApiException(HttpStatus.UNAUTHORIZED, "This account uses Google sign-in");
+            throw new ApiException(
+                    HttpStatus.UNAUTHORIZED,
+                    appleOnly(user) ? "This account uses Sign in with Apple" : "This account uses Google sign-in");
         }
         if (!passwordEncoder.matches(request.password(), hash)) {
             throw new ApiException(HttpStatus.UNAUTHORIZED, "Invalid email or password");
@@ -107,6 +112,44 @@ public class AuthService {
             user.setEmail(email);
         }
         user.setGoogleSub(profile.subject());
+        user.setEmailVerified(true);
+        userRepository.save(user);
+        return toAuthResponse(user);
+    }
+
+    @Transactional
+    public AuthResponse loginWithApple(AppleLoginRequest request) {
+        AppleTokenService.AppleProfile profile = appleTokenService.verify(request.identityToken());
+        User user = userRepository.findByAppleSub(profile.subject()).orElse(null);
+        String email = profile.email() == null ? null : profile.email().trim().toLowerCase();
+        if (user == null && email != null && !email.isEmpty()) {
+            user = userRepository.findByEmail(email).orElse(null);
+        }
+        if (user == null) {
+            if (email == null || email.isEmpty()) {
+                throw new ApiException(HttpStatus.UNAUTHORIZED, "Invalid Apple sign-in");
+            }
+            user = new User();
+            user.setEmail(email);
+            user.setDisplayName(displayNameFromApple(request.fullName(), email));
+            user.setTheme(Theme.DARK);
+            user.setLocale(UserLocale.fromCode(request.locale()));
+            user.setDeckSort(DeckSort.NEWEST);
+            user.setStudyOrder(StudyOrder.POSITION);
+            user.setStudyScope(StudyScope.DUE_ONLY);
+            user.setRestudyWait(RestudyWait.ONE_DAY);
+        } else if (user.getAppleSub() != null && !user.getAppleSub().equals(profile.subject())) {
+            throw new ApiException(HttpStatus.CONFLICT, "An account with that email already exists");
+        } else if (email != null && !email.isEmpty() && !email.equals(user.getEmail())
+                && userRepository.existsByEmail(email)) {
+            throw new ApiException(HttpStatus.CONFLICT, "An account with that email already exists");
+        } else if (email != null && !email.isEmpty()) {
+            user.setEmail(email);
+        }
+        if (user.getDisplayName() == null || user.getDisplayName().isBlank()) {
+            user.setDisplayName(displayNameFromApple(request.fullName(), user.getEmail()));
+        }
+        user.setAppleSub(profile.subject());
         user.setEmailVerified(true);
         userRepository.save(user);
         return toAuthResponse(user);
@@ -246,7 +289,20 @@ public class AuthService {
                 listenSleepMinutes,
                 listenSpeechRate,
                 user.isListenQuestionTwice(),
-                user.isListenAnswerTwice());
+                user.isListenAnswerTwice(),
+                hasAppleSub(user));
+    }
+
+    private static boolean appleOnly(User user) {
+        return hasAppleSub(user) && !hasGoogleSub(user);
+    }
+
+    private static boolean hasAppleSub(User user) {
+        return user.getAppleSub() != null && !user.getAppleSub().isBlank();
+    }
+
+    private static boolean hasGoogleSub(User user) {
+        return user.getGoogleSub() != null && !user.getGoogleSub().isBlank();
     }
 
     private static double nearestListenSpeechRate(double rate) {
@@ -270,6 +326,15 @@ public class AuthService {
         if (name.isEmpty()) {
             int at = email.indexOf('@');
             name = at > 0 ? email.substring(0, at) : email;
+        }
+        return name.length() > 100 ? name.substring(0, 100) : name;
+    }
+
+    private static String displayNameFromApple(String fullName, String email) {
+        String name = fullName == null ? "" : fullName.trim();
+        if (name.isEmpty()) {
+            int at = email == null ? -1 : email.indexOf('@');
+            name = at > 0 ? email.substring(0, at) : (email == null ? "Apple" : email);
         }
         return name.length() > 100 ? name.substring(0, 100) : name;
     }

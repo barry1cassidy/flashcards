@@ -9,6 +9,7 @@ import UIKit
 class MainViewController: CAPBridgeViewController {
     override open func capacitorDidLoad() {
         bridge?.registerPluginInstance(AppleBillingPlugin())
+        bridge?.registerPluginInstance(AppleSignInPlugin())
         bridge?.registerPluginInstance(ListenPlaybackPlugin())
         // The iPhone has no system Back button. This edge swipe follows the same
         // screen history the browser Back button and Android Back button use.

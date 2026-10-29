@@ -6,6 +6,8 @@ import { translateError } from '../i18n/errors'
 import { currentLocale } from '../i18n'
 import { isEmailVerified } from '../email'
 import GoogleSignInButton, { getGoogleClientId } from './GoogleSignInButton'
+import AppleSignInButton from './AppleSignInButton'
+import { appleSignInAvailable } from '../appleSignIn'
 import Brand from './Brand'
 import { goAfterAuth, inviteAuthState, clearJoinInvite } from '../authRedirect'
 import { SUPPORT_MAILTO } from '../support'
@@ -194,7 +196,7 @@ export default function MarketingHeader({ showLoginForm = false, loginOpen, onLo
 
 function LoginFields() {
   const { t } = useTranslation()
-  const { login, loginWithGoogle } = useAuth()
+  const { login, loginWithGoogle, loginWithApple } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
   const [email, setEmail] = useState('')
@@ -202,6 +204,7 @@ function LoginFields() {
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
   const googleEnabled = Boolean(getGoogleClientId())
+  const appleEnabled = appleSignInAvailable()
 
   async function finishLogin(work) {
     setError('')
@@ -228,18 +231,26 @@ function LoginFields() {
   return (
     <>
       {error ? <div className="error">{translateError(t, error)}</div> : null}
+      {appleEnabled ? (
+        <AppleSignInButton
+          disabled={busy}
+          onCredential={(result) =>
+            finishLogin(() => loginWithApple(result.identityToken, currentLocale(), result.fullName))
+          }
+        />
+      ) : null}
       {googleEnabled ? (
-        <>
-          <GoogleSignInButton
-            disabled={busy}
-            onCredential={(idToken) =>
-              finishLogin(() => loginWithGoogle(idToken, currentLocale()))
-            }
-          />
-          <p className="auth-divider">
-            <span>{t('auth.orEmail')}</span>
-          </p>
-        </>
+        <GoogleSignInButton
+          disabled={busy}
+          onCredential={(idToken) =>
+            finishLogin(() => loginWithGoogle(idToken, currentLocale()))
+          }
+        />
+      ) : null}
+      {appleEnabled || googleEnabled ? (
+        <p className="auth-divider">
+          <span>{t('auth.orEmail')}</span>
+        </p>
       ) : null}
       <form onSubmit={onSubmit} className="stack">
         <label>
@@ -341,6 +352,9 @@ export function MarketingFooter() {
         ) : null}
         <Link className="site-end-link" to="/privacy">
           {t('privacy.title')}
+        </Link>
+        <Link className="site-end-link" to="/terms">
+          {t('terms.title')}
         </Link>
       </div>
       <span>{t('marketing.copyright', { year: 2026 })}</span>

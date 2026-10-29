@@ -179,7 +179,7 @@ If the Google button is missing, `.env.local` is absent or Vite was not restarte
 
 ## Email verification (Resend)
 
-New **email/password** accounts must enter a 6-digit code before My Decks, Study Mix, AI, classes, Pro, and copying a shared deck or set unlock. Sample Sets, Help, and Settings stay available. Existing accounts stay verified. **Google sign-in** skips this (Google already verified the address).
+New **email/password** accounts must enter a 6-digit code before My Decks, Study Mix, AI, classes, Pro, and copying a shared deck or set unlock. Sample Sets, Help, and Settings stay available. Existing accounts stay verified. **Google sign-in** and **Sign in with Apple** skip this (the provider already verified the address). Sign in with Apple is iOS-only.
 
 You do not need Resend’s Node/PHP sample or the **Send email** button in their onboarding screen. Zipdeck already sends through `POST https://api.resend.com/emails`.
 
@@ -412,7 +412,7 @@ npm run android
 
 That builds with `VITE_API_BASE`, syncs Capacitor, and opens Android Studio. Pick an emulator (or a USB phone) and Run.
 
-The API must allow Capacitor origins (included in `APP_CORS_ORIGINS`). Put the same `VITE_GOOGLE_CLIENT_ID` Web client ID in `.env.android` as the website uses.
+The API must allow Capacitor origins (included in `APP_CORS_ORIGINS`). Put the same `VITE_GOOGLE_CLIENT_ID` Web client ID in `.env.android` as the website uses. Sign in with Apple is **iOS-only** (Guideline 4.8). Do not show that button on Android or the website.
 
 Google’s JavaScript button does not work in the Android WebView (tiny error page, then blank). The app uses native Google Sign-In instead. Adding `https://localhost` as a JavaScript origin will not fix that. `server.hostname` is `zipdeck.app` for password autofill. Native `VITE_API_BASE` must stay `https://api.zipdeck.app` so `/api` is not served from the bundle.
 
@@ -521,6 +521,8 @@ Xcode may keep **two** on-disk copies. Overwrite both after pull:
 ```bash
 cp frontend/ios-native/AppleBillingPlugin.swift frontend/ios/App/App/AppleBillingPlugin.swift
 cp frontend/ios-native/AppleBillingPlugin.swift frontend/ios/App/AppleBillingPlugin.swift
+cp frontend/ios-native/AppleSignInPlugin.swift frontend/ios/App/App/AppleSignInPlugin.swift
+cp frontend/ios-native/AppleSignInPlugin.swift frontend/ios/App/AppleSignInPlugin.swift
 cp frontend/ios-native/ListenPlaybackPlugin.swift frontend/ios/App/App/ListenPlaybackPlugin.swift
 cp frontend/ios-native/ListenPlaybackPlugin.swift frontend/ios/App/ListenPlaybackPlugin.swift
 cp frontend/ios-native/MainViewController.swift frontend/ios/App/App/MainViewController.swift
@@ -533,10 +535,10 @@ Then `find frontend/ios -name AppleBillingPlugin.swift` and `grep MainActor` on 
 After `git pull`:
 
 1. Copy the Swift files into the Xcode **App** target as above (same target as `Info.plist`). Add `MainViewController.swift` and `ListenPlaybackPlugin.swift` with File → Add Files if they are not already in the project. Overwrite `SceneDelegate.swift` — do not leave `CAPBridgeViewController()` as the root controller.
-2. Confirm **Build Phases → Compile Sources** lists `AppleBillingPlugin.swift`, `ListenPlaybackPlugin.swift`, `MainViewController.swift`, and `SceneDelegate.swift` (select the blue App project, then TARGETS → App → Build Phases). Confirm **Background Modes → Audio** is still checked after `cap sync`.
+2. Confirm **Build Phases → Compile Sources** lists `AppleBillingPlugin.swift`, `AppleSignInPlugin.swift`, `ListenPlaybackPlugin.swift`, `MainViewController.swift`, and `SceneDelegate.swift` (select the blue App project, then TARGETS → App → Build Phases). Confirm **Background Modes → Audio** is still checked after `cap sync`. If `AppleSignInPlugin.swift` is missing from Compile Sources, File → Add Files to App, pick `ios/App/App/AppleSignInPlugin.swift`, and tick the App target.
 3. In `SceneDelegate.swift`, `willConnectTo` must use `window?.rootViewController = MainViewController()`. The storyboard Custom Class does not matter on Capacitor 8.5. Grep must show `MainViewController()`, not `CAPBridgeViewController()`.
-4. Signing & Capabilities → add **In-App Purchase** if it is not already there. Keep Associated Domains (`applinks:zipdeck.app`, `webcredentials:zipdeck.app`).
-5. `npm run build:android` then `npx cap sync ios`. Confirm `AppleBillingPlugin.swift`, `ListenPlaybackPlugin.swift`, `MainViewController.swift`, and `SceneDelegate.swift` are still in Compile Sources (`cap sync` must not delete them). If you sync after copying, copy the Swift files **again**. Confirm Background Modes → Audio is still checked.
+4. Signing & Capabilities → add **In-App Purchase** if it is not already there. Keep **Sign in with Apple** (Guideline 4.8). Keep Associated Domains (`applinks:zipdeck.app`, `webcredentials:zipdeck.app`). Do not add Sustained Execution.
+5. `npm run build:android` then `npx cap sync ios`. Confirm `AppleBillingPlugin.swift`, `AppleSignInPlugin.swift`, `ListenPlaybackPlugin.swift`, `MainViewController.swift`, and `SceneDelegate.swift` are still in Compile Sources (`cap sync` must not delete them). If you sync after copying, copy the Swift files **again**. Confirm Background Modes → Audio and Sign in with Apple are still checked.
 
 **Paid Apps** (App Store Connect → **Business** → Agreements) must be **Active** or StoreKit returns no products and Subscribe shows “This subscription is not available in the App Store yet.” **Pending User Info** / **Processing** means tax or banking is incomplete. Complete the **electronic W-9** in that page (do not download a blank IRS form). US individual / sole proprietor is **Non-Exempt Payee**. Leave Business Name blank unless you file under a different legal name. Add a **bank account** on the same page. Do not paste TINs or bank numbers into git or chat. Bank can stay **Processing** after Paid Apps is already Active.
 
@@ -554,7 +556,7 @@ This is how we produce the signed archive for **internal** TestFlight. App name 
 
 1. On a browser: App Store Connect → register App ID `com.zipdeck.app` if needed (Certificates, Identifiers & Profiles → Identifiers), then Apps → New App → iOS, name Zipdeck, SKU `zipdeck`.
 2. On the Mac: `git pull` (if pull refuses to overwrite `frontend/package.json` or `package-lock.json`, `git restore` those two files only — they are leftover Mac `npm install @capacitor/ios` edits; do not commit them). From `frontend` run `npm ci`, `npm install @capacitor/ios` if needed, `npm run build:android`, `npx cap sync ios`. Confirm `GIDClientID`, the URL scheme, and `ITSAppUsesNonExemptEncryption=NO` survived (`cap sync` does not overwrite `Info.plist`).
-3. Copy all `frontend/ios-native/*.swift` files into the App target as in **App Store subscriptions** (overwrite `ios/App/App/SceneDelegate.swift` and the plugin copies, including `ListenPlaybackPlugin.swift`). `SceneDelegate` must set `rootViewController = MainViewController()`. Compile Sources must list `AppleBillingPlugin`, `ListenPlaybackPlugin`, `MainViewController`, and `SceneDelegate`. Signing & Capabilities → Background Modes → **Audio, AirPlay, and Picture in Picture** must be checked (`UIBackgroundModes` = `audio`). If Subscribe fails with `AppleBilling plugin is not implemented on ios`, SceneDelegate is still creating `CAPBridgeViewController()`.
+3. Copy all `frontend/ios-native/*.swift` files into the App target as in **App Store subscriptions** (overwrite `ios/App/App/SceneDelegate.swift` and the plugin copies, including `AppleSignInPlugin.swift` and `ListenPlaybackPlugin.swift`). `SceneDelegate` must set `rootViewController = MainViewController()`. Compile Sources must list `AppleBillingPlugin`, `AppleSignInPlugin`, `ListenPlaybackPlugin`, `MainViewController`, and `SceneDelegate`. Signing & Capabilities → Background Modes → **Audio, AirPlay, and Picture in Picture** must be checked (`UIBackgroundModes` = `audio`). Keep **Sign in with Apple**. If Subscribe fails with `AppleBilling plugin is not implemented on ios`, SceneDelegate is still creating `CAPBridgeViewController()`. If Sign in with Apple says the plugin is not implemented, `AppleSignInPlugin.swift` is missing from Compile Sources or `registerPluginInstance(AppleSignInPlugin())` is missing from `MainViewController`.
 4. Xcode → **App** target (under TARGETS) → **Signing & Capabilities**: Automatically manage signing, your Apple Developer team, bundle identifier `com.zipdeck.app`. Associated Domains must list `applinks:zipdeck.app` and `webcredentials:zipdeck.app`. Add **In-App Purchase**. Do not commit team IDs, certificates, or provisioning profiles.
 5. Bump **Build** (`CFBundleVersion`) on every upload. Apple rejects a reuse of the same version+build (all-`1.0 (1)` archives fail). Version can stay `1.0`.
 6. App Store icon is the **1024×1024** slot in **Assets.xcassets → AppIcon**, not an App Store Connect upload (there is no icon file picker). The PNG must be RGB with **no alpha**. Confirm it on the TestFlight / home-screen icon; the Apps list in App Store Connect often stays a placeholder until a version is submitted. Listing screenshots go in App Store Connect → the iOS version → **Previews and Screenshots → iPhone 6.5"** (1284×2778). A 6.9" set is optional if 6.5" is present.

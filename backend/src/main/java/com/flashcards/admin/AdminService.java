@@ -209,6 +209,9 @@ public class AdminService {
     }
 
     private static String signIn(User user) {
+        if (user.getAppleSub() != null && !user.getAppleSub().isBlank()) {
+            return "APPLE";
+        }
         return user.getGoogleSub() != null && !user.getGoogleSub().isBlank() ? "GOOGLE" : "PASSWORD";
     }
 

@@ -131,7 +131,12 @@ public class AccountService {
 
     private void requirePasswordAccount(User user) {
         if (!hasPassword(user)) {
-            throw new ApiException(HttpStatus.BAD_REQUEST, "This account uses Google sign-in");
+            throw new ApiException(
+                    HttpStatus.BAD_REQUEST,
+                    user.getAppleSub() != null && !user.getAppleSub().isBlank()
+                                    && (user.getGoogleSub() == null || user.getGoogleSub().isBlank())
+                            ? "This account uses Sign in with Apple"
+                            : "This account uses Google sign-in");
         }
     }
 

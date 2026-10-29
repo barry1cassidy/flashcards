@@ -33,5 +33,6 @@ public record UserResponse(
         int listenSleepMinutes,
         double listenSpeechRate,
         boolean listenQuestionTwice,
-        boolean listenAnswerTwice) {
+        boolean listenAnswerTwice,
+        boolean appleSignIn) {
 }

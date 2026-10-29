@@ -126,6 +126,15 @@ export function AuthProvider({ children }) {
         keepUser(result.user)
         return result.user
       },
+      async loginWithApple(identityToken, locale, fullName) {
+        const result = await api('/api/auth/apple', {
+          method: 'POST',
+          body: JSON.stringify({ identityToken, locale, fullName }),
+        })
+        setToken(result.token)
+        keepUser(result.user)
+        return result.user
+      },
       async register(displayName, email, password, locale) {
         const result = await api('/api/auth/register', {
           method: 'POST',

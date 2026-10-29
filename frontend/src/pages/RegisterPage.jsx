@@ -8,11 +8,13 @@ import { goAfterAuth, inviteAuthState, rememberLibraryReturn } from '../authRedi
 import { isEmailVerified } from '../email'
 import MarketingHeader, { MarketingFooter } from './MarketingHeader'
 import GoogleSignInButton, { getGoogleClientId } from './GoogleSignInButton'
+import AppleSignInButton from './AppleSignInButton'
+import { appleSignInAvailable } from '../appleSignIn'
 import PasswordInput from './PasswordInput'
 
 export default function RegisterPage() {
   const { t } = useTranslation()
-  const { register, loginWithGoogle } = useAuth()
+  const { register, loginWithGoogle, loginWithApple } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
   const [displayName, setDisplayName] = useState('')
@@ -21,6 +23,7 @@ export default function RegisterPage() {
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
   const googleEnabled = Boolean(getGoogleClientId())
+  const appleEnabled = appleSignInAvailable()
 
   async function finishAuth(work) {
     setError('')
@@ -56,18 +59,26 @@ export default function RegisterPage() {
           <h1>{t('auth.createYourAccount')}</h1>
           <p className="muted">{t('auth.registerSubtitle')}</p>
           {error ? <div className="error">{translateError(t, error)}</div> : null}
+          {appleEnabled ? (
+            <AppleSignInButton
+              disabled={busy}
+              onCredential={(result) =>
+                finishAuth(() => loginWithApple(result.identityToken, currentLocale(), result.fullName))
+              }
+            />
+          ) : null}
           {googleEnabled ? (
-            <>
-              <GoogleSignInButton
-                disabled={busy}
-                onCredential={(idToken) =>
-                  finishAuth(() => loginWithGoogle(idToken, currentLocale()))
-                }
-              />
-              <p className="auth-divider">
-                <span>{t('auth.orEmailRegister')}</span>
-              </p>
-            </>
+            <GoogleSignInButton
+              disabled={busy}
+              onCredential={(idToken) =>
+                finishAuth(() => loginWithGoogle(idToken, currentLocale()))
+              }
+            />
+          ) : null}
+          {appleEnabled || googleEnabled ? (
+            <p className="auth-divider">
+              <span>{t('auth.orEmailRegister')}</span>
+            </p>
           ) : null}
           <form onSubmit={onSubmit} className="stack">
             <label>

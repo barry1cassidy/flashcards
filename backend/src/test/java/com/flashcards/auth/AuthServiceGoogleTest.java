@@ -34,6 +34,8 @@ class AuthServiceGoogleTest {
     @Mock
     private GoogleTokenService googleTokenService;
     @Mock
+    private AppleTokenService appleTokenService;
+    @Mock
     private EmailVerificationService emailVerificationService;
 
     private AuthService authService;
@@ -41,7 +43,12 @@ class AuthServiceGoogleTest {
     @BeforeEach
     void setUp() {
         authService = new AuthService(
-                userRepository, passwordEncoder, jwtService, googleTokenService, emailVerificationService);
+                userRepository,
+                passwordEncoder,
+                jwtService,
+                googleTokenService,
+                appleTokenService,
+                emailVerificationService);
     }
 
     @Test

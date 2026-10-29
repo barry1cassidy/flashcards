@@ -279,8 +279,8 @@ function ProSection({ user, onError, onStub, refresh }) {
                   selected={plan === 'YEARLY'}
                   badge={t('pro.bestValue')}
                   title={t('pro.planYearlyTitle')}
-                  price={t('pro.yearlyPerMonth', { price: yearlyMonthlyRate(yearly) })}
-                  detail={t('pro.yearlyBilled', { price: yearly })}
+                  price={t('pro.yearlyPrice', { price: yearly })}
+                  detail={t('pro.yearlyPerMonth', { price: yearlyMonthlyRate(yearly) })}
                   onSelect={() => setPlan('YEARLY')}
                 />
                 <PlanOption
@@ -294,6 +294,11 @@ function ProSection({ user, onError, onStub, refresh }) {
               <button className="btn primary pro-offer-subscribe" type="button" disabled={busy} onClick={() => subscribe(plan)}>
                 {t('pro.subscribeCta')}
               </button>
+              <p className="pro-offer-legal">
+                <Link to="/privacy">{t('privacy.title')}</Link>
+                <span aria-hidden="true">·</span>
+                <Link to="/terms">{t('terms.title')}</Link>
+              </p>
               <p className="muted pro-offer-renew">{t('pro.renewNote')}</p>
               {showPlaySubscribe ? (
                 <RestorePurchases

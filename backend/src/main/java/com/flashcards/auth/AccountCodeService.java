@@ -38,7 +38,7 @@ public class AccountCodeService {
     @Transactional
     public void sendPasswordReset(User user) {
         if (!AccountService.hasPassword(user)) {
-            sendGoogleNotice(user);
+            sendSocialNotice(user);
             return;
         }
         String code = issue(user, AccountCodePurpose.PASSWORD_RESET, null);
@@ -102,12 +102,20 @@ public class AccountCodeService {
         return code;
     }
 
-    private void sendGoogleNotice(User user) {
+    private void sendSocialNotice(User user) {
         boolean spanish = spanish(user);
-        String subject = spanish ? "Tu cuenta de Zipdeck usa Google" : "Your Zipdeck account uses Google";
-        String text = spanish
-                ? "Esta cuenta de Zipdeck entra con Google, así que no tiene contraseña que restablecer."
-                : "This Zipdeck account signs in with Google, so there is no password to reset.";
+        boolean apple = user.getAppleSub() != null && !user.getAppleSub().isBlank()
+                && (user.getGoogleSub() == null || user.getGoogleSub().isBlank());
+        String subject = apple
+                ? (spanish ? "Tu cuenta de Zipdeck usa Iniciar sesión con Apple" : "Your Zipdeck account uses Sign in with Apple")
+                : (spanish ? "Tu cuenta de Zipdeck usa Google" : "Your Zipdeck account uses Google");
+        String text = apple
+                ? (spanish
+                        ? "Esta cuenta de Zipdeck entra con Apple, así que no tiene contraseña que restablecer."
+                        : "This Zipdeck account signs in with Apple, so there is no password to reset.")
+                : (spanish
+                        ? "Esta cuenta de Zipdeck entra con Google, así que no tiene contraseña que restablecer."
+                        : "This Zipdeck account signs in with Google, so there is no password to reset.");
         mailSender.send(user.getEmail(), subject, "<p>" + escape(text) + "</p>", text);
     }
 

@@ -24,6 +24,7 @@ const SECTIONS = [
   { id: 'help-offline', titleKey: 'help.offlineTitle' },
   { id: 'help-pro', titleKey: 'help.proTitle' },
   { id: 'help-settings', titleKey: 'help.settingsTitle' },
+  { id: 'help-delete-account', titleKey: 'help.deleteAccountTitle' },
   { id: 'help-share', titleKey: 'help.shareTitle' },
   { id: 'help-classes', titleKey: 'help.classesTitle' },
 ]
@@ -291,6 +292,21 @@ export default function HelpPage() {
         </p>
       </HelpSection>
 
+      <HelpSection id="help-delete-account" title={t('help.deleteAccountTitle')}>
+        <p>{t('help.deleteAccountIntro')}</p>
+        <ol className="help-steps">
+          <li>{t('help.deleteAccountStep1')}</li>
+          <li>{t('help.deleteAccountStep2')}</li>
+          <li>{t('help.deleteAccountStep3')}</li>
+        </ol>
+        <p>
+          <Link to="/settings#delete-account">{t('nav.settings')}</Link>
+        </p>
+        <p>
+          <Link to="/account#delete-account">{t('nav.accountSettings')}</Link>
+        </p>
+      </HelpSection>
+
       <HelpSection id="help-share" title={t('help.shareTitle')}>
         <p>{t('help.shareIntro')}</p>
       </HelpSection>
@@ -310,7 +326,9 @@ export default function HelpPage() {
 }
 
 function HelpSection({ id, title, defaultOpen = false, children }) {
-  const [open, setOpen] = useState(defaultOpen)
+  const [open, setOpen] = useState(
+    () => defaultOpen || window.location.hash.replace(/^#/, '') === id,
+  )
   return (
     <details
       id={id}
