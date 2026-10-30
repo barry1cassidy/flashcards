@@ -8,10 +8,12 @@ import { GroupBadge } from './ColorPicker'
 import ConfirmModal from './ConfirmModal'
 import Modal from './Modal'
 import ShareModal from './ShareModal'
-import ListingActions from './ListingActions'
+import DeckCardMenu from './DeckCardMenu'
 import DeckWelcome from './DeckWelcome'
+import StudyModeModal from './StudyModeModal'
 import { useAuth } from '../AuthContext'
 import { isAdmin } from '../admin'
+import { isProLicensed } from '../pro'
 import { sortDecks } from '../deckSort'
 import { shareCodeFromInput } from '../shareCode'
 import { defaultSpeechLanguage } from '../speechLanguages'
@@ -55,6 +57,7 @@ function writeGroupFilter(value) {
 export default function DecksPage() {
   const { t } = useTranslation()
   const { user } = useAuth()
+  const pro = isProLicensed(user)
   const navigate = useNavigate()
   const [searchParams, setSearchParams] = useSearchParams()
   const [decks, setDecks] = useState([])
@@ -71,6 +74,7 @@ export default function DecksPage() {
   const [busy, setBusy] = useState(false)
   const [shareTarget, setShareTarget] = useState(null)
   const [deleteTarget, setDeleteTarget] = useState(null)
+  const [studyTarget, setStudyTarget] = useState(null)
   const [shareInput, setShareInput] = useState('')
   const [shareError, setShareError] = useState('')
   const [shareBusy, setShareBusy] = useState(false)
@@ -124,6 +128,14 @@ export default function DecksPage() {
     setName('')
     setDescription('')
     setError('')
+  }
+
+  function openDeck(deck, intent) {
+    navigate(`/decks/${deck.id}`, { state: { deckIntent: intent } })
+  }
+
+  function listenToDeck(deck) {
+    navigate(`/listen?source=deck&id=${deck.id}`, { state: { listenReturn: '/' } })
   }
 
   async function deleteDeck() {
@@ -338,11 +350,15 @@ export default function DecksPage() {
           ) : (
             <div className="deck-grid">
               {visibleDecks.map((deck) => (
-                <div key={deck.id} className="deck-card">
-                  <ListingActions
-                    name={deck.name}
-                    onShare={() => setShareTarget(deck)}
-                    onDelete={() => setDeleteTarget(deck)}
+                <div key={deck.id} className="deck-card has-overflow-menu">
+                  <DeckCardMenu
+                    deck={deck}
+                    pro={pro}
+                    onStudy={setStudyTarget}
+                    onListen={listenToDeck}
+                    onOpen={openDeck}
+                    onShare={setShareTarget}
+                    onDelete={setDeleteTarget}
                   />
                   <Link to={`/decks/${deck.id}`} className="deck-card-main">
                     {deck.group ? (
@@ -375,6 +391,18 @@ export default function DecksPage() {
           targetId={shareTarget.id}
           name={shareTarget.name}
           onClose={() => setShareTarget(null)}
+        />
+      ) : null}
+      {studyTarget ? (
+        <StudyModeModal
+          hardCount={studyTarget.hardCount || 0}
+          againCount={studyTarget.againCount || 0}
+          onSelect={(mode, filter) => {
+            const path = `/decks/${studyTarget.id}/study/${mode}`
+            setStudyTarget(null)
+            navigate(filter === 'hard' || filter === 'again' ? `${path}?filter=${filter}` : path)
+          }}
+          onCancel={() => setStudyTarget(null)}
         />
       ) : null}
       {deleteTarget ? (

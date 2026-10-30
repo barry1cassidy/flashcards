@@ -7,6 +7,32 @@ import { formatDate } from '../i18n/format'
 import { translateError } from '../i18n/errors'
 import ConfirmModal from './ConfirmModal'
 
+const ROSTER_PAGE_SIZE = 8
+
+function deckStudyStatus(deck) {
+  if (!deck.copied) {
+    return 'notAdded'
+  }
+  if (deck.lastStudiedAt || Number(deck.learnedCount) > 0) {
+    return 'studied'
+  }
+  return 'notStudied'
+}
+
+function memberStudyStatus(member, deckId) {
+  const decks = deckId ? member.decks.filter((deck) => deck.deckId === deckId) : member.decks
+  if (decks.length === 0) {
+    return 'none'
+  }
+  if (decks.some((deck) => deckStudyStatus(deck) === 'studied')) {
+    return 'studied'
+  }
+  if (decks.some((deck) => deckStudyStatus(deck) === 'notStudied')) {
+    return 'notStudied'
+  }
+  return 'notAdded'
+}
+
 export default function ClassDetailPage() {
   const { t } = useTranslation()
   const { id } = useParams()
@@ -19,6 +45,9 @@ export default function ClassDetailPage() {
   const [busy, setBusy] = useState(false)
   const [copied, setCopied] = useState(false)
   const [confirm, setConfirm] = useState(null)
+  const [rosterStatus, setRosterStatus] = useState('all')
+  const [rosterDeckId, setRosterDeckId] = useState('')
+  const [rosterPage, setRosterPage] = useState(1)
 
   async function load() {
     const classDetail = await api(`/api/classes/${id}`)
@@ -32,6 +61,9 @@ export default function ClassDetailPage() {
   }
 
   useEffect(() => {
+    setRosterStatus('all')
+    setRosterDeckId('')
+    setRosterPage(1)
     load().catch((err) => setError(err.message))
   }, [id])
 
@@ -330,48 +362,24 @@ export default function ClassDetailPage() {
       )}
 
       {teacher ? (
-        <section className="card-form">
-          <h2 className="section-heading">{t('classes.roster')}</h2>
-          {detail.members.length === 0 ? (
-            <p className="muted">{t('classes.emptyRoster')}</p>
-          ) : (
-            <div className="class-roster">
-              {detail.members.map((member) => (
-                <article key={member.userId} className="class-roster-card">
-                  <div className="class-roster-head">
-                    <div>
-                      <strong>{member.displayName}</strong>
-                      <p className="muted small">{member.email}</p>
-                    </div>
-                    <button
-                      className="btn ghost"
-                      type="button"
-                      onClick={() => setConfirm({ type: 'remove', userId: member.userId, name: member.displayName })}
-                    >
-                      {t('classes.removeStudent')}
-                    </button>
-                  </div>
-                  <ul className="class-progress-list">
-                    {member.decks.map((deck) => (
-                      <li key={deck.deckId}>
-                        <span>{deck.name}</span>
-                        <span className="muted">
-                          {deck.copied
-                            ? t('classes.progressCopied', {
-                                due: deck.dueCount,
-                                learned: deck.learnedCount,
-                                last: deck.lastStudiedAt ? formatDate(deck.lastStudiedAt) : t('classes.notStudied'),
-                              })
-                            : t('classes.progressNotCopied')}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                </article>
-              ))}
-            </div>
-          )}
-        </section>
+        <ClassRoster
+          members={detail.members}
+          decks={detail.decks || []}
+          status={rosterStatus}
+          deckId={rosterDeckId}
+          page={rosterPage}
+          onStatus={(next) => {
+            setRosterStatus(next)
+            setRosterPage(1)
+          }}
+          onDeck={(next) => {
+            setRosterDeckId(next)
+            setRosterPage(1)
+          }}
+          onPage={setRosterPage}
+          onRemove={(member) => setConfirm({ type: 'remove', userId: member.userId, name: member.displayName })}
+          t={t}
+        />
       ) : null}
 
       {confirm === 'delete' ? (
@@ -423,5 +431,127 @@ export default function ClassDetailPage() {
         />
       ) : null}
     </div>
+  )
+}
+
+function ClassRoster({ members, decks, status, deckId, page, onStatus, onDeck, onPage, onRemove, t }) {
+  const activeDeckId = decks.some((deck) => deck.deckId === deckId) ? deckId : ''
+  const counts = { all: members.length, studied: 0, notStudied: 0, notAdded: 0 }
+  for (const member of members) {
+    const memberStatus = memberStudyStatus(member, activeDeckId)
+    if (counts[memberStatus] != null) {
+      counts[memberStatus] += 1
+    }
+  }
+  const filtered = members.filter((member) => status === 'all' || memberStudyStatus(member, activeDeckId) === status)
+  const totalPages = Math.max(1, Math.ceil(filtered.length / ROSTER_PAGE_SIZE))
+  const safePage = Math.min(page, totalPages)
+  const visible = filtered.slice((safePage - 1) * ROSTER_PAGE_SIZE, safePage * ROSTER_PAGE_SIZE)
+  const filters = [
+    ['all', 'classes.filterAll'],
+    ['studied', 'classes.filterStudied'],
+    ['notStudied', 'classes.filterNotStudied'],
+    ['notAdded', 'classes.filterNotAdded'],
+  ]
+
+  useEffect(() => {
+    if (page !== safePage) {
+      onPage(safePage)
+    }
+  }, [page, safePage, onPage])
+
+  return (
+    <section className="card-form">
+      <h2 className="section-heading">{t('classes.roster')}</h2>
+      {members.length === 0 ? (
+        <p className="muted">{t('classes.emptyRoster')}</p>
+      ) : (
+        <>
+          <div className="class-roster-tools">
+            {decks.length > 1 ? (
+              <label className="class-roster-deck">
+                <span className="field-label">{t('listen.sourceDeck')}</span>
+                <select value={activeDeckId} onChange={(event) => onDeck(event.target.value)}>
+                  <option value="">{t('classes.allDecks')}</option>
+                  {decks.map((deck) => (
+                    <option key={deck.deckId} value={deck.deckId}>
+                      {deck.name}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            ) : null}
+            <div className="class-roster-filters" role="group" aria-label={t('classes.roster')}>
+              {filters.map(([key, label]) => (
+                <button
+                  key={key}
+                  className={`btn${status === key ? ' primary' : ''}`}
+                  type="button"
+                  aria-pressed={status === key}
+                  onClick={() => onStatus(key)}
+                >
+                  {t(label)} {counts[key]}
+                </button>
+              ))}
+            </div>
+          </div>
+          {visible.length === 0 ? (
+            <p className="muted">{t('classes.rosterEmptyFilter')}</p>
+          ) : (
+            <div className="class-roster">
+              {visible.map((member) => {
+                const lines = activeDeckId
+                  ? member.decks.filter((deck) => deck.deckId === activeDeckId)
+                  : member.decks
+                return (
+                  <article key={member.userId} className="class-roster-card">
+                    <div className="class-roster-head">
+                      <div>
+                        <strong>{member.displayName}</strong>
+                        <p className="muted small">{member.email}</p>
+                      </div>
+                      <button className="btn ghost" type="button" onClick={() => onRemove(member)}>
+                        {t('classes.removeStudent')}
+                      </button>
+                    </div>
+                    <ul className="class-progress-list">
+                      {lines.map((deck) => (
+                        <li key={deck.deckId}>
+                          <span>{deck.name}</span>
+                          <span className="muted">
+                            {deck.copied
+                              ? t('classes.progressCopied', {
+                                  due: deck.dueCount,
+                                  learned: deck.learnedCount,
+                                  last: deck.lastStudiedAt ? formatDate(deck.lastStudiedAt) : t('classes.notStudied'),
+                                })
+                              : t('classes.progressNotCopied')}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  </article>
+                )
+              })}
+            </div>
+          )}
+          {filtered.length > ROSTER_PAGE_SIZE ? (
+            <div className="library-pager">
+              {safePage > 1 ? (
+                <button className="btn" type="button" onClick={() => onPage(safePage - 1)}>
+                  {t('library.previous')}
+                </button>
+              ) : null}
+              <p className="muted">{t('classes.pageStatus', { page: safePage, total: totalPages })}</p>
+              {safePage < totalPages ? (
+                <button className="btn" type="button" onClick={() => onPage(safePage + 1)}>
+                  {t('library.next')}
+                </button>
+              ) : null}
+            </div>
+          ) : null}
+        </>
+      )}
+    </section>
   )
 }

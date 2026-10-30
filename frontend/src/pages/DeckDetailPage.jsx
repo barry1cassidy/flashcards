@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { api } from '../api'
 import { downloadBlob, csvFilename } from '../download'
@@ -40,6 +40,7 @@ export default function DeckDetailPage() {
   useResumeExpiredSubscription()
   const pro = isProLicensed(user)
   const { id } = useParams()
+  const location = useLocation()
   const navigate = useNavigate()
   const fileRef = useRef(null)
   const listRef = useRef(null)
@@ -101,6 +102,21 @@ export default function DeckDetailPage() {
   useEffect(() => {
     load().catch((err) => setError(err.message))
   }, [id])
+
+  useEffect(() => {
+    const intent = location.state?.deckIntent
+    if (!deck || !intent) {
+      return
+    }
+    if (intent === 'details') {
+      beginEdit()
+    } else if (intent === 'cards') {
+      beginCardEdit()
+    } else if (intent === 'add') {
+      openAddCard()
+    }
+    navigate(location.pathname, { replace: true, state: null })
+  }, [deck, location.state])
 
   useEffect(() => {
     let cancelled = false
@@ -243,6 +259,20 @@ export default function DeckDetailPage() {
     setEditingDeck(false)
     setEditingCards(true)
   }
+
+  useLayoutEffect(() => {
+    if (!editingCards) {
+      return
+    }
+    const section = document.getElementById('deck-cards')
+    if (!section) {
+      return
+    }
+    const headerHeight = document.querySelector('.app-header')?.getBoundingClientRect().height ?? 0
+    section.style.scrollMarginTop = `${headerHeight}px`
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    section.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' })
+  }, [editingCards])
 
   function leaveEditMode() {
     window.removeEventListener('pointermove', reorderWindow.current.onMove)
@@ -560,7 +590,7 @@ export default function DeckDetailPage() {
           <div className="header-actions deck-hero-actions">
             {hasCards ? (
               <button
-                className={`btn ghost icon-btn offline-download-btn${offlinePack ? ' is-saved' : ''}`}
+                className={`btn icon-btn offline-download-btn${offlinePack ? ' is-saved' : ''}`}
                 type="button"
                 disabled={offlineBusy}
                 aria-pressed={Boolean(offlinePack)}
@@ -577,7 +607,7 @@ export default function DeckDetailPage() {
             ) : null}
             {hasCards ? (
               <button
-                className="btn ghost icon-btn"
+                className="btn icon-btn deck-action-share"
                 type="button"
                 onClick={() => setShareOpen(true)}
                 aria-label={t('share.share')}
@@ -587,7 +617,7 @@ export default function DeckDetailPage() {
             ) : null}
             {hasCards ? (
               <button
-                className="btn with-icon"
+                className="btn with-icon deck-action-listen"
                 type="button"
                 onClick={() =>
                   navigate(`/listen?source=deck&id=${id}`, {
@@ -596,16 +626,18 @@ export default function DeckDetailPage() {
                 }
               >
                 <MenuIcon name="listen" />
-                {t('listen.menu')}
+                <span>{t('listen.menu')}</span>
               </button>
             ) : null}
             {hasCards ? (
-              <button className="btn primary" type="button" onClick={() => setStudyOpen(true)}>
-                {t('decks.studyDeck')}
+              <button className="btn primary with-icon" type="button" onClick={() => setStudyOpen(true)}>
+                <MenuIcon name="study" />
+                <span>{t('decks.studyDeck')}</span>
               </button>
             ) : null}
-            <button className="btn" type="button" onClick={beginEdit}>
-              {t('decks.editDeck')}
+            <button className="btn with-icon deck-action-edit" type="button" onClick={beginEdit}>
+              <MenuIcon name="edit" />
+              <span>{t('decks.editDeck')}</span>
             </button>
           </div>
         )}
@@ -722,45 +754,58 @@ export default function DeckDetailPage() {
       </section>
 
       <section className="deck-section" aria-labelledby="deck-cards-heading">
-        <div className="deck-section-header">
+        <div className="deck-section-header" id="deck-cards">
           <h2 id="deck-cards-heading" className="section-heading">
             {t('decks.cardsSection')}
           </h2>
           {editingDeck ? null : (
             <div className="header-actions deck-card-actions">
               {editingCards ? (
-                <>
+                <div className="deck-card-actions-row">
                   <button className="btn primary" type="button" onClick={finishCardEdit}>
                     {t('decks.doneEditing')}
                   </button>
                   <button className="btn primary" type="button" onClick={openAddCard}>
                     {t('decks.addCard')}
                   </button>
-                </>
+                </div>
               ) : (
                 <>
+                  <div className="deck-card-actions-row">
+                    {hasCards ? (
+                      <button className="btn with-icon" type="button" onClick={beginCardEdit}>
+                        <MenuIcon name="decks" />
+                        <span>{t('decks.editCards')}</span>
+                      </button>
+                    ) : (
+                      <button className="btn primary with-icon" type="button" onClick={openAddCard}>
+                        <MenuIcon name="plus" />
+                        <span>{t('decks.addCard')}</span>
+                      </button>
+                    )}
+                    {hasCards ? (
+                      <button className="btn with-icon" type="button" onClick={() => setAiEditOpen(true)}>
+                        <MenuIcon name="agent" />
+                        <span>{t('agent.edit.button')}</span>
+                      </button>
+                    ) : (
+                      <button className="btn with-icon" type="button" onClick={() => fileRef.current?.click()}>
+                        <MenuIcon name="csvIn" />
+                        <span>{t('decks.importCsv')}</span>
+                      </button>
+                    )}
+                  </div>
                   {hasCards ? (
-                    <button className="btn" type="button" onClick={beginCardEdit}>
-                      {t('decks.editCards')}
-                    </button>
-                  ) : (
-                    <button className="btn primary" type="button" onClick={openAddCard}>
-                      {t('decks.addCard')}
-                    </button>
-                  )}
-                  <button className="btn" type="button" onClick={() => fileRef.current?.click()}>
-                    {t('decks.importCsv')}
-                  </button>
-                  {hasCards ? (
-                    <button className="btn ai-edit-btn" type="button" onClick={() => setAiEditOpen(true)}>
-                      <MenuIcon name="agent" />
-                      {t('agent.edit.button')}
-                    </button>
-                  ) : null}
-                  {hasCards ? (
-                    <button className="btn" type="button" onClick={exportCsv}>
-                      {t('decks.exportCsv')}
-                    </button>
+                    <div className="deck-card-actions-row">
+                      <button className="btn with-icon" type="button" onClick={() => fileRef.current?.click()}>
+                        <MenuIcon name="csvIn" />
+                        <span>{t('decks.importCsv')}</span>
+                      </button>
+                      <button className="btn with-icon" type="button" onClick={exportCsv}>
+                        <MenuIcon name="csvOut" />
+                        <span>{t('decks.exportCsv')}</span>
+                      </button>
+                    </div>
                   ) : null}
                 </>
               )}

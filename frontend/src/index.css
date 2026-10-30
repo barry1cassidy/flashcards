@@ -392,35 +392,57 @@ h1 {
   align-items: center;
 }
 
-@media (max-width: 520px) {
-  .deck-hero-actions {
-    flex-wrap: nowrap;
+@media (max-width: 700px) {
+  .deck-hero-actions:has(.btn.primary) {
+    display: grid;
+    grid-template-columns: 44px 44px auto minmax(0, 1fr);
+    gap: 8px;
+    width: 100%;
+    align-items: center;
+  }
+
+  .deck-hero-actions:has(.btn.primary) .btn.primary {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    width: 100%;
+  }
+
+  .deck-hero-actions:has(.btn.primary) .offline-download-btn {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .deck-hero-actions:has(.btn.primary) .deck-action-share {
+    grid-column: 2;
+    grid-row: 2;
+  }
+
+  .deck-hero-actions:has(.btn.primary) .deck-action-listen,
+  .deck-hero-actions:has(.btn.primary) .deck-action-edit {
     gap: 6px;
-  }
-
-  .deck-hero-actions .icon-btn {
-    flex-shrink: 0;
-  }
-
-  .deck-hero-actions .btn.with-icon {
-    gap: 6px;
-  }
-
-  .deck-hero-actions .btn.with-icon .menu-icon {
-    width: 16px;
-    height: 16px;
-  }
-
-  .deck-hero-actions .btn:not(.icon-btn) {
-    flex: 0 1 auto;
-    min-width: min-content;
+    min-width: 0;
     padding-left: 8px;
     padding-right: 8px;
-    font-size: 0.85rem;
-    line-height: 1.15;
-    text-align: center;
-    text-wrap: balance;
-    overflow-wrap: break-word;
+  }
+
+  .deck-hero-actions:has(.btn.primary) .deck-action-listen {
+    grid-column: 3;
+    grid-row: 2;
+    width: auto;
+  }
+
+  .deck-hero-actions:has(.btn.primary) .deck-action-edit {
+    grid-column: 4;
+    grid-row: 2;
+    width: 100%;
+  }
+
+  .deck-hero-actions:has(.btn.primary) .deck-action-listen span,
+  .deck-hero-actions:has(.btn.primary) .deck-action-edit span {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 }
 
@@ -1429,10 +1451,99 @@ a.library-suggestion {
   background: var(--danger-bg);
 }
 
+.deck-card.has-overflow-menu .deck-card-lead,
+.deck-card.has-overflow-menu .deck-card-title {
+  padding-right: 0;
+  padding-inline-end: 48px;
+}
+
+.deck-card.is-menu-open {
+  overflow: visible;
+  z-index: 4;
+}
+
+.deck-overflow {
+  position: absolute;
+  top: 6px;
+  inset-inline-end: 6px;
+  z-index: 2;
+}
+
+.deck-overflow-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.deck-overflow-trigger .menu-icon {
+  width: 18px;
+  height: 18px;
+}
+
+.deck-overflow-trigger:hover,
+.deck-overflow-trigger:focus-visible,
+.deck-overflow.is-open .deck-overflow-trigger {
+  color: var(--text);
+  background: var(--menu-hover);
+}
+
+.deck-overflow-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  inset-inline-end: 0;
+  z-index: 5;
+  display: grid;
+  min-width: 220px;
+  max-width: min(280px, calc(100vw - 32px));
+  padding: 6px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.deck-overflow-menu.is-up {
+  top: auto;
+  bottom: calc(100% + 4px);
+}
+
+.deck-overflow-menu .menu-link {
+  gap: 10px;
+  text-align: start;
+}
+
+.deck-overflow-menu .menu-link:hover,
+.deck-overflow-menu .menu-link:focus-visible {
+  background: var(--menu-hover);
+}
+
+.deck-overflow-menu .menu-link.is-danger,
+.deck-overflow-menu .menu-link.is-danger .menu-icon {
+  color: var(--coral);
+}
+
+.deck-overflow-menu .menu-link.is-danger:hover,
+.deck-overflow-menu .menu-link.is-danger:focus-visible {
+  background: var(--danger-bg);
+}
+
 .deck-card-actions {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+}
+
+.deck-card-actions-row {
+  display: contents;
 }
 
 .deck-card-actions .btn.with-icon .menu-icon {
@@ -1651,6 +1762,29 @@ a.library-suggestion {
 
 #study-options {
   scroll-margin-top: calc(var(--header-height) + var(--safe-top) + 16px);
+}
+
+.delete-account-panel,
+.delete-account-reveal {
+  scroll-margin-bottom: calc(24px + var(--safe-bottom));
+}
+
+.delete-confirm-email-block {
+  display: grid;
+  gap: 8px;
+}
+
+.delete-confirm-email {
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px solid var(--gold);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--gold) 18%, var(--surface-2));
+  color: var(--text);
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
 }
 
 .study-card {
@@ -3955,28 +4089,39 @@ button.agent-preset:disabled {
     width: 100%;
   }
 
-  .deck-card-actions {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+  .deck-section .deck-card-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     gap: 8px;
-  }
-
-  .deck-card-actions .btn {
     width: 100%;
-    min-width: 0;
-    padding-left: 8px;
-    padding-right: 8px;
-    text-align: center;
-    text-wrap: balance;
-    white-space: normal;
   }
 
-  .deck-card-actions .btn:last-child:nth-child(odd) {
-    grid-column: 1 / -1;
+  .deck-section .deck-card-actions-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    max-width: 100%;
   }
 
-  .deck-card-actions .btn.ai-edit-btn {
+  .deck-section .deck-card-actions .btn {
+    width: auto;
+    height: auto;
     min-width: 0;
+    min-height: 44px;
+    max-width: 100%;
+    flex: 0 1 auto;
+    white-space: nowrap;
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .deck-section .deck-card-actions .btn span {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .deck-hero-actions:has(> .btn:only-child) {
@@ -5118,9 +5263,15 @@ button.agent-preset:disabled {
   box-shadow: 0 1px 0 rgba(11, 14, 23, 0.08);
 }
 
-.class-path-teacher .class-mode-option.selected {
+.class-path-teacher .class-mode-option.is-teacher.selected {
   background: rgba(76, 111, 255, 0.22);
   color: var(--text);
+}
+
+.class-path-teacher .class-mode-option.is-teacher.is-next {
+  color: var(--text);
+  background: rgba(76, 111, 255, 0.22);
+  box-shadow: inset 0 0 0 2px var(--cobalt);
 }
 
 .class-teacher-actions {
@@ -5208,6 +5359,28 @@ button.agent-preset:disabled {
 
 .class-deck-row {
   align-items: flex-start;
+}
+
+.class-roster-tools {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.class-roster-deck {
+  display: grid;
+  gap: 6px;
+  max-width: 420px;
+}
+
+.class-roster-deck select {
+  min-height: 44px;
+}
+
+.class-roster-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 .class-roster {
@@ -5926,7 +6099,7 @@ button.agent-preset:disabled {
 }
 
 @media (max-width: 420px) {
-  .deck-card-actions .btn {
+  .studio-card .deck-card-actions .btn {
     padding-left: 4px;
     padding-right: 4px;
     font-size: 0.8125rem;

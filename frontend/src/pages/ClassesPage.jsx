@@ -166,7 +166,7 @@ export default function ClassesPage() {
             </span>
             <div>
               <h2 id="class-path-teacher-title" className="section-heading">
-                {t('classes.teacherPathTitle')}
+                {teacher ? t('classes.teacherPathTitle') : t('settings.teacherMode')}
               </h2>
               <p className="muted">{t('classes.teacherPathHint')}</p>
             </div>
@@ -190,7 +190,7 @@ export default function ClassesPage() {
               type="button"
               role="radio"
               aria-checked={teacher}
-              className={`class-mode-option ${teacher ? 'selected' : ''}`}
+              className={`class-mode-option is-teacher${teacher ? ' selected' : ' is-next'}`}
               onClick={() => changeTeacherMode(true)}
             >
               <MenuIcon name="teacher" />

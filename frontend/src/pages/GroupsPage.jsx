@@ -2,17 +2,21 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { api } from '../api'
+import { useAuth } from '../AuthContext'
 import { PRESET_COLORS } from '../colors'
 import { translateError } from '../i18n/errors'
+import { isProLicensed } from '../pro'
 import { GroupBadge } from './ColorPicker'
 import ConfirmModal from './ConfirmModal'
 import ShareModal from './ShareModal'
-import ListingActions from './ListingActions'
+import SetCardMenu from './SetCardMenu'
 import GroupForm from './GroupForm'
 import Modal from './Modal'
 
 export default function GroupsPage() {
   const { t } = useTranslation()
+  const { user } = useAuth()
+  const pro = isProLicensed(user)
   const navigate = useNavigate()
   const [searchParams, setSearchParams] = useSearchParams()
   const [groups, setGroups] = useState([])
@@ -41,6 +45,10 @@ export default function GroupsPage() {
     }
   }
 
+  function listenToSet(group) {
+    navigate(`/listen?source=set&id=${group.id}`)
+  }
+
   async function createGroup({ name, color }) {
     const group = await api('/api/groups', {
       method: 'POST',
@@ -67,11 +75,14 @@ export default function GroupsPage() {
       ) : (
         <div className="deck-grid">
           {groups.map((group) => (
-            <div key={group.id} className="deck-card">
-              <ListingActions
-                name={group.name}
-                onShare={() => setShareTarget(group)}
-                onDelete={() => setDeleteTarget(group)}
+            <div key={group.id} className="deck-card has-overflow-menu">
+              <SetCardMenu
+                group={group}
+                pro={pro}
+                onListen={listenToSet}
+                onOpen={(target) => navigate(`/sets/${target.id}`)}
+                onShare={setShareTarget}
+                onDelete={setDeleteTarget}
               />
               <Link to={`/sets/${group.id}`} className="deck-card-main">
                 <div className="deck-card-lead">

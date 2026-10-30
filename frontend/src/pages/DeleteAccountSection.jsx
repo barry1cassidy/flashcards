@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { api } from '../api'
@@ -6,6 +6,18 @@ import { useAuth } from '../AuthContext'
 import { openBillingPortal } from '../billing'
 import { translateError } from '../i18n/errors'
 import PasswordInput from './PasswordInput'
+
+function scrollDeletePanel(section, reveal) {
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  const headerHeight = document.querySelector('.app-header')?.getBoundingClientRect().height ?? 0
+  const available = window.innerHeight - headerHeight - 24
+  const target = section.getBoundingClientRect().height <= available ? section : reveal
+  target.scrollIntoView({
+    behavior: reduceMotion ? 'auto' : 'smooth',
+    block: 'end',
+    inline: 'nearest',
+  })
+}
 
 export default function DeleteAccountSection() {
   const { t, i18n } = useTranslation()
@@ -18,7 +30,21 @@ export default function DeleteAccountSection() {
   const [deletePassword, setDeletePassword] = useState('')
   const [deleteConfirmation, setDeleteConfirmation] = useState('')
   const [busy, setBusy] = useState(false)
+  const sectionRef = useRef(null)
+  const revealRef = useRef(null)
   const periodEnd = formatDate(deletion?.currentPeriodEnd, i18n.language)
+
+  useEffect(() => {
+    const section = sectionRef.current
+    const reveal = revealRef.current
+    if (!deletion || !section || !reveal) {
+      return undefined
+    }
+    const frame = window.requestAnimationFrame(() => {
+      scrollDeletePanel(section, reveal)
+    })
+    return () => window.cancelAnimationFrame(frame)
+  }, [deletion])
 
   async function checkDeletion() {
     setFeedback({ error: '', notice: '' })
@@ -67,7 +93,7 @@ export default function DeleteAccountSection() {
   }
 
   return (
-    <section className="card-form" id="delete-account">
+    <section className="card-form delete-account-panel" id="delete-account" ref={sectionRef}>
       <h2 className="section-heading">{t('settings.deleteAccount')}</h2>
       {feedback.error ? <div className="error">{translateError(t, feedback.error)}</div> : null}
       {feedback.notice ? <p className="ok">{feedback.notice}</p> : null}
@@ -80,7 +106,7 @@ export default function DeleteAccountSection() {
         )}
         {deleteOpen && !deletion ? <p className="muted">{t('settings.deleteChecking')}</p> : null}
         {deletion && !deletion.allowed ? (
-          <div className="stack">
+          <div className="stack delete-account-reveal" ref={revealRef}>
             <p>
               {deletion.cancelAtPeriodEnd
                 ? periodEnd
@@ -95,12 +121,15 @@ export default function DeleteAccountSection() {
           </div>
         ) : null}
         {deletion?.allowed ? (
-          <form className="stack" onSubmit={removeAccount}>
-            <p className="muted">
-              {hasPassword
-                ? t('settings.deleteConfirmPassword')
-                : t('settings.deleteConfirmEmail', { email: user?.email })}
-            </p>
+          <form className="stack delete-account-reveal" ref={revealRef} onSubmit={removeAccount}>
+            {hasPassword ? (
+              <p className="muted">{t('settings.deleteConfirmPassword')}</p>
+            ) : (
+              <div className="delete-confirm-email-block">
+                <p className="muted">{t('settings.deleteConfirmEmail')}</p>
+                <p className="delete-confirm-email">{user?.email}</p>
+              </div>
+            )}
             {hasPassword ? (
               <label>
                 {t('settings.currentPassword')}

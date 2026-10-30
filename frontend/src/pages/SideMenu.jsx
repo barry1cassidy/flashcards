@@ -5,7 +5,6 @@ import { useAuth } from '../AuthContext'
 import { useAiCredits } from '../AiCreditsContext'
 import { isEmailVerified } from '../email'
 import { isProLicensed } from '../pro'
-import { webMarketing } from '../webOnly'
 import Brand from './Brand'
 import MenuIcon from './MenuIcon'
 
@@ -27,7 +26,6 @@ export default function SideMenu() {
   const proActive = location.pathname.startsWith('/pro')
   const settingsActive = location.pathname.startsWith('/settings')
   const helpActive = location.pathname.startsWith('/help')
-  const blogActive = location.pathname.startsWith('/blog')
   const pro = isProLicensed(user)
   const verified = isEmailVerified(user)
   const badge = t('settings.proBadge')
@@ -106,12 +104,6 @@ export default function SideMenu() {
         </NavLink>
       ) : null}
       <hr className="side-menu-divider" />
-      {webMarketing ? (
-        <NavLink to="/blog" className={() => menuLinkClass(blogActive)} onClick={close}>
-          <MenuIcon name="blog" />
-          <span className="menu-link-text">{t('marketing.blogNav')}</span>
-        </NavLink>
-      ) : null}
       <NavLink to="/help" className={() => menuLinkClass(helpActive)} onClick={close}>
         <MenuIcon name="help" />
         <span className="menu-link-text">{t('nav.help')}</span>
