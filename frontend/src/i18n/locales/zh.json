@@ -641,6 +641,7 @@
     "addDeckFirst": "请先把此卡组加入我的卡组",
     "teacherCannotLeave": "教师不能退出自己的班级",
     "adminRequired": "需要管理员权限",
+    "tooManyAddonCredits": "这会超过此账户的额外积分上限。",
     "cannotDeleteOwnAccount": "你不能删除自己的账户",
     "cannotDeleteAdminAccount": "你不能删除管理员账户",
     "userNotFound": "找不到用户",
@@ -708,7 +709,13 @@
     "deleteUser": "删除用户",
     "deleteUserTitle": "删除此账户？",
     "deleteUserMessage": "永久删除 {{name}}（{{email}}）及其全部卡组、卡片和学习数据。此操作无法撤销。",
-    "deleteUserConfirm": "删除账户"
+    "deleteUserConfirm": "删除账户",
+    "addonHeading": "额外积分",
+    "addonHint": "为此 Pro 账户添加额外的 AI 积分。积分会保留到用完，不会随每月额度重置。",
+    "addonNeedsPro": "此账户需要先开通 Pro，才能添加额外积分。",
+    "addonAmount": "要添加的积分",
+    "addonAdd": "添加积分",
+    "confirmAddon": "要为此 Pro 账户添加 {{count}} 个额外积分吗？"
   },
   "classes": {
     "title": "班级",

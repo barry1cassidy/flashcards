@@ -641,6 +641,7 @@
     "addDeckFirst": "먼저 이 덱을 내 덱에 추가하세요",
     "teacherCannotLeave": "교사는 자기 수업을 나갈 수 없습니다",
     "adminRequired": "관리자 권한이 필요합니다",
+    "tooManyAddonCredits": "이 계정의 추가 크레딧 한도를 넘습니다.",
     "cannotDeleteOwnAccount": "자기 계정은 삭제할 수 없습니다",
     "cannotDeleteAdminAccount": "관리자 계정은 삭제할 수 없습니다",
     "userNotFound": "사용자를 찾지 못했습니다",
@@ -708,7 +709,13 @@
     "deleteUser": "사용자 삭제",
     "deleteUserTitle": "이 계정을 삭제할까요?",
     "deleteUserMessage": "{{name}} ({{email}})과 그 덱, 카드, 학습 데이터를 모두 영구 삭제합니다. 되돌릴 수 없습니다.",
-    "deleteUserConfirm": "계정 삭제"
+    "deleteUserConfirm": "계정 삭제",
+    "addonHeading": "추가 크레딧",
+    "addonHint": "이 Pro 계정에 추가 AI 크레딧을 넣습니다. 사용할 때까지 남으며 월간 제공량과 함께 초기화되지 않습니다.",
+    "addonNeedsPro": "추가 크레딧을 넣으려면 이 계정이 Pro여야 합니다.",
+    "addonAmount": "추가할 크레딧",
+    "addonAdd": "크레딧 추가",
+    "confirmAddon": "이 Pro 계정에 추가 크레딧 {{count}}개를 넣을까요?"
   },
   "classes": {
     "title": "수업",

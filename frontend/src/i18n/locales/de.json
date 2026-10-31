@@ -641,6 +641,7 @@
     "addDeckFirst": "Füge diesen Stapel zuerst zu Meinen Stapeln hinzu",
     "teacherCannotLeave": "Lehrer können ihre Klasse nicht verlassen",
     "adminRequired": "Admin erforderlich",
+    "tooManyAddonCredits": "Damit würde dieses Konto das Limit für Zusatz-Credits überschreiten.",
     "cannotDeleteOwnAccount": "Du kannst dein eigenes Konto nicht löschen",
     "cannotDeleteAdminAccount": "Du kannst ein Admin-Konto nicht löschen",
     "userNotFound": "Nutzer nicht gefunden",
@@ -708,7 +709,13 @@
     "deleteUser": "Nutzer löschen",
     "deleteUserTitle": "Dieses Konto löschen?",
     "deleteUserMessage": "{{name}} ({{email}}) und alle Stapel, Karten und Lerndaten dauerhaft löschen. Das lässt sich nicht rückgängig machen.",
-    "deleteUserConfirm": "Konto löschen"
+    "deleteUserConfirm": "Konto löschen",
+    "addonHeading": "Zusatz-Credits",
+    "addonHint": "Fügt diesem Pro-Konto zusätzliche KI-Credits hinzu. Sie bleiben, bis sie verbraucht werden, und werden nicht mit dem monatlichen Kontingent zurückgesetzt.",
+    "addonNeedsPro": "Dieses Konto braucht Pro, bevor Extra-Credits hinzugefügt werden können.",
+    "addonAmount": "Credits hinzufügen",
+    "addonAdd": "Credits hinzufügen",
+    "confirmAddon": "{{count}} Extra-Credits zu diesem Pro-Konto hinzufügen?"
   },
   "classes": {
     "title": "Klassen",

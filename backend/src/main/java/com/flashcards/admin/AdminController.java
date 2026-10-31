@@ -51,6 +51,13 @@ public class AdminController {
         return adminService.cancelSubscription(AuthSupport.requireUser(authentication).id(), userId);
     }
 
+    @PostMapping("/users/{userId}/credits")
+    public AdminUserResponse grantCredits(
+            Authentication authentication, @PathVariable UUID userId, @RequestBody AdminCreditGrantRequest request) {
+        int credits = request == null ? 0 : request.credits();
+        return adminService.grantAddonCredits(AuthSupport.requireUser(authentication).id(), userId, credits);
+    }
+
     @DeleteMapping("/users/{userId}")
     public void deleteUser(Authentication authentication, @PathVariable UUID userId) {
         adminService.deleteUser(AuthSupport.requireUser(authentication).id(), userId);

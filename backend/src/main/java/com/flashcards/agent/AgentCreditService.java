@@ -16,6 +16,9 @@ import com.flashcards.user.UserRepository;
 @Service
 public class AgentCreditService {
 
+    public static final int MAX_ADMIN_GRANT = 1_000;
+    public static final int MAX_ADDON_BALANCE = 10_000;
+
     private final UserRepository userRepository;
     private final AgentCreditLedgerRepository ledgerRepository;
     private final AgentProperties properties;
@@ -117,6 +120,26 @@ public class AgentCreditService {
         int pack = properties.addonCredits();
         user.setAgentAddonCredits(user.getAgentAddonCredits() + pack);
         ledger(user.getId(), pack, CreditBucket.ADDON, CreditReason.ADDON_PURCHASE, ref);
+        userRepository.save(user);
+        return balanceOf(user);
+    }
+
+    @Transactional
+    public CreditBalance grantAdminAddon(UUID userId, int credits) {
+        if (credits < 1 || credits > MAX_ADMIN_GRANT) {
+            throw new ApiException(HttpStatus.BAD_REQUEST, "Validation failed");
+        }
+        User user = requireUser(userId);
+        if (!ProAccess.allowed(user)) {
+            throw new ApiException(HttpStatus.FORBIDDEN, "Pro license required");
+        }
+        applyPeriod(user);
+        long next = (long) Math.max(0, user.getAgentAddonCredits()) + credits;
+        if (next > MAX_ADDON_BALANCE) {
+            throw new ApiException(HttpStatus.BAD_REQUEST, "Too many add-on credits");
+        }
+        user.setAgentAddonCredits((int) next);
+        ledger(user.getId(), credits, CreditBucket.ADDON, CreditReason.ADMIN_GRANT, UUID.randomUUID().toString());
         userRepository.save(user);
         return balanceOf(user);
     }

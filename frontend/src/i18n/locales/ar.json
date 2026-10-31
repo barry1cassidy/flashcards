@@ -677,6 +677,7 @@
     "addDeckFirst": "أضف هذه الرزمة إلى رزمي أولاً",
     "teacherCannotLeave": "لا يمكن للمعلّمين مغادرة فصلهم",
     "adminRequired": "يلزم صلاحية المسؤول",
+    "tooManyAddonCredits": "سيؤدي ذلك إلى تجاوز حد الأرصدة الإضافية لهذا الحساب.",
     "cannotDeleteOwnAccount": "لا يمكنك حذف حسابك",
     "cannotDeleteAdminAccount": "لا يمكنك حذف حساب مسؤول",
     "userNotFound": "المستخدم غير موجود",
@@ -744,7 +745,13 @@
     "deleteUser": "حذف المستخدم",
     "deleteUserTitle": "حذف هذا الحساب؟",
     "deleteUserMessage": "حذف {{name}} ({{email}}) نهائياً مع كل رزمهم وبطاقاتهم وبيانات دراستهم. لا يمكن التراجع عن ذلك.",
-    "deleteUserConfirm": "حذف الحساب"
+    "deleteUserConfirm": "حذف الحساب",
+    "addonHeading": "أرصدة إضافية",
+    "addonHint": "يضيف أرصدة ذكاء اصطناعي إضافية إلى حساب Pro هذا. تبقى حتى تُستخدم ولا تُصفَّر مع الحصة الشهرية.",
+    "addonNeedsPro": "يحتاج هذا الحساب إلى Pro قبل إضافة أرصدة إضافية.",
+    "addonAmount": "الأرصدة المراد إضافتها",
+    "addonAdd": "إضافة أرصدة",
+    "confirmAddon": "إضافة {{count}} من الأرصدة الإضافية إلى حساب Pro هذا؟"
   },
   "classes": {
     "title": "الفصول",

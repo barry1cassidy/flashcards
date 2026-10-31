@@ -641,6 +641,7 @@
     "addDeckFirst": "Ajoutez d’abord ce paquet à Mes Paquets",
     "teacherCannotLeave": "Les enseignants ne peuvent pas quitter leur classe",
     "adminRequired": "Admin requis",
+    "tooManyAddonCredits": "Cela dépasserait la limite de crédits supplémentaires de ce compte.",
     "cannotDeleteOwnAccount": "Vous ne pouvez pas supprimer votre propre compte",
     "cannotDeleteAdminAccount": "Vous ne pouvez pas supprimer un compte admin",
     "userNotFound": "Utilisateur introuvable",
@@ -708,7 +709,13 @@
     "deleteUser": "Supprimer l’utilisateur",
     "deleteUserTitle": "Supprimer ce compte ?",
     "deleteUserMessage": "Supprimer définitivement {{name}} ({{email}}) ainsi que tous ses paquets, cartes et données d’étude. Cette action est irréversible.",
-    "deleteUserConfirm": "Supprimer le compte"
+    "deleteUserConfirm": "Supprimer le compte",
+    "addonHeading": "Crédits supplémentaires",
+    "addonHint": "Ajoute des crédits IA supplémentaires à ce compte Pro. Ils restent jusqu’à utilisation et ne sont pas réinitialisés avec l’allocation mensuelle.",
+    "addonNeedsPro": "Ce compte doit être Pro avant d’ajouter des crédits supplémentaires.",
+    "addonAmount": "Crédits à ajouter",
+    "addonAdd": "Ajouter des crédits",
+    "confirmAddon": "Ajouter {{count}} crédits supplémentaires à ce compte Pro ?"
   },
   "classes": {
     "title": "Classes",

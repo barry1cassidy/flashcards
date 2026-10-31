@@ -641,6 +641,7 @@
     "addDeckFirst": "先にこのデッキをマイデッキに追加してください",
     "teacherCannotLeave": "教師は自分のクラスを抜けられません",
     "adminRequired": "管理者権限が必要です",
+    "tooManyAddonCredits": "このアカウントの追加クレジット上限を超えます。",
     "cannotDeleteOwnAccount": "自分のアカウントは削除できません",
     "cannotDeleteAdminAccount": "管理者アカウントは削除できません",
     "userNotFound": "ユーザーが見つかりません",
@@ -708,7 +709,13 @@
     "deleteUser": "ユーザーを削除",
     "deleteUserTitle": "このアカウントを削除しますか？",
     "deleteUserMessage": "{{name}}（{{email}}）と、そのデッキ、カード、学習データをすべて完全に削除します。元に戻せません。",
-    "deleteUserConfirm": "アカウントを削除"
+    "deleteUserConfirm": "アカウントを削除",
+    "addonHeading": "追加クレジット",
+    "addonHint": "この Pro アカウントに追加の AI クレジットを付与します。使い切るまで残り、毎月の付与分とは別にリセットされません。",
+    "addonNeedsPro": "追加クレジットを付与するには、このアカウントが Pro である必要があります。",
+    "addonAmount": "追加するクレジット",
+    "addonAdd": "クレジットを追加",
+    "confirmAddon": "この Pro アカウントに追加クレジットを {{count}} 付与しますか？"
   },
   "classes": {
     "title": "クラス",

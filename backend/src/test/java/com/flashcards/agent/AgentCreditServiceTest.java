@@ -130,6 +130,32 @@ class AgentCreditServiceTest {
     }
 
     @Test
+    void adminGrantAddsAddonCreditsForPro() {
+        user.setAgentAddonCredits(4);
+        CreditBalance balance = creditService.grantAdminAddon(USER_ID, 25);
+        assertEquals(29, balance.addonCredits());
+        assertEquals(1, ledger.stream().filter(row -> row.getReason() == CreditReason.ADMIN_GRANT).count());
+    }
+
+    @Test
+    void adminGrantRejectsUsersWithoutPro() {
+        user.setProLicensed(false);
+        ApiException ex = assertThrows(ApiException.class, () -> creditService.grantAdminAddon(USER_ID, 10));
+        assertEquals(HttpStatus.FORBIDDEN, ex.getStatus());
+        assertEquals("Pro license required", ex.getMessage());
+        assertEquals(0, user.getAgentAddonCredits());
+    }
+
+    @Test
+    void adminGrantRejectsAmountOverTheCap() {
+        user.setAgentAddonCredits(9_900);
+        ApiException ex = assertThrows(ApiException.class, () -> creditService.grantAdminAddon(USER_ID, 200));
+        assertEquals(HttpStatus.BAD_REQUEST, ex.getStatus());
+        assertEquals("Too many add-on credits", ex.getMessage());
+        assertEquals(9_900, user.getAgentAddonCredits());
+    }
+
+    @Test
     void addonPurchaseIsIdempotentForTheSameSession() {
         CreditBalance first = creditService.grantAddonPurchase(USER_ID, "cs_test_1");
         CreditBalance second = creditService.grantAddonPurchase(USER_ID, "cs_test_1");

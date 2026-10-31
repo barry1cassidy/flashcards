@@ -641,6 +641,7 @@
     "addDeckFirst": "Aggiungi prima questo mazzo ai Miei Mazzi",
     "teacherCannotLeave": "Gli insegnanti non possono lasciare la propria classe",
     "adminRequired": "Admin richiesto",
+    "tooManyAddonCredits": "Questo supererebbe il limite di crediti extra di questo account.",
     "cannotDeleteOwnAccount": "Non puoi eliminare il tuo account",
     "cannotDeleteAdminAccount": "Non puoi eliminare un account admin",
     "userNotFound": "Utente non trovato",
@@ -708,7 +709,13 @@
     "deleteUser": "Elimina utente",
     "deleteUserTitle": "Eliminare questo account?",
     "deleteUserMessage": "Elimina in modo permanente {{name}} ({{email}}) e tutti i suoi mazzi, carte e dati di studio. Non si può annullare.",
-    "deleteUserConfirm": "Elimina account"
+    "deleteUserConfirm": "Elimina account",
+    "addonHeading": "Crediti extra",
+    "addonHint": "Aggiunge crediti IA extra a questo account Pro. Restano finché non vengono usati e non si azzerano con la quota mensile.",
+    "addonNeedsPro": "Questo account deve essere Pro prima di aggiungere crediti extra.",
+    "addonAmount": "Crediti da aggiungere",
+    "addonAdd": "Aggiungi crediti",
+    "confirmAddon": "Aggiungere {{count}} crediti extra a questo account Pro?"
   },
   "classes": {
     "title": "Classi",

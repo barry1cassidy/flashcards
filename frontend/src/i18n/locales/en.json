@@ -94,7 +94,13 @@
     "deleteUser": "Delete user",
     "deleteUserTitle": "Delete this account?",
     "deleteUserMessage": "Permanently delete {{name}} ({{email}}) and all of their decks, cards, and study data. This cannot be undone.",
-    "deleteUserConfirm": "Delete account"
+    "deleteUserConfirm": "Delete account",
+    "addonHeading": "Add-on credits",
+    "addonHint": "Adds extra AI credits to this Pro account. They stay until the user spends them and are not reset with the monthly allowance.",
+    "addonNeedsPro": "This account needs Pro before extra credits can be added.",
+    "addonAmount": "Credits to add",
+    "addonAdd": "Add credits",
+    "confirmAddon": "Add {{count}} extra credits to this Pro account?"
   },
   "classes": {
     "title": "Classes",
@@ -1518,6 +1524,7 @@
     "addDeckFirst": "Add this deck to My Decks first",
     "teacherCannotLeave": "Teachers cannot leave their class",
     "adminRequired": "Admin required",
+    "tooManyAddonCredits": "That would put this account over the add-on credit limit.",
     "cannotDeleteOwnAccount": "You cannot delete your own account",
     "cannotDeleteAdminAccount": "You cannot delete an admin account",
     "userNotFound": "User not found",

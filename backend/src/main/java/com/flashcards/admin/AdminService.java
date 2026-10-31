@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.flashcards.agent.AgentCreditService;
 import com.flashcards.billing.BillingPlan;
 import com.flashcards.billing.BillingService;
 import com.flashcards.billing.ProAccess;
@@ -36,6 +37,7 @@ public class AdminService {
     private final DeckRepository deckRepository;
     private final CardRepository cardRepository;
     private final BillingService billingService;
+    private final AgentCreditService creditService;
 
     public AdminService(
             UserRepository userRepository,
@@ -43,13 +45,15 @@ public class AdminService {
             DeckGroupRepository groupRepository,
             DeckRepository deckRepository,
             CardRepository cardRepository,
-            BillingService billingService) {
+            BillingService billingService,
+            AgentCreditService creditService) {
         this.userRepository = userRepository;
         this.subscriptionRepository = subscriptionRepository;
         this.groupRepository = groupRepository;
         this.deckRepository = deckRepository;
         this.cardRepository = cardRepository;
         this.billingService = billingService;
+        this.creditService = creditService;
     }
 
     @Transactional(readOnly = true)
@@ -110,6 +114,16 @@ public class AdminService {
     public AdminUserResponse cancelSubscription(UUID actorId, UUID userId) {
         requireAdmin(actorId);
         billingService.cancelAdminSubscription(userId);
+        return getUser(actorId, userId);
+    }
+
+    @Transactional
+    public AdminUserResponse grantAddonCredits(UUID actorId, UUID userId, int credits) {
+        requireAdmin(actorId);
+        if (!userRepository.existsById(userId)) {
+            throw new ApiException(HttpStatus.NOT_FOUND, "User not found");
+        }
+        creditService.grantAdminAddon(userId, credits);
         return getUser(actorId, userId);
     }
 

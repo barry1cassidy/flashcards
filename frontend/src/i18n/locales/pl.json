@@ -659,6 +659,7 @@
     "addDeckFirst": "Najpierw dodaj tę talię do Moich Talii",
     "teacherCannotLeave": "Nauczyciele nie mogą opuścić swojej klasy",
     "adminRequired": "Wymagany administrator",
+    "tooManyAddonCredits": "To przekroczyłoby limit dodatkowych kredytów na tym koncie.",
     "cannotDeleteOwnAccount": "Nie możesz usunąć własnego konta",
     "cannotDeleteAdminAccount": "Nie możesz usunąć konta administratora",
     "userNotFound": "Nie znaleziono użytkownika",
@@ -726,7 +727,13 @@
     "deleteUser": "Usuń użytkownika",
     "deleteUserTitle": "Usunąć to konto?",
     "deleteUserMessage": "Trwale usuń {{name}} ({{email}}) oraz wszystkie talie, karty i dane nauki. Tego nie można cofnąć.",
-    "deleteUserConfirm": "Usuń konto"
+    "deleteUserConfirm": "Usuń konto",
+    "addonHeading": "Dodatkowe kredyty",
+    "addonHint": "Dodaje dodatkowe kredyty AI do tego konta Pro. Zostają, aż zostaną wykorzystane, i nie resetują się z miesięcznym limitem.",
+    "addonNeedsPro": "To konto musi mieć Pro, zanim będzie można dodać dodatkowe kredyty.",
+    "addonAmount": "Kredyty do dodania",
+    "addonAdd": "Dodaj kredyty",
+    "confirmAddon": "Dodać {{count}} dodatkowych kredytów do tego konta Pro?"
   },
   "classes": {
     "title": "Klasy",

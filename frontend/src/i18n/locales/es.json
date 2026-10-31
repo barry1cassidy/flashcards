@@ -94,7 +94,13 @@
     "deleteUser": "Eliminar usuario",
     "deleteUserTitle": "¿Eliminar esta cuenta?",
     "deleteUserMessage": "Se eliminará permanentemente {{name}} ({{email}}) y todos sus mazos, tarjetas y datos de estudio. Esto no se puede deshacer.",
-    "deleteUserConfirm": "Eliminar cuenta"
+    "deleteUserConfirm": "Eliminar cuenta",
+    "addonHeading": "Créditos extra",
+    "addonHint": "Añade créditos de IA extra a esta cuenta Pro. Permanecen hasta que el usuario los gaste y no se reinician con la asignación mensual.",
+    "addonNeedsPro": "Esta cuenta necesita Pro antes de poder añadir créditos extra.",
+    "addonAmount": "Créditos a añadir",
+    "addonAdd": "Añadir créditos",
+    "confirmAddon": "¿Añadir {{count}} créditos extra a esta cuenta Pro?"
   },
   "classes": {
     "title": "Clases",
@@ -1496,6 +1502,7 @@
     "addDeckFirst": "Añade este mazo a Mis Mazos primero",
     "teacherCannotLeave": "Los profesores no pueden salir de su clase",
     "adminRequired": "Se necesita un administrador",
+    "tooManyAddonCredits": "Eso superaría el límite de créditos extra de esta cuenta.",
     "cannotDeleteOwnAccount": "No puedes eliminar tu propia cuenta",
     "cannotDeleteAdminAccount": "No puedes eliminar una cuenta de administrador",
     "userNotFound": "Usuario no encontrado",

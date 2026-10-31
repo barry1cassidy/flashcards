@@ -641,6 +641,7 @@
     "addDeckFirst": "Hãy thêm bộ thẻ này vào Bộ thẻ của tôi trước",
     "teacherCannotLeave": "Giáo viên không thể rời lớp của mình",
     "adminRequired": "Cần quyền quản trị",
+    "tooManyAddonCredits": "Thao tác này sẽ vượt hạn mức tín dụng thêm của tài khoản.",
     "cannotDeleteOwnAccount": "Bạn không thể xóa tài khoản của chính mình",
     "cannotDeleteAdminAccount": "Bạn không thể xóa tài khoản quản trị",
     "userNotFound": "Không tìm thấy người dùng",
@@ -708,7 +709,13 @@
     "deleteUser": "Xóa người dùng",
     "deleteUserTitle": "Xóa tài khoản này?",
     "deleteUserMessage": "Xóa vĩnh viễn {{name}} ({{email}}) cùng mọi bộ thẻ, thẻ và dữ liệu học. Không thể hoàn tác.",
-    "deleteUserConfirm": "Xóa tài khoản"
+    "deleteUserConfirm": "Xóa tài khoản",
+    "addonHeading": "Tín dụng thêm",
+    "addonHint": "Thêm tín dụng AI vào tài khoản Pro này. Chúng giữ đến khi dùng hết và không đặt lại cùng hạn mức hàng tháng.",
+    "addonNeedsPro": "Tài khoản này cần Pro trước khi có thể thêm tín dụng.",
+    "addonAmount": "Số tín dụng thêm",
+    "addonAdd": "Thêm tín dụng",
+    "confirmAddon": "Thêm {{count}} tín dụng vào tài khoản Pro này?"
   },
   "classes": {
     "title": "Lớp",

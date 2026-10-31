@@ -641,6 +641,7 @@
     "addDeckFirst": "Tambahkan dek ini ke Dek Saya dulu",
     "teacherCannotLeave": "Guru tidak bisa keluar dari kelasnya",
     "adminRequired": "Admin diperlukan",
+    "tooManyAddonCredits": "Ini akan melewati batas kredit tambahan akun ini.",
     "cannotDeleteOwnAccount": "Kamu tidak bisa menghapus akunmu sendiri",
     "cannotDeleteAdminAccount": "Kamu tidak bisa menghapus akun admin",
     "userNotFound": "Pengguna tidak ditemukan",
@@ -708,7 +709,13 @@
     "deleteUser": "Hapus pengguna",
     "deleteUserTitle": "Hapus akun ini?",
     "deleteUserMessage": "Hapus permanen {{name}} ({{email}}) beserta semua dek, kartu, dan data belajarnya. Ini tidak dapat dibatalkan.",
-    "deleteUserConfirm": "Hapus akun"
+    "deleteUserConfirm": "Hapus akun",
+    "addonHeading": "Kredit tambahan",
+    "addonHint": "Menambahkan kredit AI tambahan ke akun Pro ini. Kredit tetap ada sampai terpakai dan tidak direset bersama jatah bulanan.",
+    "addonNeedsPro": "Akun ini perlu Pro sebelum kredit tambahan bisa ditambahkan.",
+    "addonAmount": "Kredit yang ditambahkan",
+    "addonAdd": "Tambah kredit",
+    "confirmAddon": "Tambahkan {{count}} kredit tambahan ke akun Pro ini?"
   },
   "classes": {
     "title": "Kelas",

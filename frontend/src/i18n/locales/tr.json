@@ -641,6 +641,7 @@
     "addDeckFirst": "Önce bu desteyi Destelerime ekleyin",
     "teacherCannotLeave": "Öğretmenler kendi sınıflarından ayrılamaz",
     "adminRequired": "Yönetici gerekli",
+    "tooManyAddonCredits": "Bu, hesabın ek kredi sınırını aşar.",
     "cannotDeleteOwnAccount": "Kendi hesabınızı silemezsiniz",
     "cannotDeleteAdminAccount": "Bir yönetici hesabını silemezsiniz",
     "userNotFound": "Kullanıcı bulunamadı",
@@ -708,7 +709,13 @@
     "deleteUser": "Kullanıcıyı sil",
     "deleteUserTitle": "Bu hesap silinsin mi?",
     "deleteUserMessage": "{{name}} ({{email}}) ile tüm desteleri, kartları ve çalışma verileri kalıcı olarak silinir. Bu geri alınamaz.",
-    "deleteUserConfirm": "Hesabı sil"
+    "deleteUserConfirm": "Hesabı sil",
+    "addonHeading": "Ek krediler",
+    "addonHint": "Bu Pro hesaba ek yapay zeka kredisi ekler. Kullanılana kadar kalırlar ve aylık hakla birlikte sıfırlanmazlar.",
+    "addonNeedsPro": "Ek kredi eklemeden önce bu hesabın Pro olması gerekir.",
+    "addonAmount": "Eklenecek kredi",
+    "addonAdd": "Kredi ekle",
+    "confirmAddon": "Bu Pro hesaba {{count}} ek kredi eklensin mi?"
   },
   "classes": {
     "title": "Sınıflar",

@@ -75,6 +75,27 @@ export default function AdminUsersPage() {
     setPending(null)
   }
 
+  async function grantCredits(userId, credits) {
+    if (acting) {
+      return false
+    }
+    setActing(true)
+    setError('')
+    try {
+      const updated = await api(`/api/admin/users/${userId}/credits`, {
+        method: 'POST',
+        body: JSON.stringify({ credits }),
+      })
+      setUsers((current) => current.map((row) => (row.id === updated.id ? updated : row)))
+      return true
+    } catch (err) {
+      setError(err.message)
+      return false
+    } finally {
+      setActing(false)
+    }
+  }
+
   async function confirmDeleteUser() {
     if (!deleteTarget || acting) {
       return
@@ -198,6 +219,7 @@ export default function AdminUsersPage() {
                   onConfirm={runPending}
                   onCancelAsk={() => setPending(null)}
                   onDelete={() => setDeleteTarget(user)}
+                  onGrantCredits={(credits) => grantCredits(user.id, credits)}
                   t={t}
                 />
               )
@@ -223,9 +245,26 @@ export default function AdminUsersPage() {
   )
 }
 
-function FragmentRow({ user, sub, open, onToggle, pending, acting, onAsk, onConfirm, onCancelAsk, onDelete, t }) {
+function FragmentRow({
+  user,
+  sub,
+  open,
+  onToggle,
+  pending,
+  acting,
+  onAsk,
+  onConfirm,
+  onCancelAsk,
+  onDelete,
+  onGrantCredits,
+  t,
+}) {
   const adminGrant = activeAdminGrant(user)
   const remaining = user.remainingCredits ?? user.includedCredits + user.addonCredits
+  const [creditAmount, setCreditAmount] = useState('10')
+  const [creditAsk, setCreditAsk] = useState(false)
+  const creditCount = Number(creditAmount)
+  const creditOk = Number.isInteger(creditCount) && creditCount >= 1 && creditCount <= 1000
   return (
     <>
       <tr>
@@ -324,6 +363,71 @@ function FragmentRow({ user, sub, open, onToggle, pending, acting, onAsk, onConf
             )}
             <div className="admin-grant">
               <p>
+                <strong>{t('admin.addonHeading')}</strong>
+              </p>
+              {user.proActive ? (
+                <>
+                  <p>{t('admin.addonHint')}</p>
+                  {creditAsk ? (
+                    <div className="admin-grant-confirm">
+                      <p>{t('admin.confirmAddon', { count: creditCount })}</p>
+                      <div className="admin-grant-actions">
+                        <button
+                          className="admin-btn"
+                          type="button"
+                          disabled={acting}
+                          onClick={async () => {
+                            const ok = await onGrantCredits(creditCount)
+                            if (ok) {
+                              setCreditAsk(false)
+                              setCreditAmount('10')
+                            }
+                          }}
+                        >
+                          {t('admin.confirmAction')}
+                        </button>
+                        <button
+                          className="admin-btn"
+                          type="button"
+                          disabled={acting}
+                          onClick={() => setCreditAsk(false)}
+                        >
+                          {t('common.cancel')}
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="admin-credit-field">
+                      <label className="admin-credit-label">
+                        <span>{t('admin.addonAmount')}</span>
+                        <input
+                          type="number"
+                          inputMode="numeric"
+                          min={1}
+                          max={1000}
+                          step={1}
+                          value={creditAmount}
+                          disabled={acting || Boolean(pending)}
+                          onChange={(event) => setCreditAmount(event.target.value)}
+                        />
+                      </label>
+                      <button
+                        className="admin-btn"
+                        type="button"
+                        disabled={acting || Boolean(pending) || !creditOk}
+                        onClick={() => setCreditAsk(true)}
+                      >
+                        {t('admin.addonAdd')}
+                      </button>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <p>{t('admin.addonNeedsPro')}</p>
+              )}
+            </div>
+            <div className="admin-grant">
+              <p>
                 <strong>{t('admin.grantHeading')}</strong>
               </p>
               <p>{t('admin.grantHint')}</p>
@@ -352,17 +456,27 @@ function FragmentRow({ user, sub, open, onToggle, pending, acting, onAsk, onConf
                 </div>
               ) : (
                 <div className="admin-grant-actions">
-                  <button className="admin-btn" type="button" disabled={acting} onClick={() => onAsk('MONTHLY')}>
+                  <button
+                    className="admin-btn"
+                    type="button"
+                    disabled={acting || creditAsk}
+                    onClick={() => onAsk('MONTHLY')}
+                  >
                     {t('admin.grantMonthly')}
                   </button>
-                  <button className="admin-btn" type="button" disabled={acting} onClick={() => onAsk('YEARLY')}>
+                  <button
+                    className="admin-btn"
+                    type="button"
+                    disabled={acting || creditAsk}
+                    onClick={() => onAsk('YEARLY')}
+                  >
                     {t('admin.grantYearly')}
                   </button>
                   {adminGrant ? (
                     <button
                       className="admin-btn admin-btn-danger"
                       type="button"
-                      disabled={acting}
+                      disabled={acting || creditAsk}
                       onClick={() => onAsk('CANCEL')}
                     >
                       {t('admin.cancelGrant')}

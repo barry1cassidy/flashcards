@@ -113,6 +113,7 @@ const ERROR_KEYS = {
   'Add this deck to My Decks first': 'errors.addDeckFirst',
   'Teachers cannot leave their class': 'errors.teacherCannotLeave',
   'Admin required': 'errors.adminRequired',
+  'Too many add-on credits': 'errors.tooManyAddonCredits',
   'Cannot delete your own account': 'errors.cannotDeleteOwnAccount',
   'Cannot delete an admin account': 'errors.cannotDeleteAdminAccount',
   'User not found': 'errors.userNotFound',

@@ -641,6 +641,7 @@
     "addDeckFirst": "Adicione este baralho a Meus Baralhos primeiro",
     "teacherCannotLeave": "Professores não podem sair da própria turma",
     "adminRequired": "Admin necessário",
+    "tooManyAddonCredits": "Isso ultrapassaria o limite de créditos extras desta conta.",
     "cannotDeleteOwnAccount": "Você não pode excluir a própria conta",
     "cannotDeleteAdminAccount": "Você não pode excluir uma conta admin",
     "userNotFound": "Usuário não encontrado",
@@ -708,7 +709,13 @@
     "deleteUser": "Excluir usuário",
     "deleteUserTitle": "Excluir esta conta?",
     "deleteUserMessage": "Excluir permanentemente {{name}} ({{email}}) e todos os baralhos, cartões e dados de estudo. Isso não pode ser desfeito.",
-    "deleteUserConfirm": "Excluir conta"
+    "deleteUserConfirm": "Excluir conta",
+    "addonHeading": "Créditos extras",
+    "addonHint": "Adiciona créditos de IA extras a esta conta Pro. Eles permanecem até serem usados e não são reiniciados com a cota mensal.",
+    "addonNeedsPro": "Esta conta precisa do Pro antes de receber créditos extras.",
+    "addonAmount": "Créditos a adicionar",
+    "addonAdd": "Adicionar créditos",
+    "confirmAddon": "Adicionar {{count}} créditos extras a esta conta Pro?"
   },
   "classes": {
     "title": "Turmas",

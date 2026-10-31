@@ -641,6 +641,7 @@
     "addDeckFirst": "เพิ่มสำรับนี้ในสำรับของฉันก่อน",
     "teacherCannotLeave": "ครูออกจากชั้นเรียนของตัวเองไม่ได้",
     "adminRequired": "ต้องเป็นผู้ดูแล",
+    "tooManyAddonCredits": "การนี้จะทำให้บัญชีนี้เกินขีดจำกัดเครดิตเพิ่ม",
     "cannotDeleteOwnAccount": "คุณลบบัญชีของตัวเองไม่ได้",
     "cannotDeleteAdminAccount": "คุณลบบัญชีผู้ดูแลไม่ได้",
     "userNotFound": "ไม่พบผู้ใช้",
@@ -708,7 +709,13 @@
     "deleteUser": "ลบผู้ใช้",
     "deleteUserTitle": "ลบบัญชีนี้?",
     "deleteUserMessage": "ลบ {{name}} ({{email}}) ถาวร พร้อมสำรับ การ์ด และข้อมูลการเรียนทั้งหมด ย้อนกลับไม่ได้",
-    "deleteUserConfirm": "ลบบัญชี"
+    "deleteUserConfirm": "ลบบัญชี",
+    "addonHeading": "เครดิตเพิ่ม",
+    "addonHint": "เพิ่มเครดิต AI ให้บัญชี Pro นี้ เครดิตคงอยู่จนกว่าจะใช้ และไม่รีเซ็ตพร้อมโควต้ารายเดือน",
+    "addonNeedsPro": "บัญชีนี้ต้องเป็น Pro ก่อนจึงจะเพิ่มเครดิตได้",
+    "addonAmount": "จำนวนที่จะเพิ่ม",
+    "addonAdd": "เพิ่มเครดิต",
+    "confirmAddon": "เพิ่มเครดิตพิเศษ {{count}} ให้บัญชี Pro นี้?"
   },
   "classes": {
     "title": "ชั้นเรียน",

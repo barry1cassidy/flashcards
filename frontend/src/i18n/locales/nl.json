@@ -641,6 +641,7 @@
     "addDeckFirst": "Voeg deze stapel eerst toe aan Mijn Stapels",
     "teacherCannotLeave": "Docenten kunnen hun klas niet verlaten",
     "adminRequired": "Beheerder vereist",
+    "tooManyAddonCredits": "Daarmee komt dit account boven de limiet voor extra credits.",
     "cannotDeleteOwnAccount": "Je kunt je eigen account niet verwijderen",
     "cannotDeleteAdminAccount": "Je kunt een beheerdersaccount niet verwijderen",
     "userNotFound": "Gebruiker niet gevonden",
@@ -708,7 +709,13 @@
     "deleteUser": "Gebruiker verwijderen",
     "deleteUserTitle": "Dit account verwijderen?",
     "deleteUserMessage": "{{name}} ({{email}}) en alle stapels, kaarten en studiegegevens permanent verwijderen. Dit kan niet ongedaan worden gemaakt.",
-    "deleteUserConfirm": "Account verwijderen"
+    "deleteUserConfirm": "Account verwijderen",
+    "addonHeading": "Extra credits",
+    "addonHint": "Voegt extra AI-credits toe aan dit Pro-account. Ze blijven staan tot ze zijn gebruikt en worden niet gereset met het maandelijkse tegoed.",
+    "addonNeedsPro": "Dit account heeft Pro nodig voordat extra credits kunnen worden toegevoegd.",
+    "addonAmount": "Credits om toe te voegen",
+    "addonAdd": "Credits toevoegen",
+    "confirmAddon": "{{count}} extra credits toevoegen aan dit Pro-account?"
   },
   "classes": {
     "title": "Klassen",

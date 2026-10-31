@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -20,6 +21,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
+import com.flashcards.agent.AgentCreditService;
 import com.flashcards.billing.BillingPlan;
 import com.flashcards.billing.BillingService;
 import com.flashcards.billing.UserSubscriptionRepository;
@@ -45,6 +47,8 @@ class AdminServiceTest {
     private CardRepository cardRepository;
     @Mock
     private BillingService billingService;
+    @Mock
+    private AgentCreditService creditService;
 
     private AdminService adminService;
     private final UUID adminId = UUID.fromString("00000000-0000-0000-0000-000000000001");
@@ -58,7 +62,8 @@ class AdminServiceTest {
                 groupRepository,
                 deckRepository,
                 cardRepository,
-                billingService);
+                billingService,
+                creditService);
         lenient().when(groupRepository.countGroupedByUser()).thenReturn(List.of());
         lenient().when(deckRepository.countGroupedByUser()).thenReturn(List.of());
         lenient().when(cardRepository.countGroupedByUser()).thenReturn(List.of());
@@ -221,6 +226,53 @@ class AdminServiceTest {
         ApiException ex = assertThrows(ApiException.class, () -> adminService.cancelSubscription(memberId, adminId));
         assertEquals(HttpStatus.FORBIDDEN, ex.getStatus());
         verify(billingService, never()).cancelAdminSubscription(any());
+    }
+
+    @Test
+    void nonAdminCannotGrantAddonCredits() {
+        User member = new User();
+        member.setId(memberId);
+        member.setAdmin(false);
+        when(userRepository.findById(memberId)).thenReturn(Optional.of(member));
+
+        ApiException ex = assertThrows(ApiException.class, () -> adminService.grantAddonCredits(memberId, adminId, 10));
+        assertEquals(HttpStatus.FORBIDDEN, ex.getStatus());
+        assertEquals("Admin required", ex.getMessage());
+        verify(creditService, never()).grantAdminAddon(any(), anyInt());
+    }
+
+    @Test
+    void adminGrantAddonCreditsDelegatesToCreditService() {
+        User admin = new User();
+        admin.setId(adminId);
+        admin.setAdmin(true);
+        User member = new User();
+        member.setId(memberId);
+        member.setEmail("student@example.com");
+        member.setDisplayName("Student");
+        member.setProLicensed(true);
+        when(userRepository.findById(adminId)).thenReturn(Optional.of(admin));
+        when(userRepository.findById(memberId)).thenReturn(Optional.of(member));
+        when(userRepository.existsById(memberId)).thenReturn(true);
+        when(subscriptionRepository.findByUser_Id(memberId)).thenReturn(List.of());
+
+        AdminUserResponse row = adminService.grantAddonCredits(adminId, memberId, 25);
+        assertEquals(memberId, row.id());
+        verify(creditService).grantAdminAddon(memberId, 25);
+    }
+
+    @Test
+    void adminCannotGrantCreditsToMissingUser() {
+        User admin = new User();
+        admin.setId(adminId);
+        admin.setAdmin(true);
+        when(userRepository.findById(adminId)).thenReturn(Optional.of(admin));
+        when(userRepository.existsById(memberId)).thenReturn(false);
+
+        ApiException ex = assertThrows(ApiException.class, () -> adminService.grantAddonCredits(adminId, memberId, 10));
+        assertEquals(HttpStatus.NOT_FOUND, ex.getStatus());
+        assertEquals("User not found", ex.getMessage());
+        verify(creditService, never()).grantAdminAddon(any(), anyInt());
     }
 
     @Test

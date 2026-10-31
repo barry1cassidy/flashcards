@@ -641,6 +641,7 @@
     "addDeckFirst": "पहले इस डेक को मेरे डेक में जोड़ें",
     "teacherCannotLeave": "शिक्षक अपनी कक्षा नहीं छोड़ सकते",
     "adminRequired": "एडमिन आवश्यक",
+    "tooManyAddonCredits": "इससे इस खाते की अतिरिक्त क्रेडिट सीमा पार हो जाएगी।",
     "cannotDeleteOwnAccount": "आप अपना खाता नहीं हटा सकते",
     "cannotDeleteAdminAccount": "आप एडमिन खाता नहीं हटा सकते",
     "userNotFound": "उपयोगकर्ता नहीं मिला",
@@ -708,7 +709,13 @@
     "deleteUser": "उपयोगकर्ता हटाएँ",
     "deleteUserTitle": "यह खाता हटाएँ?",
     "deleteUserMessage": "{{name}} ({{email}}) और उनके सभी डेक, कार्ड और अध्ययन डेटा को स्थायी रूप से हटाएँ। इसे पूर्ववत नहीं किया जा सकता।",
-    "deleteUserConfirm": "खाता हटाएँ"
+    "deleteUserConfirm": "खाता हटाएँ",
+    "addonHeading": "अतिरिक्त क्रेडिट",
+    "addonHint": "इस Pro खाते में अतिरिक्त AI क्रेडिट जोड़ता है। वे उपयोग होने तक रहते हैं और मासिक सीमा के साथ रीसेट नहीं होते।",
+    "addonNeedsPro": "अतिरिक्त क्रेडिट जोड़ने से पहले इस खाते को Pro चाहिए।",
+    "addonAmount": "जोड़ने के लिए क्रेडिट",
+    "addonAdd": "क्रेडिट जोड़ें",
+    "confirmAddon": "इस Pro खाते में {{count}} अतिरिक्त क्रेडिट जोड़ें?"
   },
   "classes": {
     "title": "कक्षाएँ",

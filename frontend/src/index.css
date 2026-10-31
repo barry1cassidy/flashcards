@@ -5753,6 +5753,31 @@ button.agent-preset:disabled {
   gap: 8px;
 }
 
+.admin-credit-field {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.admin-credit-label {
+  display: grid;
+  gap: 4px;
+  color: var(--admin-muted);
+  font-size: 0.85rem;
+}
+
+.admin-credit-field input {
+  width: 7rem;
+  min-height: 44px;
+  border: 1px solid var(--admin-line);
+  background: var(--admin-panel);
+  color: var(--admin-text);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font: inherit;
+}
+
 .admin-grant-confirm {
   display: grid;
   gap: 10px;
