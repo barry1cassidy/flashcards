@@ -9,5 +9,6 @@ import jakarta.validation.constraints.Size;
 public record AppleLoginRequest(
         @NotBlank String identityToken,
         @Pattern(regexp = UserLocale.CODE_PATTERN, message = "Unsupported locale") String locale,
-        @Size(max = 100) String fullName) {
+        @Size(max = 100) String fullName,
+        @Size(max = 128) String nonce) {
 }

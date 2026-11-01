@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { api } from '../api'
 import { formatDate } from '../i18n/format'
@@ -11,12 +11,16 @@ import { GroupBadge } from './ColorPicker'
 import GroupForm from './GroupForm'
 import { useAuth } from '../AuthContext'
 import { sortDecks } from '../deckSort'
+import { mixReturnTo, withMixReturn } from '../mixReturn'
 
 export default function GroupDetailPage() {
   const { t } = useTranslation()
   const { user } = useAuth()
   const { id } = useParams()
+  const [searchParams] = useSearchParams()
   const navigate = useNavigate()
+  const mixReturn = mixReturnTo(searchParams.get('return'))
+  const setPath = withMixReturn(`/sets/${id}`, mixReturn)
   const [group, setGroup] = useState(null)
   const [decks, setDecks] = useState([])
   const [allDecks, setAllDecks] = useState([])
@@ -87,8 +91,8 @@ export default function GroupDetailPage() {
     <div className="page">
       <div className="page-title">
         <div className="deck-hero">
-          <Link className="page-back" to="/sets">
-            {t('groups.back')}
+          <Link className="page-back" to={mixReturn || '/sets'}>
+            {mixReturn ? t('nav.backToMix') : t('groups.back')}
           </Link>
           <GroupBadge group={group} />
           <h1>{group.name}</h1>
@@ -103,7 +107,15 @@ export default function GroupDetailPage() {
             >
               <MenuIcon name="share" />
             </button>
-            <button className="btn" type="button" onClick={() => navigate(`/listen?source=set&id=${id}`)}>
+            <button
+              className="btn"
+              type="button"
+              onClick={() =>
+                navigate(`/listen?source=set&id=${id}`, {
+                  state: mixReturn ? { listenReturn: setPath } : undefined,
+                })
+              }
+            >
               {t('listen.menu')}
             </button>
             <button className="btn danger" type="button" onClick={() => setConfirmDelete(true)}>
@@ -157,7 +169,7 @@ export default function GroupDetailPage() {
             {sortDecks(decks, user?.deckSort).map((deck) => (
               <li key={deck.id} className="card-row">
                 <div>
-                  <Link to={`/decks/${deck.id}`}>
+                  <Link to={withMixReturn(`/decks/${deck.id}`, mixReturn)}>
                     <strong>{deck.name}</strong>
                   </Link>
                   <p className="muted small">

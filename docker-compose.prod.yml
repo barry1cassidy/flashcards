@@ -48,6 +48,8 @@ services:
       GOOGLE_PLAY_PRODUCT_YEARLY: ${GOOGLE_PLAY_PRODUCT_YEARLY:-pro_yearly}
       GOOGLE_PLAY_PRODUCT_ADDON: ${GOOGLE_PLAY_PRODUCT_ADDON:-credits_addon}
       APPLE_BUNDLE_ID: ${APPLE_BUNDLE_ID:-com.zipdeck.app}
+      APPLE_CLIENT_ID: ${APPLE_CLIENT_ID:-com.zipdeck.app}
+      APPLE_WEB_CLIENT_ID: ${APPLE_WEB_CLIENT_ID:-com.zipdeck.web}
       APPLE_PRODUCT_MONTHLY: ${APPLE_PRODUCT_MONTHLY:-pro_monthly}
       APPLE_PRODUCT_YEARLY: ${APPLE_PRODUCT_YEARLY:-pro_yearly}
       APPLE_PRODUCT_ADDON: ${APPLE_PRODUCT_ADDON:-credits_addon}
@@ -84,6 +86,7 @@ services:
       context: ./frontend
       args:
         VITE_GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
+        VITE_APPLE_CLIENT_ID: ${APPLE_WEB_CLIENT_ID:-com.zipdeck.web}
     restart: unless-stopped
     ports:
       - "80:80"

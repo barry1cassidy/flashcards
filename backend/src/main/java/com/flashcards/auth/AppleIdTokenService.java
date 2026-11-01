@@ -8,6 +8,7 @@ import java.time.Duration;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -42,7 +43,7 @@ public class AppleIdTokenService implements AppleTokenService {
     }
 
     @Override
-    public AppleProfile verify(String identityToken) {
+    public AppleProfile verify(String identityToken, String rawNonce) {
         if (!properties.enabled()) {
             throw new ApiException(HttpStatus.SERVICE_UNAVAILABLE, "Sign in with Apple is not configured");
         }
@@ -54,6 +55,13 @@ public class AppleIdTokenService implements AppleTokenService {
         if (claims == null) {
             throw new ApiException(HttpStatus.UNAUTHORIZED, "Invalid Apple sign-in");
         }
+        if (!audienceAllowed(claims.getAudience(), properties.audiences())) {
+            throw new ApiException(HttpStatus.UNAUTHORIZED, "Invalid Apple sign-in");
+        }
+        requireNonce(
+                rawNonce,
+                nonceClaim(claims),
+                webNonceRequired(claims.getAudience(), properties.audience(), properties.webAudience()));
         String subject = claims.getSubject();
         if (subject == null || subject.isBlank()) {
             throw new ApiException(HttpStatus.UNAUTHORIZED, "Invalid Apple sign-in");
@@ -68,6 +76,53 @@ public class AppleIdTokenService implements AppleTokenService {
         return new AppleProfile(subject, email);
     }
 
+    static boolean audienceAllowed(Set<String> tokenAudiences, Set<String> allowed) {
+        if (tokenAudiences == null || tokenAudiences.isEmpty() || allowed == null || allowed.isEmpty()) {
+            return false;
+        }
+        for (String audience : tokenAudiences) {
+            if (audience != null && allowed.contains(audience)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    static boolean webNonceRequired(Set<String> tokenAudiences, String nativeAudience, String webAudience) {
+        if (webAudience == null || webAudience.isBlank() || tokenAudiences == null) {
+            return false;
+        }
+        String web = webAudience.trim();
+        if (nativeAudience != null && web.equals(nativeAudience.trim())) {
+            return false;
+        }
+        return tokenAudiences.contains(web);
+    }
+
+    static void requireNonce(String rawNonce, String nonceClaim, boolean webToken) {
+        boolean present = nonceClaim != null && !nonceClaim.isBlank();
+        if (!present) {
+            if (webToken) {
+                throw new ApiException(HttpStatus.UNAUTHORIZED, "Invalid Apple sign-in");
+            }
+            return;
+        }
+        if (!AppleNonce.matches(rawNonce, nonceClaim)) {
+            throw new ApiException(HttpStatus.UNAUTHORIZED, "Invalid Apple sign-in");
+        }
+    }
+
+    private static String nonceClaim(Claims claims) {
+        Object value = claims.get("nonce");
+        if (value == null) {
+            return null;
+        }
+        if (value instanceof String text) {
+            return text;
+        }
+        throw new ApiException(HttpStatus.UNAUTHORIZED, "Invalid Apple sign-in");
+    }
+
     private Claims parse(String identityToken, PublicKey key) {
         if (key == null) {
             return null;
@@ -76,7 +131,6 @@ public class AppleIdTokenService implements AppleTokenService {
             return Jwts.parser()
                     .verifyWith(key)
                     .requireIssuer(ISSUER)
-                    .requireAudience(properties.audience().trim())
                     .clockSkewSeconds(60)
                     .build()
                     .parseSignedClaims(identityToken)

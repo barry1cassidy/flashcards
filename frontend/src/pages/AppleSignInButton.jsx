@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { appleSignInAvailable, signInWithApple } from '../appleSignIn'
+import { appleSignInAvailable, ensureAppleWebReady, signInWithApple } from '../appleSignIn'
+import { isIosApp } from '../billing'
 import { translateError } from '../i18n/errors'
 
 function AppleMark() {
@@ -19,15 +20,52 @@ function AppleMark() {
 export default function AppleSignInButton({ onCredential, disabled }) {
   const { t } = useTranslation()
   const [loadError, setLoadError] = useState('')
+  const [pending, setPending] = useState(false)
+  const [ready, setReady] = useState(isIosApp())
+
+  useEffect(() => {
+    if (isIosApp()) {
+      return undefined
+    }
+    let cancelled = false
+    ensureAppleWebReady()
+      .then(() => {
+        if (!cancelled) {
+          setReady(true)
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setLoadError('Invalid Apple sign-in')
+        }
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [])
 
   if (!appleSignInAvailable()) {
     return null
   }
 
   async function onClick() {
-    if (disabled) {
+    if (disabled || pending) {
       return
     }
+    if (!ready) {
+      setPending(true)
+      setLoadError('')
+      try {
+        await ensureAppleWebReady()
+        setReady(true)
+      } catch {
+        setLoadError('Invalid Apple sign-in')
+      } finally {
+        setPending(false)
+      }
+      return
+    }
+    setPending(true)
     setLoadError('')
     try {
       const result = await signInWithApple()
@@ -46,12 +84,19 @@ export default function AppleSignInButton({ onCredential, disabled }) {
         return
       }
       setLoadError(message || 'Invalid Apple sign-in')
+    } finally {
+      setPending(false)
     }
   }
 
   return (
-    <div className={`apple-signin ${disabled ? 'is-busy' : ''}`}>
-      <button className="apple-signin-btn" type="button" disabled={disabled} onClick={onClick}>
+    <div className={`apple-signin ${disabled || pending ? 'is-busy' : ''}`}>
+      <button
+        className="apple-signin-btn"
+        type="button"
+        disabled={disabled || pending || (!ready && !loadError)}
+        onClick={onClick}
+      >
         <AppleMark />
         <span>{t('auth.continueWithApple')}</span>
       </button>

@@ -235,7 +235,9 @@ function LoginFields() {
         <AppleSignInButton
           disabled={busy}
           onCredential={(result) =>
-            finishLogin(() => loginWithApple(result.identityToken, currentLocale(), result.fullName))
+            finishLogin(() =>
+              loginWithApple(result.identityToken, currentLocale(), result.fullName, result.nonce),
+            )
           }
         />
       ) : null}

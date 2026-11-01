@@ -119,7 +119,7 @@ public class AuthService {
 
     @Transactional
     public AuthResponse loginWithApple(AppleLoginRequest request) {
-        AppleTokenService.AppleProfile profile = appleTokenService.verify(request.identityToken());
+        AppleTokenService.AppleProfile profile = appleTokenService.verify(request.identityToken(), request.nonce());
         User user = userRepository.findByAppleSub(profile.subject()).orElse(null);
         String email = profile.email() == null ? null : profile.email().trim().toLowerCase();
         if (user == null && email != null && !email.isEmpty()) {

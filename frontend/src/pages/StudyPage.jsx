@@ -13,17 +13,19 @@ import RatingRow from './RatingRow'
 import AuthImage from './AuthImage'
 import { useAuth } from '../AuthContext'
 import { answersMatch, diffAnswers } from '../answerCompare'
+import { mixReturnTo, withMixReturn } from '../mixReturn'
 
 export default function StudyPage() {
   const { t } = useTranslation()
   const { id, mode } = useParams()
   const location = useLocation()
+  const [searchParams] = useSearchParams()
   const isMix = location.pathname.startsWith('/mixes/')
   const studyRoot = isMix ? `/api/mixes/${id}` : `/api/decks/${id}`
-  const backTo = isMix ? `/mixes/${id}` : `/decks/${id}`
+  const mixReturn = mixReturnTo(searchParams.get('return'))
+  const backTo = isMix ? `/mixes/${id}` : withMixReturn(`/decks/${id}`, mixReturn)
   const { user } = useAuth()
   const dueToday = user?.restudyWait === 'IMMEDIATE'
-  const [searchParams] = useSearchParams()
   const [cards, setCards] = useState([])
   const [index, setIndex] = useState(0)
   const [revealed, setRevealed] = useState(false)

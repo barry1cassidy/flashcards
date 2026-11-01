@@ -63,7 +63,9 @@ export default function RegisterPage() {
             <AppleSignInButton
               disabled={busy}
               onCredential={(result) =>
-                finishAuth(() => loginWithApple(result.identityToken, currentLocale(), result.fullName))
+                finishAuth(() =>
+                  loginWithApple(result.identityToken, currentLocale(), result.fullName, result.nonce),
+                )
               }
             />
           ) : null}

@@ -8,6 +8,7 @@ import { isProLicensed } from '../pro'
 import { translateError } from '../i18n/errors'
 import { listOfflinePacks } from '../offlinePacks'
 import { studioLibraryPath, studioListenReturnPath, studioSamplesPath } from '../languageStudio'
+import { listenReturnPath } from '../mixReturn'
 import { flattenListenCards, loadListenQueue } from '../listenQueue'
 import { LISTEN_SLEEP_EXTEND_MS, listenPrefsFromUser, normalizeListenPrefs } from '../listenPrefs'
 import { createListenSession } from '../listenSession'
@@ -43,13 +44,7 @@ function externalListenReturn(path) {
   if (studio) {
     return studio
   }
-  if (
-    typeof path === 'string' &&
-    /^\/(decks|mixes)\/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/.test(path)
-  ) {
-    return path
-  }
-  return ''
+  return listenReturnPath(path)
 }
 
 export default function ListenPage() {

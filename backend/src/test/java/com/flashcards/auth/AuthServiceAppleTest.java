@@ -53,7 +53,7 @@ class AuthServiceAppleTest {
 
     @Test
     void createsAccountFromAppleProfile() {
-        when(appleTokenService.verify("id-token"))
+        when(appleTokenService.verify("id-token", null))
                 .thenReturn(new AppleTokenService.AppleProfile("apple-1", "hide@privaterelay.appleid.com"));
         when(userRepository.findByAppleSub("apple-1")).thenReturn(Optional.empty());
         when(userRepository.findByEmail("hide@privaterelay.appleid.com")).thenReturn(Optional.empty());
@@ -64,7 +64,7 @@ class AuthServiceAppleTest {
         });
         when(jwtService.createToken(any())).thenReturn("jwt");
 
-        AuthResponse response = authService.loginWithApple(new AppleLoginRequest("id-token", "en", "Barry Cassidy"));
+        AuthResponse response = authService.loginWithApple(new AppleLoginRequest("id-token", "en", "Barry Cassidy", null));
 
         assertEquals("jwt", response.token());
         assertEquals("hide@privaterelay.appleid.com", response.user().email());
@@ -83,14 +83,14 @@ class AuthServiceAppleTest {
         existing.setEmail("barry@gmail.com");
         existing.setDisplayName("Existing");
         existing.setPasswordHash("hash");
-        when(appleTokenService.verify("id-token"))
+        when(appleTokenService.verify("id-token", null))
                 .thenReturn(new AppleTokenService.AppleProfile("apple-1", "Barry@gmail.com"));
         when(userRepository.findByAppleSub("apple-1")).thenReturn(Optional.empty());
         when(userRepository.findByEmail("barry@gmail.com")).thenReturn(Optional.of(existing));
         when(userRepository.save(existing)).thenReturn(existing);
         when(jwtService.createToken(any())).thenReturn("jwt");
 
-        AuthResponse response = authService.loginWithApple(new AppleLoginRequest("id-token", "en", "Barry"));
+        AuthResponse response = authService.loginWithApple(new AppleLoginRequest("id-token", "en", "Barry", null));
 
         assertEquals("Existing", response.user().displayName());
         assertEquals("apple-1", existing.getAppleSub());
@@ -104,13 +104,13 @@ class AuthServiceAppleTest {
         existing.setEmail("hide@privaterelay.appleid.com");
         existing.setDisplayName("Barry");
         existing.setAppleSub("apple-1");
-        when(appleTokenService.verify("id-token"))
+        when(appleTokenService.verify("id-token", null))
                 .thenReturn(new AppleTokenService.AppleProfile("apple-1", null));
         when(userRepository.findByAppleSub("apple-1")).thenReturn(Optional.of(existing));
         when(userRepository.save(existing)).thenReturn(existing);
         when(jwtService.createToken(any())).thenReturn("jwt");
 
-        AuthResponse response = authService.loginWithApple(new AppleLoginRequest("id-token", "en", null));
+        AuthResponse response = authService.loginWithApple(new AppleLoginRequest("id-token", "en", null, null));
 
         assertEquals("hide@privaterelay.appleid.com", response.user().email());
         assertEquals("apple-1", existing.getAppleSub());
@@ -118,12 +118,12 @@ class AuthServiceAppleTest {
 
     @Test
     void firstAppleLoginWithoutEmailFails() {
-        when(appleTokenService.verify("id-token"))
+        when(appleTokenService.verify("id-token", null))
                 .thenReturn(new AppleTokenService.AppleProfile("apple-1", null));
         when(userRepository.findByAppleSub("apple-1")).thenReturn(Optional.empty());
 
         ApiException error = assertThrows(
-                ApiException.class, () -> authService.loginWithApple(new AppleLoginRequest("id-token", "en", null)));
+                ApiException.class, () -> authService.loginWithApple(new AppleLoginRequest("id-token", "en", null, null)));
         assertEquals("Invalid Apple sign-in", error.getMessage());
     }
 

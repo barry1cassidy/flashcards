@@ -6,10 +6,15 @@ import { useAuth } from '../AuthContext'
 import { isProLicensed } from '../pro'
 import { useResumeExpiredSubscription } from '../useResumeExpiredSubscription'
 import { translateError } from '../i18n/errors'
+import { formatDate } from '../i18n/format'
+import { sortDecks } from '../deckSort'
 import { MIX_STUDY_ORDERS, normalizeMixStudyOrder } from '../studySettings'
+import { withMixReturn } from '../mixReturn'
 import MenuIcon from './MenuIcon'
 import StudyModeModal from './StudyModeModal'
 import { GroupBadge } from './ColorPicker'
+
+const PAGE_SIZE = 6
 
 export default function MixDetailPage() {
   const { t } = useTranslation()
@@ -23,6 +28,7 @@ export default function MixDetailPage() {
   const [error, setError] = useState('')
   const [studyOpen, setStudyOpen] = useState(false)
   const pro = isProLicensed(user)
+  const mixPath = `/mixes/${id}`
 
   useEffect(() => {
     if (!pro) {
@@ -49,7 +55,7 @@ export default function MixDetailPage() {
   }, [id, pro])
 
   function listen() {
-    navigate(`/listen?source=mix&id=${id}`, { state: { listenReturn: `/mixes/${id}` } })
+    navigate(`/listen?source=mix&id=${id}`, { state: { listenReturn: mixPath } })
   }
 
   if (!pro) {
@@ -82,10 +88,13 @@ export default function MixDetailPage() {
   }
 
   const hasCards = Number(mix.cardCount) > 0
-  const setById = new Map(groups.map((group) => [String(group.id), group]))
-  const deckById = new Map(decks.map((deck) => [String(deck.id), deck]))
-  const memberSets = (mix.setIds || []).map((setId) => setById.get(String(setId))).filter(Boolean)
-  const memberDecks = (mix.deckIds || []).map((deckId) => deckById.get(String(deckId))).filter(Boolean)
+  const selectedSets = new Set((mix.setIds || []).map(String))
+  const selectedDecks = new Set((mix.deckIds || []).map(String))
+  const memberSets = mix.includeAll ? groups : groups.filter((group) => selectedSets.has(String(group.id)))
+  const memberDecks = sortDecks(
+    mix.includeAll ? decks : decks.filter((deck) => selectedDecks.has(String(deck.id))),
+    user?.deckSort,
+  )
   const orderKey =
     MIX_STUDY_ORDERS.find((item) => item.value === normalizeMixStudyOrder(mix.studyOrder))?.labelKey ||
     'mix.studyOrderDefault'
@@ -104,11 +113,7 @@ export default function MixDetailPage() {
           </Link>
           <h1>{mix.name}</h1>
           <p className="muted">{stats.join(' · ')}</p>
-          <p className="muted">
-            {mix.includeAll
-              ? t('mix.summaryAll')
-              : t('mix.summaryCounts', { sets: mix.setIds?.length || 0, decks: mix.deckIds?.length || 0 })}
-          </p>
+          {mix.includeAll ? <p className="muted">{t('mix.summaryAll')}</p> : null}
           <p className="muted">{t(orderKey)}</p>
         </div>
         <div className="header-actions deck-hero-actions mix-hero-actions">
@@ -124,38 +129,18 @@ export default function MixDetailPage() {
               <span>{t('mix.study')}</span>
             </button>
           ) : null}
-          <button className="btn with-icon deck-action-edit" type="button" onClick={() => navigate(`/mixes/${id}/edit`)}>
+          <button className="btn with-icon deck-action-edit" type="button" onClick={() => navigate(`${mixPath}/edit`)}>
             <MenuIcon name="edit" />
             <span>{t('mix.edit')}</span>
           </button>
         </div>
       </div>
       {error ? <div className="error">{translateError(t, error)}</div> : null}
+      {mix.includeAll ? <p className="muted">{t('mix.includeAllHint')}</p> : null}
 
-      <section className="deck-section">
-        <h2 className="section-heading">{t('mix.contents')}</h2>
-        {mix.includeAll ? <p className="muted">{t('mix.includeAllHint')}</p> : null}
-        {!mix.includeAll && (memberSets.length > 0 || memberDecks.length > 0) ? (
-          <ul className="card-list mix-members">
-            {memberSets.map((group) => (
-              <li key={`set-${group.id}`}>
-                <Link className="mix-member" to={`/sets/${group.id}`}>
-                  <GroupBadge group={group} />
-                  <span className="muted">{t('groups.decks', { count: group.deckCount })}</span>
-                </Link>
-              </li>
-            ))}
-            {memberDecks.map((deck) => (
-              <li key={`deck-${deck.id}`}>
-                <Link className="mix-member" to={`/decks/${deck.id}`}>
-                  <strong>{deck.name}</strong>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        ) : null}
-        {!hasCards ? <p className="muted">{t('mix.noCards')}</p> : null}
-      </section>
+      <MixSources key={id} sets={memberSets} decks={memberDecks} mixPath={mixPath} />
+
+      {memberSets.length === 0 && memberDecks.length === 0 ? <p className="muted">{t('mix.noCards')}</p> : null}
 
       {studyOpen ? (
         <StudyModeModal
@@ -168,6 +153,100 @@ export default function MixDetailPage() {
           }}
           onCancel={() => setStudyOpen(false)}
         />
+      ) : null}
+    </div>
+  )
+}
+
+function MixSources({ sets, decks, mixPath }) {
+  const { t } = useTranslation()
+  const [setPage, setSetPage] = useState(1)
+  const [deckPage, setDeckPage] = useState(1)
+
+  return (
+    <>
+      {sets.length > 0 ? (
+        <section className="deck-section mix-source">
+          <h2 className="section-heading">{t('mix.sets')}</h2>
+          <div className="deck-grid">
+            {pageItems(sets, setPage).map((group) => (
+              <div key={group.id} className="deck-card">
+                <Link className="deck-card-main" to={withMixReturn(`/sets/${group.id}`, mixPath)}>
+                  <div className="deck-card-lead">
+                    <GroupBadge group={group} />
+                  </div>
+                  <h2 title={group.name}>{group.name}</h2>
+                  <p className="muted">{t('groups.decks', { count: group.deckCount })}</p>
+                </Link>
+              </div>
+            ))}
+          </div>
+          <CardPager page={setPage} total={sets.length} onPage={setSetPage} />
+        </section>
+      ) : null}
+      {decks.length > 0 ? (
+        <section className="deck-section mix-source">
+          <h2 className="section-heading">{t('groups.decks', { count: decks.length })}</h2>
+          <div className="deck-grid">
+            {pageItems(decks, deckPage).map((deck) => (
+              <div key={deck.id} className="deck-card">
+                <Link className="deck-card-main" to={withMixReturn(`/decks/${deck.id}`, mixPath)}>
+                  {deck.group ? (
+                    <div className="deck-card-lead">
+                      <GroupBadge group={deck.group} />
+                    </div>
+                  ) : null}
+                  <h2 className={deck.group ? undefined : 'deck-card-title'} title={deck.name}>
+                    {deck.name}
+                  </h2>
+                  <p className="muted">{deck.description || t('decks.noDescription')}</p>
+                  <div className="stat-row">
+                    <span>{t('decks.cards', { count: deck.cardCount })}</span>
+                    <span className="due-badge">{t('decks.due', { count: deck.dueCount })}</span>
+                    <span>{t('decks.learned', { count: deck.learnedCount })}</span>
+                  </div>
+                  {deck.lastStudiedAt ? (
+                    <p className="muted small">{t('decks.lastStudied', { date: formatDate(deck.lastStudiedAt) })}</p>
+                  ) : (
+                    <p className="muted small">{t('decks.notStudied')}</p>
+                  )}
+                </Link>
+              </div>
+            ))}
+          </div>
+          <CardPager page={deckPage} total={decks.length} onPage={setDeckPage} />
+        </section>
+      ) : null}
+    </>
+  )
+}
+
+function pageItems(items, page) {
+  const totalPages = Math.max(1, Math.ceil(items.length / PAGE_SIZE))
+  const safe = Math.min(Math.max(page, 1), totalPages)
+  const start = (safe - 1) * PAGE_SIZE
+  return items.slice(start, start + PAGE_SIZE)
+}
+
+function CardPager({ page, total, onPage }) {
+  const { t } = useTranslation()
+  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE))
+  const safe = Math.min(Math.max(page, 1), totalPages)
+  if (total <= PAGE_SIZE) {
+    return null
+  }
+  return (
+    <div className="library-pager">
+      {safe > 1 ? (
+        <button className="btn" type="button" onClick={() => onPage(safe - 1)}>
+          {t('listen.previous')}
+        </button>
+      ) : null}
+      <p className="muted">{t('listen.pageStatus', { page: safe, total: totalPages })}</p>
+      {safe < totalPages ? (
+        <button className="btn" type="button" onClick={() => onPage(safe + 1)}>
+          {t('listen.next')}
+        </button>
       ) : null}
     </div>
   )

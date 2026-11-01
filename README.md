@@ -177,9 +177,27 @@ Restart both the Vite dev server and Spring Boot after saving. Flyway migration 
 
 If the Google button is missing, `.env.local` is absent or Vite was not restarted. If Google shows `redirect_uri_mismatch` or origin errors, the JavaScript origin must match the URL in the address bar exactly, including port. If Google shows that the app has not completed verification, add your Gmail under **Audience → Test users**.
 
+## Sign in with Apple on the website
+
+The iPhone app signs in with the bundle ID `com.zipdeck.app`. The website signs in with a Services ID, `com.zipdeck.web`, and posts the Apple identity token to the same `/api/auth/apple` endpoint. The API accepts either audience (`APPLE_CLIENT_ID`, `APPLE_WEB_CLIENT_ID`). The Android app does not show the button.
+
+Create the Services ID once in the Apple Developer account, with the iOS app as its primary App ID. That grouping keeps the Apple user id the same, so an iPhone account opens the same Zipdeck account on the website.
+
+1. [Identifiers](https://developer.apple.com/account/resources/identifiers/list) → **+** → **Services IDs**.
+2. Description `Zipdeck Web`, identifier `com.zipdeck.web`. Register it.
+3. Open that Services ID, enable **Sign in with Apple**, and click **Configure**.
+4. Primary App ID: the Zipdeck iOS app (`com.zipdeck.app`).
+5. Domains and subdomains: `zipdeck.app`.
+6. Return URLs: `https://zipdeck.app/apple-callback.html`.
+7. If Apple asks you to verify the domain, download the association file and save it as `frontend/public/.well-known/apple-developer-domain-association.txt`. Deploy the site, confirm `https://zipdeck.app/.well-known/apple-developer-domain-association.txt` returns that file, then click **Verify**. Register, then **Continue** and **Save**.
+
+Until that Services ID is saved, the website button is visible and Apple rejects the login. Apple will not complete the popup on `http://localhost`. After a production deploy, sign in on the site with the same Apple ID used on iPhone and confirm it is the same account.
+
+A different Services ID has to be set in both places: `APPLE_WEB_CLIENT_ID` for the API, and `VITE_APPLE_CLIENT_ID` when building the web image.
+
 ## Email verification (Resend)
 
-New **email/password** accounts must enter a 6-digit code before My Decks, Study Mix, AI, classes, Pro, and copying a shared deck or set unlock. Sample Sets, Help, and Settings stay available. Existing accounts stay verified. **Google sign-in** and **Sign in with Apple** skip this (the provider already verified the address). Sign in with Apple is iOS-only.
+New **email/password** accounts must enter a 6-digit code before My Decks, Study Mix, AI, classes, Pro, and copying a shared deck or set unlock. Sample Sets, Help, and Settings stay available. Existing accounts stay verified. **Google sign-in** and **Sign in with Apple** skip this (the provider already verified the address). Sign in with Apple is on the iOS app and the website, not the Android app.
 
 You do not need Resend’s Node/PHP sample or the **Send email** button in their onboarding screen. Zipdeck already sends through `POST https://api.resend.com/emails`.
 
@@ -412,7 +430,7 @@ npm run android
 
 That builds with `VITE_API_BASE`, syncs Capacitor, and opens Android Studio. Pick an emulator (or a USB phone) and Run.
 
-The API must allow Capacitor origins (included in `APP_CORS_ORIGINS`). Put the same `VITE_GOOGLE_CLIENT_ID` Web client ID in `.env.android` as the website uses. Sign in with Apple is **iOS-only** (Guideline 4.8). Do not show that button on Android or the website.
+The API must allow Capacitor origins (included in `APP_CORS_ORIGINS`). Put the same `VITE_GOOGLE_CLIENT_ID` Web client ID in `.env.android` as the website uses. Sign in with Apple stays on the iOS app and the website. Do not show that button on Android.
 
 Google’s JavaScript button does not work in the Android WebView (tiny error page, then blank). The app uses native Google Sign-In instead. Adding `https://localhost` as a JavaScript origin will not fix that. `server.hostname` is `zipdeck.app` for password autofill. Native `VITE_API_BASE` must stay `https://api.zipdeck.app` so `/api` is not served from the bundle.
 

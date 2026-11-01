@@ -3712,17 +3712,10 @@ button.agent-preset:disabled {
   align-content: start;
 }
 
-.mix-members {
-  margin-top: 12px;
-}
-
-.mix-member {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  min-height: 44px;
-  color: inherit;
-  text-decoration: none;
+.mix-source .deck-card-lead,
+.mix-source .deck-card-title {
+  padding-right: 0;
+  padding-inline-end: 0;
 }
 
 .mix-mark {

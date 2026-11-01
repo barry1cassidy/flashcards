@@ -126,10 +126,15 @@ export function AuthProvider({ children }) {
         keepUser(result.user)
         return result.user
       },
-      async loginWithApple(identityToken, locale, fullName) {
+      async loginWithApple(identityToken, locale, fullName, nonce) {
         const result = await api('/api/auth/apple', {
           method: 'POST',
-          body: JSON.stringify({ identityToken, locale, fullName }),
+          body: JSON.stringify({
+            identityToken,
+            locale,
+            fullName: fullName || undefined,
+            nonce: nonce || undefined,
+          }),
         })
         setToken(result.token)
         keepUser(result.user)

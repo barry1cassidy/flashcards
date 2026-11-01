@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
-import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
+import { Link, useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { api } from '../api'
 import { downloadBlob, csvFilename } from '../download'
@@ -21,6 +21,7 @@ import { useAuth } from '../AuthContext'
 import { isProLicensed } from '../pro'
 import { getOfflinePack, saveOfflinePack } from '../offlinePacks'
 import { useResumeExpiredSubscription } from '../useResumeExpiredSubscription'
+import { mixReturnTo, withMixReturn } from '../mixReturn'
 import EditCardsWithAi from './EditCardsWithAi'
 
 function deckUpdateBody(deck, overrides = {}) {
@@ -41,7 +42,10 @@ export default function DeckDetailPage() {
   const pro = isProLicensed(user)
   const { id } = useParams()
   const location = useLocation()
+  const [searchParams] = useSearchParams()
   const navigate = useNavigate()
+  const mixReturn = mixReturnTo(searchParams.get('return'))
+  const deckPath = withMixReturn(`/decks/${id}`, mixReturn)
   const fileRef = useRef(null)
   const listRef = useRef(null)
   const cardsRef = useRef([])
@@ -578,8 +582,8 @@ export default function DeckDetailPage() {
     <div className="page">
       <div className="page-title">
         <div className="deck-hero">
-          <Link className="page-back" to="/">
-            {t('decks.back')}
+          <Link className="page-back" to={mixReturn || '/'}>
+            {mixReturn ? t('nav.backToMix') : t('decks.back')}
           </Link>
           <GroupBadge group={deck.group} />
           <h1>{deck.name}</h1>
@@ -621,7 +625,7 @@ export default function DeckDetailPage() {
                 type="button"
                 onClick={() =>
                   navigate(`/listen?source=deck&id=${id}`, {
-                    state: { listenReturn: `/decks/${id}` },
+                    state: { listenReturn: deckPath },
                   })
                 }
               >
@@ -1050,8 +1054,15 @@ export default function DeckDetailPage() {
           againCount={deck.againCount || 0}
           onSelect={(mode, filter) => {
             setStudyOpen(false)
-            const path = `/decks/${id}/study/${mode}`
-            navigate(filter === 'hard' || filter === 'again' ? `${path}?filter=${filter}` : path)
+            const params = new URLSearchParams()
+            if (filter === 'hard' || filter === 'again') {
+              params.set('filter', filter)
+            }
+            if (mixReturn) {
+              params.set('return', mixReturn)
+            }
+            const query = params.toString()
+            navigate(query ? `/decks/${id}/study/${mode}?${query}` : `/decks/${id}/study/${mode}`)
           }}
           onCancel={() => setStudyOpen(false)}
         />
