@@ -151,12 +151,12 @@ export default function MixEditorPage() {
         deckIds: includeAll ? [] : [...deckIds],
       }
       if (isNew) {
-        await api('/api/mixes', { method: 'POST', body: JSON.stringify(body) })
-        navigate('/mixes')
+        const created = await api('/api/mixes', { method: 'POST', body: JSON.stringify(body) })
+        navigate(`/mixes/${created.id}`)
         return
       }
       await api(`/api/mixes/${id}`, { method: 'PUT', body: JSON.stringify(body) })
-      navigate('/mixes')
+      navigate(`/mixes/${id}`)
     } catch (err) {
       setError(err.message)
     } finally {
@@ -197,13 +197,14 @@ export default function MixEditorPage() {
   }
 
   const canSave = name.trim() && (includeAll || setIds.size > 0 || deckIds.size > 0)
+  const backTo = isNew ? '/mixes' : `/mixes/${id}`
 
   return (
     <div className="page">
       <div className="page-title">
         <div>
-          <Link className="page-back" to="/mixes">
-            {t('mix.menu')}
+          <Link className="page-back" to={backTo}>
+            {isNew || !name.trim() ? t('mix.menu') : name.trim()}
           </Link>
           <h1>{isNew ? t('mix.new') : t('mix.edit')}</h1>
           <p className="muted">{t('mix.editorHint')}</p>
@@ -218,7 +219,6 @@ export default function MixEditorPage() {
             onChange={(event) => setName(event.target.value)}
             required
             maxLength={80}
-            autoFocus={isNew}
             disabled={busy}
           />
         </label>
@@ -326,7 +326,7 @@ export default function MixEditorPage() {
           <button className="btn primary" type="submit" disabled={busy || !canSave}>
             {t('common.save')}
           </button>
-          <Link className="btn ghost" to="/mixes">
+          <Link className="btn ghost" to={backTo}>
             {t('common.cancel')}
           </Link>
           {!isNew ? (

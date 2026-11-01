@@ -55,6 +55,7 @@ public class LanguageStudioService {
     private final AgentCreditService creditService;
     private final AgentProperties properties;
     private final ExpiredStoreSubscriptionRefresh expiredStoreSubscriptionRefresh;
+    private final ConversationPlaylistRepository playlistRepository;
     private final ChatClient chatClient;
     private final ConcurrentHashMap<UUID, LanguageStudioJob> jobs = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<UUID, UUID> activeByUser = new ConcurrentHashMap<>();
@@ -66,13 +67,15 @@ public class LanguageStudioService {
             UserRepository userRepository,
             AgentCreditService creditService,
             AgentProperties properties,
-            ExpiredStoreSubscriptionRefresh expiredStoreSubscriptionRefresh) {
+            ExpiredStoreSubscriptionRefresh expiredStoreSubscriptionRefresh,
+            ConversationPlaylistRepository playlistRepository) {
         this.conversationRepository = conversationRepository;
         this.pairService = pairService;
         this.userRepository = userRepository;
         this.creditService = creditService;
         this.properties = properties;
         this.expiredStoreSubscriptionRefresh = expiredStoreSubscriptionRefresh;
+        this.playlistRepository = playlistRepository;
         this.chatClient = properties.configured() ? ChatClient.create(openAiChatModel()) : null;
     }
 
@@ -113,6 +116,13 @@ public class LanguageStudioService {
         String nativeLanguage = conversation.getNativeLanguage();
         String targetLanguage = conversation.getTargetLanguage();
         conversationRepository.delete(conversation);
+        conversationRepository.flush();
+        if (conversationRepository.countByUser_IdAndNativeLanguageAndTargetLanguage(
+                        userId, nativeLanguage, targetLanguage)
+                == 0) {
+            playlistRepository.deleteByUser_IdAndNativeLanguageAndTargetLanguage(
+                    userId, nativeLanguage, targetLanguage);
+        }
         pairService.forgetIfEmpty(userId, nativeLanguage, targetLanguage);
     }
 

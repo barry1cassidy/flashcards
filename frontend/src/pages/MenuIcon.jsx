@@ -290,6 +290,12 @@ const ICONS = {
       <path d="M5 14v4a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4" />
     </>
   ),
+  copy: (
+    <>
+      <rect x="8" y="8" width="11" height="12" rx="2" />
+      <path d="M6 16V6a2 2 0 0 1 2-2h8" />
+    </>
+  ),
   csvOut: (
     <>
       <path d="M12 12V3" />

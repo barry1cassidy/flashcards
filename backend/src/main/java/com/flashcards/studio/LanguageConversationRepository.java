@@ -1,5 +1,6 @@
 package com.flashcards.studio;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -13,6 +14,11 @@ public interface LanguageConversationRepository extends JpaRepository<LanguageCo
 
     List<LanguageConversation> findByUser_IdAndNativeLanguageAndTargetLanguageOrderByUpdatedAtDesc(
             UUID userId, String nativeLanguage, String targetLanguage);
+
+    List<LanguageConversation> findByUser_IdAndNativeLanguageAndTargetLanguageOrderByCreatedAtAsc(
+            UUID userId, String nativeLanguage, String targetLanguage);
+
+    List<LanguageConversation> findByIdInAndUser_Id(Collection<UUID> ids, UUID userId);
 
     long countByUser_IdAndNativeLanguageAndTargetLanguage(UUID userId, String nativeLanguage, String targetLanguage);
 

@@ -684,7 +684,6 @@ export default function DeckDetailPage() {
                 onChange={(event) => setEditName(event.target.value)}
                 onBlur={() => commitDeckDetails()}
                 required
-                autoFocus
               />
             </label>
             <label>
@@ -935,7 +934,7 @@ export default function DeckDetailPage() {
           <div className="card-side-block">
             <label>
               {t('decks.front')}
-              <textarea value={front} onChange={(event) => setFront(event.target.value)} required autoFocus />
+              <textarea value={front} onChange={(event) => setFront(event.target.value)} required />
             </label>
             <CardImageField
               side="front"

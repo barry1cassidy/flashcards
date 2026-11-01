@@ -25,6 +25,7 @@ import HelpPage from './pages/HelpPage'
 import AgentPage from './pages/AgentPage'
 import MixesPage from './pages/MixesPage'
 import MixEditorPage from './pages/MixEditorPage'
+import MixDetailPage from './pages/MixDetailPage'
 import LibraryPage from './pages/LibraryPage'
 import LibraryGroupPage from './pages/LibraryGroupPage'
 import LibraryDeckPage from './pages/LibraryDeckPage'
@@ -41,6 +42,7 @@ import OfflineListenPage from './pages/OfflineListenPage'
 import OfflineStudyPage from './pages/OfflineStudyPage'
 import ListenPage from './pages/ListenPage'
 import LanguageStudioPage from './pages/LanguageStudioPage'
+import PlaylistEditorPage from './pages/PlaylistEditorPage'
 import LanguageStudioCreate from './pages/LanguageStudioCreate'
 import LanguageStudioPractice from './pages/LanguageStudioPractice'
 import LanguageStudioSamples from './pages/LanguageStudioSamples'
@@ -470,10 +472,13 @@ export default function App() {
           <Route path="/decks/:id/study/:mode" element={<StudyPage />} />
           <Route path="/create-with-ai" element={<AgentPage />} />
           <Route path="/mixes/new" element={<MixEditorPage />} />
+          <Route path="/mixes/:id/edit" element={<MixEditorPage />} />
           <Route path="/mixes/:id/study/:mode" element={<StudyPage />} />
-          <Route path="/mixes/:id" element={<MixEditorPage />} />
+          <Route path="/mixes/:id" element={<MixDetailPage />} />
           <Route path="/mixes" element={<MixesPage />} />
           <Route path="/listen" element={<ListenPage />} />
+          <Route path="/language-studio/playlists/new" element={<PlaylistEditorPage />} />
+          <Route path="/language-studio/playlists/:id" element={<PlaylistEditorPage />} />
           <Route path="/language-studio/new" element={<LanguageStudioCreate />} />
           <Route path="/language-studio/samples/:slug" element={<LanguageStudioPractice />} />
           <Route path="/language-studio/samples" element={<LanguageStudioSamples />} />

@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -49,6 +50,8 @@ class LanguageStudioServiceTest {
     private AgentCreditService creditService;
     @Mock
     private ExpiredStoreSubscriptionRefresh expiredStoreSubscriptionRefresh;
+    @Mock
+    private ConversationPlaylistRepository playlistRepository;
 
     private LanguageStudioService studioService;
     private User user;
@@ -61,7 +64,8 @@ class LanguageStudioServiceTest {
                 userRepository,
                 creditService,
                 new AgentProperties("", "", "", 10, 10, 40, 90, 0, 0, 0, 0),
-                expiredStoreSubscriptionRefresh);
+                expiredStoreSubscriptionRefresh,
+                playlistRepository);
         user = new User();
         user.setId(USER_ID);
         user.setProLicensed(true);
@@ -94,6 +98,7 @@ class LanguageStudioServiceTest {
         studioService.delete(USER_ID, conversation.getId());
 
         verify(conversationRepository).delete(conversation);
+        verify(playlistRepository).deleteByUser_IdAndNativeLanguageAndTargetLanguage(USER_ID, "es-ES", "en-US");
         verify(pairService).forgetIfEmpty(USER_ID, "es-ES", "en-US");
     }
 
@@ -213,6 +218,20 @@ class LanguageStudioServiceTest {
     }
 
     @Test
+    void deleteKeepsPlaylistsWhenOtherConversationsRemain() {
+        LanguageConversation conversation = scene("At the pharmacy");
+        when(conversationRepository.findByIdAndUser_Id(conversation.getId(), USER_ID))
+                .thenReturn(Optional.of(conversation));
+        when(conversationRepository.countByUser_IdAndNativeLanguageAndTargetLanguage(USER_ID, "es-ES", "en-US"))
+                .thenReturn(1L);
+
+        studioService.delete(USER_ID, conversation.getId());
+
+        verify(playlistRepository, never())
+                .deleteByUser_IdAndNativeLanguageAndTargetLanguage(USER_ID, "es-ES", "en-US");
+    }
+
+    @Test
     void requiresPro() {
         user.setProLicensed(false);
         ApiException error = assertThrows(ApiException.class, () -> studioService.list(USER_ID, null, null));
@@ -238,7 +257,8 @@ class LanguageStudioServiceTest {
                 userRepository,
                 creditService,
                 new AgentProperties("test-key", "", "", 10, 10, 40, 90, 0, 0, 0, 0),
-                expiredStoreSubscriptionRefresh);
+                expiredStoreSubscriptionRefresh,
+                playlistRepository);
         ApiException error = assertThrows(
                 ApiException.class,
                 () -> configured.startGenerate(

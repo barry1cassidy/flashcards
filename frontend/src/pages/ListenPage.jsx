@@ -61,7 +61,10 @@ export default function ListenPage() {
   const pro = isProLicensed(user)
   const [params, setParams] = useSearchParams()
   const sourceParam = params.get('source')
-  const source = SOURCES.some((item) => item.id === sourceParam) || sourceParam === 'studio-sample' ? sourceParam : ''
+  const source =
+    SOURCES.some((item) => item.id === sourceParam) || sourceParam === 'studio-sample' || sourceParam === 'studio-playlist'
+      ? sourceParam
+      : ''
   const id = params.get('id') || params.get('slug') || ''
   const nativeLanguage = params.get('native') || ''
   const targetLanguage = params.get('target') || ''
@@ -114,7 +117,7 @@ export default function ListenPage() {
   }, [source, id, nativeLanguage, targetLanguage, selectedOffline])
 
   useEffect(() => {
-    if (!pro || !source || source === 'offline' || source === 'studio-sample' || id) {
+    if (!pro || !source || source === 'offline' || source === 'studio-sample' || source === 'studio-playlist' || id) {
       return undefined
     }
     let cancelled = false
@@ -126,8 +129,17 @@ export default function ListenPage() {
           ? '/api/groups'
           : source === 'mix'
             ? '/api/mixes'
-            : '/api/language-studio/conversations'
-    api(path)
+            : null
+    const request =
+      source === 'studio'
+        ? Promise.all([api('/api/language-studio/playlists'), api('/api/language-studio/conversations')]).then(
+            ([playlists, conversations]) => [
+              ...(playlists || []).map((item) => ({ ...item, kind: 'playlist' })),
+              ...(conversations || []).map((item) => ({ ...item, kind: 'conversation' })),
+            ],
+          )
+        : api(path)
+    request
       .then((found) => {
         if (!cancelled) {
           setItems(found || [])
@@ -177,6 +189,7 @@ export default function ListenPage() {
       (source === 'set' && id) ||
       (source === 'mix' && id) ||
       (source === 'studio' && id) ||
+      (source === 'studio-playlist' && id) ||
       (source === 'studio-sample' && id && nativeLanguage && targetLanguage) ||
       (source === 'offline' && offlineIds.length > 0)
     if (!canLoad) {
@@ -218,8 +231,19 @@ export default function ListenPage() {
     setParams(next ? { source: next } : {})
   }
 
-  function chooseItem(itemId) {
-    setParams({ source, id: itemId })
+  function chooseItem(item) {
+    if (item.kind === 'playlist') {
+      setParams({ source: 'studio-playlist', id: item.id })
+      return
+    }
+    setParams({ source, id: item.id })
+  }
+
+  function sourceLabel(value) {
+    if (value === 'studio-sample' || value === 'studio-playlist') {
+      return t('listen.sourceStudio')
+    }
+    return t(`listen.source${value[0].toUpperCase()}${value.slice(1)}`)
   }
 
   function toggleOffline(packId) {
@@ -393,13 +417,17 @@ export default function ListenPage() {
           onRate={conversationListen ? rateConversation : undefined}
           ratingBusy={ratingBusy}
           ratingError={ratingError}
+          announcePhaseLabel={source === 'studio-playlist' ? t('listen.announceScenePhase') : undefined}
         />
       </div>
     )
   }
 
   const showOptions = source === 'offline' ? offlineIds.length > 0 : Boolean(id)
-  const sourceMeta = SOURCES.find((item) => item.id === source) || (source === 'studio-sample' ? { id: 'studio-sample', icon: 'studio' } : undefined)
+  const sourceMeta =
+    SOURCES.find((item) => item.id === source) ||
+    (source === 'studio-sample' || source === 'studio-playlist' ? { id: source, icon: 'studio' } : undefined)
+  const scenePlaylist = source === 'studio-playlist'
   const showBrowse = source && source !== 'studio-sample' && (source === 'offline' || !id)
   const needle = query.trim().toLowerCase()
   const filteredItems = (items || []).filter(
@@ -437,7 +465,7 @@ export default function ListenPage() {
             <span className="listen-browse-mark">
               <MenuIcon name={sourceMeta.icon} />
             </span>
-            <h2>{t(`listen.source${source[0].toUpperCase()}${source.slice(1)}`)}</h2>
+            <h2>{sourceLabel(source)}</h2>
             {items && items.length > 0 ? (
               <label className="listen-search">
                 <span className="admin-sr">{t('listen.searchLabel')}</span>
@@ -478,11 +506,13 @@ export default function ListenPage() {
               {pageItems.map((item) => {
                 const color = itemColor(item)
                 const count =
-                  source === 'deck' || source === 'offline'
-                    ? t('listen.cards', { count: source === 'offline' ? item.cards?.length || 0 : item.cardCount || 0 })
-                    : source === 'studio'
-                      ? t('studio.turns', { count: item.turnCount || 0 })
-                      : t('listen.decks', { count: item.deckCount || item.deckIds?.length || 0 })
+                  item.kind === 'playlist'
+                    ? t('studio.playlistListenMeta', { count: item.conversationCount || 0 })
+                    : source === 'deck' || source === 'offline'
+                      ? t('listen.cards', { count: source === 'offline' ? item.cards?.length || 0 : item.cardCount || 0 })
+                      : source === 'studio'
+                        ? t('studio.turns', { count: item.turnCount || 0 })
+                        : t('listen.decks', { count: item.deckCount || item.deckIds?.length || 0 })
                 const body = (
                   <span>
                     {color ? <span className="listen-swatch" style={{ background: color }} /> : null}
@@ -500,7 +530,7 @@ export default function ListenPage() {
                   )
                 }
                 return (
-                  <button key={item.id} className="choice listen-item" type="button" onClick={() => chooseItem(item.id)}>
+                  <button key={`${item.kind || source}-${item.id}`} className="choice listen-item" type="button" onClick={() => chooseItem(item)}>
                     {body}
                   </button>
                 )
@@ -536,7 +566,7 @@ export default function ListenPage() {
                   navigate(listenReturn || conversationHome())
                   return
                 }
-                chooseSource(source)
+                chooseSource(source === 'studio-playlist' ? 'studio' : source)
               }}
             >
               {t('listen.back')}
@@ -547,8 +577,12 @@ export default function ListenPage() {
               <MenuIcon name={sourceMeta.icon} />
             </span>
             <div>
-              <h2>{queue?.title || t(`listen.source${source[0].toUpperCase()}${source.slice(1)}`)}</h2>
-              {cards.length > 0 ? <p className="muted">{t('listen.cards', { count: cards.length })}</p> : null}
+              <h2>{queue?.title || sourceLabel(source)}</h2>
+              {cards.length > 0 ? (
+                <p className="muted">
+                  {scenePlaylist ? t('studio.turns', { count: cards.length }) : t('listen.cards', { count: cards.length })}
+                </p>
+              ) : null}
             </div>
           </div>
           <div className="listen-play-bar">
@@ -560,11 +594,20 @@ export default function ListenPage() {
           <ListenOptionsToggle
             open={optionsOpen}
             onToggle={() => setOptionsOpen((open) => !open)}
-            summary={listenPrefsSummary(prefs, t, multi)}
+            summary={listenPrefsSummary(prefs, t, multi, scenePlaylist ? 'listen.announceSceneOff' : 'listen.announceOff')}
           />
-          {optionsOpen ? <ListenOptions prefs={prefs} onChange={changePrefs} showAnnounce={multi} /> : null}
+          {optionsOpen ? (
+            <ListenOptions
+              prefs={prefs}
+              onChange={changePrefs}
+              showAnnounce={multi}
+              announceLabel={scenePlaylist ? t('listen.announceScene') : undefined}
+            />
+          ) : null}
           {loadingQueue ? <p>{t('listen.loading')}</p> : null}
-          {!loadingQueue && queue && cards.length === 0 ? <p>{t('listen.emptyCards')}</p> : null}
+          {!loadingQueue && queue && cards.length === 0 ? (
+            <p>{t(scenePlaylist && (queue.decks || []).length === 0 ? 'listen.emptyPlaylist' : 'listen.emptyCards')}</p>
+          ) : null}
           {Capacitor.getPlatform() === 'android' ? (
             <p className="muted listen-lock-note">{t('listen.lockNoteAndroid')}</p>
           ) : null}

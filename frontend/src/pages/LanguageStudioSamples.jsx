@@ -185,7 +185,7 @@ export default function LanguageStudioSamples() {
                   {t('studio.turns', { count: item.turnCount })}
                 </p>
               </div>
-              <div className="deck-card-actions">
+              <div className="deck-card-actions studio-sample-actions">
                 {pro ? (
                   <>
                     <button
@@ -199,7 +199,7 @@ export default function LanguageStudioSamples() {
                       }
                     >
                       <MenuIcon name="listen" />
-                      {t('listen.menu')}
+                      <span>{t('listen.menu')}</span>
                     </button>
                     <button
                       className="btn primary studio-mode-btn"
@@ -211,10 +211,16 @@ export default function LanguageStudioSamples() {
                       }
                     >
                       <MenuIcon name="practice" />
-                      {t('studio.practice')}
+                      <span>{t('studio.practice')}</span>
                     </button>
-                    <button className="btn studio-mode-btn" type="button" disabled={copying === item.slug} onClick={() => copy(item)}>
-                      {item.copiedId ? t('studio.samplesOpenCopy') : t('studio.samplesCopy')}
+                    <button
+                      className="btn studio-mode-btn studio-sample-copy"
+                      type="button"
+                      disabled={copying === item.slug}
+                      onClick={() => copy(item)}
+                    >
+                      <MenuIcon name={item.copiedId ? 'library' : 'copy'} />
+                      <span>{item.copiedId ? t('studio.samplesOpenCopy') : t('studio.samplesCopy')}</span>
                     </button>
                   </>
                 ) : (

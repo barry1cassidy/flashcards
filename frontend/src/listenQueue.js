@@ -53,6 +53,18 @@ export async function loadListenQueue({ source, id, ids, nativeLanguage, targetL
     const conversation = await api(`/api/language-studio/conversations/${id}`)
     return conversationToListenQueue(conversation)
   }
+  if (source === 'studio-playlist') {
+    const playlist = await api(`/api/language-studio/playlists/${id}/listen`)
+    const decks = (playlist.conversations || [])
+      .map((conversation) => conversationToListenQueue(conversation).decks[0])
+      .filter(Boolean)
+    return {
+      title: playlist.name || '',
+      nativeLanguage: normalizeSpeechLanguage(playlist.nativeLanguage, 'en-US'),
+      targetLanguage: normalizeSpeechLanguage(playlist.targetLanguage, 'en-US'),
+      decks,
+    }
+  }
   if (source === 'studio-sample') {
     const sample = await api(
       `/api/language-studio/samples/${encodeURIComponent(id)}?nativeLanguage=${encodeURIComponent(nativeLanguage)}&targetLanguage=${encodeURIComponent(targetLanguage)}`,

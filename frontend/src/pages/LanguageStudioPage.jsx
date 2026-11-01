@@ -37,6 +37,8 @@ export default function LanguageStudioPage() {
   const pro = isProLicensed(user)
   const [pairs, setPairs] = useState([])
   const [items, setItems] = useState([])
+  const [playlists, setPlaylists] = useState([])
+  const [pendingPlaylistDelete, setPendingPlaylistDelete] = useState(null)
   const [ready, setReady] = useState(!pro)
   const [error, setError] = useState('')
   const [filter, setFilter] = useState('all')
@@ -85,15 +87,16 @@ export default function LanguageStudioPage() {
   useEffect(() => {
     if (!pro || !selectedPair) {
       setItems([])
+      setPlaylists([])
       return
     }
     let cancelled = false
-    api(
-      `/api/language-studio/conversations?nativeLanguage=${encodeURIComponent(selectedPair.nativeLanguage)}&targetLanguage=${encodeURIComponent(selectedPair.targetLanguage)}`,
-    )
-      .then((rows) => {
+    const query = `nativeLanguage=${encodeURIComponent(selectedPair.nativeLanguage)}&targetLanguage=${encodeURIComponent(selectedPair.targetLanguage)}`
+    Promise.all([api(`/api/language-studio/conversations?${query}`), api(`/api/language-studio/playlists?${query}`)])
+      .then(([rows, lists]) => {
         if (!cancelled) {
           setItems(rows || [])
+          setPlaylists(lists || [])
           setError('')
         }
       })
@@ -101,6 +104,7 @@ export default function LanguageStudioPage() {
         if (!cancelled) {
           setError(err.message)
           setItems([])
+          setPlaylists([])
         }
       })
     return () => {
@@ -125,6 +129,12 @@ export default function LanguageStudioPage() {
       if (remaining.length === 0) {
         const rows = await api('/api/language-studio/pairs')
         setPairs(rows || [])
+        setPlaylists([])
+      } else if (selectedPair) {
+        const lists = await api(
+          `/api/language-studio/playlists?nativeLanguage=${encodeURIComponent(selectedPair.nativeLanguage)}&targetLanguage=${encodeURIComponent(selectedPair.targetLanguage)}`,
+        )
+        setPlaylists(lists || [])
       }
     } catch (err) {
       setError(err.message)
@@ -139,6 +149,21 @@ export default function LanguageStudioPage() {
   const samplesHref = selectedPair
     ? `/language-studio/samples?native=${encodeURIComponent(selectedPair.nativeLanguage)}&target=${encodeURIComponent(selectedPair.targetLanguage)}`
     : '/language-studio/samples'
+  const playlistHref = selectedPair
+    ? `/language-studio/playlists/new?native=${encodeURIComponent(selectedPair.nativeLanguage)}&target=${encodeURIComponent(selectedPair.targetLanguage)}`
+    : '/language-studio'
+
+  async function removePlaylist(item) {
+    setError('')
+    try {
+      await api(`/api/language-studio/playlists/${item.id}`, { method: 'DELETE' })
+      setPlaylists((current) => current.filter((row) => row.id !== item.id))
+      setPendingPlaylistDelete(null)
+    } catch (err) {
+      setError(err.message)
+      setPendingPlaylistDelete(null)
+    }
+  }
 
   return (
     <div className="page">
@@ -160,11 +185,16 @@ export default function LanguageStudioPage() {
             </div>
             <div className="page-title-actions studio-title-actions">
               <button className="btn primary" type="button" onClick={() => navigate(newHref)}>
+                <MenuIcon name="plus" />
                 {t('studio.new')}
               </button>
-              <button className="btn ghost studio-samples-link" type="button" onClick={() => navigate(samplesHref)}>
+              <button className="btn studio-playlist-new" type="button" onClick={() => navigate(playlistHref)}>
+                <MenuIcon name="mix" />
+                {t('studio.playlistNew')}
+              </button>
+              <button className="btn studio-samples-btn" type="button" onClick={() => navigate(samplesHref)}>
+                <MenuIcon name="library" />
                 {t('studio.samples')}
-                <MenuIcon name="next" />
               </button>
             </div>
           </div>
@@ -197,6 +227,54 @@ export default function LanguageStudioPage() {
                 ))}
               </select>
             </label>
+          ) : null}
+
+          {playlists.length > 0 ? (
+            <section className="studio-playlists">
+              <h2>{t('studio.playlists')}</h2>
+              <div className="studio-list">
+                {playlists.map((item) => (
+                  <article key={item.id} className="studio-card">
+                    <div className="studio-card-copy">
+                      <div className="studio-card-title">
+                        <h2>{item.name}</h2>
+                        <span className="studio-pill">{t('studio.playlistLabel')}</span>
+                      </div>
+                      <p className="muted">{playlistSummary(t, item)}</p>
+                    </div>
+                    <div className="deck-card-actions">
+                      <button
+                        className="btn studio-mode-btn"
+                        type="button"
+                        onClick={() =>
+                          navigate(`/listen?source=studio-playlist&id=${item.id}`, {
+                            state: { listenReturn: studioLibraryPath(selectedPair) },
+                          })
+                        }
+                      >
+                        <MenuIcon name="listen" />
+                        {t('listen.menu')}
+                      </button>
+                      <button
+                        className="btn studio-mode-btn"
+                        type="button"
+                        onClick={() => navigate(`/language-studio/playlists/${item.id}`)}
+                      >
+                        {t('common.edit')}
+                      </button>
+                      <button
+                        className="listing-action danger"
+                        type="button"
+                        aria-label={t('common.deleteNamed', { name: item.name })}
+                        onClick={() => setPendingPlaylistDelete(item)}
+                      >
+                        <MenuIcon name="trash" />
+                      </button>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </section>
           ) : null}
 
           <div className="listen-choice-row studio-filters" role="radiogroup" aria-label={t('studio.filters')}>
@@ -284,6 +362,17 @@ export default function LanguageStudioPage() {
         </>
       ) : null}
 
+      {pendingPlaylistDelete ? (
+        <ConfirmModal
+          title={t('studio.playlistDeleteTitle')}
+          message={t('studio.playlistDeleteMessage', { name: pendingPlaylistDelete.name })}
+          confirmLabel={t('common.delete')}
+          danger
+          onConfirm={() => removePlaylist(pendingPlaylistDelete)}
+          onCancel={() => setPendingPlaylistDelete(null)}
+        />
+      ) : null}
+
       {pendingDelete ? (
         <ConfirmModal
           title={t('studio.deleteTitle')}
@@ -296,6 +385,15 @@ export default function LanguageStudioPage() {
       ) : null}
     </div>
   )
+}
+
+function playlistSummary(t, playlist) {
+  const conversations = t('studio.playlistConversations', { count: playlist.conversationCount || 0 })
+  const turns = t('studio.turns', { count: playlist.turnCount || 0 })
+  if (playlist.includeAll) {
+    return `${t('studio.playlistAll')} · ${conversations} · ${turns}`
+  }
+  return `${conversations} · ${turns}`
 }
 
 function StudioIntro({ pro }) {

@@ -8,6 +8,8 @@ import { useResumeExpiredSubscription } from '../useResumeExpiredSubscription'
 import { translateError } from '../i18n/errors'
 import { MIX_STUDY_ORDERS, normalizeMixStudyOrder } from '../studySettings'
 import MenuIcon from './MenuIcon'
+import MixCardMenu from './MixCardMenu'
+import StudyModeModal from './StudyModeModal'
 import ConfirmModal from './ConfirmModal'
 
 export default function MixesPage() {
@@ -18,6 +20,7 @@ export default function MixesPage() {
   const [mixes, setMixes] = useState([])
   const [error, setError] = useState('')
   const [deleteMix, setDeleteMix] = useState(null)
+  const [studyMix, setStudyMix] = useState(null)
   const [deleting, setDeleting] = useState(false)
   const pro = isProLicensed(user)
 
@@ -83,24 +86,26 @@ export default function MixesPage() {
       {pro && mixes.length > 0 ? (
         <div className="deck-grid">
           {mixes.map((mix) => (
-            <article key={mix.id} className="deck-card mix-card">
-              <div className="listing-actions">
-                <button
-                  className="listing-action danger"
-                  type="button"
-                  aria-label={t('common.deleteNamed', { name: mix.name })}
-                  onClick={() => setDeleteMix(mix)}
-                >
-                  <MenuIcon name="trash" />
-                </button>
-              </div>
+            <article key={mix.id} className="deck-card mix-card has-overflow-menu">
+              <MixCardMenu
+                mix={mix}
+                pro={pro}
+                onStudy={setStudyMix}
+                onListen={(target) =>
+                  navigate(`/listen?source=mix&id=${target.id}`, {
+                    state: { listenReturn: `/mixes/${target.id}` },
+                  })
+                }
+                onEdit={(target) => navigate(`/mixes/${target.id}/edit`)}
+                onDelete={setDeleteMix}
+              />
               <Link to={`/mixes/${mix.id}`} className="deck-card-main" onClick={() => window.scrollTo(0, 0)}>
                 <div className="deck-card-lead mix-card-lead">
                   <span className="mix-mark" aria-hidden="true">
                     <MenuIcon name="mix" />
                   </span>
                 </div>
-                <h2 title={mix.name}>{mix.name}</h2>
+                <h2 className="deck-card-title" title={mix.name}>{mix.name}</h2>
                 <p className="muted">{summary(t, mix)}</p>
                 <div className="stat-row">
                   <span>{t('decks.cards', { count: mix.cardCount || 0 })}</span>
@@ -113,6 +118,18 @@ export default function MixesPage() {
         </div>
       ) : null}
 
+      {studyMix ? (
+        <StudyModeModal
+          hardCount={studyMix.hardCount || 0}
+          againCount={studyMix.againCount || 0}
+          onSelect={(mode, filter) => {
+            const path = `/mixes/${studyMix.id}/study/${mode}`
+            setStudyMix(null)
+            navigate(filter === 'hard' || filter === 'again' ? `${path}?filter=${filter}` : path)
+          }}
+          onCancel={() => setStudyMix(null)}
+        />
+      ) : null}
       {deleteMix ? (
         <ConfirmModal
           title={t('mix.deleteTitle')}

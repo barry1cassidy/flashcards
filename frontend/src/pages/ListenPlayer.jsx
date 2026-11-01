@@ -26,6 +26,7 @@ export default function ListenPlayer({
   onRate,
   ratingBusy = false,
   ratingError = '',
+  announcePhaseLabel,
 }) {
   const { t } = useTranslation()
   const actions = useRef({})
@@ -89,7 +90,7 @@ export default function ListenPlayer({
 
   const phaseLabel =
     phase === 'announce'
-      ? t('listen.announcePhase')
+      ? announcePhaseLabel || t('listen.announcePhase')
       : phase === 'answer'
         ? t('listen.answer')
         : phase === 'gap'

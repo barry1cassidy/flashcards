@@ -10,7 +10,7 @@ import {
   stepListenRate,
 } from '../listenPrefs'
 
-export function listenPrefsSummary(prefs, t, showAnnounce) {
+export function listenPrefsSummary(prefs, t, showAnnounce, announceOffKey = 'listen.announceOff') {
   const sleep =
     prefs.sleepMinutes === 0
       ? t('listen.sleepOff')
@@ -25,7 +25,7 @@ export function listenPrefsSummary(prefs, t, showAnnounce) {
     sleep,
   ]
   if (showAnnounce && !prefs.announce) {
-    parts.splice(3, 0, t('listen.announceOff'))
+    parts.splice(3, 0, t(announceOffKey))
   }
   return withTwiceSummaries(parts, prefs, t).join(' · ')
 }
@@ -242,8 +242,9 @@ export function ListenLiveOptions({ prefs, sleepLeft, onChange, onExtendSleep })
   )
 }
 
-export default function ListenOptions({ prefs, onChange, showAnnounce = true }) {
+export default function ListenOptions({ prefs, onChange, showAnnounce = true, announceLabel }) {
   const { t } = useTranslation()
+  const announceText = announceLabel || t('listen.announce')
   return (
     <div className="listen-setup-grid">
       <PausePanel prefs={prefs} onChange={onChange} />
@@ -267,8 +268,8 @@ export default function ListenOptions({ prefs, onChange, showAnnounce = true }) 
       <SpeedPanel prefs={prefs} onChange={onChange} />
       {showAnnounce ? (
         <fieldset className="listen-panel">
-          <legend>{t('listen.announce')}</legend>
-          <div className="listen-choice-row" role="radiogroup" aria-label={t('listen.announce')}>
+          <legend>{announceText}</legend>
+          <div className="listen-choice-row" role="radiogroup" aria-label={announceText}>
             {[true, false].map((item) => (
               <button
                 key={item ? 'on' : 'off'}
