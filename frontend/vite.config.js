@@ -2,6 +2,27 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { writeLibrarySitemap } from './scripts/librarySitemap.mjs'
 
+function nativeLaunchDocument() {
+  let mode = 'production'
+  return {
+    name: 'native-launch-document',
+    configResolved(config) {
+      mode = config.mode
+    },
+    transformIndexHtml(html) {
+      if (mode !== 'android') {
+        return html
+      }
+      return html
+        .replace(/<div id="root">[\s\S]*?<\/div>/, '<div id="root"></div>')
+        .replace(
+          '</head>',
+          '    <style>html,body,#root{background:#0b0e17}</style>\n  </head>',
+        )
+    },
+  }
+}
+
 function websiteGoogleAnalytics() {
   let command = 'build'
   let mode = 'production'
@@ -42,7 +63,7 @@ function librarySitemap() {
 }
 
 export default defineConfig({
-  plugins: [react(), websiteGoogleAnalytics(), librarySitemap()],
+  plugins: [react(), websiteGoogleAnalytics(), nativeLaunchDocument(), librarySitemap()],
   server: {
     port: 5173,
     headers: {

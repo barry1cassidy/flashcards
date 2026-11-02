@@ -5,12 +5,17 @@ import android.os.Bundle;
 import android.view.View;
 import android.webkit.WebView;
 
+import androidx.core.splashscreen.SplashScreen;
+
 import com.getcapacitor.BridgeActivity;
 
 public class MainActivity extends BridgeActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        // Before the first frame, so Android 12 keeps the launch splash instead of
+        // revealing the WebView while it is still blank.
+        SplashScreen.installSplashScreen(this);
         registerPlugin(PlayBillingPlugin.class);
         registerPlugin(ListenPlaybackPlugin.class);
         super.onCreate(savedInstanceState);

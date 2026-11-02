@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useMemo, useState } from 'react'
+import { createContext, useContext, useEffect, useLayoutEffect, useMemo, useState } from 'react'
 import { Capacitor } from '@capacitor/core'
 import { GoogleSignIn } from '@capawesome/capacitor-google-sign-in'
 import { api, getCachedUser, getToken, isNetworkError, setCachedUser, setToken } from './api'
@@ -7,13 +7,23 @@ import { applyTheme } from './theme'
 import { clearJoinInvite } from './authRedirect'
 import { offerSavePassword } from './offerSavePassword'
 import { listenPrefsToApi, mergeListenResponse, readStoredListenPrefs, writeStoredListenPrefs } from './listenPrefs'
+import { hideLaunchSplash } from './launchSplash'
 
 const AuthContext = createContext(null)
 
+function initialSession() {
+  if (!getToken()) {
+    return { user: null, ready: true }
+  }
+  // Keep the native splash up until the session is confirmed. The cached
+  // profile is only here so the theme is right before that splash lifts.
+  return { user: getCachedUser(), ready: false }
+}
+
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState(() => initialSession().user)
   const [offline, setOffline] = useState(false)
-  const [ready, setReady] = useState(false)
+  const [ready, setReady] = useState(() => initialSession().ready)
 
   function keepUser(next) {
     setCachedUser(next)
@@ -22,9 +32,15 @@ export function AuthProvider({ children }) {
     return next
   }
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     applyTheme(user?.theme)
-  }, [user?.theme])
+    if (!ready) {
+      return undefined
+    }
+    hideLaunchSplash()
+    const retry = window.setTimeout(hideLaunchSplash, 100)
+    return () => window.clearTimeout(retry)
+  }, [user?.theme, ready])
 
   useEffect(() => {
     if (user?.locale) {

@@ -178,10 +178,7 @@ export default function LanguageStudioPage() {
             <div>
               <h1>{t('studio.title')}</h1>
               <p className="muted">{t('studio.subtitle')}</p>
-              {pairs.length <= 1 && selectedPair ? (
-                <p className="muted">{studioPairLabel(selectedPair, t)}</p>
-              ) : null}
-              <p className="muted">{t('studio.schedule')}</p>
+              <p className="muted studio-schedule">{t('studio.schedule')}</p>
             </div>
             <div className="page-title-actions studio-title-actions">
               <button className="btn primary" type="button" onClick={() => navigate(newHref)}>
@@ -199,34 +196,40 @@ export default function LanguageStudioPage() {
             </div>
           </div>
 
-          {pairs.length > 1 ? (
-            <label className="studio-pair-filter" htmlFor="studio-pair-filter">
-              {t('studio.pairFilter')}
-              <select
-                id="studio-pair-filter"
-                value={
-                  selectedPair
-                    ? studioPairKey(selectedPair.nativeLanguage, selectedPair.targetLanguage)
-                    : ''
-                }
-                onChange={(event) => {
-                  const [native, target] = event.target.value.split('::')
-                  const next = findStudioPair(pairs, native, target)
-                  if (next) {
-                    setParams({ native: next.nativeLanguage, target: next.targetLanguage })
-                  }
-                }}
-              >
-                {pairs.map((pair) => (
-                  <option
-                    key={pair.id}
-                    value={studioPairKey(pair.nativeLanguage, pair.targetLanguage)}
-                  >
-                    {studioPairLabel(pair, t)}
-                  </option>
-                ))}
-              </select>
-            </label>
+          {selectedPair ? (
+            <div className="studio-library-head">
+              {pairs.length > 1 ? (
+                <label className="studio-pair-kicker" htmlFor="studio-pair-filter">
+                  {t('studio.pairFilter')}
+                </label>
+              ) : (
+                <p className="studio-pair-kicker">{t('studio.pairFilter')}</p>
+              )}
+              {pairs.length > 1 ? (
+                <select
+                  id="studio-pair-filter"
+                  value={studioPairKey(selectedPair.nativeLanguage, selectedPair.targetLanguage)}
+                  onChange={(event) => {
+                    const [native, target] = event.target.value.split('::')
+                    const next = findStudioPair(pairs, native, target)
+                    if (next) {
+                      setParams({ native: next.nativeLanguage, target: next.targetLanguage })
+                    }
+                  }}
+                >
+                  {pairs.map((pair) => (
+                    <option
+                      key={pair.id}
+                      value={studioPairKey(pair.nativeLanguage, pair.targetLanguage)}
+                    >
+                      {studioPairLabel(pair, t)}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <h2>{studioPairLabel(selectedPair, t)}</h2>
+              )}
+            </div>
           ) : null}
 
           {playlists.length > 0 ? (

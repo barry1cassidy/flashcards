@@ -2,6 +2,10 @@
   "appId": "com.zipdeck.app",
   "appName": "Zipdeck",
   "webDir": "dist",
+  "backgroundColor": "#0b0e17",
+  "android": {
+    "backgroundColor": "#0b0e17"
+  },
   "server": {
     "hostname": "zipdeck.app",
     "androidScheme": "https"
@@ -9,6 +13,14 @@
   "plugins": {
     "SystemBars": {
       "style": "DARK"
+    },
+    "SplashScreen": {
+      "launchAutoHide": true,
+      "launchShowDuration": 8000,
+      "launchFadeOutDuration": 200,
+      "backgroundColor": "#0b0e17",
+      "androidSplashResourceName": "launch_screen",
+      "showSpinner": false
     }
   }
 }

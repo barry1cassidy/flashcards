@@ -19,6 +19,7 @@
     "@capacitor/app": "^8.1.2",
     "@capacitor/cli": "^8.5.1",
     "@capacitor/core": "^8.5.1",
+    "@capacitor/splash-screen": "^8.0.2",
     "@capawesome/capacitor-google-sign-in": "^0.1.4",
     "@capgo/capacitor-autofill-save-password": "^8.1.4",
     "i18next": "^26.4.2",
