@@ -497,6 +497,34 @@ npx cap add ios
 
 Do not commit `frontend/ios/`, `package.json`, or `package-lock.json` from the Mac. `ios/` holds `GIDClientID` and signing. After `cap add ios`, copy the Swift files as in **App Store subscriptions** below — `cap add` / `cap sync` never copy `ios-native/`. Capacitor 8.5 `SceneDelegate` must instantiate `MainViewController()`; the storyboard Custom Class is ignored.
 
+A private copy of the hand-tuned Xcode settings lives at `macfiles/` in the repo root on the Windows machine. That directory is gitignored. It is not on the Mac, and it is not build output. Keep it. A new `cap add ios` will not recreate it.
+
+| File in `macfiles/` | Put it back at |
+| --- | --- |
+| `Info.plist` | `frontend/ios/App/App/Info.plist` |
+| `App.entitlements` | `frontend/ios/App/App/App.entitlements` |
+| `App.xcodeproj.zip` | unzip into `frontend/ios/App/` so it replaces `App.xcodeproj` |
+
+`Info.plist` is the Google iOS client ID, the reversed URL scheme, `ITSAppUsesNonExemptEncryption` = NO, background audio, and the version numbers. `App.entitlements` is Sign in with Apple plus `applinks:zipdeck.app` and `webcredentials:zipdeck.app`. The zip is the Xcode project: the Apple team, bundle ID `com.zipdeck.app`, and the Swift files in the App target. The file that matters inside the zip is `project.pbxproj`. The zip may also contain `xcuserdata` from the cloud Mac; that user state can stay or be deleted after unzip.
+
+From the repo root, after `npx cap add ios` on a new Mac:
+
+```bash
+cp macfiles/Info.plist frontend/ios/App/App/Info.plist
+cp macfiles/App.entitlements frontend/ios/App/App/App.entitlements
+unzip -o macfiles/App.xcodeproj.zip -d frontend/ios/App
+```
+
+Copy `macfiles/` onto that Mac first (it is not in git). `cap sync` does not overwrite `Info.plist`. If a later sync rewrites the Xcode project, unzip `App.xcodeproj.zip` again and copy the Swift files again.
+
+The iPhone launch screen is three images in `frontend/ios/App/App/Assets.xcassets/Splash.imageset/`. The copies in git are the Zipdeck icon, not the Capacitor logo `cap add ios` drops in. `cap sync` does not replace them. From the repo root, after the iOS project exists:
+
+```bash
+cp frontend/resources/ios-splash/*.png frontend/ios/App/App/Assets.xcassets/Splash.imageset/
+```
+
+Leave `Contents.json` in that imageset as it is.
+
 Reuse the Android Vite env (there is no separate `.env.ios`). Copy `frontend/.env.android.example` to gitignored `frontend/.env.android`:
 
 1. `VITE_API_BASE=https://api.zipdeck.app` — relative `/api` has no proxy on device. Do not use `https://zipdeck.app`.
@@ -583,7 +611,11 @@ Do not add a website Subscribe button or Stripe checkout in the iOS app.
 This is how we produce the signed archive for **internal** TestFlight. App name Zipdeck, bundle ID `com.zipdeck.app`. The native Pro page uses StoreKit (`pro_monthly`, `pro_yearly`, `credits_addon`). It must not show Stripe or “subscribe on the website.”
 
 1. On a browser: App Store Connect → register App ID `com.zipdeck.app` if needed (Certificates, Identifiers & Profiles → Identifiers), then Apps → New App → iOS, name Zipdeck, SKU `zipdeck`.
-2. On the Mac: `git pull` (if pull refuses to overwrite `frontend/package.json` or `package-lock.json`, `git restore` those two files only — they are leftover Mac `npm install @capacitor/ios` edits; do not commit them). From `frontend` run `npm ci`, `npm install @capacitor/ios` if needed, `npm run build:android`, `npx cap sync ios`. Confirm `GIDClientID`, the URL scheme, and `ITSAppUsesNonExemptEncryption=NO` survived (`cap sync` does not overwrite `Info.plist`).
+2. On the Mac: `git pull` (if pull refuses to overwrite `frontend/package.json` or `package-lock.json`, `git restore` those two files only — they are leftover Mac `npm install @capacitor/ios` edits; do not commit them). From `frontend` run `npm ci`, `npm install @capacitor/ios` if needed, `npm run build:android`, `npx cap sync ios`. If `frontend/ios/` was just created, restore `macfiles/` first (see **iOS (Capacitor)** above) so `GIDClientID`, the URL scheme, `ITSAppUsesNonExemptEncryption=NO`, the entitlements, and the signing team come back. `cap sync` does not overwrite `Info.plist`. From the repo root, copy the launch images (this replaces the Capacitor logo on the white screen):
+
+```bash
+cp frontend/resources/ios-splash/*.png frontend/ios/App/App/Assets.xcassets/Splash.imageset/
+```
 3. Copy all `frontend/ios-native/*.swift` files into the App target as in **App Store subscriptions** (overwrite `ios/App/App/SceneDelegate.swift` and the plugin copies, including `AppleSignInPlugin.swift` and `ListenPlaybackPlugin.swift`). `SceneDelegate` must set `rootViewController = MainViewController()`. Compile Sources must list `AppleBillingPlugin`, `AppleSignInPlugin`, `ListenPlaybackPlugin`, `MainViewController`, and `SceneDelegate`. If `AppleSignInPlugin.swift` is new to this Mac project, File → Add Files and **Reference files in place** (inner `ios/App/App/` file). Signing & Capabilities → Background Modes → **Audio, AirPlay, and Picture in Picture** must be checked (`UIBackgroundModes` = `audio`). Keep **Sign in with Apple**. If Subscribe fails with `AppleBilling plugin is not implemented on ios`, SceneDelegate is still creating `CAPBridgeViewController()`. If Sign in with Apple says the plugin is not implemented, `AppleSignInPlugin.swift` is missing from Compile Sources or `registerPluginInstance(AppleSignInPlugin())` is missing from `MainViewController`.
 4. Xcode → **App** target (under TARGETS) → **Signing & Capabilities**: Automatically manage signing, your Apple Developer team, bundle identifier `com.zipdeck.app`. Associated Domains must list `applinks:zipdeck.app` and `webcredentials:zipdeck.app`. Add **In-App Purchase**. Do not commit team IDs, certificates, or provisioning profiles.
 5. Bump **Build** (`CFBundleVersion`) on every upload. Apple rejects a reuse of the same version+build (all-`1.0 (1)` archives fail). Version can stay `1.0`.

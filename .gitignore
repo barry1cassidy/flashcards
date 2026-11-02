@@ -10,6 +10,9 @@ hs_err_pid*
 frontend/node_modules/
 frontend/dist/
 
+# Private Mac Xcode backup (Google iOS client ID and signing team). Not build output.
+macfiles/
+
 # Env / secrets
 .env
 .env.local
