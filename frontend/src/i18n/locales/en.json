@@ -1427,6 +1427,7 @@
     "studioStep2": "Practice as a chat. Your language is the meaning; the language you are learning is the line to say. Reveal, then next turn.",
     "studioStep3": "At the end, rate the scene. Fully learned means you can play it, and new conversations can reuse the lines you said.",
     "studioGrade": "This does not change your study schedule. Vocabulary cards from a scene would be a later step, and those would live in My Decks with SM-2.",
+    "studioPlaylist": "A playlist plays several conversations for one language pair, in order, during Listen. Include every conversation in that pair — later ones are included and play last — or pick conversations and set the order. Playlists do not grade the scenes.",
     "studioListen": "Choose Listen on a conversation, or play a playlist of scenes for one language pair. Open Listen and choose Language Studio to start either one. A single scene asks you to grade it at the end. A playlist plays the scenes in order, can say the scene name when it changes, and does not grade them. Grade each scene from Practice, or by listening to that scene alone.",
     "proItemStudio": "Language Studio — generate a spoken scene, practice it, or listen to it, and grade the whole conversation.",
     "listenTitle": "Listen",

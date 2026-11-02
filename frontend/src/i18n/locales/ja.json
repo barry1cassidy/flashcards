@@ -1542,6 +1542,7 @@
     "studioStep2": "Practice as a chat. Your language is the meaning; the language you are learning is the line to say. Reveal, then next turn.",
     "studioStep3": "At the end, rate the scene. Fully learned means you can play it, and new conversations can reuse the lines you said.",
     "studioGrade": "This does not change your study schedule. Vocabulary cards from a scene would be a later step, and those would live in My Decks with SM-2.",
+    "studioPlaylist": "プレイリストは、ひとつの言語の組み合わせの会話を、聞くで順番に再生します。その組み合わせのすべての会話を入れることもできます。あとから作った会話は追加され、最後に再生されます。会話を選んで順番を決めることもできます。プレイリストはシーンを評価しません。",
     "studioListen": "会話で聞くを選ぶか、ひとつの言語の組み合わせのシーンをプレイリストで再生します。聞くを開き、言語スタジオを選ぶと、どちらも始められます。シーンひとつは、終わりに評価を尋ねます。プレイリストはシーンを順番に再生し、変わるときにシーン名を言うことができ、評価はしません。各シーンは練習で評価するか、そのシーンだけを聞いて評価します。",
     "proItemStudio": "Language Studio — generate a spoken scene, practice it, or listen to it, and grade the whole conversation.",
     "listenBenefit": "聞くは、デッキ、セット、学習ミックス、言語スタジオのシーンやプレイリスト、またはこの電話のオフラインデッキを読み上げます。質問を聞いて、答える時間があり、そのあと答えを聞きます。手はふさがったままでよく、学習スケジュールは変わりません。",

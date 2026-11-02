@@ -1572,6 +1572,7 @@
     "studioStep2": "Practice as a chat. Your language is the meaning; the language you are learning is the line to say. Reveal, then next turn.",
     "studioStep3": "At the end, rate the scene. Fully learned means you can play it, and new conversations can reuse the lines you said.",
     "studioGrade": "This does not change your study schedule. Vocabulary cards from a scene would be a later step, and those would live in My Decks with SM-2.",
+    "studioPlaylist": "Плейлист відтворює кілька розмов однієї мовної пари по порядку в Слухати. Увімкніть кожну розмову цієї пари — створені пізніше додаються і звучать наприкінці — або виберіть розмови і задайте порядок. Плейлист не оцінює сцени.",
     "studioListen": "Оберіть Слухати біля розмови або ввімкніть плейлист сцен для однієї мовної пари. Відкрийте Слухати і оберіть Мовну студію, щоб почати будь-яке з двох. Одна сцена наприкінці просить оцінку. Плейлист грає сцени по порядку, може назвати сцену, коли вона змінюється, і не оцінює їх. Оцініть кожну сцену на практиці або слухаючи лише її.",
     "proItemStudio": "Language Studio — generate a spoken scene, practice it, or listen to it, and grade the whole conversation.",
     "listenBenefit": "Слухати промовляє колоду, набір, мікс навчання, сцену або плейлист мовної студії, або офлайн-колоди на цьому телефоні. Ви чуєте питання, встигаєте згадати відповідь і потім чуєте її. Руки можуть бути зайняті, а розклад навчання не змінюється.",

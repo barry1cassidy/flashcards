@@ -218,6 +218,7 @@ export default function HelpPage() {
           <li>{t('help.studioStep3')}</li>
         </ol>
         <p>{t('help.studioGrade')}</p>
+        <p>{t('help.studioPlaylist')}</p>
         <p>{t('help.studioListen')}</p>
         {webMarketing ? (
           <p>

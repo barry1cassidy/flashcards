@@ -1542,6 +1542,7 @@
     "studioStep2": "Practice as a chat. Your language is the meaning; the language you are learning is the line to say. Reveal, then next turn.",
     "studioStep3": "At the end, rate the scene. Fully learned means you can play it, and new conversations can reuse the lines you said.",
     "studioGrade": "This does not change your study schedule. Vocabulary cards from a scene would be a later step, and those would live in My Decks with SM-2.",
+    "studioPlaylist": "播放列表会在收听里按顺序播放一个语言组合的多段对话。可以包含该语言组合的每段对话，以后创建的也会加入并排在最后播放；也可以挑选对话并设定顺序。播放列表不会给场景打分。",
     "studioListen": "在一段对话上选择收听，或播放一个语言组合的场景播放列表。打开收听并选择语言工作室，就可以开始其中一种。单个场景结束时会请你打分。播放列表按顺序播放场景，可以在切换时说出场景名，并且不打分。请在练习里给每个场景打分，或只收听那一个场景再打分。",
     "proItemStudio": "Language Studio — generate a spoken scene, practice it, or listen to it, and grade the whole conversation.",
     "listenBenefit": "收听会朗读一个卡组、一个集合、一个学习组合、语言工作室的场景或播放列表，或这台手机上的离线卡组。你先听到问题，有片刻时间回忆答案，然后再听到答案。手可以继续忙别的，学习计划不会改变。",
