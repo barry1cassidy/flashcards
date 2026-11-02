@@ -42,3 +42,4 @@ Thumbs.db
 backend/data/
 /bucket_keys.txt
 local_notes_files
+/macfiles
