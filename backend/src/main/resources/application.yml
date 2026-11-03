@@ -105,7 +105,7 @@ app:
     resend-api-key: ${RESEND_API_KEY:}
     from: "${APP_MAIL_FROM:Zipdeck <onboarding@resend.dev>}"
   posthog:
-    api-key: ${POSTHOG_PROJECT_KEY:phc_yeSHD4zZb2ttaiX6sklwnPmM3AA7Rptbt48w92rWGHZP}
+    api-key: ${POSTHOG_PROJECT_KEY:phc_yeSHD4zZb2ttaiX6skWnwPmM3AA7Rptbt48w92rWGHzP}
     host: ${POSTHOG_HOST:https://us.i.posthog.com}
   card-images:
     storage: ${CARD_IMAGES_STORAGE:local}
