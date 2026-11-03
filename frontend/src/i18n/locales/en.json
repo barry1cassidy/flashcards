@@ -365,7 +365,7 @@
     "hostingHeading": "Where data is stored",
     "hostingBody": "Zipdeck runs on Amazon Web Services (Lightsail). Account and deck data are stored in our database on that host. Backups of that database may be kept so we can restore the service if something fails.",
     "analyticsHeading": "Product analytics",
-    "analyticsBody": "We use PostHog to understand how Zipdeck is used. That includes sign-up, sign-in, pages visited, decks created, sample decks copied, and attempts to open Pro features. After you sign in, events are tied to your account id. They also include the platform (web, Android, or iOS) and details such as deck languages. We do not send your name, email, or card text. PostHog stores these events in the United States.",
+    "analyticsBody": "We use PostHog to understand how Zipdeck is used. That includes sign-up, sign-in, decks created, sample decks copied, and attempts to open Pro features. After you sign in, events are tied to your account id. They also include the platform (web, Android, or iOS) and details such as deck languages. We do not send your name, email, or card text. PostHog stores these events in the United States.",
     "shareHeading": "When we share data",
     "shareBody": "We share data with the processors needed to run Zipdeck: Amazon Web Services for hosting, Google for optional Google sign-in and optional AI deck generation, and PostHog for product analytics. We may also disclose information if required by law. We do not sell your personal information.",
     "rightsHeading": "Your choices",

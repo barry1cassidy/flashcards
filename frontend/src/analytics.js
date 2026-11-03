@@ -63,12 +63,6 @@ export function resetAnalytics() {
   posthog.reset()
 }
 
-export function trackPageView(pathname) {
-  track('$pageview', {
-    $current_url: `${window.location.origin}${pathname}`,
-  })
-}
-
 export function trackAuth(result, method) {
   if (!result?.user) {
     return
