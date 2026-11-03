@@ -71,7 +71,7 @@ services:
       AZURE_TRANSLATOR_KEY: ${AZURE_TRANSLATOR_KEY:-}
       AZURE_TRANSLATOR_REGION: ${AZURE_TRANSLATOR_REGION:-}
       AZURE_TRANSLATOR_ENDPOINT: ${AZURE_TRANSLATOR_ENDPOINT:-https://api.cognitive.microsofttranslator.com}
-      POSTHOG_PROJECT_KEY: ${POSTHOG_PROJECT_KEY:-phc_yeSHD4zZb2ttaiX6sklwnPmM3AA7Rptbt48w92rWGHZP}
+      POSTHOG_PROJECT_KEY: ${POSTHOG_PROJECT_KEY:-phc_yeSHD4zZb2ttaiX6skWnwPmM3AA7Rptbt48w92rWGHzP}
       POSTHOG_HOST: ${POSTHOG_HOST:-https://us.i.posthog.com}
       # Used only if card translation is switched back to the LibreTranslate container.
       TRANSLATE_URL: http://translate:5000
@@ -89,7 +89,7 @@ services:
       args:
         VITE_GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
         VITE_APPLE_CLIENT_ID: ${APPLE_WEB_CLIENT_ID:-com.zipdeck.web}
-        VITE_POSTHOG_KEY: ${VITE_POSTHOG_KEY:-phc_yeSHD4zZb2ttaiX6sklwnPmM3AA7Rptbt48w92rWGHZP}
+        VITE_POSTHOG_KEY: ${VITE_POSTHOG_KEY:-phc_yeSHD4zZb2ttaiX6skWnwPmM3AA7Rptbt48w92rWGHzP}
     restart: unless-stopped
     ports:
       - "80:80"
