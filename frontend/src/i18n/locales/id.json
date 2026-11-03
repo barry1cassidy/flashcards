@@ -1340,6 +1340,7 @@
     "playlistEdit": "Edit daftar putar",
     "playlistLabel": "Daftar putar",
     "playlistName": "Nama",
+    "playlistNameRequired": "Masukkan nama untuk daftar putar.",
     "playlistHint": "Daftar putar memutar adegan ini berurutan di Dengarkan. Ia tidak menilainya.",
     "playlistNeedPair": "Buka pasangan bahasa di Studio Bahasa, lalu buat daftar putar di sana.",
     "playlistIncludeAll": "Setiap percakapan dalam pasangan bahasa ini",

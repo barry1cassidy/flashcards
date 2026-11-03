@@ -1340,6 +1340,7 @@
     "playlistEdit": "Çalma listesini düzenle",
     "playlistLabel": "Çalma listesi",
     "playlistName": "Ad",
+    "playlistNameRequired": "Çalma listesine bir ad girin.",
     "playlistHint": "Çalma listesi bu sahneleri Dinle’de sırayla çalar. Onları değerlendirmez.",
     "playlistNeedPair": "Dil Stüdyosu’nda bir dil çifti açın, sonra orada bir çalma listesi oluşturun.",
     "playlistIncludeAll": "Bu dil çiftindeki her konuşma",

@@ -8,6 +8,7 @@ import { clearJoinInvite } from './authRedirect'
 import { offerSavePassword } from './offerSavePassword'
 import { listenPrefsToApi, mergeListenResponse, readStoredListenPrefs, writeStoredListenPrefs } from './listenPrefs'
 import { hideLaunchSplash } from './launchSplash'
+import { identifyUser, resetAnalytics, trackAuth } from './analytics'
 
 const AuthContext = createContext(null)
 
@@ -47,6 +48,12 @@ export function AuthProvider({ children }) {
       applyLocale(user.locale)
     }
   }, [user?.locale])
+
+  useEffect(() => {
+    if (user?.id) {
+      identifyUser(user)
+    }
+  }, [user?.id])
 
   useEffect(() => {
     let cancelled = false
@@ -130,6 +137,7 @@ export function AuthProvider({ children }) {
         })
         setToken(result.token)
         keepUser(result.user)
+        trackAuth(result, 'email')
         await offerSavePassword(email, password)
         return result.user
       },
@@ -140,6 +148,7 @@ export function AuthProvider({ children }) {
         })
         setToken(result.token)
         keepUser(result.user)
+        trackAuth(result, 'google')
         return result.user
       },
       async loginWithApple(identityToken, locale, fullName, nonce) {
@@ -154,6 +163,7 @@ export function AuthProvider({ children }) {
         })
         setToken(result.token)
         keepUser(result.user)
+        trackAuth(result, 'apple')
         return result.user
       },
       async register(displayName, email, password, locale) {
@@ -163,6 +173,7 @@ export function AuthProvider({ children }) {
         })
         setToken(result.token)
         keepUser(result.user)
+        trackAuth(result, 'email')
         await offerSavePassword(email, password)
         return result.user
       },
@@ -267,6 +278,7 @@ export function AuthProvider({ children }) {
         }
       },
       logout() {
+        resetAnalytics()
         setToken(null)
         setUser(null)
         clearJoinInvite()

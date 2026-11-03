@@ -53,6 +53,7 @@ import { webMarketing } from './webOnly'
 import { BackNavigation } from './backNavigation'
 import { IncomingLinks } from './incomingLinks'
 import { stopSpeaking } from './tts'
+import { trackPageView } from './analytics'
 
 const RememberPages = webMarketing ? lazy(() => import('./pages/remember/RememberPages.jsx')) : null
 const QuizletAlternativePage = webMarketing ? lazy(() => import('./pages/QuizletAlternativePage.jsx')) : null
@@ -74,6 +75,14 @@ function StopListenSpeechOnLeave() {
     if (wasListen && !isListenPath(pathname)) {
       stopSpeaking()
     }
+  }, [pathname])
+  return null
+}
+
+function ProductAnalytics() {
+  const { pathname } = useLocation()
+  useEffect(() => {
+    trackPageView(pathname)
   }, [pathname])
   return null
 }
@@ -411,6 +420,7 @@ export default function App() {
         <BackNavigation />
         <IncomingLinks />
         <DocumentLang />
+        <ProductAnalytics />
         {webMarketing ? <AnalyticsPageViews /> : null}
         <StopListenSpeechOnLeave />
         <SavingIndicator />

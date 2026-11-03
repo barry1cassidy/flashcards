@@ -16,6 +16,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.flashcards.analytics.ProductAnalytics;
 import com.flashcards.common.ApiException;
 import com.flashcards.security.JwtService;
 import com.flashcards.user.ListenSideFirst;
@@ -50,7 +51,8 @@ class AuthServiceUpdateMeTest {
                 jwtService,
                 googleTokenService,
                 appleTokenService,
-                emailVerificationService);
+                emailVerificationService,
+                ProductAnalytics.disabled());
     }
 
     @Test

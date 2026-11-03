@@ -10,6 +10,7 @@ import { isLanguageLibraryGroup } from '../libraryGroup'
 import { clearPageMeta, setPageMeta } from '../seo'
 import { GroupBadge } from './ColorPicker'
 import LibraryGuestActions from './LibraryGuestActions'
+import { trackSampleCopied } from '../analytics'
 
 export default function LibraryGroupPage() {
   const { t } = useTranslation()
@@ -72,6 +73,12 @@ export default function LibraryGroupPage() {
     setAddingId(deckId)
     try {
       const copy = await api(`/api/library/decks/${deckId}/add`, { method: 'POST' })
+      trackSampleCopied({
+        id: deckId,
+        frontLanguage: group?.sourceLanguage,
+        backLanguage: group?.targetLanguage,
+        source: 'library',
+      })
       setGroup((current) =>
         current
           ? {

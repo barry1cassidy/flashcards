@@ -1340,6 +1340,7 @@
     "playlistEdit": "Sửa danh sách phát",
     "playlistLabel": "Danh sách phát",
     "playlistName": "Tên",
+    "playlistNameRequired": "Nhập tên cho danh sách phát.",
     "playlistHint": "Danh sách phát chạy các cảnh này theo thứ tự trong Nghe. Nó không chấm điểm.",
     "playlistNeedPair": "Mở một cặp ngôn ngữ trong Studio ngôn ngữ, rồi tạo danh sách phát ở đó.",
     "playlistIncludeAll": "Mọi hội thoại trong cặp ngôn ngữ này",

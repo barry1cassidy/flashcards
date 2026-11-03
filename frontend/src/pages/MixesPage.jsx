@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { api } from '../api'
 import { useAuth } from '../AuthContext'
 import { isProLicensed } from '../pro'
+import { useTrackProGate } from '../analytics'
 import { useResumeExpiredSubscription } from '../useResumeExpiredSubscription'
 import { translateError } from '../i18n/errors'
 import { MIX_STUDY_ORDERS, normalizeMixStudyOrder } from '../studySettings'
@@ -23,6 +24,7 @@ export default function MixesPage() {
   const [studyMix, setStudyMix] = useState(null)
   const [deleting, setDeleting] = useState(false)
   const pro = isProLicensed(user)
+  useTrackProGate('mixes', Boolean(user) && !pro)
 
   useEffect(() => {
     if (!pro) {

@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { api } from '../api'
 import { useAuth } from '../AuthContext'
 import { isProLicensed } from '../pro'
+import { useTrackProGate } from '../analytics'
 import { useResumeExpiredSubscription } from '../useResumeExpiredSubscription'
 import { translateError } from '../i18n/errors'
 import { languageName } from '../speechLanguages'
@@ -22,6 +23,7 @@ export default function LanguageStudioPractice() {
   const nativeLanguage = params.get('native') || ''
   const targetLanguage = params.get('target') || ''
   const pro = isProLicensed(user)
+  useTrackProGate('studio', Boolean(user) && !pro)
   const [conversation, setConversation] = useState(null)
   const [error, setError] = useState('')
   const [turn, setTurn] = useState(0)

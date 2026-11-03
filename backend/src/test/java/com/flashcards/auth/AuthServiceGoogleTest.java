@@ -1,6 +1,7 @@
 package com.flashcards.auth;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -17,6 +18,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.flashcards.analytics.ProductAnalytics;
 import com.flashcards.common.ApiException;
 import com.flashcards.security.JwtService;
 import com.flashcards.user.User;
@@ -48,7 +50,8 @@ class AuthServiceGoogleTest {
                 jwtService,
                 googleTokenService,
                 appleTokenService,
-                emailVerificationService);
+                emailVerificationService,
+                ProductAnalytics.disabled());
     }
 
     @Test
@@ -67,6 +70,7 @@ class AuthServiceGoogleTest {
         AuthResponse response = authService.loginWithGoogle(new GoogleLoginRequest("id-token", "es"));
 
         assertEquals("jwt", response.token());
+        assertTrue(response.newAccount());
         assertEquals("barry@gmail.com", response.user().email());
         assertEquals("Barry", response.user().displayName());
         assertEquals("es", response.user().locale());
@@ -92,6 +96,7 @@ class AuthServiceGoogleTest {
 
         AuthResponse response = authService.loginWithGoogle(new GoogleLoginRequest("id-token", "en"));
 
+        assertFalse(response.newAccount());
         assertEquals("Existing", response.user().displayName());
         assertEquals("sub-1", existing.getGoogleSub());
     }

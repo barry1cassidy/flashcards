@@ -1340,6 +1340,7 @@
     "playlistEdit": "Playlist bearbeiten",
     "playlistLabel": "Playlist",
     "playlistName": "Name",
+    "playlistNameRequired": "Geben Sie der Playlist einen Namen.",
     "playlistHint": "Eine Playlist spielt diese Szenen der Reihe nach in Anhören. Sie bewertet sie nicht.",
     "playlistNeedPair": "Öffnen Sie ein Sprachenpaar im Sprachstudio und erstellen Sie dort eine Playlist.",
     "playlistIncludeAll": "Jedes Gespräch in diesem Sprachenpaar",

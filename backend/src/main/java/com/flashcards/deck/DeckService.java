@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.flashcards.analytics.ProductAnalytics;
 import com.flashcards.card.Card;
 import com.flashcards.card.CardImageService;
 import com.flashcards.card.CardLanguages;
@@ -33,6 +34,7 @@ public class DeckService {
     private final UserRepository userRepository;
     private final OwnedAccess ownedAccess;
     private final CardImageService cardImageService;
+    private final ProductAnalytics analytics;
 
     public DeckService(
             DeckRepository deckRepository,
@@ -40,13 +42,15 @@ public class DeckService {
             CardReviewRepository cardReviewRepository,
             UserRepository userRepository,
             OwnedAccess ownedAccess,
-            CardImageService cardImageService) {
+            CardImageService cardImageService,
+            ProductAnalytics analytics) {
         this.deckRepository = deckRepository;
         this.cardRepository = cardRepository;
         this.cardReviewRepository = cardReviewRepository;
         this.userRepository = userRepository;
         this.ownedAccess = ownedAccess;
         this.cardImageService = cardImageService;
+        this.analytics = analytics;
     }
 
     @Transactional(readOnly = true)
@@ -64,6 +68,11 @@ public class DeckService {
 
     @Transactional
     public DeckResponse create(UUID userId, DeckRequest request) {
+        return create(userId, request, "blank");
+    }
+
+    @Transactional
+    public DeckResponse create(UUID userId, DeckRequest request, String source) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ApiException(HttpStatus.UNAUTHORIZED, "Not authenticated"));
         String name = request.name().trim();
@@ -77,6 +86,7 @@ public class DeckService {
         deck.setFrontLanguage(CardLanguages.normalize(request.frontLanguage(), fallback));
         deck.setBackLanguage(CardLanguages.normalize(request.backLanguage(), fallback));
         deckRepository.save(deck);
+        analytics.deckSaved(userId, deck.getFrontLanguage(), deck.getBackLanguage(), source);
         return toResponse(deck, new DeckStats(0, 0, 0, null, 0, 0));
     }
 

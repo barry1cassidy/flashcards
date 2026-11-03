@@ -37,6 +37,9 @@ export default function PrivacyPage() {
         <h2>{t('privacy.hostingHeading')}</h2>
         <p>{t('privacy.hostingBody')}</p>
 
+        <h2>{t('privacy.analyticsHeading')}</h2>
+        <p>{t('privacy.analyticsBody')}</p>
+
         <h2>{t('privacy.shareHeading')}</h2>
         <p>{t('privacy.shareBody')}</p>
 

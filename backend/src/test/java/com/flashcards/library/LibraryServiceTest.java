@@ -15,6 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.flashcards.analytics.ProductAnalytics;
 import com.flashcards.card.CardRepository;
 import com.flashcards.deck.DeckRepository;
 import com.flashcards.deck.DeckService;
@@ -60,7 +61,8 @@ class LibraryServiceTest {
                 userGroupRepository,
                 userCardRepository,
                 userRepository,
-                deckService);
+                deckService,
+                ProductAnalytics.disabled());
     }
 
     @Test

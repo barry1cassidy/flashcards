@@ -1340,6 +1340,7 @@
     "playlistEdit": "Modifica playlist",
     "playlistLabel": "Playlist",
     "playlistName": "Nome",
+    "playlistNameRequired": "Inserisci un nome per la playlist.",
     "playlistHint": "Una playlist riproduce queste scene in ordine in Ascolta. Non le valuta.",
     "playlistNeedPair": "Apri una coppia di lingue in Studio linguistico, poi crea lì una playlist.",
     "playlistIncludeAll": "Ogni conversazione di questa coppia di lingue",

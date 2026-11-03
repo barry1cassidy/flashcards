@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.flashcards.analytics.ProductAnalytics;
 import com.flashcards.card.Card;
 import com.flashcards.card.CardLanguages;
 import com.flashcards.card.CardRepository;
@@ -37,6 +38,7 @@ public class LibraryService {
     private final CardRepository userCardRepository;
     private final UserRepository userRepository;
     private final DeckService deckService;
+    private final ProductAnalytics analytics;
 
     public LibraryService(
             LibraryGroupRepository groupRepository,
@@ -46,7 +48,8 @@ public class LibraryService {
             DeckGroupRepository userGroupRepository,
             CardRepository userCardRepository,
             UserRepository userRepository,
-            DeckService deckService) {
+            DeckService deckService,
+            ProductAnalytics analytics) {
         this.groupRepository = groupRepository;
         this.deckRepository = deckRepository;
         this.cardRepository = cardRepository;
@@ -55,6 +58,7 @@ public class LibraryService {
         this.userCardRepository = userCardRepository;
         this.userRepository = userRepository;
         this.deckService = deckService;
+        this.analytics = analytics;
     }
 
     @Transactional(readOnly = true)
@@ -179,6 +183,13 @@ public class LibraryService {
         deck.setBackLanguage(CardLanguages.normalize(libraryGroup.getTargetLanguage(), CardLanguages.DEFAULT));
         deck.setLibraryDeckId(libraryDeck.getId());
         userDeckRepository.save(deck);
+        analytics.deckSaved(userId, deck.getFrontLanguage(), deck.getBackLanguage(), "library");
+        analytics.sampleSaved(
+                userId,
+                libraryDeck.getId().toString(),
+                deck.getFrontLanguage(),
+                deck.getBackLanguage(),
+                "library");
         List<LibraryCard> sourceCards = cardRepository.findByDeckIdOrderByPositionAscIdAsc(libraryDeck.getId());
         List<Card> cards = new ArrayList<>();
         int position = 0;

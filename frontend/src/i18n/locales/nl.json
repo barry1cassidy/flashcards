@@ -1340,6 +1340,7 @@
     "playlistEdit": "Afspeellijst bewerken",
     "playlistLabel": "Afspeellijst",
     "playlistName": "Naam",
+    "playlistNameRequired": "Geef de afspeellijst een naam.",
     "playlistHint": "Een afspeellijst speelt deze scènes op volgorde in Luisteren. Ze worden niet beoordeeld.",
     "playlistNeedPair": "Open een talenpaar in Taalstudio en maak daar een afspeellijst.",
     "playlistIncludeAll": "Elk gesprek in dit talenpaar",

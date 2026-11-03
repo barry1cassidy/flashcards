@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.flashcards.analytics.ProductAnalytics;
 import com.flashcards.billing.ExpiredStoreSubscriptionRefresh;
 import com.flashcards.billing.ProAccess;
 import com.flashcards.card.CardLanguages;
@@ -24,18 +25,21 @@ public class LanguageStudioCatalogService {
     private final LanguageStudioPairService pairService;
     private final UserRepository userRepository;
     private final ExpiredStoreSubscriptionRefresh expiredStoreSubscriptionRefresh;
+    private final ProductAnalytics analytics;
 
     public LanguageStudioCatalogService(
             StudioSampleSceneRepository sceneRepository,
             LanguageConversationRepository conversationRepository,
             LanguageStudioPairService pairService,
             UserRepository userRepository,
-            ExpiredStoreSubscriptionRefresh expiredStoreSubscriptionRefresh) {
+            ExpiredStoreSubscriptionRefresh expiredStoreSubscriptionRefresh,
+            ProductAnalytics analytics) {
         this.sceneRepository = sceneRepository;
         this.conversationRepository = conversationRepository;
         this.pairService = pairService;
         this.userRepository = userRepository;
         this.expiredStoreSubscriptionRefresh = expiredStoreSubscriptionRefresh;
+        this.analytics = analytics;
     }
 
     @Transactional(readOnly = true)
@@ -105,6 +109,7 @@ public class LanguageStudioCatalogService {
         conversation.setTurns(turns);
         LanguageConversation saved = conversationRepository.save(conversation);
         pairService.touch(user, pair.nativeLanguage(), pair.targetLanguage(), null);
+        analytics.sampleSaved(user.getId(), scene.getSlug(), pair.nativeLanguage(), pair.targetLanguage(), "studio");
         return saved;
     }
 

@@ -17,6 +17,7 @@ import { isProLicensed } from '../pro'
 import { sortDecks } from '../deckSort'
 import { shareCodeFromInput } from '../shareCode'
 import { defaultSpeechLanguage } from '../speechLanguages'
+import { trackDeckCreated } from '../analytics'
 import LanguageSelect from './LanguageSelect'
 
 const GROUP_FILTER_KEY = 'flashcards.deckGroupFilter'
@@ -199,6 +200,11 @@ export default function DecksPage() {
       setName('')
       setDescription('')
       setCreating(false)
+      trackDeckCreated({
+        frontLanguage,
+        backLanguage,
+        source: 'blank',
+      })
       navigate(`/decks/${deck.id}`)
     } catch (err) {
       setError(err.message)

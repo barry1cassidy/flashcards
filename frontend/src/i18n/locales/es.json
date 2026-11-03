@@ -1109,6 +1109,7 @@
     "playlistEdit": "Editar lista",
     "playlistLabel": "Lista",
     "playlistName": "Nombre",
+    "playlistNameRequired": "Escribe un nombre para la lista.",
     "playlistHint": "Una lista reproduce estas escenas en orden en Escuchar. No las califica.",
     "playlistNeedPair": "Abre un par de idiomas en Estudio de Idiomas y crea allí una lista.",
     "playlistIncludeAll": "Todas las conversaciones de este par de idiomas",

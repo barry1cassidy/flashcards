@@ -1370,6 +1370,7 @@
     "playlistEdit": "Edytuj playlistę",
     "playlistLabel": "Playlista",
     "playlistName": "Nazwa",
+    "playlistNameRequired": "Wpisz nazwę playlisty.",
     "playlistHint": "Playlista odtwarza te sceny po kolei w Słuchaj. Nie ocenia ich.",
     "playlistNeedPair": "Otwórz parę języków w Studio językowe i utwórz tam playlistę.",
     "playlistIncludeAll": "Każda rozmowa w tej parze języków",

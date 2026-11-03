@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { formatDate } from '../i18n/format'
 import { useAuth } from '../AuthContext'
 import { isProLicensed } from '../pro'
+import { useTrackProGate } from '../analytics'
 import ConfirmModal from './ConfirmModal'
 import MenuIcon from './MenuIcon'
 import { listOfflinePacks, removeOfflinePack } from '../offlinePacks'
@@ -15,6 +16,7 @@ export default function OfflineDecksPage() {
   const navigate = useNavigate()
   const { user } = useAuth()
   const pro = isProLicensed(user)
+  useTrackProGate('offline', Boolean(user) && !pro)
   const [packs, setPacks] = useState(null)
   const [page, setPage] = useState(1)
   const [confirm, setConfirm] = useState(null)

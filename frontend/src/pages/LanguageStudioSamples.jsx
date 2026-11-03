@@ -17,6 +17,7 @@ import {
 import { SPEECH_LANGUAGES } from '../speechLanguages'
 import LanguageSelect from './LanguageSelect'
 import MenuIcon from './MenuIcon'
+import { trackSampleCopied, useTrackProGate } from '../analytics'
 
 export default function LanguageStudioSamples() {
   const { t, i18n } = useTranslation()
@@ -25,6 +26,7 @@ export default function LanguageStudioSamples() {
   const navigate = useNavigate()
   const [params, setParams] = useSearchParams()
   const pro = isProLicensed(user)
+  useTrackProGate('studio_samples', Boolean(user) && !pro)
   const defaults = useMemo(
     () => defaultStudioSamplePair(i18n.resolvedLanguage || user?.locale),
     [i18n.resolvedLanguage, user?.locale],
@@ -107,6 +109,12 @@ export default function LanguageStudioSamples() {
         method: 'POST',
         skipSaving: true,
         body: JSON.stringify({ nativeLanguage, targetLanguage }),
+      })
+      trackSampleCopied({
+        id: item.slug,
+        frontLanguage: nativeLanguage,
+        backLanguage: targetLanguage,
+        source: 'studio',
       })
       navigate(`/language-studio/${created.id}`)
     } catch (err) {

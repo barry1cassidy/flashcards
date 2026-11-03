@@ -216,7 +216,8 @@ public class AgentTools {
                             clip(description, 2000),
                             groupId,
                             front,
-                            back));
+                            back),
+                    "ai");
             createdDeckId = deck.id();
             if (deck.group() != null) {
                 createdSetId = deck.group().id();

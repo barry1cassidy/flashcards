@@ -41,7 +41,12 @@ class LanguageStudioCatalogServiceTest {
     @BeforeEach
     void setUp() {
         catalogService = new LanguageStudioCatalogService(
-                sceneRepository, conversationRepository, pairService, userRepository, expiredStoreSubscriptionRefresh);
+                sceneRepository,
+                conversationRepository,
+                pairService,
+                userRepository,
+                expiredStoreSubscriptionRefresh,
+                com.flashcards.analytics.ProductAnalytics.disabled());
         user = new User();
         user.setId(USER_ID);
         user.setProLicensed(true);

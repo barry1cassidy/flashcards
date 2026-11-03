@@ -13,6 +13,16 @@ import ConfirmModal from './ConfirmModal'
 import StudyModeModal from './StudyModeModal'
 import LibraryGuestActions from './LibraryGuestActions'
 import { normalizeSpeechLanguage } from '../speechLanguages'
+import { trackSampleCopied } from '../analytics'
+
+function trackLibraryCopy(deck) {
+  trackSampleCopied({
+    id: deck.id,
+    frontLanguage: deck.sourceLanguage,
+    backLanguage: deck.targetLanguage,
+    source: 'library',
+  })
+}
 
 export default function LibraryDeckPage() {
   const { t } = useTranslation()
@@ -113,6 +123,7 @@ export default function LibraryDeckPage() {
     setBusy(true)
     try {
       const copy = await api(`/api/library/decks/${deck.id}/add`, { method: 'POST' })
+      trackLibraryCopy(deck)
       setDeck((current) => (current ? { ...current, copiedDeckId: copy.id } : current))
       setHardCount(copy.hardCount || 0)
       setAgainCount(copy.againCount || 0)
@@ -131,6 +142,7 @@ export default function LibraryDeckPage() {
       let deckId = deck?.copiedDeckId
       if (!deckId) {
         const copy = await api(`/api/library/decks/${deck.id}/add`, { method: 'POST' })
+        trackLibraryCopy(deck)
         deckId = copy.id
       }
       const path = `/decks/${deckId}/study/${mode}`
@@ -147,6 +159,7 @@ export default function LibraryDeckPage() {
     setBusy(true)
     try {
       const copy = await api(`/api/library/decks/${deck.id}/add`, { method: 'POST' })
+      trackLibraryCopy(deck)
       setDeck((current) => (current ? { ...current, copiedDeckId: copy.id } : current))
       setHardCount(copy.hardCount || 0)
       setAgainCount(copy.againCount || 0)

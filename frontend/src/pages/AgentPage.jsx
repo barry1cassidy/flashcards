@@ -6,6 +6,7 @@ import { useAuth } from '../AuthContext'
 import { useAiCredits } from '../AiCreditsContext'
 import { completeCheckout, isNativeApp, startCheckout } from '../billing'
 import { isProLicensed } from '../pro'
+import { trackDeckCreated, useTrackProGate } from '../analytics'
 import { useResumeExpiredSubscription } from '../useResumeExpiredSubscription'
 import { translateError } from '../i18n/errors'
 import LanguageSelect from './LanguageSelect'
@@ -188,6 +189,7 @@ export default function AgentPage() {
         return
       }
       if (started.deckId && !started.jobId) {
+        trackDeckCreated({ frontLanguage, backLanguage, source: 'ai' })
         navigate(`/decks/${started.deckId}`)
         return
       }
@@ -212,6 +214,7 @@ export default function AgentPage() {
         // keep the last known credit count
       }
       if (current.state === 'done' && current.result?.deckId) {
+        trackDeckCreated({ frontLanguage, backLanguage, source: 'ai' })
         navigate(`/decks/${current.result.deckId}`)
         return
       }
@@ -248,6 +251,7 @@ export default function AgentPage() {
 
   const pro = isProLicensed(user)
   const canUseAi = status ? !status.proRequired : pro
+  useTrackProGate('ai', Boolean(user) && Boolean(status) && !canUseAi)
   const elapsed = startedAt ? Math.max(0, Math.floor((now - startedAt) / 1000)) : job?.elapsedSeconds || 0
   const steps = job?.steps || []
   const remaining = status?.remainingCredits ?? 0

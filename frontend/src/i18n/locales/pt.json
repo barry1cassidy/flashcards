@@ -1340,6 +1340,7 @@
     "playlistEdit": "Editar lista",
     "playlistLabel": "Lista",
     "playlistName": "Nome",
+    "playlistNameRequired": "Digite um nome para a lista.",
     "playlistHint": "Uma lista reproduz estas cenas em ordem no Ouvir. Ela não as avalia.",
     "playlistNeedPair": "Abra um par de idiomas no Estúdio de Idiomas e crie uma lista ali.",
     "playlistIncludeAll": "Todas as conversas deste par de idiomas",

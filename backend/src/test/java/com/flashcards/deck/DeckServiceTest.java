@@ -14,6 +14,7 @@ import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.flashcards.analytics.ProductAnalytics;
 import com.flashcards.card.Card;
 import com.flashcards.card.CardImageService;
 import com.flashcards.card.CardRepository;
@@ -49,7 +50,8 @@ class DeckServiceTest {
                 cardReviewRepository,
                 userRepository,
                 ownedAccess,
-                cardImageService);
+                cardImageService,
+                ProductAnalytics.disabled());
     }
 
     @Test

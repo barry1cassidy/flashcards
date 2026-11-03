@@ -1340,6 +1340,7 @@
     "playlistEdit": "プレイリストを編集",
     "playlistLabel": "プレイリスト",
     "playlistName": "名前",
+    "playlistNameRequired": "プレイリストの名前を入力してください。",
     "playlistHint": "プレイリストは、聞くでこれらのシーンを順番に再生します。評価はしません。",
     "playlistNeedPair": "言語スタジオで言語の組み合わせを開き、そこでプレイリストを作ってください。",
     "playlistIncludeAll": "この言語の組み合わせのすべての会話",

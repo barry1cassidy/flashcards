@@ -5,6 +5,7 @@ import { api } from '../api'
 import { useAuth } from '../AuthContext'
 import { useAiCredits } from '../AiCreditsContext'
 import { isProLicensed } from '../pro'
+import { useTrackProGate } from '../analytics'
 import { useResumeExpiredSubscription } from '../useResumeExpiredSubscription'
 import { translateError } from '../i18n/errors'
 import {
@@ -30,6 +31,7 @@ export default function LanguageStudioCreate() {
   const navigate = useNavigate()
   const [params] = useSearchParams()
   const pro = isProLicensed(user)
+  useTrackProGate('studio', Boolean(user) && !pro)
   const defaults = useMemo(
     () => defaultStudioLanguages(i18n.resolvedLanguage || user?.locale),
     [i18n.resolvedLanguage, user?.locale],

@@ -50,20 +50,20 @@ class AgentToolsTest {
     @Test
     void createDeckOnlyOnce() {
         UUID deckId = UUID.randomUUID();
-        when(deckService.create(eq(userId), any(DeckRequest.class))).thenReturn(deckResponse(deckId, "Travel"));
+        when(deckService.create(eq(userId), any(DeckRequest.class), eq("ai"))).thenReturn(deckResponse(deckId, "Travel"));
 
         String first = tools.createDeck("Travel", "Phrases", "es-ES", "en-US", null);
         String second = tools.createDeck("Travel 2", "More", "es-ES", "en-US", null);
 
         assertTrue(first.contains(deckId.toString()));
         assertTrue(second.contains("already created"));
-        verify(deckService).create(eq(userId), any(DeckRequest.class));
+        verify(deckService).create(eq(userId), any(DeckRequest.class), eq("ai"));
     }
 
     @Test
     void addCardsCapsAtMax() {
         UUID deckId = UUID.randomUUID();
-        when(deckService.create(eq(userId), any(DeckRequest.class))).thenReturn(deckResponse(deckId, "Travel"));
+        when(deckService.create(eq(userId), any(DeckRequest.class), eq("ai"))).thenReturn(deckResponse(deckId, "Travel"));
         when(cardService.createMany(eq(userId), eq(deckId), any())).thenAnswer(invocation -> {
             List<CardDraft> drafts = invocation.getArgument(2);
             return drafts.size();
@@ -93,7 +93,7 @@ class AgentToolsTest {
     @Test
     void addCardsRejectsWhenNoneHaveBothSides() {
         UUID deckId = UUID.randomUUID();
-        when(deckService.create(eq(userId), any(DeckRequest.class))).thenReturn(deckResponse(deckId, "Travel"));
+        when(deckService.create(eq(userId), any(DeckRequest.class), eq("ai"))).thenReturn(deckResponse(deckId, "Travel"));
         when(cardService.createMany(eq(userId), eq(deckId), any())).thenReturn(0);
         tools.createDeck("Travel", null, "en-US", "zh-CN", null);
 
@@ -108,7 +108,7 @@ class AgentToolsTest {
     @Test
     void discardEmptyDeletesDeckWithNoCards() {
         UUID deckId = UUID.randomUUID();
-        when(deckService.create(eq(userId), any(DeckRequest.class))).thenReturn(deckResponse(deckId, "Travel"));
+        when(deckService.create(eq(userId), any(DeckRequest.class), eq("ai"))).thenReturn(deckResponse(deckId, "Travel"));
         tools.createDeck("Travel", null, "en-US", "zh-CN", null);
 
         tools.discardEmpty();
@@ -120,7 +120,7 @@ class AgentToolsTest {
     @Test
     void discardCreatedDeletesDeckEvenWithCards() {
         UUID deckId = UUID.randomUUID();
-        when(deckService.create(eq(userId), any(DeckRequest.class))).thenReturn(deckResponse(deckId, "Travel"));
+        when(deckService.create(eq(userId), any(DeckRequest.class), eq("ai"))).thenReturn(deckResponse(deckId, "Travel"));
         when(cardService.createMany(eq(userId), eq(deckId), any())).thenReturn(1);
         tools.createDeck("Travel", null, "en-US", "zh-CN", null);
         tools.addCards(deckId.toString(), List.of(new AgentTools.AgentCardInput("hola", "hello", null)));
@@ -134,14 +134,14 @@ class AgentToolsTest {
     @Test
     void createDeckUsesLockedLanguages() {
         UUID deckId = UUID.randomUUID();
-        when(deckService.create(eq(userId), any(DeckRequest.class))).thenReturn(deckResponse(deckId, "Travel"));
+        when(deckService.create(eq(userId), any(DeckRequest.class), eq("ai"))).thenReturn(deckResponse(deckId, "Travel"));
         tools = new AgentTools(
                 userId, null, 40, groupService, deckService, cardService, AgentProgress.noop(), "es-ES", "en-US");
 
         tools.createDeck("Travel", null, "ja-JP", "fr-FR", null);
 
         ArgumentCaptor<DeckRequest> request = ArgumentCaptor.forClass(DeckRequest.class);
-        verify(deckService).create(eq(userId), request.capture());
+        verify(deckService).create(eq(userId), request.capture(), eq("ai"));
         assertEquals("es-ES", request.getValue().frontLanguage());
         assertEquals("en-US", request.getValue().backLanguage());
     }

@@ -19,6 +19,7 @@ import Modal from './Modal'
 import AuthImage from './AuthImage'
 import { useAuth } from '../AuthContext'
 import { isProLicensed } from '../pro'
+import { track } from '../analytics'
 import { getOfflinePack, saveOfflinePack } from '../offlinePacks'
 import { useResumeExpiredSubscription } from '../useResumeExpiredSubscription'
 import { mixReturnTo, withMixReturn } from '../mixReturn'
@@ -154,8 +155,14 @@ export default function DeckDetailPage() {
     offlineToastTimer.current = window.setTimeout(() => setOfflineToast(''), 2000)
   }
 
+  function openImageProGate() {
+    track('pro_gate_hit', { feature: 'card_image' })
+    setProModal(true)
+  }
+
   function downloadOffline() {
     if (!pro) {
+      track('pro_gate_hit', { feature: 'offline' })
       setOfflineProOpen(true)
       return
     }
@@ -378,6 +385,7 @@ export default function DeckDetailPage() {
 
   async function exportCsv() {
     if (!pro) {
+      track('pro_gate_hit', { feature: 'export' })
       setExportProOpen(true)
       return
     }
@@ -956,7 +964,7 @@ export default function DeckDetailPage() {
                 setFrontFile(null)
                 setRemoveFrontImage(true)
               }}
-              onNeedPro={() => setProModal(true)}
+              onNeedPro={openImageProGate}
               onError={setError}
             />
           </div>
@@ -994,7 +1002,7 @@ export default function DeckDetailPage() {
                 setBackFile(null)
                 setRemoveBackImage(true)
               }}
-              onNeedPro={() => setProModal(true)}
+              onNeedPro={openImageProGate}
               onError={setError}
             />
           </div>

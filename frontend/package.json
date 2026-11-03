@@ -23,6 +23,7 @@
     "@capawesome/capacitor-google-sign-in": "^0.1.4",
     "@capgo/capacitor-autofill-save-password": "^8.1.4",
     "i18next": "^26.4.2",
+    "posthog-js": "^1.444.4",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "react-i18next": "^17.0.13",

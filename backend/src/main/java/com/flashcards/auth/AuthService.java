@@ -7,6 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.flashcards.analytics.ProductAnalytics;
 import com.flashcards.billing.ProAccess;
 import com.flashcards.common.ApiException;
 import com.flashcards.security.JwtService;
@@ -33,6 +34,7 @@ public class AuthService {
     private final GoogleTokenService googleTokenService;
     private final AppleTokenService appleTokenService;
     private final EmailVerificationService emailVerificationService;
+    private final ProductAnalytics analytics;
 
     public AuthService(
             UserRepository userRepository,
@@ -40,13 +42,15 @@ public class AuthService {
             JwtService jwtService,
             GoogleTokenService googleTokenService,
             AppleTokenService appleTokenService,
-            EmailVerificationService emailVerificationService) {
+            EmailVerificationService emailVerificationService,
+            ProductAnalytics analytics) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
         this.googleTokenService = googleTokenService;
         this.appleTokenService = appleTokenService;
         this.emailVerificationService = emailVerificationService;
+        this.analytics = analytics;
     }
 
     @Transactional
@@ -68,7 +72,8 @@ public class AuthService {
         user.setEmailVerified(false);
         userRepository.save(user);
         emailVerificationService.issueAndSend(user);
-        return toAuthResponse(user);
+        analytics.accountCreated(user.getId(), "email");
+        return toAuthResponse(user, true);
     }
 
     @Transactional(readOnly = true)
@@ -85,7 +90,7 @@ public class AuthService {
         if (!passwordEncoder.matches(request.password(), hash)) {
             throw new ApiException(HttpStatus.UNAUTHORIZED, "Invalid email or password");
         }
-        return toAuthResponse(user);
+        return toAuthResponse(user, false);
     }
 
     @Transactional
@@ -94,6 +99,7 @@ public class AuthService {
         String email = profile.email().trim().toLowerCase();
         User user = userRepository.findByGoogleSub(profile.subject())
                 .orElseGet(() -> userRepository.findByEmail(email).orElse(null));
+        boolean created = user == null;
         if (user == null) {
             user = new User();
             user.setEmail(email);
@@ -114,7 +120,10 @@ public class AuthService {
         user.setGoogleSub(profile.subject());
         user.setEmailVerified(true);
         userRepository.save(user);
-        return toAuthResponse(user);
+        if (created) {
+            analytics.accountCreated(user.getId(), "google");
+        }
+        return toAuthResponse(user, created);
     }
 
     @Transactional
@@ -125,6 +134,7 @@ public class AuthService {
         if (user == null && email != null && !email.isEmpty()) {
             user = userRepository.findByEmail(email).orElse(null);
         }
+        boolean created = user == null;
         if (user == null) {
             if (email == null || email.isEmpty()) {
                 throw new ApiException(HttpStatus.UNAUTHORIZED, "Invalid Apple sign-in");
@@ -152,7 +162,10 @@ public class AuthService {
         user.setAppleSub(profile.subject());
         user.setEmailVerified(true);
         userRepository.save(user);
-        return toAuthResponse(user);
+        if (created) {
+            analytics.accountCreated(user.getId(), "apple");
+        }
+        return toAuthResponse(user, created);
     }
 
     @Transactional
@@ -243,9 +256,9 @@ public class AuthService {
         return toUserResponse(user);
     }
 
-    private AuthResponse toAuthResponse(User user) {
+    private AuthResponse toAuthResponse(User user, boolean newAccount) {
         UserPrincipal principal = new UserPrincipal(user.getId(), user.getEmail(), user.getDisplayName());
-        return new AuthResponse(jwtService.createToken(principal), toUserResponse(user));
+        return new AuthResponse(jwtService.createToken(principal), toUserResponse(user), newAccount);
     }
 
     public static UserResponse toUserResponse(User user) {

@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { api } from '../api'
 import { useAuth } from '../AuthContext'
 import { isProLicensed } from '../pro'
+import { useTrackProGate } from '../analytics'
 import { useResumeExpiredSubscription } from '../useResumeExpiredSubscription'
 import { translateError } from '../i18n/errors'
 import { sortDecks } from '../deckSort'
@@ -38,6 +39,7 @@ export default function MixEditorPage() {
   const [busy, setBusy] = useState(false)
   const [confirmDelete, setConfirmDelete] = useState(false)
   const pro = isProLicensed(user)
+  useTrackProGate('mixes', Boolean(user) && !pro)
 
   useLayoutEffect(() => {
     if ('scrollRestoration' in window.history) {

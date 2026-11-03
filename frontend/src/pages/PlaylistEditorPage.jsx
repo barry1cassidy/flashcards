@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { api } from '../api'
 import { useAuth } from '../AuthContext'
 import { isProLicensed } from '../pro'
+import { useTrackProGate } from '../analytics'
 import { useResumeExpiredSubscription } from '../useResumeExpiredSubscription'
 import { translateError } from '../i18n/errors'
 import { studioLibraryPath, studioPairLabel } from '../languageStudio'
@@ -22,7 +23,10 @@ export default function PlaylistEditorPage() {
   useResumeExpiredSubscription()
   const navigate = useNavigate()
   const pro = isProLicensed(user)
+  useTrackProGate('playlist', Boolean(user) && !pro)
   const [name, setName] = useState('')
+  const [nameError, setNameError] = useState(false)
+  const nameRef = useRef(null)
   const [includeAll, setIncludeAll] = useState(false)
   const [order, setOrder] = useState([])
   const nativeQuery = params.get('native') || ''
@@ -118,6 +122,11 @@ export default function PlaylistEditorPage() {
     if (!pair) {
       return
     }
+    if (!name.trim()) {
+      setNameError(true)
+      nameRef.current?.focus()
+      return
+    }
     setError('')
     setBusy(true)
     try {
@@ -173,7 +182,7 @@ export default function PlaylistEditorPage() {
     )
   }
 
-  const canSave = name.trim() && pair && (includeAll || order.length > 0) && conversations.length > 0
+  const canSave = pair && (includeAll || order.length > 0) && conversations.length > 0
 
   return (
     <div className="page">
@@ -201,7 +210,26 @@ export default function PlaylistEditorPage() {
         <form className="card-form" onSubmit={save}>
           <label>
             {t('studio.playlistName')}
-            <input value={name} onChange={(event) => setName(event.target.value)} required maxLength={80} disabled={busy} />
+            <input
+              ref={nameRef}
+              value={name}
+              onChange={(event) => {
+                setName(event.target.value)
+                if (event.target.value.trim()) {
+                  setNameError(false)
+                }
+              }}
+              maxLength={80}
+              disabled={busy}
+              autoComplete="off"
+              aria-invalid={nameError}
+              aria-describedby={nameError ? 'playlist-name-error' : undefined}
+            />
+            {nameError ? (
+              <span id="playlist-name-error" className="field-error">
+                {t('studio.playlistNameRequired')}
+              </span>
+            ) : null}
           </label>
           <label className="mix-pick">
             <input

@@ -1340,6 +1340,7 @@
     "playlistEdit": "编辑播放列表",
     "playlistLabel": "播放列表",
     "playlistName": "名称",
+    "playlistNameRequired": "请为播放列表输入名称。",
     "playlistHint": "播放列表会在收听里按顺序播放这些场景。它不会给它们打分。",
     "playlistNeedPair": "在语言工作室里打开一个语言组合，然后在那里新建播放列表。",
     "playlistIncludeAll": "这个语言组合里的每段对话",

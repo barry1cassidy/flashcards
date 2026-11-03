@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '../AuthContext'
 import { isProLicensed } from '../pro'
+import { track } from '../analytics'
 import Modal from './Modal'
 
 const MODES = [
@@ -21,6 +22,7 @@ export default function StudyModeModal({ onSelect, onCancel, hint, hardCount = 0
 
   function pickMode(mode, filter) {
     if (mode === 'rehearse' && !pro) {
+      track('pro_gate_hit', { feature: 'rehearse' })
       onCancel()
       navigate('/pro')
       return

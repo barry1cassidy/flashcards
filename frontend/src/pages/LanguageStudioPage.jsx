@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { api } from '../api'
 import { useAuth } from '../AuthContext'
 import { isProLicensed } from '../pro'
+import { useTrackProGate } from '../analytics'
 import { useResumeExpiredSubscription } from '../useResumeExpiredSubscription'
 import { translateError } from '../i18n/errors'
 import {
@@ -35,6 +36,7 @@ export default function LanguageStudioPage() {
   const navigate = useNavigate()
   const [params, setParams] = useSearchParams()
   const pro = isProLicensed(user)
+  useTrackProGate('studio', Boolean(user) && !pro)
   const [pairs, setPairs] = useState([])
   const [items, setItems] = useState([])
   const [playlists, setPlaylists] = useState([])

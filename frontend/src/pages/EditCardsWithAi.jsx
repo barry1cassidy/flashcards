@@ -5,6 +5,7 @@ import { api } from '../api'
 import { useAuth } from '../AuthContext'
 import { useAiCredits } from '../AiCreditsContext'
 import { isProLicensed } from '../pro'
+import { useTrackProGate } from '../analytics'
 import { translateError } from '../i18n/errors'
 import MenuIcon from './MenuIcon'
 import Modal from './Modal'
@@ -107,6 +108,7 @@ export default function EditCardsWithAi({ deck, cards, onClose, onSaved }) {
   }, [busy])
 
   const locked = status ? status.proRequired : !pro
+  useTrackProGate('ai_edit', Boolean(user) && locked)
   const remaining = status?.remainingCredits ?? 0
   const elapsed = startedAt ? Math.max(0, Math.floor((now - startedAt) / 1000)) : 0
   const steps = job?.steps || []

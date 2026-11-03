@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { api } from '../api'
 import { useAuth } from '../AuthContext'
 import { isProLicensed } from '../pro'
+import { trackSampleCopied, useTrackProGate } from '../analytics'
 import { translateError } from '../i18n/errors'
 import { listOfflinePacks } from '../offlinePacks'
 import { studioLibraryPath, studioListenReturnPath, studioSamplesPath } from '../languageStudio'
@@ -54,6 +55,7 @@ export default function ListenPage() {
   const location = useLocation()
   const listenReturn = externalListenReturn(location.state?.listenReturn)
   const pro = isProLicensed(user)
+  useTrackProGate('listen', Boolean(user) && !pro)
   const [params, setParams] = useSearchParams()
   const sourceParam = params.get('source')
   const source =
@@ -342,6 +344,12 @@ export default function ListenPage() {
         })
         ownedId = copied.id
         pair = copied
+        trackSampleCopied({
+          id,
+          frontLanguage: nativeLanguage,
+          backLanguage: targetLanguage,
+          source: 'studio',
+        })
       }
       await api(`/api/language-studio/conversations/${ownedId}`, {
         method: 'PATCH',

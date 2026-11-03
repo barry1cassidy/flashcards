@@ -1,6 +1,7 @@
 package com.flashcards.auth;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -17,6 +18,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.flashcards.analytics.ProductAnalytics;
 import com.flashcards.common.ApiException;
 import com.flashcards.security.JwtService;
 import com.flashcards.user.User;
@@ -48,7 +50,8 @@ class AuthServiceAppleTest {
                 jwtService,
                 googleTokenService,
                 appleTokenService,
-                emailVerificationService);
+                emailVerificationService,
+                ProductAnalytics.disabled());
     }
 
     @Test
@@ -67,6 +70,7 @@ class AuthServiceAppleTest {
         AuthResponse response = authService.loginWithApple(new AppleLoginRequest("id-token", "en", "Barry Cassidy", null));
 
         assertEquals("jwt", response.token());
+        assertTrue(response.newAccount());
         assertEquals("hide@privaterelay.appleid.com", response.user().email());
         assertEquals("Barry Cassidy", response.user().displayName());
         assertTrue(response.user().appleSignIn());
@@ -92,6 +96,7 @@ class AuthServiceAppleTest {
 
         AuthResponse response = authService.loginWithApple(new AppleLoginRequest("id-token", "en", "Barry", null));
 
+        assertFalse(response.newAccount());
         assertEquals("Existing", response.user().displayName());
         assertEquals("apple-1", existing.getAppleSub());
         assertTrue(response.user().appleSignIn());
@@ -112,6 +117,7 @@ class AuthServiceAppleTest {
 
         AuthResponse response = authService.loginWithApple(new AppleLoginRequest("id-token", "en", null, null));
 
+        assertFalse(response.newAccount());
         assertEquals("hide@privaterelay.appleid.com", response.user().email());
         assertEquals("apple-1", existing.getAppleSub());
     }

@@ -1340,6 +1340,7 @@
     "playlistEdit": "Modifier la liste",
     "playlistLabel": "Liste",
     "playlistName": "Nom",
+    "playlistNameRequired": "Donnez un nom à la liste.",
     "playlistHint": "Une liste lit ces scènes dans l’ordre avec Écouter. Elle ne les note pas.",
     "playlistNeedPair": "Ouvrez une paire de langues dans le Studio de langues, puis créez-y une liste.",
     "playlistIncludeAll": "Toutes les conversations de cette paire de langues",

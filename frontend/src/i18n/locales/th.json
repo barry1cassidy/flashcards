@@ -1340,6 +1340,7 @@
     "playlistEdit": "แก้ไขเพลย์ลิสต์",
     "playlistLabel": "เพลย์ลิสต์",
     "playlistName": "ชื่อ",
+    "playlistNameRequired": "ใส่ชื่อเพลย์ลิสต์",
     "playlistHint": "เพลย์ลิสต์เล่นฉากเหล่านี้ตามลำดับในฟัง และไม่ให้คะแนน",
     "playlistNeedPair": "เปิดคู่ภาษาในสตูดิโอภาษา แล้วสร้างเพลย์ลิสต์ที่นั่น",
     "playlistIncludeAll": "ทุกบทสนทนาในคู่ภาษานี้",

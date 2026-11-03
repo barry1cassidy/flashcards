@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { api } from '../api'
 import { useAuth } from '../AuthContext'
 import { isProLicensed } from '../pro'
+import { useTrackProGate } from '../analytics'
 import { useResumeExpiredSubscription } from '../useResumeExpiredSubscription'
 import { translateError } from '../i18n/errors'
 import { formatDate } from '../i18n/format'
@@ -28,6 +29,7 @@ export default function MixDetailPage() {
   const [error, setError] = useState('')
   const [studyOpen, setStudyOpen] = useState(false)
   const pro = isProLicensed(user)
+  useTrackProGate('mixes', Boolean(user) && !pro)
   const mixPath = `/mixes/${id}`
 
   useEffect(() => {

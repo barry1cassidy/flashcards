@@ -1,4 +1,4 @@
 package com.flashcards.auth;
 
-public record AuthResponse(String token, UserResponse user) {
+public record AuthResponse(String token, UserResponse user, boolean newAccount) {
 }

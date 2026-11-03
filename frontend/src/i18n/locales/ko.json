@@ -1340,6 +1340,7 @@
     "playlistEdit": "재생 목록 편집",
     "playlistLabel": "재생 목록",
     "playlistName": "이름",
+    "playlistNameRequired": "재생 목록 이름을 입력하세요.",
     "playlistHint": "재생 목록은 듣기에서 이 장면들을 순서대로 재생합니다. 평가하지 않습니다.",
     "playlistNeedPair": "언어 스튜디오에서 언어 쌍을 연 다음, 거기서 재생 목록을 만드세요.",
     "playlistIncludeAll": "이 언어 쌍의 모든 대화",
