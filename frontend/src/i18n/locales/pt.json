@@ -1316,7 +1316,7 @@
     "useLearnedHintEmpty": "Marque uma cena como Dominada quando puder interpretá-la sem ajuda. Conversas novas podem trazer algumas dessas palavras numa situação diferente. Cenas ainda em andamento nunca são tratadas como sabidas, e não são copiadas.",
     "generate": "Gerar · 1 crédito",
     "generating": "Gerando…",
-    "creditCost": "Gerar uma conversa usa 1 crédito. Praticar e Ouvir não.",
+    "creditCost": "Gerar uma conversa usa 1 crédito. Uma vez gerada, praticar e ouvir não usam créditos.",
     "back": "Voltar",
     "turnProgress": "Turno {{current}} de {{total}}.",
     "youPlay": "Você é o/a {{role}}. {{native}} é o significado; {{target}} é a fala a dizer.",

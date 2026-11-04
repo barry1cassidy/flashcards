@@ -8215,10 +8215,38 @@ button.page-back {
   box-shadow: inset 4px 0 0 var(--cobalt);
 }
 
+.studio-credit {
+  display: grid;
+  gap: 6px;
+}
+
+.studio-credit-left {
+  margin: 0;
+  color: var(--mint);
+  font-weight: 650;
+}
+
+.studio-create .studio-lang-row {
+  margin-top: 8px;
+}
+
 .studio-lang-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
+}
+
+.studio-lang-row label {
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 650;
+}
+
+.studio-lang-row select {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 400;
 }
 
 .studio-locations {

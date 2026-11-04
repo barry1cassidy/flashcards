@@ -1316,7 +1316,7 @@
     "useLearnedHintEmpty": "Markeer een scène als Beheerst wanneer je hem zonder hulp kunt spelen. Nieuwe gesprekken kunnen dan een paar van die woorden in een andere situatie terugbrengen. Scènes die nog bezig zijn, worden nooit als bekend behandeld en niet gekopieerd.",
     "generate": "Genereren · 1 tegoed",
     "generating": "Bezig met genereren…",
-    "creditCost": "Een gesprek genereren gebruikt 1 tegoed. Oefenen en Luisteren niet.",
+    "creditCost": "Een gesprek genereren gebruikt 1 tegoed. Zodra het is gegenereerd, gebruiken oefenen en luisteren geen tegoed.",
     "back": "Terug",
     "turnProgress": "Beurt {{current}} van {{total}}.",
     "youPlay": "Jij speelt {{role}}. {{native}} is de betekenis; {{target}} is de regel om te zeggen.",

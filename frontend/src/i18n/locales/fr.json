@@ -1316,7 +1316,7 @@
     "useLearnedHintEmpty": "Marquez une scène Maîtrisée quand vous pouvez la jouer sans aide. Les nouvelles conversations peuvent alors ramener quelques-uns de ces mots dans une autre situation. Les scènes encore en cours ne sont jamais traitées comme sues, et ne sont pas copiées.",
     "generate": "Générer · 1 crédit",
     "generating": "Génération…",
-    "creditCost": "Générer une conversation utilise 1 crédit. Pratiquer et Écouter, non.",
+    "creditCost": "Générer une conversation utilise 1 crédit. Une fois générée, pratiquer et écouter n’utilisent pas de crédit.",
     "back": "Retour",
     "turnProgress": "Tour {{current}} sur {{total}}.",
     "youPlay": "Vous jouez le/la {{role}}. {{native}} est le sens ; {{target}} est la réplique à dire.",

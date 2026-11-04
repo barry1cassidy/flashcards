@@ -411,12 +411,12 @@ export default function LanguageStudioCreate() {
 function CreditNote({ remaining }) {
   const { t } = useTranslation()
   return (
-    <>
-      <p className={remaining <= 0 ? 'credit-remaining is-empty' : 'muted'}>
+    <div className="studio-credit">
+      <p className={remaining <= 0 ? 'studio-credit-left credit-remaining is-empty' : 'studio-credit-left'}>
         {t('pro.balanceLeft', { count: remaining })}
       </p>
-      <p>{t('studio.creditCost')}</p>
-    </>
+      <p className="muted">{t('studio.creditCost')}</p>
+    </div>
   )
 }
 

@@ -1316,7 +1316,7 @@
     "useLearnedHintEmpty": "Mark a scene Fully learned when you can play it without help. New conversations can then bring a few of those words back in a different situation. Scenes still in progress are never treated as known, and will not be copied.",
     "generate": "Generate · 1 credit",
     "generating": "Generating…",
-    "creditCost": "Generating a conversation uses 1 credit. Practice and Listen do not.",
+    "creditCost": "Bir konuşma oluşturmak 1 kredi kullanır. Oluştuktan sonra pratik yapmak ve dinlemek kredi kullanmaz.",
     "back": "Back",
     "turnProgress": "Turn {{current}} of {{total}}.",
     "youPlay": "You play the {{role}}. {{native}} is the meaning; {{target}} is the line to say.",

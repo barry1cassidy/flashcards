@@ -1346,7 +1346,7 @@
     "useLearnedHintEmpty": "Mark a scene Fully learned when you can play it without help. New conversations can then bring a few of those words back in a different situation. Scenes still in progress are never treated as known, and will not be copied.",
     "generate": "Generate · 1 credit",
     "generating": "Generating…",
-    "creditCost": "Generating a conversation uses 1 credit. Practice and Listen do not.",
+    "creditCost": "Створення розмови витрачає 1 кредит. Коли її створено, практика та прослуховування кредити не витрачають.",
     "back": "Back",
     "turnProgress": "Turn {{current}} of {{total}}.",
     "youPlay": "You play the {{role}}. {{native}} is the meaning; {{target}} is the line to say.",

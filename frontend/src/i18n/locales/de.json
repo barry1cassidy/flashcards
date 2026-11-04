@@ -1316,7 +1316,7 @@
     "useLearnedHintEmpty": "Markieren Sie eine Szene als Beherrscht, wenn Sie sie ohne Hilfe spielen können. Neue Gespräche können dann ein paar dieser Wörter in einer anderen Situation zurückbringen. Szenen, die noch in Arbeit sind, gelten nie als gekannt und werden nicht kopiert.",
     "generate": "Erzeugen · 1 Guthaben",
     "generating": "Wird erzeugt…",
-    "creditCost": "Ein Gespräch zu erzeugen kostet 1 Guthaben. Üben und Anhören nicht.",
+    "creditCost": "Ein Gespräch zu erzeugen kostet 1 Guthaben. Sobald es erzeugt ist, kosten Üben und Anhören kein Guthaben.",
     "back": "Zurück",
     "turnProgress": "Zug {{current}} von {{total}}.",
     "youPlay": "Sie spielen {{role}}. {{native}} ist die Bedeutung; {{target}} ist die Zeile zum Sagen.",

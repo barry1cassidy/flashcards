@@ -1316,7 +1316,7 @@
     "useLearnedHintEmpty": "Segna una scena come Padroneggiata quando puoi recitarla senza aiuto. Le nuove conversazioni possono riportare alcune di quelle parole in un’altra situazione. Le scene ancora in corso non sono mai trattate come sapute, e non vengono copiate.",
     "generate": "Genera · 1 credito",
     "generating": "Generazione…",
-    "creditCost": "Generare una conversazione usa 1 credito. Esercitarsi e Ascolta no.",
+    "creditCost": "Generare una conversazione usa 1 credito. Una volta generata, esercitarsi e ascoltare non usano crediti.",
     "back": "Indietro",
     "turnProgress": "Turno {{current}} di {{total}}.",
     "youPlay": "Fai {{role}}. {{native}} è il significato; {{target}} è la battuta da dire.",

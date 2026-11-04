@@ -1346,7 +1346,7 @@
     "useLearnedHintEmpty": "Oznacz scenę jako Opanowane, gdy potrafisz ją zagrać bez pomocy. Nowe rozmowy mogą wtedy wnieść kilka z tych słów w innej sytuacji. Sceny w toku nigdy nie są traktowane jako znane i nie są kopiowane.",
     "generate": "Generuj · 1 kredyt",
     "generating": "Generowanie…",
-    "creditCost": "Wygenerowanie rozmowy zużywa 1 kredyt. Ćwiczenie i Słuchaj nie.",
+    "creditCost": "Wygenerowanie rozmowy zużywa 1 kredyt. Gdy jest już wygenerowana, ćwiczenie i słuchanie nie zużywają kredytów.",
     "back": "Wstecz",
     "turnProgress": "Tura {{current}} z {{total}}.",
     "youPlay": "Grasz {{role}}. {{native}} to znaczenie; {{target}} to kwestia do powiedzenia.",
