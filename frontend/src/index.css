@@ -2638,6 +2638,7 @@ a.library-suggestion {
 .group-badge {
   display: inline-flex;
   align-self: flex-start;
+  justify-self: start;
   border-radius: 20px;
   padding: 4px 11px;
   font-family: var(--font-mono);
@@ -4184,8 +4185,18 @@ button.agent-preset:disabled {
 }
 
 @media (min-width: 701px) {
-  .page-title:has(.deck-hero-actions > .btn:only-child) {
+  .page-title:has(.deck-hero-actions) {
     align-items: center;
+    gap: 24px;
+  }
+
+  .page-title:has(.deck-hero-actions) > .deck-hero-actions {
+    flex-wrap: nowrap;
+    flex: 0 0 auto;
+  }
+
+  .page-title:has(.deck-hero-actions) > .deck-hero-actions .btn.primary {
+    order: 1;
   }
 }
 
