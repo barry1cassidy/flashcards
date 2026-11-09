@@ -250,6 +250,8 @@
     "importing": "正在导入…",
     "exportCsv": "导出 CSV",
     "empty": "还没有卡组。创建一个开始吧。",
+    "welcomeBrand": "什么都能做成抽认卡。",
+    "welcomeBrandLine": "读一读，或听一听。",
     "welcomePrompt": "你想学什么？",
     "welcomeSearch": "搜索题库",
     "welcomeSample": "从题库开始",

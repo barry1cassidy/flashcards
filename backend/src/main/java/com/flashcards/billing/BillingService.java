@@ -602,6 +602,12 @@ public class BillingService {
     }
 
     @Transactional
+    public void deleteSubscriptions(UUID userId) {
+        subscriptionRepository.deleteAll(subscriptionRepository.findByUser_Id(userId));
+        subscriptionRepository.flush();
+    }
+
+    @Transactional
     public AccountDeletionStatus deletionStatus(UUID userId) {
         refreshStoreSubscriptions(userId);
         Instant now = Instant.now();

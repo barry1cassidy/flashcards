@@ -6,7 +6,9 @@ import { useAuth } from '../AuthContext'
 import { isEmailVerified } from '../email'
 import { inviteAuthState, peekJoinInvite, rememberJoinInvite, takeJoinInvite } from '../authRedirect'
 import { translateError } from '../i18n/errors'
+import { webMarketing } from '../webOnly'
 import MarketingHeader, { MarketingFooter } from './MarketingHeader'
+import NativeGuestBar from './NativeGuestBar'
 
 const joiningCodes = new Set()
 
@@ -43,7 +45,7 @@ export default function JoinClassPage() {
       return
     }
     if (skipAutoJoin.current === null) {
-      skipAutoJoin.current = Boolean(user) && peekJoinInvite() !== joinPath
+      skipAutoJoin.current = webMarketing && Boolean(user) && peekJoinInvite() !== joinPath
     }
     if (skipAutoJoin.current || !user || !isEmailVerified(user) || !preview || joiningCodes.has(code)) {
       return
@@ -53,6 +55,7 @@ export default function JoinClassPage() {
     setBusy(true)
     api(`/api/join/${encodeURIComponent(code)}`, { method: 'POST' })
       .then((detail) => {
+        joiningCodes.delete(code)
         takeJoinInvite()
         navigate(`/classes/${detail.id}`, { replace: true })
       })
@@ -72,6 +75,7 @@ export default function JoinClassPage() {
     setBusy(true)
     try {
       const detail = await api(`/api/join/${encodeURIComponent(code)}`, { method: 'POST' })
+      joiningCodes.delete(code)
       takeJoinInvite()
       navigate(`/classes/${detail.id}`, { replace: true })
     } catch (err) {
@@ -89,35 +93,34 @@ export default function JoinClassPage() {
     return <Navigate to="/verify" replace />
   }
 
-  return (
-    <div className="marketing">
-      <MarketingHeader showLoginForm loginOpen={loginOpen} onLoginOpenChange={setLoginOpen} />
-      <section className="register-panel">
-        <div className="auth-card">
-          <p className="kicker">{t('classes.joinKicker')}</p>
-          {preview ? (
-            <>
-              <h1>{preview.name}</h1>
-              <p className="muted">
-                {t('classes.joinPreview', {
-                  teacher: preview.teacherName,
-                  decks: preview.deckCount,
-                  members: preview.memberCount,
-                })}
-              </p>
-              <p className="class-join-code">{preview.joinCode}</p>
-            </>
-          ) : (
-            <h1>{t('classes.joinTitle')}</h1>
-          )}
-          {error ? <div className="error">{translateError(t, error)}</div> : null}
-          {preview && user ? (
-            <button className="btn primary" type="button" disabled={busy} onClick={join}>
-              {busy ? t('classes.joining') : t('classes.joinButton')}
-            </button>
-          ) : null}
-          {preview && !user ? (
-            <div className="header-actions">
+  const card = (
+    <section className="register-panel">
+      <div className="auth-card">
+        <p className="kicker">{t('classes.joinKicker')}</p>
+        {preview ? (
+          <>
+            <h1>{preview.name}</h1>
+            <p className="muted">
+              {t('classes.joinPreview', {
+                teacher: preview.teacherName,
+                decks: preview.deckCount,
+                members: preview.memberCount,
+              })}
+            </p>
+            <p className="class-join-code">{preview.joinCode}</p>
+          </>
+        ) : (
+          <h1>{t('classes.joinTitle')}</h1>
+        )}
+        {error ? <div className="error">{translateError(t, error)}</div> : null}
+        {preview && user ? (
+          <button className="btn primary" type="button" disabled={busy} onClick={join}>
+            {busy ? t('classes.joining') : t('classes.joinButton')}
+          </button>
+        ) : null}
+        {preview && !user ? (
+          <div className="header-actions">
+            {webMarketing ? (
               <button
                 className="btn primary"
                 type="button"
@@ -129,18 +132,45 @@ export default function JoinClassPage() {
               >
                 {t('auth.signIn')}
               </button>
+            ) : (
               <Link
-                className="btn"
-                to="/register"
+                className="btn primary"
+                to="/login"
                 state={inviteAuthState(location)}
                 onClick={() => rememberJoinInvite(joinPath)}
               >
-                {t('auth.createAccountButton')}
+                {t('auth.signIn')}
               </Link>
-            </div>
-          ) : null}
+            )}
+            <Link
+              className="btn"
+              to="/register"
+              state={inviteAuthState(location)}
+              onClick={() => rememberJoinInvite(joinPath)}
+            >
+              {t('auth.createAccountButton')}
+            </Link>
+          </div>
+        ) : null}
+      </div>
+    </section>
+  )
+
+  if (!webMarketing) {
+    return (
+      <div className="app-frame">
+        <div className="app-pane">
+          {user ? null : <NativeGuestBar />}
+          <main className="page-content">{card}</main>
         </div>
-      </section>
+      </div>
+    )
+  }
+
+  return (
+    <div className="marketing">
+      <MarketingHeader showLoginForm loginOpen={loginOpen} onLoginOpenChange={setLoginOpen} />
+      {card}
       <MarketingFooter />
     </div>
   )

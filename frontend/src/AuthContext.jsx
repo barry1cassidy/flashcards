@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useLayoutEffect, useMemo, useState } from 'react'
 import { Capacitor } from '@capacitor/core'
 import { GoogleSignIn } from '@capawesome/capacitor-google-sign-in'
-import { api, getCachedUser, getToken, isNetworkError, setCachedUser, setToken } from './api'
+import { api, getCachedUser, getRefreshToken, getToken, isNetworkError, revokeRefreshToken, setCachedUser, setRefreshToken, setToken } from './api'
 import { applyLocale, deviceLocale } from './i18n'
 import { applyTheme } from './theme'
 import { clearJoinInvite } from './authRedirect'
@@ -13,7 +13,7 @@ import { identifyUser, resetAnalytics, trackAuth } from './analytics'
 const AuthContext = createContext(null)
 
 function initialSession() {
-  if (!getToken()) {
+  if (!getToken() && !getRefreshToken()) {
     return { user: null, ready: true }
   }
   // Keep the native splash up until the session is confirmed. The cached
@@ -31,6 +31,14 @@ export function AuthProvider({ children }) {
     setUser(next)
     setOffline(false)
     return next
+  }
+
+  function storeSession(result) {
+    setToken(result.token)
+    if (Capacitor.isNativePlatform() && result.refreshToken) {
+      setRefreshToken(result.refreshToken)
+    }
+    return keepUser(result.user)
   }
 
   useLayoutEffect(() => {
@@ -59,7 +67,7 @@ export function AuthProvider({ children }) {
     let cancelled = false
 
     async function load() {
-      if (!getToken()) {
+      if (!getToken() && !getRefreshToken()) {
         applyTheme('DARK')
         applyLocale(deviceLocale())
         setReady(true)
@@ -77,7 +85,7 @@ export function AuthProvider({ children }) {
         if (cancelled) {
           return
         }
-        if (getToken()) {
+        if (getToken() || getRefreshToken()) {
           const cached = getCachedUser()
           if (cached) {
             setUser(cached)
@@ -97,7 +105,7 @@ export function AuthProvider({ children }) {
     }
 
     function onOnline() {
-      if (!getToken()) {
+      if (!getToken() && !getRefreshToken()) {
         return
       }
       api('/api/auth/me')
@@ -110,7 +118,7 @@ export function AuthProvider({ children }) {
           setOffline(false)
         })
         .catch(() => {
-          if (!getToken()) {
+          if (!getToken() && !getRefreshToken()) {
             setUser(null)
             setOffline(false)
           }
@@ -135,21 +143,19 @@ export function AuthProvider({ children }) {
           method: 'POST',
           body: JSON.stringify({ email, password }),
         })
-        setToken(result.token)
-        keepUser(result.user)
+        const user = storeSession(result)
         trackAuth(result, 'email')
         await offerSavePassword(email, password)
-        return result.user
+        return user
       },
       async loginWithGoogle(idToken, locale) {
         const result = await api('/api/auth/google', {
           method: 'POST',
           body: JSON.stringify({ idToken, locale }),
         })
-        setToken(result.token)
-        keepUser(result.user)
+        const user = storeSession(result)
         trackAuth(result, 'google')
-        return result.user
+        return user
       },
       async loginWithApple(identityToken, locale, fullName, nonce) {
         const result = await api('/api/auth/apple', {
@@ -161,21 +167,19 @@ export function AuthProvider({ children }) {
             nonce: nonce || undefined,
           }),
         })
-        setToken(result.token)
-        keepUser(result.user)
+        const user = storeSession(result)
         trackAuth(result, 'apple')
-        return result.user
+        return user
       },
       async register(displayName, email, password, locale) {
         const result = await api('/api/auth/register', {
           method: 'POST',
           body: JSON.stringify({ displayName, email, password, locale }),
         })
-        setToken(result.token)
-        keepUser(result.user)
+        const user = storeSession(result)
         trackAuth(result, 'email')
         await offerSavePassword(email, password)
-        return result.user
+        return user
       },
       async verifyEmail(code) {
         const updated = await api('/api/auth/verify-email', {
@@ -278,6 +282,7 @@ export function AuthProvider({ children }) {
         }
       },
       logout() {
+        revokeRefreshToken()
         resetAnalytics()
         setToken(null)
         setUser(null)

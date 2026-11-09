@@ -250,6 +250,8 @@
     "importing": "Đang nhập…",
     "exportCsv": "Xuất CSV",
     "empty": "Chưa có bộ thẻ. Tạo một cái để bắt đầu.",
+    "welcomeBrand": "Thẻ cho mọi thứ.",
+    "welcomeBrandLine": "Đọc, hoặc nghe.",
     "welcomePrompt": "Bạn muốn học gì?",
     "welcomeSearch": "Tìm trong thư viện",
     "welcomeSample": "Bắt đầu từ một bộ thẻ trong thư viện",

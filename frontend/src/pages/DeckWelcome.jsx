@@ -15,7 +15,7 @@ const FEATURED_SLUGS = [
   'us-history',
 ]
 
-export default function DeckWelcome({ onCreate, shareOpen, onShowShare, shareForm }) {
+export default function DeckWelcome({ onCreate, shareOpen, onShowShare, shareForm, brand = false }) {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const [query, setQuery] = useState('')
@@ -52,6 +52,12 @@ export default function DeckWelcome({ onCreate, shareOpen, onShowShare, shareFor
 
   return (
     <section className="deck-welcome" aria-labelledby="deck-welcome-prompt">
+      {brand ? (
+        <p className="deck-welcome-brand">
+          <span>{t('decks.welcomeBrand')}</span>
+          <span>{t('decks.welcomeBrandLine')}</span>
+        </p>
+      ) : null}
       <h1 id="deck-welcome-prompt">{t('decks.welcomePrompt')}</h1>
       <form className="deck-welcome-search" onSubmit={searchSamples}>
         <input

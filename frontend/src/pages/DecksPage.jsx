@@ -16,6 +16,7 @@ import { isAdmin } from '../admin'
 import { isProLicensed } from '../pro'
 import { sortDecks } from '../deckSort'
 import { shareCodeFromInput } from '../shareCode'
+import { clearAfterAuth } from '../authRedirect'
 import { defaultSpeechLanguage } from '../speechLanguages'
 import { trackDeckCreated } from '../analytics'
 import LanguageSelect from './LanguageSelect'
@@ -106,6 +107,7 @@ export default function DecksPage() {
     if (searchParams.get('create') !== '1') {
       return
     }
+    clearAfterAuth()
     setError('')
     const language = defaultSpeechLanguage(user?.locale)
     setFrontLanguage(language)
@@ -115,6 +117,39 @@ export default function DecksPage() {
     next.delete('create')
     setSearchParams(next, { replace: true })
   }, [searchParams, setSearchParams, user?.locale])
+
+  const pendingShare = useRef('')
+  useEffect(() => {
+    const raw = searchParams.get('share')
+    if (!raw || !loaded) {
+      return
+    }
+    const code = shareCodeFromInput(raw)
+    clearAfterAuth()
+    const next = new URLSearchParams(searchParams)
+    next.delete('share')
+    setSearchParams(next, { replace: true })
+    if (!code || pendingShare.current === code) {
+      return
+    }
+    pendingShare.current = code
+    setShareOpen(true)
+    setShareInput(code)
+    setShareError('')
+    setShareBusy(true)
+    api(`/api/shares/${encodeURIComponent(code)}/copy`, { method: 'POST' })
+      .then((result) => {
+        if (result?.kind === 'SET' && result.groupId) {
+          navigate(`/sets/${result.groupId}`, { replace: true })
+          return
+        }
+        if (result?.deckId) {
+          navigate(`/decks/${result.deckId}`, { replace: true })
+        }
+      })
+      .catch((err) => setShareError(err.message))
+      .finally(() => setShareBusy(false))
+  }, [loaded, navigate, searchParams, setSearchParams])
 
   function onGroupFilterChange(value) {
     setGroupFilter(value)

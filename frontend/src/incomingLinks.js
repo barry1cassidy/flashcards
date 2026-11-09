@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { App } from '@capacitor/app'
 import { Capacitor } from '@capacitor/core'
-import { invitePathFromUrl } from './authRedirect'
+import { invitePathFromUrl, rememberJoinInvite } from './authRedirect'
 
 export function IncomingLinks() {
   const navigate = useNavigate()
@@ -15,6 +15,7 @@ export function IncomingLinks() {
     const open = (url) => {
       const path = invitePathFromUrl(url)
       if (path) {
+        rememberJoinInvite(path)
         navigate(path, { replace: true })
       }
     }

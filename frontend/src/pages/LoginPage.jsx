@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import MarketingHeader, { MarketingFooter } from './MarketingHeader'
+import MarketingHeader, { LoginFields, MarketingFooter } from './MarketingHeader'
+import NativeGuestBar from './NativeGuestBar'
 import { webMarketing } from '../webOnly'
 import AudioTrack from './AudioTrack'
 import MenuIcon from './MenuIcon'
@@ -33,6 +34,24 @@ export default function LoginPage() {
     }
     document.getElementById(id)?.scrollIntoView({ block: 'start' })
   }, [hash])
+
+  if (!webMarketing) {
+    return (
+      <div className="app-frame">
+        <div className="app-pane">
+          <NativeGuestBar />
+          <main className="page-content">
+            <section className="register-panel">
+              <div className="auth-card">
+                <h1>{t('auth.welcomeBack')}</h1>
+                <LoginFields />
+              </div>
+            </section>
+          </main>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <main className="marketing">

@@ -3,7 +3,7 @@ import { Navigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '../AuthContext'
 import { isEmailVerified } from '../email'
-import { peekLibraryReturn } from '../authRedirect'
+import { peekAfterAuth, peekJoinInvite, peekLibraryReturn } from '../authRedirect'
 import { translateError } from '../i18n/errors'
 
 export default function VerifyEmailPage() {
@@ -18,7 +18,7 @@ export default function VerifyEmailPage() {
     return <Navigate to="/login" replace />
   }
   if (isEmailVerified(user)) {
-    return <Navigate to={peekLibraryReturn() || '/'} replace />
+    return <Navigate to={peekJoinInvite() || peekLibraryReturn() || peekAfterAuth() || '/'} replace />
   }
 
   async function onSubmit(event) {

@@ -250,6 +250,8 @@
     "importing": "インポート中…",
     "exportCsv": "CSVをエクスポート",
     "empty": "まだデッキがありません。作成して始めましょう。",
+    "welcomeBrand": "何でもフラッシュカード。",
+    "welcomeBrandLine": "読むか、聞くか。",
     "welcomePrompt": "何を勉強しますか？",
     "welcomeSearch": "ライブラリを検索",
     "welcomeSample": "ライブラリのデッキから始める",

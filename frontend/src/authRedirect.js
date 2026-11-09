@@ -1,8 +1,11 @@
+import { shareCodeFromInput } from './shareCode'
+
 const JOIN_PATH = /^\/(join|share)\/[^/]+$/
 const LIBRARY_PATH = /^\/library(\/.*)?$/
 const JOIN_INVITE_KEY = 'flashcards.joinInvite'
 const JOIN_RESUME_KEY = 'flashcards.joinResume'
 const LIBRARY_RETURN_KEY = 'flashcards.libraryReturn'
+const AFTER_AUTH_KEY = 'flashcards.afterAuth'
 
 export function joinInvitePath(location) {
   const from = location?.state?.from
@@ -17,7 +20,7 @@ export function joinInvitePath(location) {
 }
 
 export function pathAfterAuth(location) {
-  return joinInvitePath(location) || libraryReturnPath(location) || '/'
+  return joinInvitePath(location) || libraryReturnPath(location) || afterAuthPath(location) || '/'
 }
 
 export function inviteAuthState(location) {
@@ -26,7 +29,19 @@ export function inviteAuthState(location) {
     return { from: invite }
   }
   const library = currentLibraryPath(location) || libraryFromState(location) || peekLibraryReturn()
-  return library ? { from: library } : undefined
+  if (library) {
+    return { from: library }
+  }
+  const intent = afterAuthPath(location)
+  return intent ? { from: intent } : undefined
+}
+
+export function rememberAuthDestination(from) {
+  if (typeof from !== 'string') {
+    return
+  }
+  rememberLibraryReturn(from)
+  rememberAfterAuth(from)
 }
 
 export function rememberLibraryReturn(path) {
@@ -61,6 +76,9 @@ export function goAfterAuth(navigate, location) {
   const next = pathAfterAuth(location)
   if (isJoinPath(next)) {
     rememberJoinInvite(next)
+  }
+  if (isAfterAuthPath(next) || peekAfterAuth()) {
+    clearAfterAuth()
   }
   if (pathnameOnly(location?.pathname) === next) {
     return
@@ -135,6 +153,61 @@ export function invitePathFromUrl(url) {
   } catch {
     return null
   }
+}
+
+export function rememberAfterAuth(path) {
+  const stored = afterAuthFromRaw(path)
+  if (!stored) {
+    return
+  }
+  try {
+    sessionStorage.setItem(AFTER_AUTH_KEY, stored)
+  } catch {
+    // sessionStorage can be unavailable in some WebViews
+  }
+}
+
+export function peekAfterAuth() {
+  try {
+    return afterAuthFromRaw(sessionStorage.getItem(AFTER_AUTH_KEY) || '')
+  } catch {
+    return null
+  }
+}
+
+export function clearAfterAuth() {
+  try {
+    sessionStorage.removeItem(AFTER_AUTH_KEY)
+  } catch {
+    // ignore
+  }
+}
+
+function afterAuthPath(location) {
+  const from = location?.state?.from
+  return afterAuthFromRaw(typeof from === 'string' ? from : '') || peekAfterAuth()
+}
+
+function afterAuthFromRaw(path) {
+  if (typeof path !== 'string' || !path.startsWith('/?')) {
+    return null
+  }
+  const params = new URLSearchParams(path.slice(2))
+  if ([...params.keys()].length !== 1) {
+    return null
+  }
+  if (params.get('create') === '1') {
+    return '/?create=1'
+  }
+  const share = shareCodeFromInput(params.get('share') || '')
+  if (share) {
+    return `/?share=${share}`
+  }
+  return null
+}
+
+function isAfterAuthPath(path) {
+  return Boolean(afterAuthFromRaw(path))
 }
 
 function libraryReturnPath(location) {

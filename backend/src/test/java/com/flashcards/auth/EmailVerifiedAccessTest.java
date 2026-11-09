@@ -15,6 +15,8 @@ class EmailVerifiedAccessTest {
         assertTrue(EmailVerifiedAccess.allowedWhileUnverified("POST", "/api/auth/resend-verification"));
         assertTrue(EmailVerifiedAccess.allowedWhileUnverified("POST", "/api/auth/forgot-password"));
         assertTrue(EmailVerifiedAccess.allowedWhileUnverified("POST", "/api/auth/reset-password"));
+        assertTrue(EmailVerifiedAccess.allowedWhileUnverified("POST", "/api/auth/refresh"));
+        assertTrue(EmailVerifiedAccess.allowedWhileUnverified("POST", "/api/auth/logout"));
         assertTrue(EmailVerifiedAccess.allowedWhileUnverified("GET", "/api/library"));
         assertTrue(EmailVerifiedAccess.allowedWhileUnverified("GET", "/api/library/decks/1"));
         assertTrue(EmailVerifiedAccess.allowedWhileUnverified("GET", "/api/billing/status"));

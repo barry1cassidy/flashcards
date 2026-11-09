@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Zipdeck Agent ↔ LLM Walkthrough</title>
+  <style>
+    :root {
+      --bg: #0b0e17;
+      --surface: #141a2b;
+      --surface-2: #1b2238;
+      --text: #edeff5;
+      --muted: #8b93a7;
+      --cobalt: #4c6fff;
+      --mint: #3fcf8e;
+      --gold: #f2b84b;
+      --coral: #ff6b57;
+      --line: rgba(237, 239, 245, 0.1);
+      --code-bg: #0a0d14;
+      --font: "Segoe UI", system-ui, sans-serif;
+      --mono: "Cascadia Code", "JetBrains Mono", Consolas, monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    .top {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      backdrop-filter: blur(10px);
+      background: color-mix(in srgb, var(--bg) 88%, transparent);
+      border-bottom: 1px solid var(--line);
+      padding: 12px 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 18px;
+      align-items: center;
+    }
+    .top strong { color: var(--cobalt); letter-spacing: -0.02em; }
+    .top a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+    .top a:hover { color: var(--text); }
+
+    main {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 28px 20px 80px;
+    }
+
+    h1 {
+      font-size: clamp(1.8rem, 4vw, 2.4rem);
+      letter-spacing: -0.03em;
+      margin: 8px 0 8px;
+    }
+    h2 {
+      margin: 48px 0 12px;
+      font-size: 1.45rem;
+      letter-spacing: -0.02em;
+      border-top: 1px solid var(--line);
+      padding-top: 28px;
+    }
+    h3 { margin: 24px 0 8px; font-size: 1.1rem; color: var(--gold); }
+    p, li { color: var(--text); }
+    .lede { color: var(--muted); font-size: 1.05rem; max-width: 40rem; }
+    .muted { color: var(--muted); }
+
+    .callout {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-left: 4px solid var(--cobalt);
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin: 16px 0;
+    }
+    .callout.mint { border-left-color: var(--mint); }
+    .callout.gold { border-left-color: var(--gold); }
+    .callout.coral { border-left-color: var(--coral); }
+
+    .flow {
+      display: grid;
+      gap: 10px;
+      margin: 20px 0;
+    }
+    .flow-row {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      gap: 12px;
+      align-items: stretch;
+    }
+    @media (max-width: 640px) {
+      .flow-row { grid-template-columns: 1fr; }
+    }
+    .flow-who {
+      background: var(--surface-2);
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+    }
+    .flow-who.ui { color: #9db0ff; }
+    .flow-who.api { color: var(--mint); }
+    .flow-who.llm { color: var(--gold); }
+    .flow-who.tool { color: #ffb4a9; }
+    .flow-box {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 12px 14px;
+    }
+    .flow-box code { font-size: 0.85rem; }
+
+    .arrow {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.85rem;
+      letter-spacing: 0.04em;
+      margin: 2px 0;
+    }
+
+    .loop {
+      border: 1px dashed color-mix(in srgb, var(--gold) 50%, var(--line));
+      border-radius: 14px;
+      padding: 14px;
+      margin: 16px 0;
+      background: color-mix(in srgb, var(--gold) 6%, transparent);
+    }
+    .loop-title {
+      font-weight: 700;
+      color: var(--gold);
+      margin-bottom: 10px;
+      font-size: 0.95rem;
+    }
+
+    .grid-2 {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: 1fr 1fr;
+    }
+    @media (max-width: 700px) {
+      .grid-2 { grid-template-columns: 1fr; }
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 16px;
+    }
+    .card h3 { margin-top: 0; }
+
+    .ref {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      background: var(--code-bg);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 2px 8px;
+      color: #c5d0ff;
+      margin: 2px 0;
+      word-break: break-all;
+    }
+
+    pre {
+      background: var(--code-bg);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 14px 16px;
+      overflow-x: auto;
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      line-height: 1.45;
+      margin: 10px 0 0;
+    }
+    pre .c { color: #6b7388; }
+    pre .k { color: #9db0ff; }
+    pre .s { color: #a8e6c0; }
+    pre .n { color: var(--gold); }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0;
+      font-size: 0.92rem;
+    }
+    th, td {
+      text-align: left;
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+    }
+    th { color: var(--muted); font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    td code { font-family: var(--mono); font-size: 0.82rem; color: #c5d0ff; }
+
+    .steps {
+      counter-reset: step;
+      list-style: none;
+      padding: 0;
+      margin: 12px 0;
+    }
+    .steps > li {
+      counter-increment: step;
+      position: relative;
+      padding: 12px 12px 12px 52px;
+      margin-bottom: 8px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+    }
+    .steps > li::before {
+      content: counter(step);
+      position: absolute;
+      left: 14px;
+      top: 12px;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--cobalt);
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .toc {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 16px 20px;
+      margin: 20px 0;
+    }
+    .toc ol { margin: 8px 0 0; padding-left: 1.2rem; }
+    .toc a { color: #9db0ff; text-decoration: none; }
+    .toc a:hover { text-decoration: underline; }
+
+    footer {
+      margin-top: 48px;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="top">
+    <strong>Zipdeck · Agent ↔ LLM</strong>
+    <a href="#big-idea">Big idea</a>
+    <a href="#map">File map</a>
+    <a href="#create">Create deck</a>
+    <a href="#edit">Edit with AI</a>
+    <a href="#loop">Tool loop</a>
+    <a href="#talking-points">Talking points</a>
+  </div>
+
+  <main>
+    <h1>How Zipdeck’s agent talks to an LLM</h1>
+    <p class="lede">
+      A walkthrough of <strong>Create With AI</strong> and <strong>Edit Cards with AI</strong>:
+      how the UI starts a job, how Spring AI sends prompts + tool definitions to Gemini
+      (OpenAI-compatible API), and how the model drives real side effects by calling tools.
+    </p>
+
+    <div class="toc">
+      <strong>Open these while you talk</strong>
+      <ol>
+        <li><span class="ref">backend/.../agent/AgentController.java</span> — HTTP entry</li>
+        <li><span class="ref">backend/.../agent/AgentService.java</span> — prompt + ChatClient + job runner</li>
+        <li><span class="ref">backend/.../agent/AgentTools.java</span> — create tools (createSet / createDeck / addCards)</li>
+        <li><span class="ref">backend/.../agent/AgentEditTools.java</span> — edit tool (proposeChanges)</li>
+        <li><span class="ref">frontend/src/pages/AgentPage.jsx</span> — Create With AI UI + poll</li>
+        <li><span class="ref">frontend/src/pages/EditCardsWithAi.jsx</span> — Edit with AI UI + poll</li>
+      </ol>
+    </div>
+
+    <h2 id="big-idea">1. Big idea</h2>
+    <div class="callout">
+      The model never writes SQL or touches React state directly.
+      We give it a <strong>system prompt</strong>, a <strong>user message</strong>, and a list of
+      <strong>tools</strong> (Java methods annotated with <code>@Tool</code>).
+      When the model wants something done, it returns a <strong>tool call</strong>.
+      Spring AI runs that Java method, sends the JSON result back to the model, and repeats until
+      the model returns a normal text reply (or we finish the job from tool side effects).
+    </div>
+
+    <div class="flow">
+      <div class="flow-row">
+        <div class="flow-who ui">Browser</div>
+        <div class="flow-box">User describes a deck or an edit. UI <code>POST</code>s and polls a job.</div>
+      </div>
+      <div class="arrow">↓</div>
+      <div class="flow-row">
+        <div class="flow-who api">API</div>
+        <div class="flow-box"><code>AgentService</code> builds ChatClient prompt + registers tool object.</div>
+      </div>
+      <div class="arrow">↓</div>
+      <div class="flow-row">
+        <div class="flow-who llm">LLM</div>
+        <div class="flow-box">Gemini (via OpenAI-compatible base URL). Returns text and/or <code>tool_calls</code>.</div>
+      </div>
+      <div class="arrow">↓</div>
+      <div class="flow-row">
+        <div class="flow-who tool">Tools</div>
+        <div class="flow-box">Java methods create decks/cards or collect edit proposals. Results feed back into the model.</div>
+      </div>
+    </div>
+
+    <h2 id="map">2. File map</h2>
+    <table>
+      <thead>
+        <tr><th>Role</th><th>Where</th><th>What to say</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>HTTP API</td>
+          <td><code>AgentController.java</code></td>
+          <td><code>POST /api/agent/decks</code>, <code>POST .../edits</code>, <code>GET .../jobs/{id}</code></td>
+        </tr>
+        <tr>
+          <td>Orchestrator</td>
+          <td><code>AgentService.java</code></td>
+          <td>Credits, job queue, system/user prompts, <code>chatClient.prompt()…tools(…)</code></td>
+        </tr>
+        <tr>
+          <td>Create tools</td>
+          <td><code>AgentTools.java</code></td>
+          <td><code>listSets</code>, <code>createSet</code>, <code>createDeck</code>, <code>addCards</code></td>
+        </tr>
+        <tr>
+          <td>Edit tools</td>
+          <td><code>AgentEditTools.java</code></td>
+          <td>Single tool <code>proposeChanges</code> — preview only; user confirms later</td>
+        </tr>
+        <tr>
+          <td>Model config</td>
+          <td><code>AgentProperties.java</code></td>
+          <td>Gemini OpenAI endpoint, model name, max cards, timeouts</td>
+        </tr>
+        <tr>
+          <td>Create UI</td>
+          <td><code>AgentPage.jsx</code></td>
+          <td>Starts job, polls steps (“calling model”, “addCards”, …)</td>
+        </tr>
+        <tr>
+          <td>Edit UI</td>
+          <td><code>EditCardsWithAi.jsx</code></td>
+          <td>Starts edit job, shows before/after preview, then applies</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2 id="create">3. Create With AI — end to end</h2>
+
+    <ol class="steps">
+      <li>
+        <strong>UI starts a job</strong><br />
+        <span class="ref">frontend/src/pages/AgentPage.jsx</span> (~183–236)<br />
+        <code>POST /api/agent/decks</code> with prompt (and optional file / languages / set).
+        Then <code>pollJob</code> hits <code>GET /api/agent/jobs/{jobId}</code> until done.
+      </li>
+      <li>
+        <strong>Controller is thin</strong><br />
+        <span class="ref">AgentController.java:38–55</span><br />
+        JSON or multipart create both call <code>agentService.startCreateDeck(...)</code>.
+      </li>
+      <li>
+        <strong>Service queues work on a virtual thread</strong><br />
+        <span class="ref">AgentService.java:126–180</span><br />
+        Checks Pro / credits / config, creates an <code>AgentJob</code>, returns immediately,
+        runs <code>runJob</code> in the background so the HTTP request does not wait on Gemini.
+      </li>
+      <li>
+        <strong>The actual LLM call</strong><br />
+        <span class="ref">AgentService.java:323–331</span>
+        <pre><span class="c">// Create path — system + user + tools, then call</span>
+<span class="k">String</span> reply = chatClient.prompt()
+        .system(systemPrompt(...))
+        .user(userMessage(...))
+        .tools(tools)          <span class="c">// AgentTools instance</span>
+        .call()
+        .content();</pre>
+      </li>
+      <li>
+        <strong>Model is told it must use tools</strong><br />
+        <span class="ref">AgentService.java:461–475</span>
+        <pre>You create flashcard decks...
+You must use tools. Do not only describe a deck in text.
+Create exactly one deck per request, then add cards...
+You must call addCards with at least 12 cards...</pre>
+      </li>
+      <li>
+        <strong>Finish only if tools actually created data</strong><br />
+        <span class="ref">AgentService.java:379–401</span><br />
+        Requires a <code>deckId</code> and <code>cardsAdded &gt; 0</code>, then consumes one AI credit.
+        Empty / failed generations discard orphan decks.
+      </li>
+    </ol>
+
+    <h3>Create tools the model can call</h3>
+    <p class="muted">Declared with Spring AI <code>@Tool</code> / <code>@ToolParam</code>. Descriptions become the schema the model sees.</p>
+    <table>
+      <thead>
+        <tr><th>Tool</th><th>Lines</th><th>Side effect</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>listSets</code></td>
+          <td><span class="ref">AgentTools.java:127–140</span></td>
+          <td>Read-only list of the user’s sets</td>
+        </tr>
+        <tr>
+          <td><code>createSet</code></td>
+          <td><span class="ref">AgentTools.java:142–173</span></td>
+          <td>Optional folder for the new deck</td>
+        </tr>
+        <tr>
+          <td><code>createDeck</code></td>
+          <td><span class="ref">AgentTools.java:175–229</span></td>
+          <td>Creates the deck row (once per request)</td>
+        </tr>
+        <tr>
+          <td><code>addCards</code></td>
+          <td><span class="ref">AgentTools.java:231–283</span></td>
+          <td>Bulk-inserts card fronts/backs/hints; enforces max card limit</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <pre><span class="c">// AgentTools.java — what the model “sees” as a function</span>
+<span class="n">@Tool</span>(description = """
+        Create exactly one flashcard deck for this request.
+        Put it in preferredSetId or a set you just created when that makes sense.
+        """)
+<span class="k">public</span> <span class="k">String</span> createDeck(
+        <span class="n">@ToolParam</span>(description = <span class="s">"Deck name"</span>) <span class="k">String</span> name,
+        ...
+) { ... <span class="k">return</span> <span class="s">"{\"deckId\":\"...\",\"name\":\"...\"}"</span>; }</pre>
+
+    <div class="callout mint">
+      Typical create sequence the model chooses:
+      <code>createDeck</code> → <code>addCards</code>
+      (sometimes <code>listSets</code> / <code>createSet</code> first).
+      Each tool return value is JSON the model reads before the next call.
+    </div>
+
+    <h2 id="edit">4. Edit Cards with AI — same pattern, different tools</h2>
+    <div class="grid-2">
+      <div class="card">
+        <h3>Create</h3>
+        <p>Tools <strong>write</strong> to the database while the model runs.</p>
+        <p class="muted">Deck + cards exist before the job “completes.”</p>
+      </div>
+      <div class="card">
+        <h3>Edit</h3>
+        <p>Tool only <strong>proposes</strong> changes. User reviews a preview, then the app applies them.</p>
+        <p class="muted">Safer for mutating an existing deck.</p>
+      </div>
+    </div>
+
+    <ol class="steps">
+      <li>
+        <strong>UI</strong> — <span class="ref">EditCardsWithAi.jsx</span> (~194–218)<br />
+        <code>POST /api/agent/decks/{deckId}/edits?jobId=…</code> with the instruction; poll the same job endpoint.
+      </li>
+      <li>
+        <strong>Snapshot cards into the user message</strong><br />
+        <span class="ref">AgentService.java:211–216, 627+</span><br />
+        Instruction + JSON array of <code>{id, front, back, hint}</code> so the model has exact ids.
+      </li>
+      <li>
+        <strong>Edit system prompt forces one tool</strong><br />
+        <span class="ref">AgentService.java:51–63</span>
+        <pre>You edit cards in an existing flashcard deck. You must call the proposeChanges tool.
+Do not only describe the edits in text.
+Change only what the instruction asks. Omit every card that should stay the same.
+Use each card id exactly. Do not invent ids, add cards, or delete cards.</pre>
+      </li>
+      <li>
+        <strong>LLM call</strong><br />
+        <span class="ref">AgentService.java:565–570</span>
+        <pre>chatClient.prompt()
+        .system(EDIT_SYSTEM)
+        .user(editUserMessage(...))
+        .tools(tools)     <span class="c">// AgentEditTools</span>
+        .call()
+        .content();</pre>
+      </li>
+      <li>
+        <strong>proposeChanges</strong><br />
+        <span class="ref">AgentEditTools.java:48–119</span><br />
+        Validates ids, drops unchanged text, stores <code>AgentCardChange</code> proposals,
+        returns a small JSON summary (<code>accepted</code>, <code>unknown</code>, …).
+        <code>returnDirect = true</code> stops the model from needing another round after a good proposal.
+      </li>
+      <li>
+        <strong>finishEdit</strong> — <span class="ref">AgentService.java:596–611</span><br />
+        If there are changes, charge a credit and return an <code>AgentEditPreview</code> for the UI.
+        Applying the diffs to the DB is a separate user action after review.
+      </li>
+    </ol>
+
+    <h2 id="loop">5. The tool-calling loop (what happens on the wire)</h2>
+    <p>
+      Spring AI’s <code>ChatClient</code> + <code>OpenAiChatModel</code> speak the OpenAI tools protocol
+      to Gemini’s OpenAI-compatible endpoint
+      (<span class="ref">AgentProperties.java:21–24</span>,
+      <span class="ref">AgentService.java:428–440</span>).
+    </p>
+
+    <div class="loop">
+      <div class="loop-title">One agent turn (simplified)</div>
+      <div class="flow">
+        <div class="flow-row">
+          <div class="flow-who api">API → LLM</div>
+          <div class="flow-box">
+            Messages: system + user (+ prior tool results).<br />
+            Also: tool schemas derived from <code>@Tool</code> methods
+            (<code>name</code>, <code>description</code>, JSON parameter schema).
+          </div>
+        </div>
+        <div class="arrow">↓ model decides</div>
+        <div class="flow-row">
+          <div class="flow-who llm">LLM → API</div>
+          <div class="flow-box">
+            Either a final assistant <strong>text</strong> message,<br />
+            or one or more <strong>tool_calls</strong> like
+            <code>{ name: "addCards", arguments: { deckId, cards: [...] } }</code>
+          </div>
+        </div>
+        <div class="arrow">↓ if tool_calls</div>
+        <div class="flow-row">
+          <div class="flow-who tool">API runs Java</div>
+          <div class="flow-box">
+            Invokes the matching method on <code>AgentTools</code> / <code>AgentEditTools</code>.
+            Progress step recorded on the job (UI can show “Adding cards…”).
+          </div>
+        </div>
+        <div class="arrow">↓ tool result message appended</div>
+        <div class="flow-row">
+          <div class="flow-who api">API → LLM</div>
+          <div class="flow-box">Send tool output JSON back. Model may call another tool or finish.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout gold">
+      We set <code>parallelToolCalls(false)</code>
+      (<span class="ref">AgentService.java:438</span>)
+      so the model creates the deck before dumping cards in parallel.
+      Tool call caps: create ≤ 12 (<span class="ref">AgentTools.java:27</span>),
+      edit ≤ 6 (<span class="ref">AgentEditTools.java:14</span>).
+    </div>
+
+    <h3>Progress the user sees</h3>
+    <p>
+      Each tool call does <code>progress.step(code, detail)</code>
+      (<span class="ref">AgentTools.java:285–291</span>).
+      The UI polls the job and maps those codes to friendly copy
+      (“Calling the model…”, “Creating deck…”, “Adding cards…”).
+    </p>
+
+    <h2 id="talking-points">6. Suggested talking order (≈10 minutes)</h2>
+    <ol class="steps">
+      <li>
+        Open <strong>Create With AI</strong> in the app. Explain: the browser only starts a job and polls;
+        the model never talks to the browser.
+      </li>
+      <li>
+        Jump to <code>AgentController</code> → <code>startCreateDeck</code> → show the async handoff.
+      </li>
+      <li>
+        Show <code>chatClient.prompt().system().user().tools(tools).call()</code> —
+        this is the whole interface.
+      </li>
+      <li>
+        Open <code>AgentTools</code> and walk one <code>@Tool</code> method: description → args → JSON return.
+      </li>
+      <li>
+        Sketch the loop on a whiteboard: model asks for <code>createDeck</code>, gets <code>deckId</code>,
+        then calls <code>addCards</code>.
+      </li>
+      <li>
+        Contrast with <code>AgentEditTools.proposeChanges</code>: same loop, but no immediate DB write —
+        preview + human confirm.
+      </li>
+      <li>
+        Optional: mention provider wiring — Gemini over OpenAI-compatible URL, not a custom Gemini SDK
+        (<code>AgentProperties</code> / <code>openAiChatModel()</code>).
+      </li>
+    </ol>
+
+    <div class="callout coral">
+      <strong>What this is not:</strong> a live chatbot or streaming token UI.
+      It is a <em>job-shaped agent</em>: one user goal, tools with side effects (or a preview),
+      then a finished job record. Language Studio generation is a separate feature path;
+      this walkthrough is specifically Create / Edit deck with the agent.
+    </div>
+
+    <h2 id="snippets">7. Cheat-sheet snippets</h2>
+
+    <h3>HTTP surface</h3>
+    <pre><span class="c">// AgentController.java</span>
+POST /api/agent/decks                 → startCreateDeck
+POST /api/agent/decks/{id}/edits      → startEditDeck
+GET  /api/agent/jobs/{jobId}          → poll status / result</pre>
+
+    <h3>Registering tools with the model</h3>
+    <pre><span class="c">// Create — AgentService.runJob ~326-331</span>
+chatClient.prompt()
+    .system(systemPrompt(...))
+    .user(userMessage(...))
+    .tools(tools)   <span class="c">// AgentTools</span>
+    .call().content();
+
+<span class="c">// Edit — AgentService.runEditJob ~565-570</span>
+chatClient.prompt()
+    .system(EDIT_SYSTEM)
+    .user(editUserMessage(...))
+    .tools(tools)   <span class="c">// AgentEditTools</span>
+    .call().content();</pre>
+
+    <h3>Provider config</h3>
+    <pre><span class="c">// AgentProperties defaults</span>
+baseUrl = https://generativelanguage.googleapis.com/v1beta/openai
+model   = gemini-3.8-flash   <span class="c">// override via env / agent.yml</span>
+
+<span class="c">// AgentService.openAiChatModel ~428-440</span>
+OpenAiChatOptions: temperature 0.3, maxTokens 8192,
+                   parallelToolCalls(false), timeout from properties</pre>
+
+    <footer>
+      Zipdeck internal walkthrough · open this file in any browser · paths are relative to the
+      <code>flashcards</code> repo root under <code>backend/src/main/java/com/flashcards/agent/</code>
+      and <code>frontend/src/pages/</code>.
+    </footer>
+  </main>
+</body>
+</html>

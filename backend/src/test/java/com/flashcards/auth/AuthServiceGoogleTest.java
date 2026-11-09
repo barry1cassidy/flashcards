@@ -39,6 +39,8 @@ class AuthServiceGoogleTest {
     private AppleTokenService appleTokenService;
     @Mock
     private EmailVerificationService emailVerificationService;
+    @Mock
+    private RefreshTokenService refreshTokenService;
 
     private AuthService authService;
 
@@ -51,6 +53,7 @@ class AuthServiceGoogleTest {
                 googleTokenService,
                 appleTokenService,
                 emailVerificationService,
+                refreshTokenService,
                 ProductAnalytics.disabled());
     }
 

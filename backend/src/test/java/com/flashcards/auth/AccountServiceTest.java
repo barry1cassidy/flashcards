@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -15,6 +16,7 @@ import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
@@ -40,12 +42,15 @@ class AccountServiceTest {
     private AccountCodeService accountCodeService;
     @Mock
     private BillingService billingService;
+    @Mock
+    private RefreshTokenService refreshTokenService;
 
     private AccountService accountService;
 
     @BeforeEach
     void setUp() {
-        accountService = new AccountService(userRepository, passwordEncoder, accountCodeService, billingService);
+        accountService = new AccountService(
+                userRepository, passwordEncoder, accountCodeService, billingService, refreshTokenService);
     }
 
     @Test
@@ -60,6 +65,7 @@ class AccountServiceTest {
                 USER_ID, new DeleteAccountRequest("secret-pass", null)));
 
         assertEquals(HttpStatus.CONFLICT, ex.getStatus());
+        verify(billingService, never()).deleteSubscriptions(any());
         verify(userRepository, never()).delete(any());
     }
 
@@ -72,7 +78,9 @@ class AccountServiceTest {
 
         accountService.deleteAccount(USER_ID, new DeleteAccountRequest("secret-pass", null));
 
-        verify(userRepository).delete(user);
+        InOrder order = inOrder(billingService, userRepository);
+        order.verify(billingService).deleteSubscriptions(USER_ID);
+        order.verify(userRepository).delete(user);
     }
 
     @Test

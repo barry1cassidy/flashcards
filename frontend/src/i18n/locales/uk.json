@@ -252,6 +252,8 @@
     "importing": "Імпорт…",
     "exportCsv": "Експорт CSV",
     "empty": "Колод ще немає. Створіть одну, щоб почати.",
+    "welcomeBrand": "Картки для всього.",
+    "welcomeBrandLine": "Читайте їх або слухайте.",
     "welcomePrompt": "Що ви хочете вчити?",
     "welcomeSearch": "Шукати в бібліотеці",
     "welcomeSample": "Почати з колоди з бібліотеки",

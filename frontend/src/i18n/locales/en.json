@@ -468,6 +468,8 @@
     "importing": "Importing…",
     "exportCsv": "Export CSV",
     "empty": "No decks yet. Create one to get started.",
+    "welcomeBrand": "Flashcards for anything.",
+    "welcomeBrandLine": "Read them, or hear them.",
     "welcomePrompt": "What do you want to study?",
     "welcomeSearch": "Search sample sets",
     "welcomeSample": "Start from a sample set",

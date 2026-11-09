@@ -250,6 +250,8 @@
     "importing": "Importation…",
     "exportCsv": "Exporter un CSV",
     "empty": "Pas encore de paquets. Créez-en un pour commencer.",
+    "welcomeBrand": "Des cartes pour tout.",
+    "welcomeBrandLine": "Lisez-les, ou écoutez-les.",
     "welcomePrompt": "Que voulez-vous étudier ?",
     "welcomeSearch": "Rechercher dans la bibliothèque",
     "welcomeSample": "Commencer avec un paquet partagé",

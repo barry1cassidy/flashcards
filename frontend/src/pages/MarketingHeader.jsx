@@ -9,7 +9,7 @@ import GoogleSignInButton, { getGoogleClientId } from './GoogleSignInButton'
 import AppleSignInButton from './AppleSignInButton'
 import { appleSignInAvailable } from '../appleSignIn'
 import Brand from './Brand'
-import { goAfterAuth, inviteAuthState, clearJoinInvite } from '../authRedirect'
+import { goAfterAuth, inviteAuthState, clearJoinInvite, rememberAuthDestination } from '../authRedirect'
 import { SUPPORT_MAILTO } from '../support'
 import { listOfflinePacks } from '../offlinePacks'
 import { webMarketing } from '../webOnly'
@@ -194,7 +194,7 @@ export default function MarketingHeader({ showLoginForm = false, loginOpen, onLo
   )
 }
 
-function LoginFields() {
+export function LoginFields() {
   const { t } = useTranslation()
   const { login, loginWithGoogle, loginWithApple } = useAuth()
   const navigate = useNavigate()
@@ -212,6 +212,7 @@ function LoginFields() {
     try {
       const signedIn = await work()
       if (signedIn && !isEmailVerified(signedIn)) {
+        rememberAuthDestination(location.state?.from)
         navigate('/verify', { replace: true })
         return
       }

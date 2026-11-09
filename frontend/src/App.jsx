@@ -11,6 +11,7 @@ import DeckDetailPage from './pages/DeckDetailPage'
 import DecksPage from './pages/DecksPage'
 import GroupDetailPage from './pages/GroupDetailPage'
 import LoginPage from './pages/LoginPage'
+import NativeHome from './pages/NativeHome'
 import RegisterPage from './pages/RegisterPage'
 import ForgotPasswordPage from './pages/ForgotPasswordPage'
 import StudyPage from './pages/StudyPage'
@@ -49,6 +50,7 @@ import LanguageStudioSamples from './pages/LanguageStudioSamples'
 import SavingIndicator from './pages/SavingIndicator'
 import { getToken } from './api'
 import { clearLibraryReturn, pathAfterAuth, peekJoinInvite, shouldResumeJoinInvite } from './authRedirect'
+import NativeGuestBar from './pages/NativeGuestBar'
 import { webMarketing } from './webOnly'
 import { BackNavigation } from './backNavigation'
 import { IncomingLinks } from './incomingLinks'
@@ -276,6 +278,9 @@ function ProtectedLayout() {
   }
   if (!user) {
     if (location.pathname === '/') {
+      if (!webMarketing) {
+        return <NativeHome />
+      }
       return <LoginPage />
     }
     if (location.pathname.startsWith('/help')) {
@@ -330,6 +335,18 @@ function LibraryGate() {
   if (user) {
     return <AppLayout />
   }
+  if (!webMarketing) {
+    return (
+      <div className="app-frame">
+        <div className="app-pane">
+          <NativeGuestBar />
+          <main className="page-content">
+            <Outlet />
+          </main>
+        </div>
+      </div>
+    )
+  }
   if (offline && getToken()) {
     return (
       <div className="marketing">
@@ -338,9 +355,6 @@ function LibraryGate() {
         </div>
       </div>
     )
-  }
-  if (!webMarketing) {
-    return <Navigate to="/login" replace />
   }
   return (
     <div className="marketing">

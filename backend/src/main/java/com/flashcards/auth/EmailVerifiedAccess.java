@@ -28,6 +28,12 @@ public final class EmailVerifiedAccess {
         if (path.equals("/api/auth/reset-password") && "POST".equals(verb)) {
             return true;
         }
+        if (path.equals("/api/auth/refresh") && "POST".equals(verb)) {
+            return true;
+        }
+        if (path.equals("/api/auth/logout") && "POST".equals(verb)) {
+            return true;
+        }
         if (path.equals("/api/billing/status") && "GET".equals(verb)) {
             return true;
         }

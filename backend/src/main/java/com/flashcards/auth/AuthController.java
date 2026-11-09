@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,23 +34,44 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public AuthResponse register(@Valid @RequestBody RegisterRequest request) {
-        return authService.register(request);
+    public AuthResponse register(
+            @Valid @RequestBody RegisterRequest request,
+            @RequestHeader(value = NativeClient.HEADER, required = false) String client) {
+        return authService.register(request, NativeClient.isNative(client));
     }
 
     @PostMapping("/login")
-    public AuthResponse login(@Valid @RequestBody LoginRequest request) {
-        return authService.login(request);
+    public AuthResponse login(
+            @Valid @RequestBody LoginRequest request,
+            @RequestHeader(value = NativeClient.HEADER, required = false) String client) {
+        return authService.login(request, NativeClient.isNative(client));
     }
 
     @PostMapping("/google")
-    public AuthResponse loginWithGoogle(@Valid @RequestBody GoogleLoginRequest request) {
-        return authService.loginWithGoogle(request);
+    public AuthResponse loginWithGoogle(
+            @Valid @RequestBody GoogleLoginRequest request,
+            @RequestHeader(value = NativeClient.HEADER, required = false) String client) {
+        return authService.loginWithGoogle(request, NativeClient.isNative(client));
     }
 
     @PostMapping("/apple")
-    public AuthResponse loginWithApple(@Valid @RequestBody AppleLoginRequest request) {
-        return authService.loginWithApple(request);
+    public AuthResponse loginWithApple(
+            @Valid @RequestBody AppleLoginRequest request,
+            @RequestHeader(value = NativeClient.HEADER, required = false) String client) {
+        return authService.loginWithApple(request, NativeClient.isNative(client));
+    }
+
+    @PostMapping("/refresh")
+    public AuthResponse refresh(@Valid @RequestBody RefreshRequest request) {
+        return authService.refresh(request.refreshToken());
+    }
+
+    @PostMapping("/logout")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void logout(@RequestBody(required = false) LogoutRequest request) {
+        if (request != null) {
+            authService.revokeRefresh(request.refreshToken());
+        }
     }
 
     @GetMapping("/me")

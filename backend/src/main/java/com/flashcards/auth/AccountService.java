@@ -20,16 +20,19 @@ public class AccountService {
     private final PasswordEncoder passwordEncoder;
     private final AccountCodeService accountCodeService;
     private final BillingService billingService;
+    private final RefreshTokenService refreshTokenService;
 
     public AccountService(
             UserRepository userRepository,
             PasswordEncoder passwordEncoder,
             AccountCodeService accountCodeService,
-            BillingService billingService) {
+            BillingService billingService,
+            RefreshTokenService refreshTokenService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.accountCodeService = accountCodeService;
         this.billingService = billingService;
+        this.refreshTokenService = refreshTokenService;
     }
 
     @Transactional
@@ -41,6 +44,7 @@ public class AccountService {
         }
         user.setPasswordHash(passwordEncoder.encode(request.newPassword()));
         userRepository.save(user);
+        refreshTokenService.revokeAll(user);
     }
 
     @Transactional
@@ -93,6 +97,7 @@ public class AccountService {
         accountCodeService.consume(user, AccountCodePurpose.PASSWORD_RESET, request.code());
         user.setPasswordHash(passwordEncoder.encode(request.password()));
         userRepository.save(user);
+        refreshTokenService.revokeAll(user);
     }
 
     @Transactional
@@ -122,6 +127,7 @@ public class AccountService {
         if (!status.allowed()) {
             throw new ApiException(HttpStatus.CONFLICT, "Cancel your subscription before deleting this account");
         }
+        billingService.deleteSubscriptions(userId);
         userRepository.delete(user);
     }
 

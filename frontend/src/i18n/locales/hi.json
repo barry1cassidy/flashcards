@@ -250,6 +250,8 @@
     "importing": "आयात हो रहा है…",
     "exportCsv": "CSV निर्यात करें",
     "empty": "अभी कोई डेक नहीं। शुरू करने के लिए एक बनाएँ।",
+    "welcomeBrand": "कुछ भी, फ़्लैशकार्ड।",
+    "welcomeBrandLine": "पढ़ें, या सुनें।",
     "welcomePrompt": "आप क्या पढ़ना चाहते हैं?",
     "welcomeSearch": "लाइब्रेरी खोजें",
     "welcomeSample": "लाइब्रेरी के डेक से शुरू करें",

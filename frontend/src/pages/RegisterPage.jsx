@@ -4,13 +4,15 @@ import { useTranslation } from 'react-i18next'
 import { useAuth } from '../AuthContext'
 import { currentLocale } from '../i18n'
 import { translateError } from '../i18n/errors'
-import { goAfterAuth, inviteAuthState, rememberLibraryReturn } from '../authRedirect'
+import { goAfterAuth, inviteAuthState, rememberAuthDestination } from '../authRedirect'
+import NativeGuestBar from './NativeGuestBar'
 import { isEmailVerified } from '../email'
 import MarketingHeader, { MarketingFooter } from './MarketingHeader'
 import GoogleSignInButton, { getGoogleClientId } from './GoogleSignInButton'
 import AppleSignInButton from './AppleSignInButton'
 import { appleSignInAvailable } from '../appleSignIn'
 import PasswordInput from './PasswordInput'
+import { webMarketing } from '../webOnly'
 
 export default function RegisterPage() {
   const { t } = useTranslation()
@@ -31,9 +33,7 @@ export default function RegisterPage() {
     try {
       const created = await work()
       if (created && !isEmailVerified(created)) {
-        if (typeof location.state?.from === 'string') {
-          rememberLibraryReturn(location.state.from)
-        }
+        rememberAuthDestination(location.state?.from)
         navigate('/verify', { replace: true })
         return
       }
@@ -50,12 +50,10 @@ export default function RegisterPage() {
     await finishAuth(() => register(displayName, email, password, currentLocale()))
   }
 
-  return (
-    <div className="marketing">
-      <MarketingHeader />
+  const card = (
       <section className="register-panel">
         <div className="auth-card">
-          <p className="kicker">{t('marketing.kicker')}</p>
+          {webMarketing ? <p className="kicker">{t('marketing.kicker')}</p> : null}
           <h1>{t('auth.createYourAccount')}</h1>
           <p className="muted">{t('auth.registerSubtitle')}</p>
           {error ? <div className="error">{translateError(t, error)}</div> : null}
@@ -122,11 +120,29 @@ export default function RegisterPage() {
               {busy ? t('auth.creating') : t('auth.createAccountButton')}
             </button>
           </form>
-          <p className="muted">
-            {t('auth.alreadyHaveAccount')} <Link to="/login" state={inviteAuthState(location)}>{t('auth.signIn')}</Link>
+          <p className="auth-switch">
+            <span>{t('auth.alreadyHaveAccount')}</span>
+            <Link to="/login" state={inviteAuthState(location)}>{t('auth.signIn')}</Link>
           </p>
         </div>
       </section>
+  )
+
+  if (!webMarketing) {
+    return (
+      <div className="app-frame">
+        <div className="app-pane">
+          <NativeGuestBar />
+          <main className="page-content">{card}</main>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="marketing">
+      <MarketingHeader />
+      {card}
       <MarketingFooter />
     </div>
   )

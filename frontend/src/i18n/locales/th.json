@@ -250,6 +250,8 @@
     "importing": "กำลังนำเข้า…",
     "exportCsv": "ส่งออก CSV",
     "empty": "ยังไม่มีสำรับ สร้างอันหนึ่งเพื่อเริ่ม",
+    "welcomeBrand": "แฟลชการ์ดสำหรับทุกอย่าง",
+    "welcomeBrandLine": "อ่าน หรือฟัง",
     "welcomePrompt": "อยากเรียนอะไร?",
     "welcomeSearch": "ค้นในคลัง",
     "welcomeSample": "เริ่มจากสำรับในคลัง",

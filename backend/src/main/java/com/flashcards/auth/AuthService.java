@@ -34,6 +34,7 @@ public class AuthService {
     private final GoogleTokenService googleTokenService;
     private final AppleTokenService appleTokenService;
     private final EmailVerificationService emailVerificationService;
+    private final RefreshTokenService refreshTokenService;
     private final ProductAnalytics analytics;
 
     public AuthService(
@@ -43,6 +44,7 @@ public class AuthService {
             GoogleTokenService googleTokenService,
             AppleTokenService appleTokenService,
             EmailVerificationService emailVerificationService,
+            RefreshTokenService refreshTokenService,
             ProductAnalytics analytics) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
@@ -50,11 +52,17 @@ public class AuthService {
         this.googleTokenService = googleTokenService;
         this.appleTokenService = appleTokenService;
         this.emailVerificationService = emailVerificationService;
+        this.refreshTokenService = refreshTokenService;
         this.analytics = analytics;
     }
 
     @Transactional
     public AuthResponse register(RegisterRequest request) {
+        return register(request, false);
+    }
+
+    @Transactional
+    public AuthResponse register(RegisterRequest request, boolean nativeClient) {
         String email = request.email().trim().toLowerCase();
         if (userRepository.existsByEmail(email)) {
             throw new ApiException(HttpStatus.CONFLICT, "An account with that email already exists");
@@ -73,11 +81,16 @@ public class AuthService {
         userRepository.save(user);
         emailVerificationService.issueAndSend(user);
         analytics.accountCreated(user.getId(), "email");
-        return toAuthResponse(user, true);
+        return toAuthResponse(user, true, nativeClient);
     }
 
     @Transactional(readOnly = true)
     public AuthResponse login(LoginRequest request) {
+        return login(request, false);
+    }
+
+    @Transactional
+    public AuthResponse login(LoginRequest request, boolean nativeClient) {
         String email = request.email().trim().toLowerCase();
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new ApiException(HttpStatus.UNAUTHORIZED, "Invalid email or password"));
@@ -90,11 +103,16 @@ public class AuthService {
         if (!passwordEncoder.matches(request.password(), hash)) {
             throw new ApiException(HttpStatus.UNAUTHORIZED, "Invalid email or password");
         }
-        return toAuthResponse(user, false);
+        return toAuthResponse(user, false, nativeClient);
     }
 
     @Transactional
     public AuthResponse loginWithGoogle(GoogleLoginRequest request) {
+        return loginWithGoogle(request, false);
+    }
+
+    @Transactional
+    public AuthResponse loginWithGoogle(GoogleLoginRequest request, boolean nativeClient) {
         GoogleTokenService.GoogleProfile profile = googleTokenService.verify(request.idToken());
         String email = profile.email().trim().toLowerCase();
         User user = userRepository.findByGoogleSub(profile.subject())
@@ -123,11 +141,16 @@ public class AuthService {
         if (created) {
             analytics.accountCreated(user.getId(), "google");
         }
-        return toAuthResponse(user, created);
+        return toAuthResponse(user, created, nativeClient);
     }
 
     @Transactional
     public AuthResponse loginWithApple(AppleLoginRequest request) {
+        return loginWithApple(request, false);
+    }
+
+    @Transactional
+    public AuthResponse loginWithApple(AppleLoginRequest request, boolean nativeClient) {
         AppleTokenService.AppleProfile profile = appleTokenService.verify(request.identityToken(), request.nonce());
         User user = userRepository.findByAppleSub(profile.subject()).orElse(null);
         String email = profile.email() == null ? null : profile.email().trim().toLowerCase();
@@ -165,7 +188,18 @@ public class AuthService {
         if (created) {
             analytics.accountCreated(user.getId(), "apple");
         }
-        return toAuthResponse(user, created);
+        return toAuthResponse(user, created, nativeClient);
+    }
+
+    @Transactional
+    public AuthResponse refresh(String refreshToken) {
+        User user = refreshTokenService.rotate(refreshToken);
+        return toAuthResponse(user, false, true);
+    }
+
+    @Transactional
+    public void revokeRefresh(String refreshToken) {
+        refreshTokenService.revoke(refreshToken);
     }
 
     @Transactional
@@ -256,9 +290,10 @@ public class AuthService {
         return toUserResponse(user);
     }
 
-    private AuthResponse toAuthResponse(User user, boolean newAccount) {
+    private AuthResponse toAuthResponse(User user, boolean newAccount, boolean nativeClient) {
         UserPrincipal principal = new UserPrincipal(user.getId(), user.getEmail(), user.getDisplayName());
-        return new AuthResponse(jwtService.createToken(principal), toUserResponse(user), newAccount);
+        String refreshToken = nativeClient ? refreshTokenService.issue(user) : null;
+        return new AuthResponse(jwtService.createToken(principal), toUserResponse(user), newAccount, refreshToken);
     }
 
     public static UserResponse toUserResponse(User user) {
