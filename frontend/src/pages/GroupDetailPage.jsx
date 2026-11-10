@@ -99,25 +99,29 @@ export default function GroupDetailPage() {
           <p className="muted">{t('groups.decks', { count: group.deckCount })}</p>
         </div>
           <div className="header-actions">
-            <button
-              className="btn ghost icon-btn"
-              type="button"
-              onClick={() => setShareOpen(true)}
-              aria-label={t('share.share')}
-            >
-              <MenuIcon name="share" />
-            </button>
-            <button
-              className="btn"
-              type="button"
-              onClick={() =>
-                navigate(`/listen?source=set&id=${id}`, {
-                  state: mixReturn ? { listenReturn: setPath } : undefined,
-                })
-              }
-            >
-              {t('listen.menu')}
-            </button>
+            {decks.length > 0 ? (
+              <>
+                <button
+                  className="btn ghost icon-btn"
+                  type="button"
+                  onClick={() => setShareOpen(true)}
+                  aria-label={t('share.share')}
+                >
+                  <MenuIcon name="share" />
+                </button>
+                <button
+                  className="btn"
+                  type="button"
+                  onClick={() =>
+                    navigate(`/listen?source=set&id=${id}`, {
+                      state: mixReturn ? { listenReturn: setPath } : undefined,
+                    })
+                  }
+                >
+                  {t('listen.menu')}
+                </button>
+              </>
+            ) : null}
             <button className="btn danger" type="button" onClick={() => setConfirmDelete(true)}>
               {t('groups.deleteGroup')}
             </button>

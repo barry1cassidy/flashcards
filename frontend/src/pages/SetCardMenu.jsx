@@ -66,16 +66,18 @@ export default function SetCardMenu({ group, pro, onListen, onOpen, onShare, onD
   sections.push([
     { key: 'edit', icon: 'edit', label: t('groups.editGroup'), action: () => onOpen(group) },
   ])
-  sections.push([
-    { key: 'share', icon: 'share', label: t('share.share'), action: () => onShare(group) },
-    {
-      key: 'delete',
-      icon: 'trash',
-      label: t('groups.deleteGroup'),
-      danger: true,
-      action: () => onDelete(group),
-    },
-  ])
+  const manage = []
+  if (hasDecks) {
+    manage.push({ key: 'share', icon: 'share', label: t('share.share'), action: () => onShare(group) })
+  }
+  manage.push({
+    key: 'delete',
+    icon: 'trash',
+    label: t('groups.deleteGroup'),
+    danger: true,
+    action: () => onDelete(group),
+  })
+  sections.push(manage)
 
   return (
     <div className={`deck-overflow${open ? ' is-open' : ''}`} ref={rootRef}>

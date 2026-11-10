@@ -53,10 +53,19 @@ export default function DeckWelcome({ onCreate, shareOpen, onShowShare, shareFor
   return (
     <section className="deck-welcome" aria-labelledby="deck-welcome-prompt">
       {brand ? (
-        <p className="deck-welcome-brand">
-          <span>{t('decks.welcomeBrand')}</span>
-          <span>{t('decks.welcomeBrandLine')}</span>
-        </p>
+        <div className="deck-welcome-hero">
+          <span className="deck-welcome-mark" aria-hidden="true">
+            <span className="deck-welcome-mark-back" />
+            <span className="deck-welcome-mark-front">
+              <span />
+              <span />
+            </span>
+          </span>
+          <p className="deck-welcome-brand">
+            <span>{t('decks.welcomeBrand')}</span>
+            <span>{t('decks.welcomeBrandLine')}</span>
+          </p>
+        </div>
       ) : null}
       <h1 id="deck-welcome-prompt">{t('decks.welcomePrompt')}</h1>
       <form className="deck-welcome-search" onSubmit={searchSamples}>
