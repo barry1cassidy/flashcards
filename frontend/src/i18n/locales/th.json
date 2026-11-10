@@ -663,7 +663,9 @@
     "emailUnchanged": "นั่นเป็นอีเมลของคุณอยู่แล้ว",
     "typeEmailToConfirm": "พิมพ์อีเมลของคุณเพื่อยืนยัน",
     "cancelSubscriptionBeforeDelete": "ยกเลิกการสมัครก่อนลบบัญชีนี้",
-    "mailFailed": "ส่งอีเมลไม่ได้"
+    "mailFailed": "ส่งอีเมลไม่ได้",
+    "appleSubscriptionOtherAccount": "การสมัคร Apple นี้เป็นของบัญชี Zipdeck อื่น ลงชื่อเข้าใช้ด้วยบัญชีนั้น",
+    "googleSubscriptionOtherAccount": "การสมัคร Google Play นี้เป็นของบัญชี Zipdeck อื่น ลงชื่อเข้าใช้ด้วยบัญชีนั้น"
   },
   "admin": {
     "enter": "โหมดผู้ดูแล",

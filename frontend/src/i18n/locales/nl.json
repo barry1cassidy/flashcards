@@ -663,7 +663,9 @@
     "emailUnchanged": "Dat is al je e-mailadres",
     "typeEmailToConfirm": "Typ je e-mailadres om te bevestigen",
     "cancelSubscriptionBeforeDelete": "Zeg je abonnement op voordat je dit account verwijdert",
-    "mailFailed": "E-mail kon niet worden verzonden"
+    "mailFailed": "E-mail kon niet worden verzonden",
+    "appleSubscriptionOtherAccount": "Dit Apple-abonnement hoort bij een ander Zipdeck-account. Log in met dat account.",
+    "googleSubscriptionOtherAccount": "Dit Google Play-abonnement hoort bij een ander Zipdeck-account. Log in met dat account."
   },
   "admin": {
     "enter": "Beheerdersmodus",

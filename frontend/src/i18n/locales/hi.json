@@ -663,7 +663,9 @@
     "emailUnchanged": "वह पहले से आपका ईमेल है",
     "typeEmailToConfirm": "पुष्टि के लिए अपना ईमेल टाइप करें",
     "cancelSubscriptionBeforeDelete": "यह खाता हटाने से पहले अपनी सदस्यता रद्द करें",
-    "mailFailed": "ईमेल नहीं भेजा जा सका"
+    "mailFailed": "ईमेल नहीं भेजा जा सका",
+    "appleSubscriptionOtherAccount": "यह Apple सदस्यता किसी अन्य Zipdeck खाते की है। उस खाते से साइन इन करें।",
+    "googleSubscriptionOtherAccount": "यह Google Play सदस्यता किसी अन्य Zipdeck खाते की है। उस खाते से साइन इन करें।"
   },
   "admin": {
     "enter": "एडमिन मोड",

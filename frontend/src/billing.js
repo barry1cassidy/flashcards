@@ -121,6 +121,15 @@ export async function startApplePurchase(productId, accountId) {
   return submitAppleTransaction(native)
 }
 
+function isForeignStoreAccountError(error) {
+  const message = String(error?.message || '')
+  return (
+    message === 'Not authenticated' ||
+    message === 'This Apple subscription belongs to another Zipdeck account. Sign in with that account.' ||
+    message === 'This Google Play subscription belongs to another Zipdeck account. Sign in with that account.'
+  )
+}
+
 export async function restoreApplePurchases(accountId) {
   const result = await AppleBilling.restore({ accountId: accountId || '' })
   const purchases = Array.isArray(result?.purchases) ? result.purchases : []
@@ -132,7 +141,7 @@ export async function restoreApplePurchases(accountId) {
         latest = updated
       }
     } catch (err) {
-      if (err?.message !== 'Not authenticated') {
+      if (!isForeignStoreAccountError(err)) {
         throw err
       }
     }
@@ -154,7 +163,7 @@ async function submitApplePurchases(result) {
         latest = updated
       }
     } catch (err) {
-      if (err?.message === 'Not authenticated') {
+      if (!isForeignStoreAccountError(err)) {
         throw err
       }
     }

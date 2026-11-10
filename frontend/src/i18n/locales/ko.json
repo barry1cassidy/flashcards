@@ -663,7 +663,9 @@
     "emailUnchanged": "이미 그 이메일을 쓰고 있습니다",
     "typeEmailToConfirm": "확인하려면 이메일을 입력하세요",
     "cancelSubscriptionBeforeDelete": "이 계정을 삭제하기 전에 구독을 취소하세요",
-    "mailFailed": "이메일을 보내지 못했습니다"
+    "mailFailed": "이메일을 보내지 못했습니다",
+    "appleSubscriptionOtherAccount": "이 Apple 구독은 다른 Zipdeck 계정에 속합니다. 그 계정으로 로그인하세요.",
+    "googleSubscriptionOtherAccount": "이 Google Play 구독은 다른 Zipdeck 계정에 속합니다. 그 계정으로 로그인하세요."
   },
   "admin": {
     "enter": "관리자 모드",

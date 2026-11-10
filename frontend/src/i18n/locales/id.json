@@ -663,7 +663,9 @@
     "emailUnchanged": "Itu sudah emailmu",
     "typeEmailToConfirm": "Ketik emailmu untuk mengonfirmasi",
     "cancelSubscriptionBeforeDelete": "Batalkan langgananmu sebelum menghapus akun ini",
-    "mailFailed": "Tidak dapat mengirim email"
+    "mailFailed": "Tidak dapat mengirim email",
+    "appleSubscriptionOtherAccount": "Langganan Apple ini milik akun Zipdeck lain. Masuk dengan akun itu.",
+    "googleSubscriptionOtherAccount": "Langganan Google Play ini milik akun Zipdeck lain. Masuk dengan akun itu."
   },
   "admin": {
     "enter": "Mode Admin",

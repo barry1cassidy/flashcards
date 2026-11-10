@@ -663,7 +663,9 @@
     "emailUnchanged": "Das ist schon deine E-Mail",
     "typeEmailToConfirm": "Gib deine E-Mail zur Bestätigung ein",
     "cancelSubscriptionBeforeDelete": "Kündige dein Abo, bevor du dieses Konto löschst",
-    "mailFailed": "E-Mail konnte nicht gesendet werden"
+    "mailFailed": "E-Mail konnte nicht gesendet werden",
+    "appleSubscriptionOtherAccount": "Dieses Apple-Abo gehört zu einem anderen Zipdeck-Konto. Melde dich mit diesem Konto an.",
+    "googleSubscriptionOtherAccount": "Dieses Google-Play-Abo gehört zu einem anderen Zipdeck-Konto. Melde dich mit diesem Konto an."
   },
   "admin": {
     "enter": "Admin-Modus",

@@ -542,6 +542,9 @@ class BillingServiceTest {
         ApiException ex =
                 assertThrows(ApiException.class, () -> billingService.completeApplePurchase(USER_ID, "pro_monthly", "signed-jws"));
         assertEquals(HttpStatus.FORBIDDEN, ex.getStatus());
+        assertEquals(
+                "This Apple subscription belongs to another Zipdeck account. Sign in with that account.",
+                ex.getMessage());
         assertTrue(rows.isEmpty());
     }
 }

@@ -681,7 +681,9 @@
     "emailUnchanged": "To już jest Twój e-mail",
     "typeEmailToConfirm": "Wpisz e-mail, żeby potwierdzić",
     "cancelSubscriptionBeforeDelete": "Anuluj subskrypcję, zanim usuniesz to konto",
-    "mailFailed": "Nie udało się wysłać e-maila"
+    "mailFailed": "Nie udało się wysłać e-maila",
+    "appleSubscriptionOtherAccount": "Ta subskrypcja Apple należy do innego konta Zipdeck. Zaloguj się na to konto.",
+    "googleSubscriptionOtherAccount": "Ta subskrypcja Google Play należy do innego konta Zipdeck. Zaloguj się na to konto."
   },
   "admin": {
     "enter": "Tryb Administratora",

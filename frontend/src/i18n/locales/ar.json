@@ -699,7 +699,9 @@
     "emailUnchanged": "هذا بريدك بالفعل",
     "typeEmailToConfirm": "اكتب بريدك للتأكيد",
     "cancelSubscriptionBeforeDelete": "ألغِ اشتراكك قبل حذف هذا الحساب",
-    "mailFailed": "تعذر إرسال البريد"
+    "mailFailed": "تعذر إرسال البريد",
+    "appleSubscriptionOtherAccount": "اشتراك Apple هذا يخص حساب Zipdeck آخر. سجّل الدخول بذلك الحساب.",
+    "googleSubscriptionOtherAccount": "اشتراك Google Play هذا يخص حساب Zipdeck آخر. سجّل الدخول بذلك الحساب."
   },
   "admin": {
     "enter": "وضع المسؤول",

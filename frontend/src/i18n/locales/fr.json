@@ -663,7 +663,9 @@
     "emailUnchanged": "C’est déjà votre e-mail",
     "typeEmailToConfirm": "Saisissez votre e-mail pour confirmer",
     "cancelSubscriptionBeforeDelete": "Annulez votre abonnement avant de supprimer ce compte",
-    "mailFailed": "Impossible d’envoyer l’e-mail"
+    "mailFailed": "Impossible d’envoyer l’e-mail",
+    "appleSubscriptionOtherAccount": "Cet abonnement Apple appartient à un autre compte Zipdeck. Connectez-vous avec ce compte.",
+    "googleSubscriptionOtherAccount": "Cet abonnement Google Play appartient à un autre compte Zipdeck. Connectez-vous avec ce compte."
   },
   "admin": {
     "enter": "Mode admin",

@@ -681,7 +681,9 @@
     "emailUnchanged": "Це вже ваша пошта",
     "typeEmailToConfirm": "Введіть пошту для підтвердження",
     "cancelSubscriptionBeforeDelete": "Скасуйте підписку, перш ніж видаляти цей обліковий запис",
-    "mailFailed": "Не вдалося надіслати листа"
+    "mailFailed": "Не вдалося надіслати листа",
+    "appleSubscriptionOtherAccount": "Ця підписка Apple належить іншому обліковому запису Zipdeck. Увійдіть у той обліковий запис.",
+    "googleSubscriptionOtherAccount": "Ця підписка Google Play належить іншому обліковому запису Zipdeck. Увійдіть у той обліковий запис."
   },
   "admin": {
     "enter": "Режим Адміністратора",

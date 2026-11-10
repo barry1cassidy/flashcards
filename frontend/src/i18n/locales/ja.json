@@ -663,7 +663,9 @@
     "emailUnchanged": "それはすでにあなたのメールです",
     "typeEmailToConfirm": "確認のためメールを入力してください",
     "cancelSubscriptionBeforeDelete": "このアカウントを削除する前にサブスクリプションを解約してください",
-    "mailFailed": "メールを送信できませんでした"
+    "mailFailed": "メールを送信できませんでした",
+    "appleSubscriptionOtherAccount": "この Apple サブスクリプションは別の Zipdeck アカウントのものです。そのアカウントでサインインしてください。",
+    "googleSubscriptionOtherAccount": "この Google Play サブスクリプションは別の Zipdeck アカウントのものです。そのアカウントでサインインしてください。"
   },
   "admin": {
     "enter": "管理者モード",

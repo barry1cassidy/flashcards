@@ -663,7 +663,9 @@
     "emailUnchanged": "Esse já é o seu e-mail",
     "typeEmailToConfirm": "Digite seu e-mail para confirmar",
     "cancelSubscriptionBeforeDelete": "Cancele sua assinatura antes de excluir esta conta",
-    "mailFailed": "Não foi possível enviar o e-mail"
+    "mailFailed": "Não foi possível enviar o e-mail",
+    "appleSubscriptionOtherAccount": "Esta assinatura da Apple pertence a outra conta Zipdeck. Entre com essa conta.",
+    "googleSubscriptionOtherAccount": "Esta assinatura do Google Play pertence a outra conta Zipdeck. Entre com essa conta."
   },
   "admin": {
     "enter": "Modo Admin",

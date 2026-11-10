@@ -681,7 +681,9 @@
     "emailUnchanged": "Это уже ваша почта",
     "typeEmailToConfirm": "Введите почту для подтверждения",
     "cancelSubscriptionBeforeDelete": "Отмените подписку, прежде чем удалять этот аккаунт",
-    "mailFailed": "Не удалось отправить письмо"
+    "mailFailed": "Не удалось отправить письмо",
+    "appleSubscriptionOtherAccount": "Эта подписка Apple принадлежит другому аккаунту Zipdeck. Войдите в тот аккаунт.",
+    "googleSubscriptionOtherAccount": "Эта подписка Google Play принадлежит другому аккаунту Zipdeck. Войдите в тот аккаунт."
   },
   "admin": {
     "enter": "Режим Администратора",

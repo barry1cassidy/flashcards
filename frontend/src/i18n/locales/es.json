@@ -1558,7 +1558,9 @@
     "emailUnchanged": "Ese ya es tu correo",
     "typeEmailToConfirm": "Escribe tu correo para confirmar",
     "cancelSubscriptionBeforeDelete": "Cancela tu suscripción antes de eliminar esta cuenta",
-    "mailFailed": "No se pudo enviar el correo"
+    "mailFailed": "No se pudo enviar el correo",
+    "appleSubscriptionOtherAccount": "Esta suscripción de Apple pertenece a otra cuenta de Zipdeck. Inicia sesión con esa cuenta.",
+    "googleSubscriptionOtherAccount": "Esta suscripción de Google Play pertenece a otra cuenta de Zipdeck. Inicia sesión con esa cuenta."
   },
   "terms": {
     "title": "Términos de uso",

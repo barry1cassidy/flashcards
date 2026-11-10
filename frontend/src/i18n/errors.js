@@ -7,6 +7,10 @@ const ERROR_KEYS = {
   'An account with that email already exists': 'errors.emailExists',
   'Invalid email or password': 'errors.invalidCredentials',
   'Not authenticated': 'errors.notAuthenticated',
+  'This Apple subscription belongs to another Zipdeck account. Sign in with that account.':
+    'errors.appleSubscriptionOtherAccount',
+  'This Google Play subscription belongs to another Zipdeck account. Sign in with that account.':
+    'errors.googleSubscriptionOtherAccount',
   'Deck not found': 'errors.deckNotFound',
   'You already have a deck with that name': 'errors.deckNameTaken',
   'You already have a set with that name': 'errors.setNameTaken',

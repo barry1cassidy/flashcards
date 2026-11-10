@@ -124,7 +124,9 @@ public class BillingService {
         }
         String obfuscated = record.obfuscatedAccountId();
         if (obfuscated != null && !obfuscated.isBlank() && !obfuscated.equals(user.getId().toString())) {
-            throw new ApiException(HttpStatus.FORBIDDEN, "Not authenticated");
+            throw new ApiException(
+                    HttpStatus.FORBIDDEN,
+                    "This Google Play subscription belongs to another Zipdeck account. Sign in with that account.");
         }
         if (plan == BillingPlan.ADDON) {
             if (!record.active()) {
@@ -163,7 +165,9 @@ public class BillingService {
         }
         String account = record.appAccountToken();
         if (account != null && !account.isBlank() && !account.equalsIgnoreCase(user.getId().toString())) {
-            throw new ApiException(HttpStatus.FORBIDDEN, "Not authenticated");
+            throw new ApiException(
+                    HttpStatus.FORBIDDEN,
+                    "This Apple subscription belongs to another Zipdeck account. Sign in with that account.");
         }
         if (plan == BillingPlan.ADDON) {
             if (!record.active()) {

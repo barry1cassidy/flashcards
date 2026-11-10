@@ -663,7 +663,9 @@
     "emailUnchanged": "Đó đã là email của bạn",
     "typeEmailToConfirm": "Hãy gõ email của bạn để xác nhận",
     "cancelSubscriptionBeforeDelete": "Hãy hủy gói đăng ký trước khi xóa tài khoản này",
-    "mailFailed": "Không gửi được email"
+    "mailFailed": "Không gửi được email",
+    "appleSubscriptionOtherAccount": "Thuê bao Apple này thuộc tài khoản Zipdeck khác. Đăng nhập bằng tài khoản đó.",
+    "googleSubscriptionOtherAccount": "Thuê bao Google Play này thuộc tài khoản Zipdeck khác. Đăng nhập bằng tài khoản đó."
   },
   "admin": {
     "enter": "Chế Độ Quản Trị",

@@ -663,7 +663,9 @@
     "emailUnchanged": "Bu zaten e-postanız",
     "typeEmailToConfirm": "Onaylamak için e-postanızı yazın",
     "cancelSubscriptionBeforeDelete": "Bu hesabı silmeden önce aboneliğinizi iptal edin",
-    "mailFailed": "E-posta gönderilemedi"
+    "mailFailed": "E-posta gönderilemedi",
+    "appleSubscriptionOtherAccount": "Bu Apple aboneliği başka bir Zipdeck hesabına ait. O hesapla giriş yapın.",
+    "googleSubscriptionOtherAccount": "Bu Google Play aboneliği başka bir Zipdeck hesabına ait. O hesapla giriş yapın."
   },
   "admin": {
     "enter": "Yönetici Modu",

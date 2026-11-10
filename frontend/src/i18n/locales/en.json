@@ -1457,6 +1457,8 @@
     "emailExists": "An account with that email already exists",
     "invalidCredentials": "Invalid email or password",
     "notAuthenticated": "Not authenticated",
+    "appleSubscriptionOtherAccount": "This Apple subscription belongs to another Zipdeck account. Sign in with that account.",
+    "googleSubscriptionOtherAccount": "This Google Play subscription belongs to another Zipdeck account. Sign in with that account.",
     "deckNotFound": "Deck not found",
     "deckNameTaken": "You already have a deck with that name",
     "setNameTaken": "You already have a set with that name",

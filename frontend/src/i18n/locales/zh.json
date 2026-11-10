@@ -663,7 +663,9 @@
     "emailUnchanged": "这已经是你的邮箱",
     "typeEmailToConfirm": "输入邮箱以确认",
     "cancelSubscriptionBeforeDelete": "删除此账户前请先取消订阅",
-    "mailFailed": "无法发送邮件"
+    "mailFailed": "无法发送邮件",
+    "appleSubscriptionOtherAccount": "此 Apple 订阅属于另一个 Zipdeck 账户。请使用该账户登录。",
+    "googleSubscriptionOtherAccount": "此 Google Play 订阅属于另一个 Zipdeck 账户。请使用该账户登录。"
   },
   "admin": {
     "enter": "管理员模式",

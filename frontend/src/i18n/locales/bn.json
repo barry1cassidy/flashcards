@@ -663,7 +663,9 @@
     "emailUnchanged": "এটি ইতিমধ্যে আপনার ইমেইল",
     "typeEmailToConfirm": "নিশ্চিত করতে আপনার ইমেইল টাইপ করুন",
     "cancelSubscriptionBeforeDelete": "এই অ্যাকাউন্ট মুছতে আগে সাবস্ক্রিপশন বাতিল করুন",
-    "mailFailed": "ইমেইল পাঠানো যায়নি"
+    "mailFailed": "ইমেইল পাঠানো যায়নি",
+    "appleSubscriptionOtherAccount": "এই Apple সাবস্ক্রিপশন অন্য Zipdeck অ্যাকাউন্টের। সেই অ্যাকাউন্ট দিয়ে সাইন ইন করুন।",
+    "googleSubscriptionOtherAccount": "এই Google Play সাবস্ক্রিপশন অন্য Zipdeck অ্যাকাউন্টের। সেই অ্যাকাউন্ট দিয়ে সাইন ইন করুন।"
   },
   "admin": {
     "enter": "অ্যাডমিন মোড",
