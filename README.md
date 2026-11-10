@@ -410,13 +410,15 @@ Events: `checkout.session.completed`, `customer.subscription.created`, `customer
 
 ### Tester checkout allowlist
 
-While `APP_BILLING_PUBLIC_CHECKOUT` is `false`, only admins and emails in `APP_BILLING_ALLOW_EMAILS` see Subscribe (website, Play, and App Store). Add this to the server `.env`, then recreate `api`:
+**App Store and Play Billing are open** whenever those gateways are configured. Anyone signed into the iOS or Android app can Subscribe or buy Extra AI Credits (sandbox on TestFlight / Play license testers). That is required for App Review: reviewers often use Sign in with Apple with Hide My Email, so an email allowlist cannot reach them.
+
+While `APP_BILLING_PUBLIC_CHECKOUT` is `false`, only admins and emails in `APP_BILLING_ALLOW_EMAILS` see **website** Stripe Subscribe. Add this to the server `.env`, then recreate `api`:
 
 ```
 APP_BILLING_ALLOW_EMAILS=barry1cassidy@gmail.com,barry1cassidy@hotmail.com,barry1cassidy@yahoo.com,*@zipdeck.app
 ```
 
-Leave `APP_BILLING_PUBLIC_CHECKOUT=false` until testing is done. Then clear `APP_BILLING_ALLOW_EMAILS` and set `APP_BILLING_PUBLIC_CHECKOUT=true`.
+Leave `APP_BILLING_PUBLIC_CHECKOUT=false` until both mobile apps are in the stores. Then clear `APP_BILLING_ALLOW_EMAILS` and set `APP_BILLING_PUBLIC_CHECKOUT=true` so Stripe matches App Store and Play. A Pro purchase on either store already unlocks the same account on the website.
 
 ## Android (Capacitor)
 
@@ -623,6 +625,6 @@ cp frontend/resources/ios-splash/*.png frontend/ios/App/App/Assets.xcassets/Spla
 7. Destination: **Any iOS Device (arm64)** (Archive stays disabled while a simulator is selected). Product → Archive. Skip Xcode Cloud **Get Started**. If Archive fails looking for a missing `.mobileprovision` after adding Sign in with Apple, quit Xcode and delete Derived Data plus local Provisioning Profiles as in **App Store subscriptions** step 6, then reopen and Archive again.
 8. Organizer → **Archives** → select the **newest** row. **Distribute App** is on the right of that window (or right-click the row). Distribute → **App Store Connect** → Upload. Newer Xcode may skip the options/signing sheets when automatic signing is already on.
 9. App Store Connect → Zipdeck → TestFlight. Wait until the build is **Ready to Test**. Create an **Internal Testing** group (Enable Automatic Distribution is fine), add yourself, attach the build. Internal testers skip Beta App Review.
-10. On the test iPhone, sign into the App Store / TestFlight with the **same Apple ID** that received the invite, then install from the email’s View in TestFlight link or from the TestFlight app. Subscribe with that Apple ID. Do not sign the phone into a Sandbox tester as the main Apple ID. TestFlight is already sandbox (no real charge). iOS 26 will not show **Settings → App Store → Sandbox Account** without Developer Mode. Subscribe is allowlisted: Zipdeck accounts `barry1cassidy@…` or `@zipdeck.app` see StoreKit; everyone else still sees coming soon. That is expected. The sheet must say **Environment: Sandbox**, not a website.
+10. On the test iPhone, sign into the App Store / TestFlight with the **same Apple ID** that received the invite, then install from the email’s View in TestFlight link or from the TestFlight app. Subscribe with that Apple ID. Do not sign the phone into a Sandbox tester as the main Apple ID. TestFlight is already sandbox (no real charge). iOS 26 will not show **Settings → App Store → Sandbox Account** without Developer Mode. StoreKit Subscribe is open on iOS for every signed-in account (website Stripe stays allowlisted until `APP_BILLING_PUBLIC_CHECKOUT=true`). The sheet must say **Environment: Sandbox**, not a website.
 
 A USB phone cannot attach to a cloud Mac. Simulator Google Sign-In is unreliable; TestFlight on a device is the real check. Digital goods on iOS must use StoreKit — do not add a website subscribe CTA in the iOS app.

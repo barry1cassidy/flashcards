@@ -194,8 +194,8 @@ function ProSection({ user, onError, onStub, refresh }) {
   const appleOn = Boolean(billing?.appleEnabled)
   const canPay = Boolean(billing?.checkoutAllowed)
   const showSubscribe = stripeOn && !native && !pro && canPay
-  const showPlaySubscribe = playOn && android && !pro && canPay
-  const showAppleSubscribe = appleOn && ios && !pro && canPay
+  const showPlaySubscribe = playOn && android && !pro
+  const showAppleSubscribe = appleOn && ios && !pro
   const showComingSoon = !pro && !showSubscribe && !showPlaySubscribe && !showAppleSubscribe
   const canSubscribe = showSubscribe || showPlaySubscribe || showAppleSubscribe
   const showManage = stripeOn && !native && pro && billing?.provider === 'STRIPE'
@@ -417,7 +417,7 @@ function ProSection({ user, onError, onStub, refresh }) {
                 </button>
               </div>
             ) : null}
-            {billing?.googleAddonEnabled && android && canPay ? (
+            {billing?.googleAddonEnabled && android ? (
               <div className="billing-actions">
                 <button
                   className="btn"
@@ -434,7 +434,7 @@ function ProSection({ user, onError, onStub, refresh }) {
                 </button>
               </div>
             ) : null}
-            {billing?.appleAddonEnabled && ios && canPay ? (
+            {billing?.appleAddonEnabled && ios ? (
               <div className="billing-actions">
                 <button
                   className="btn"

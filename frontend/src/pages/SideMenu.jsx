@@ -52,20 +52,20 @@ export default function SideMenu() {
             <MenuIcon name="library" />
             <span className="menu-link-text">{t('library.title')}</span>
           </NavLink>
+          <NavLink to="/sets" className={() => menuLinkClass(setsActive)} onClick={close}>
+            <MenuIcon name="groups" />
+            <span className="menu-link-text">{t('groups.manage')}</span>
+          </NavLink>
           <NavLink to="/classes" className={() => menuLinkClass(classesActive)} onClick={close}>
             <MenuIcon name="classes" />
             <span className="menu-link-text">{t('classes.title')}</span>
           </NavLink>
+          <hr className="side-menu-divider" />
           <NavLink to="/offline" className={() => menuLinkClass(offlineActive)} onClick={close}>
             <MenuIcon name="offline" />
             <span className="menu-link-text">{t('offline.menu')}</span>
             {!pro ? <span className="menu-pro-tag">{badge}</span> : null}
           </NavLink>
-          <NavLink to="/sets" className={() => menuLinkClass(setsActive)} onClick={close}>
-            <MenuIcon name="groups" />
-            <span className="menu-link-text">{t('groups.manage')}</span>
-          </NavLink>
-          <hr className="side-menu-divider" />
           <NavLink to="/create-with-ai" className={() => menuLinkClass(agentActive)} onClick={close}>
             <MenuIcon name="agent" />
             <span className="menu-link-copy">

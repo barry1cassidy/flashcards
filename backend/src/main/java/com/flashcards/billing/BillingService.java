@@ -103,7 +103,6 @@ public class BillingService {
             throw new ApiException(HttpStatus.BAD_REQUEST, "Validation failed");
         }
         User user = requireOwnAccount(userId);
-        requirePaidCheckout(user);
         String sku = productId.trim();
         String token = purchaseToken.trim();
         BillingPlan plan;
@@ -154,7 +153,6 @@ public class BillingService {
             throw new ApiException(HttpStatus.BAD_REQUEST, "Validation failed");
         }
         User user = requireOwnAccount(userId);
-        requirePaidCheckout(user);
         ApplePurchaseRecord record = appleBillingGateway.verify(signedTransaction.trim());
         String sku = firstNonBlank(record.productId(), productId);
         BillingPlan plan;

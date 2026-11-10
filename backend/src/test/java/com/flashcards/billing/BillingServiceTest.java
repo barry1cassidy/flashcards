@@ -274,15 +274,58 @@ class BillingServiceTest {
     }
 
     @Test
-    void googlePurchaseRejectedWhenEmailIsNotAllowlisted() {
+    void googlePurchaseAllowedWhenStripeCheckoutIsClosed() {
+        user.setEmail("reviewer@privaterelay.appleid.com");
         BillingService closed = closedBilling("");
         when(userRepository.findById(USER_ID)).thenReturn(Optional.of(user));
+        when(userRepository.save(user)).thenReturn(user);
         when(playBillingGateway.enabled()).thenReturn(true);
+        Instant end = Instant.now().plusSeconds(60 * 60 * 24 * 30);
+        when(playBillingGateway.verifySubscription("pro_monthly", "token-1"))
+                .thenReturn(new PlayPurchaseRecord(
+                        "pro_monthly",
+                        "token-1",
+                        "GPA.123",
+                        USER_ID.toString(),
+                        true,
+                        true,
+                        false,
+                        false,
+                        end,
+                        false));
 
-        ApiException ex = assertThrows(
-                ApiException.class, () -> closed.completeGooglePurchase(USER_ID, "pro_monthly", "token-1", "GPA.123"));
-        assertEquals(HttpStatus.SERVICE_UNAVAILABLE, ex.getStatus());
-        verify(playBillingGateway, never()).verifySubscription(any(), any());
+        closed.completeGooglePurchase(USER_ID, "pro_monthly", "token-1", "GPA.123");
+
+        assertTrue(user.isProLicensed());
+        BillingStatusResponse status = closed.status(USER_ID);
+        assertFalse(status.checkoutAllowed());
+        verify(playBillingGateway).verifySubscription("pro_monthly", "token-1");
+    }
+
+    @Test
+    void applePurchaseAllowedWhenStripeCheckoutIsClosed() {
+        user.setEmail("reviewer@privaterelay.appleid.com");
+        BillingService closed = closedBilling("");
+        when(userRepository.findById(USER_ID)).thenReturn(Optional.of(user));
+        when(userRepository.save(user)).thenReturn(user);
+        when(appleBillingGateway.enabled()).thenReturn(true);
+        Instant end = Instant.now().plusSeconds(60 * 60 * 24 * 30);
+        when(appleBillingGateway.verify("signed-jws"))
+                .thenReturn(new ApplePurchaseRecord(
+                        "pro_monthly",
+                        "orig-1",
+                        "txn-1",
+                        USER_ID.toString(),
+                        true,
+                        true,
+                        end,
+                        false));
+
+        closed.completeApplePurchase(USER_ID, "pro_monthly", "signed-jws");
+
+        assertTrue(user.isProLicensed());
+        assertFalse(closed.status(USER_ID).checkoutAllowed());
+        verify(appleBillingGateway).verify("signed-jws");
     }
 
     @Test
