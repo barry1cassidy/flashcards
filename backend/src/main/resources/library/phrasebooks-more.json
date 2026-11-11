@@ -11548,6 +11548,603 @@
           ]
         }
       ]
+    },
+    {
+      "slug": "nigerian-pidgin",
+      "name": "Nigerian Pidgin",
+      "sourceLanguage": "en-US",
+      "targetLanguage": "pcm-NG",
+      "sourceUrl": "https://en.wikivoyage.org/wiki/Nigerian_Pidgin_phrasebook",
+      "sourceTitle": "Nigerian Pidgin phrasebook",
+      "attribution": "Text from English Wikivoyage article “Nigerian Pidgin phrasebook”, licensed under CC BY-SA 4.0.",
+      "decks": [
+        {
+          "slug": "greetings-courtesy",
+          "name": "Greetings & courtesy",
+          "description": "Hello, names, please, and thanks.",
+          "position": 0,
+          "cards": [
+            {
+              "front": "Hello.",
+              "back": "Helo.",
+              "hint": null
+            },
+            {
+              "front": "Hello.",
+              "back": "How far?",
+              "hint": null
+            },
+            {
+              "front": "How are you?",
+              "back": "How yu dey?",
+              "hint": null
+            },
+            {
+              "front": "Fine, thank you.",
+              "back": "I dey fine, tank yu.",
+              "hint": null
+            },
+            {
+              "front": "What is your name?",
+              "back": "Wetin bi your name?",
+              "hint": null
+            },
+            {
+              "front": "My name is ______ .",
+              "back": "My name na ______.",
+              "hint": null
+            },
+            {
+              "front": "Nice to meet you.",
+              "back": "I dey hapi to meet yu.",
+              "hint": null
+            },
+            {
+              "front": "Please.",
+              "back": "Abeg.",
+              "hint": null
+            },
+            {
+              "front": "Thank you.",
+              "back": "Tank yu.",
+              "hint": null
+            },
+            {
+              "front": "You're welcome.",
+              "back": "Yu dey welkom o.",
+              "hint": null
+            },
+            {
+              "front": "Yes.",
+              "back": "Yes o.",
+              "hint": null
+            },
+            {
+              "front": "No.",
+              "back": "No o.",
+              "hint": null
+            },
+            {
+              "front": "Excuse me.",
+              "back": "How far!/Hess!",
+              "hint": null
+            },
+            {
+              "front": "Excuse me.",
+              "back": "Abeg.",
+              "hint": null
+            },
+            {
+              "front": "I'm sorry.",
+              "back": "No vex for me/dooh.",
+              "hint": null
+            },
+            {
+              "front": "Goodbye",
+              "back": "Bye-bye.",
+              "hint": null
+            },
+            {
+              "front": "Goodbye",
+              "back": "E go bi [nah].",
+              "hint": null
+            },
+            {
+              "front": "I can't speak name of language [well].",
+              "back": "I no sabi spik \"name of language\" wella.",
+              "hint": null
+            },
+            {
+              "front": "Do you speak English?",
+              "back": "Yu sabi spik Oyibo?",
+              "hint": null
+            },
+            {
+              "front": "Is there someone here who speaks English?",
+              "back": "E get pesin wey dey spik Oyibo for hie?",
+              "hint": null
+            }
+          ]
+        },
+        {
+          "slug": "survival-phrases",
+          "name": "Survival phrases",
+          "description": "When you do not understand, need the toilet, or need help.",
+          "position": 1,
+          "cards": [
+            {
+              "front": "Help!",
+              "back": "Epp!",
+              "hint": null
+            },
+            {
+              "front": "Look out!",
+              "back": "Dey put eye!",
+              "hint": null
+            },
+            {
+              "front": "Good morning.",
+              "back": "Gud monin.",
+              "hint": null
+            },
+            {
+              "front": "Good afternoon",
+              "back": "Gud aftunun.",
+              "hint": null
+            },
+            {
+              "front": "Good evening.",
+              "back": "Gud evenin.",
+              "hint": null
+            },
+            {
+              "front": "Good night.",
+              "back": "Gud nite.",
+              "hint": null
+            },
+            {
+              "front": "Good night",
+              "back": "Til tumoro.",
+              "hint": null
+            },
+            {
+              "front": "I don't understand.",
+              "back": "I no understand.",
+              "hint": null
+            },
+            {
+              "front": "Where is the toilet?",
+              "back": "Wie di toilet dey?",
+              "hint": null
+            },
+            {
+              "front": "I am looking for__.",
+              "back": "I dey find ___",
+              "hint": null
+            }
+          ]
+        },
+        {
+          "slug": "numbers",
+          "name": "Numbers",
+          "description": "Counting for tickets, prices, and times.",
+          "position": 2,
+          "cards": [
+            {
+              "front": "1",
+              "back": "wan",
+              "hint": null
+            },
+            {
+              "front": "2",
+              "back": "twu",
+              "hint": null
+            },
+            {
+              "front": "3",
+              "back": "tiri",
+              "hint": null
+            },
+            {
+              "front": "4",
+              "back": "for",
+              "hint": null
+            },
+            {
+              "front": "5",
+              "back": "five",
+              "hint": null
+            },
+            {
+              "front": "6",
+              "back": "six",
+              "hint": null
+            },
+            {
+              "front": "7",
+              "back": "sevun",
+              "hint": null
+            },
+            {
+              "front": "8",
+              "back": "eit",
+              "hint": null
+            },
+            {
+              "front": "9",
+              "back": "nine",
+              "hint": null
+            },
+            {
+              "front": "10",
+              "back": "ten",
+              "hint": null
+            },
+            {
+              "front": "11",
+              "back": "elevun",
+              "hint": null
+            },
+            {
+              "front": "12",
+              "back": "twef",
+              "hint": null
+            },
+            {
+              "front": "13",
+              "back": "tatin",
+              "hint": null
+            },
+            {
+              "front": "14",
+              "back": "fortin",
+              "hint": null
+            },
+            {
+              "front": "15",
+              "back": "fiftin",
+              "hint": null
+            },
+            {
+              "front": "16",
+              "back": "sixtin",
+              "hint": null
+            },
+            {
+              "front": "17",
+              "back": "sevuntin",
+              "hint": null
+            },
+            {
+              "front": "18",
+              "back": "eitin",
+              "hint": null
+            },
+            {
+              "front": "19",
+              "back": "ninetin",
+              "hint": null
+            },
+            {
+              "front": "20",
+              "back": "twenti",
+              "hint": null
+            }
+          ]
+        },
+        {
+          "slug": "time-dates",
+          "name": "Time & dates",
+          "description": "Now, today, days, and clock time.",
+          "position": 3,
+          "cards": [
+            {
+              "front": "now",
+              "back": "nau-nau",
+              "hint": null
+            },
+            {
+              "front": "later",
+              "back": "later",
+              "hint": "leta"
+            },
+            {
+              "front": "before",
+              "back": "bifor",
+              "hint": null
+            },
+            {
+              "front": "morning",
+              "back": "monin/day brek",
+              "hint": null
+            },
+            {
+              "front": "afternoon",
+              "back": "aftunun",
+              "hint": null
+            },
+            {
+              "front": "evening",
+              "back": "evenin",
+              "hint": null
+            },
+            {
+              "front": "night",
+              "back": "nite",
+              "hint": null
+            },
+            {
+              "front": "one o'clock AM",
+              "back": "wan o'clock for monin",
+              "hint": null
+            },
+            {
+              "front": "two o'clock AM",
+              "back": "twu o'clock for monin",
+              "hint": null
+            },
+            {
+              "front": "today",
+              "back": "today",
+              "hint": null
+            },
+            {
+              "front": "yesterday",
+              "back": "yestaday",
+              "hint": null
+            },
+            {
+              "front": "tomorrow",
+              "back": "tumoro",
+              "hint": null
+            },
+            {
+              "front": "this week",
+              "back": "dis wik",
+              "hint": null
+            },
+            {
+              "front": "last week",
+              "back": "las wik",
+              "hint": null
+            },
+            {
+              "front": "next week",
+              "back": "nes wik",
+              "hint": null
+            },
+            {
+              "front": "Sunday",
+              "back": "Sonday",
+              "hint": null
+            },
+            {
+              "front": "Monday",
+              "back": "Monday",
+              "hint": null
+            },
+            {
+              "front": "Tuesday",
+              "back": "Tusday",
+              "hint": null
+            },
+            {
+              "front": "Wednesday",
+              "back": "Wensday",
+              "hint": null
+            },
+            {
+              "front": "Thursday",
+              "back": "Tosday",
+              "hint": null
+            }
+          ]
+        },
+        {
+          "slug": "getting-around",
+          "name": "Getting around",
+          "description": "Tickets, directions, taxis, and the airport.",
+          "position": 4,
+          "cards": [
+            {
+              "front": "How much is a ticket to _____?",
+              "back": "how much be the ticket to_______?",
+              "hint": null
+            },
+            {
+              "front": "One ticket to _____, please.",
+              "back": "one ticket to _____, abeg.",
+              "hint": null
+            },
+            {
+              "front": "Where does this train/bus go?",
+              "back": "where this bus/train dey go?",
+              "hint": null
+            },
+            {
+              "front": "When does the train/bus for _____ leave?",
+              "back": "when the train/bus for ____ dey comot?",
+              "hint": null
+            },
+            {
+              "front": "When will this train/bus arrive in _____?",
+              "back": "when this train/bus go reach ___?",
+              "hint": null
+            },
+            {
+              "front": "How do I get to _____ ?",
+              "back": "how I go reach ____?",
+              "hint": null
+            },
+            {
+              "front": "Where are there a lot of...",
+              "back": "where i go see plenty...",
+              "hint": null
+            },
+            {
+              "front": "Take me to _____, please.",
+              "back": "carry me go ____, abeg.",
+              "hint": null
+            },
+            {
+              "front": "How much does it cost to get to _____?",
+              "back": "how much e go be to reach ____?",
+              "hint": null
+            },
+            {
+              "front": "Take me there, please.",
+              "back": "carry me go there, abeg.",
+              "hint": null
+            }
+          ]
+        },
+        {
+          "slug": "money",
+          "name": "Money",
+          "description": "Cards, cash, and how much it costs.",
+          "position": 6,
+          "cards": [
+            {
+              "front": "Do you accept American/Australian/Canadian dollars?",
+              "back": "you dey collect American/Australian/Canadian dollars?",
+              "hint": null
+            },
+            {
+              "front": "Do you accept British pounds?",
+              "back": "you dey collect British pounds?",
+              "hint": null
+            },
+            {
+              "front": "Do you accept euros?",
+              "back": "you dey collect euros?",
+              "hint": null
+            },
+            {
+              "front": "Do you accept credit cards?",
+              "back": "you dey collect credit cards?",
+              "hint": null
+            },
+            {
+              "front": "Can you change money for me?",
+              "back": "you fit change this money for me?",
+              "hint": null
+            },
+            {
+              "front": "Where can I get money changed?",
+              "back": "where I fit go change money?",
+              "hint": null
+            },
+            {
+              "front": "What is the exchange rate?",
+              "back": "wetin be exchange rate?",
+              "hint": null
+            }
+          ]
+        },
+        {
+          "slug": "help-emergencies",
+          "name": "Help & emergencies",
+          "description": "Lost, sick, police, and asking for help.",
+          "position": 9,
+          "cards": [
+            {
+              "front": "Leave me alone.",
+              "back": "Limi.",
+              "hint": null
+            },
+            {
+              "front": "Don't touch me!",
+              "back": "No tosh me!",
+              "hint": null
+            },
+            {
+              "front": "I'll call the police.",
+              "back": "I go call police.",
+              "hint": null
+            },
+            {
+              "front": "Police!",
+              "back": "Police!",
+              "hint": null
+            },
+            {
+              "front": "Stop! Thief!",
+              "back": "Stop dia! Tiff!",
+              "hint": null
+            },
+            {
+              "front": "I need your help.",
+              "back": "I need your epp.",
+              "hint": null
+            },
+            {
+              "front": "It's an emergency.",
+              "back": "Na emergency.",
+              "hint": null
+            },
+            {
+              "front": "I'm lost.",
+              "back": "I don loss.",
+              "hint": null
+            },
+            {
+              "front": "I lost my bag.",
+              "back": "My bag loss.",
+              "hint": null
+            },
+            {
+              "front": "I lost my wallet.",
+              "back": "My wallet loss.",
+              "hint": null
+            },
+            {
+              "front": "I'm sick.",
+              "back": "I no well/I dey sick.",
+              "hint": null
+            },
+            {
+              "front": "I've been injured.",
+              "back": "I don injure.",
+              "hint": null
+            },
+            {
+              "front": "I need a doctor.",
+              "back": "I go need dokinta.",
+              "hint": null
+            },
+            {
+              "front": "Can I use your phone?",
+              "back": "I fit use your fon?",
+              "hint": null
+            },
+            {
+              "front": "I haven't done anything wrong.",
+              "back": "I no do anything bad",
+              "hint": null
+            },
+            {
+              "front": "Where are you taking me?",
+              "back": "where you dey carry me go?",
+              "hint": null
+            },
+            {
+              "front": "Am I under arrest?",
+              "back": "I dey unda arrest?",
+              "hint": null
+            },
+            {
+              "front": "I want to talk to a lawyer.",
+              "back": "I wan talk to lawyer.",
+              "hint": null
+            },
+            {
+              "front": "Can I just pay a fine now?",
+              "back": "I fit pay money",
+              "hint": null
+            }
+          ]
+        }
+      ]
     }
   ]
 }

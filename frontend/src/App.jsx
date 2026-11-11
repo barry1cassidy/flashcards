@@ -389,6 +389,18 @@ function OfflineGate() {
   if (user) {
     return <AppLayout />
   }
+  if (!webMarketing) {
+    return (
+      <div className="app-frame">
+        <div className="app-pane">
+          <NativeGuestBar />
+          <main className="page-content">
+            <Outlet />
+          </main>
+        </div>
+      </div>
+    )
+  }
   return (
     <div className="marketing">
       <MarketingHeader />

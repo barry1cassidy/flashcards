@@ -43,6 +43,7 @@ const MORE_LANGUAGES = [
   { slug: 'welsh', name: 'Welsh', page: 'Welsh_phrasebook', targetLanguage: 'cy-GB' },
   { slug: 'norwegian', name: 'Norwegian', page: 'Norwegian_phrasebook', targetLanguage: 'nb-NO' },
   { slug: 'hungarian', name: 'Hungarian', page: 'Hungarian_phrasebook', targetLanguage: 'hu-HU' },
+  { slug: 'nigerian-pidgin', name: 'Nigerian Pidgin', page: 'Nigerian_Pidgin_phrasebook', targetLanguage: 'pcm-NG' },
 ]
 
 const DECKS = [
@@ -242,11 +243,18 @@ function stripWiki(value) {
 }
 
 function cleanBack(value) {
-  return balanceParens(value)
+  let back = balanceParens(value)
     .replace(/\/[^/\n]*[^\u0000-\u007F][^/\n]*\//g, ' ')
     .replace(/\(\s*[,/.\s]*\)/g, ' ')
     .replace(/\(\s*\)/g, ' ')
     .replace(/\s+Note:.*$/i, '')
+  // Stub phrasebooks put the whole translation in parentheses. A trailing
+  // parenthetical on a real phrase is still a pronunciation note.
+  const wrapped = unwrapOuterParens(back)
+  if (wrapped && wrapped !== back.trim()) {
+    back = wrapped
+  }
+  return back
     .replace(/\s*\([^)]*\)\s*$/g, ' ')
     .replace(/\s+,/g, ',')
     .replace(/\s+([.!?؟])/g, '$1')

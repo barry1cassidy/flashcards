@@ -86,6 +86,16 @@ test('spanish italics stay a pronunciation hint', () => {
   assert.equal(card.hint, 'OH-lah')
 })
 
+test('a translation that is only a parenthetical stays on the back', () => {
+  const card = parsePhrase(
+    '; How much is a ticket to _____? : (how much be the ticket to _______?)',
+    'pcm-NG',
+  )
+  assert.equal(card.front, 'How much is a ticket to _____?')
+  assert.equal(card.back, 'how much be the ticket to _______?')
+  assert.equal(card.hint, null)
+})
+
 test('following pronunciation lines attach to the phrase', () => {
   const sections = phrasesBySection(`
 ==Phrase list==

@@ -33,6 +33,7 @@ export const SPEECH_LANGUAGES = [
   { code: 'cy-GB', name: 'Cymraeg' },
   { code: 'nb-NO', name: 'Norsk' },
   { code: 'hu-HU', name: 'Magyar' },
+  { code: 'pcm-NG', name: 'Nigerian Pidgin' },
 ]
 
 const CODES = new Set(SPEECH_LANGUAGES.map((language) => language.code))

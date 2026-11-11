@@ -47,7 +47,8 @@ public final class CardLanguages {
             "sw-KE",
             "cy-GB",
             "nb-NO",
-            "hu-HU");
+            "hu-HU",
+            "pcm-NG");
 
     private static final Set<String> ALLOWED = Set.copyOf(CODES);
 

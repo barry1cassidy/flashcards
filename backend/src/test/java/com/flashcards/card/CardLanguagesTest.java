@@ -24,6 +24,8 @@ class CardLanguagesTest {
         assertEquals("ga-IE", CardLanguages.normalize("ga-IE", CardLanguages.DEFAULT));
         assertEquals("zh-HK", CardLanguages.normalize("zh-HK", CardLanguages.DEFAULT));
         assertEquals("zh-CN", CardLanguages.normalize("zh", CardLanguages.DEFAULT));
+        assertEquals("pcm-NG", CardLanguages.normalize("pcm", CardLanguages.DEFAULT));
+        assertEquals("pcm-NG", CardLanguages.normalize("pcm-NG", CardLanguages.DEFAULT));
     }
 
     @Test

@@ -7,6 +7,7 @@ export default function NativeGuestBar() {
   const { t } = useTranslation()
   const location = useLocation()
   const onSignIn = location.pathname === '/login'
+  const onOffline = location.pathname.startsWith('/offline')
 
   return (
     <header className="app-header">
@@ -17,6 +18,15 @@ export default function NativeGuestBar() {
       </div>
       {onSignIn ? null : (
         <div className="header-actions">
+          {onOffline ? (
+            <Link className="btn" to="/">
+              {t('offline.home')}
+            </Link>
+          ) : (
+            <Link className="offline-nav-btn" to="/offline">
+              {t('offline.landing')}
+            </Link>
+          )}
           <Link className="btn" to="/login" state={inviteAuthState(location)}>
             {t('auth.signIn')}
           </Link>
