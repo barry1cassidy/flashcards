@@ -393,6 +393,11 @@ h1 {
   align-items: center;
 }
 
+.app-header .header-actions {
+  flex-wrap: nowrap;
+  flex-shrink: 0;
+}
+
 @media (max-width: 700px) {
   .deck-hero-actions:has(.btn.primary) {
     display: grid;
@@ -4470,16 +4475,22 @@ button.agent-preset:disabled {
 }
 
 @media (max-width: 420px) {
-  .marketing-nav:has(.offline-nav-btn) .brand-word {
+  .marketing-nav:has(.offline-nav-btn) .brand-word,
+  .app-header:has(.offline-nav-btn) .brand-word,
+  .app-header:has(.guest-home-link) .brand-word {
     display: none;
   }
 
-  .marketing-nav:has(.offline-nav-btn) {
+  .marketing-nav:has(.offline-nav-btn),
+  .app-header:has(.offline-nav-btn),
+  .app-header:has(.guest-home-link) {
     gap: 8px;
   }
 
   .offline-nav-btn,
-  .marketing-nav:has(.offline-nav-btn) .login-btn {
+  .marketing-nav:has(.offline-nav-btn) .login-btn,
+  .app-header:has(.offline-nav-btn) .header-actions .btn,
+  .app-header:has(.guest-home-link) .header-actions .btn {
     padding-left: 12px;
     padding-right: 12px;
   }
