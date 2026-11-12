@@ -52,7 +52,8 @@ class ExpiredStoreSubscriptionRefreshTest {
                 new BillingProperties.Google(
                         "com.zipdeck.app", "google-play.json", "pro_monthly", "pro_yearly", "credits_addon"),
                 null,
-                "");
+                "",
+                false);
         refresh = new ExpiredStoreSubscriptionRefresh(
                 properties, userRepository, subscriptionRepository, playBillingGateway, billingService);
         user = new User();

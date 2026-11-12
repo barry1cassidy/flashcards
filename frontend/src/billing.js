@@ -175,17 +175,30 @@ async function submitAppleTransaction(native) {
   if (!native?.jwsRepresentation || !native?.productId) {
     throw new Error('Payment failed')
   }
-  const updated = await api('/api/billing/apple/purchase', {
-    method: 'POST',
-    skipSaving: true,
-    body: JSON.stringify({
-      productId: native.productId,
-      signedTransaction: native.jwsRepresentation,
-      transactionId: native.transactionId || '',
-    }),
-  })
-  if (native.transactionId) {
-    await AppleBilling.finish({ transactionId: native.transactionId })
+  try {
+    const updated = await api('/api/billing/apple/purchase', {
+      method: 'POST',
+      skipSaving: true,
+      body: JSON.stringify({
+        productId: native.productId,
+        signedTransaction: native.jwsRepresentation,
+        transactionId: native.transactionId || '',
+      }),
+    })
+    if (native.transactionId) {
+      await AppleBilling.finish({ transactionId: native.transactionId })
+    }
+    return updated
+  } catch (err) {
+    // Foreign-account rejects used to leave the StoreKit transaction unfinished, so the
+    // phone kept replaying the old receipt after Clear Purchase History.
+    if (isForeignStoreAccountError(err) && native.transactionId) {
+      try {
+        await AppleBilling.finish({ transactionId: native.transactionId })
+      } catch {
+        // Still surface the original API error.
+      }
+    }
+    throw err
   }
-  return updated
 }

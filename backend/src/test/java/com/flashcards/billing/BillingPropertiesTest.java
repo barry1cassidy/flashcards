@@ -34,7 +34,8 @@ class BillingPropertiesTest {
                 null,
                 null,
                 null,
-                "");
+                "",
+                false);
         BillingProperties closed = closed("");
 
         assertTrue(open.paidCheckoutAllowed(false, "anyone@example.com"));
@@ -53,6 +54,7 @@ class BillingPropertiesTest {
                 null,
                 null,
                 null,
-                allowEmails);
+                allowEmails,
+                false);
     }
 }

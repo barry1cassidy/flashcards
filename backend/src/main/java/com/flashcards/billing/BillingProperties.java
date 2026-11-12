@@ -15,7 +15,11 @@ public record BillingProperties(
         Stripe stripe,
         Google google,
         Apple apple,
-        String allowEmails) {
+        String allowEmails,
+        // Temporary App Review helper: when true, Apple receipts may be claimed by the
+        // signed-in Zipdeck user even if appAccountToken was stamped for another account.
+        // Leave false in normal production; turn on only to capture review footage, then off.
+        boolean appleRelaxAccountToken) {
 
     public record Stripe(
             String secretKey, String webhookSecret, String priceMonthly, String priceYearly, String priceAddon) {

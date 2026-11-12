@@ -67,7 +67,8 @@ class BillingServiceTest {
                 new BillingProperties.Stripe("sk_test", "whsec", "price_month", "price_year", "price_addon"),
                 googleConfig(),
                 appleConfig(),
-                "");
+                "",
+                false);
         AgentProperties agentProperties = new AgentProperties("", "", "", 10, 10, 40, 90, 0, 0, 0, 0);
         billingService = new BillingService(
                 properties,
@@ -136,7 +137,8 @@ class BillingServiceTest {
                 new BillingProperties.Stripe("sk_test", "whsec", "price_month", "price_year", "price_addon"),
                 googleConfig(),
                 appleConfig(),
-                allowEmails);
+                allowEmails,
+                false);
         return new BillingService(
                 closed,
                 stripeGateway,
@@ -235,7 +237,8 @@ class BillingServiceTest {
                 new BillingProperties.Stripe("sk_test", "whsec", "price_month", "price_year", "price_addon"),
                 googleConfig(),
                 appleConfig(),
-                "");
+                "",
+                false);
         BillingService closedBilling = new BillingService(
                 closed,
                 stripeGateway,
@@ -546,5 +549,50 @@ class BillingServiceTest {
                 "This Apple subscription belongs to another Zipdeck account. Sign in with that account.",
                 ex.getMessage());
         assertTrue(rows.isEmpty());
+    }
+
+    @Test
+    void applePurchaseReassignedWhenAccountTokenRelaxed() {
+        BillingProperties relaxed = new BillingProperties(
+                true,
+                true,
+                "http://localhost:5173",
+                "$5.99",
+                "$39.99",
+                "$2.99",
+                new BillingProperties.Stripe("sk_test", "whsec", "price_month", "price_year", "price_addon"),
+                googleConfig(),
+                appleConfig(),
+                "",
+                true);
+        BillingService service = new BillingService(
+                relaxed,
+                stripeGateway,
+                userRepository,
+                subscriptionRepository,
+                creditService,
+                new AgentProperties("", "", "", 10, 10, 40, 90, 0, 0, 0, 0),
+                playBillingGateway,
+                appleBillingGateway);
+        when(userRepository.findById(USER_ID)).thenReturn(Optional.of(user));
+        when(userRepository.save(user)).thenReturn(user);
+        when(appleBillingGateway.enabled()).thenReturn(true);
+        Instant end = Instant.now().plusSeconds(3600);
+        when(appleBillingGateway.verify("signed-jws"))
+                .thenReturn(new ApplePurchaseRecord(
+                        "pro_monthly",
+                        "orig-1",
+                        "txn-1",
+                        "00000000-0000-0000-0000-000000000099",
+                        true,
+                        true,
+                        end,
+                        false));
+
+        service.completeApplePurchase(USER_ID, "pro_monthly", "signed-jws");
+
+        assertTrue(user.isProLicensed());
+        assertEquals(1, rows.size());
+        assertEquals(USER_ID, rows.get(0).getUser().getId());
     }
 }

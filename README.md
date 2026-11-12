@@ -420,6 +420,8 @@ APP_BILLING_ALLOW_EMAILS=barry1cassidy@gmail.com,barry1cassidy@hotmail.com,barry
 
 Leave `APP_BILLING_PUBLIC_CHECKOUT=false` until both mobile apps are in the stores. Then clear `APP_BILLING_ALLOW_EMAILS` and set `APP_BILLING_PUBLIC_CHECKOUT=true` so Stripe matches App Store and Play. A Pro purchase on either store already unlocks the same account on the website.
 
+Temporary App Review only: if a sandbox Apple receipt was stamped for one Zipdeck user (`appAccountToken`) and you need another Zipdeck login on the same phone to claim it for a review recording, set `APP_BILLING_APPLE_RELAX_ACCOUNT_TOKEN=true` and recreate `api`. Turn it back to `false` (or remove it) as soon as the video is done.
+
 ## Android (Capacitor)
 
 The native app is the same Vite React UI in a WebView. Keep coding in Cursor; install **Android Studio** for the SDK and emulator.

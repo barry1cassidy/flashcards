@@ -164,7 +164,10 @@ public class BillingService {
             throw new ApiException(HttpStatus.BAD_REQUEST, "Invalid billing plan");
         }
         String account = record.appAccountToken();
-        if (account != null && !account.isBlank() && !account.equalsIgnoreCase(user.getId().toString())) {
+        if (account != null
+                && !account.isBlank()
+                && !account.equalsIgnoreCase(user.getId().toString())
+                && !properties.appleRelaxAccountToken()) {
             throw new ApiException(
                     HttpStatus.FORBIDDEN,
                     "This Apple subscription belongs to another Zipdeck account. Sign in with that account.");
