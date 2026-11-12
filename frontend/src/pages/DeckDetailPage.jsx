@@ -56,6 +56,9 @@ export default function DeckDetailPage() {
   const [deck, setDeck] = useState(null)
   const [cards, setCards] = useState([])
   const [draggingId, setDraggingId] = useState(null)
+  const [movedCardId, setMovedCardId] = useState(null)
+  const reorderMotion = useRef(null)
+  const movedCardTimer = useRef(null)
   const [groups, setGroups] = useState([])
   const [front, setFront] = useState('')
   const [back, setBack] = useState('')
@@ -145,9 +148,19 @@ export default function DeckDetailPage() {
     () => () => {
       window.clearTimeout(offlineToastTimer.current)
       window.clearTimeout(aiToastTimer.current)
+      window.clearTimeout(movedCardTimer.current)
     },
     [],
   )
+
+  useLayoutEffect(() => {
+    const pending = reorderMotion.current
+    reorderMotion.current = null
+    if (!pending) {
+      return
+    }
+    playCardShift(listRef.current, pending.tops, pending.duration)
+  }, [cards])
 
   function showOfflineSaved() {
     setOfflineToast(t('offline.saved'))
@@ -415,13 +428,29 @@ export default function DeckDetailPage() {
     }
   }
 
+  function queueCardShift(duration) {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      reorderMotion.current = null
+      return
+    }
+    reorderMotion.current = { tops: cardRowTops(listRef.current), duration }
+  }
+
+  function showCardMoved(cardId) {
+    setMovedCardId(cardId)
+    window.clearTimeout(movedCardTimer.current)
+    movedCardTimer.current = window.setTimeout(() => setMovedCardId(null), 1100)
+  }
+
   async function moveCard(from, to) {
     const next = moveItem(cards, from, to)
     if (next === cards) {
       return
     }
+    queueCardShift(360)
     cardsRef.current = next
     setCards(next)
+    showCardMoved(cards[from].id)
     await persistOrder(next)
   }
 
@@ -456,6 +485,7 @@ export default function DeckDetailPage() {
       return
     }
     const next = moveItem(cardsRef.current, from, to)
+    queueCardShift(240)
     cardsRef.current = next
     setCards(next)
   }
@@ -475,6 +505,7 @@ export default function DeckDetailPage() {
     }
     const now = cardsRef.current.findIndex((card) => card.id === state.id)
     if (now >= 0 && now !== state.fromIndex) {
+      showCardMoved(state.id)
       persistOrder(cardsRef.current)
     }
   }
@@ -835,7 +866,8 @@ export default function DeckDetailPage() {
               {cards.map((card, index) => (
                 <li
                   key={card.id}
-                  className={`card-row${card.id === draggingId ? ' is-dragging' : ''}`}
+                  data-card-id={card.id}
+                  className={`card-row${card.id === draggingId ? ' is-dragging' : ''}${card.id === movedCardId ? ' just-moved' : ''}`}
                 >
                   {editingCards ? (
                     <div className="reorder-controls">
@@ -1122,6 +1154,51 @@ function languageName(code) {
   return SPEECH_LANGUAGES.find((language) => language.code === code)?.name || code
 }
 
+function cardRowTops(list) {
+  const tops = new Map()
+  if (!list) {
+    return tops
+  }
+  for (const row of list.querySelectorAll(':scope > .card-row')) {
+    if (row.dataset.cardId) {
+      tops.set(row.dataset.cardId, row.getBoundingClientRect().top)
+    }
+  }
+  return tops
+}
+
+function playCardShift(list, beforeTops, duration) {
+  if (!list || !beforeTops) {
+    return
+  }
+  const rows = [...list.querySelectorAll(':scope > .card-row')]
+  for (const row of rows) {
+    if (typeof row.getAnimations !== 'function') {
+      continue
+    }
+    for (const anim of row.getAnimations()) {
+      if (anim.id === 'card-reorder') {
+        anim.cancel()
+      }
+    }
+  }
+  for (const row of rows) {
+    const before = beforeTops.get(row.dataset.cardId)
+    if (before == null || typeof row.animate !== 'function') {
+      continue
+    }
+    const delta = before - row.getBoundingClientRect().top
+    if (Math.abs(delta) < 1) {
+      continue
+    }
+    const anim = row.animate(
+      [{ transform: `translateY(${delta}px)` }, { transform: 'translateY(0)' }],
+      { duration, easing: 'cubic-bezier(0.22, 0.8, 0.28, 1)', fill: 'both' },
+    )
+    anim.id = 'card-reorder'
+  }
+}
+
 function moveItem(list, from, to) {
   if (to < 0 || to >= list.length || from === to) {
     return list
@@ -1130,6 +1207,17 @@ function moveItem(list, from, to) {
   const [item] = next.splice(from, 1)
   next.splice(to, 0, item)
   return next
+}
+
+function layoutViewportTop(row) {
+  const visual = row.getBoundingClientRect().top
+  const transform = window.getComputedStyle(row).transform
+  if (!transform || transform === 'none') {
+    return visual
+  }
+  const parts = transform.slice(transform.indexOf('(') + 1, -1).split(',')
+  const ty = parts.length === 16 ? Number.parseFloat(parts[13]) : Number.parseFloat(parts[5])
+  return visual - (Number.isFinite(ty) ? ty : 0)
 }
 
 function rowIndexFromPoint(list, clientY) {
@@ -1141,8 +1229,8 @@ function rowIndexFromPoint(list, clientY) {
     return -1
   }
   for (let i = 0; i < rows.length; i++) {
-    const rect = rows[i].getBoundingClientRect()
-    if (clientY < rect.top + rect.height / 2) {
+    const top = layoutViewportTop(rows[i])
+    if (clientY < top + rows[i].offsetHeight / 2) {
       return i
     }
   }

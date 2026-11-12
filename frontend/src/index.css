@@ -1699,6 +1699,10 @@ a.library-suggestion {
   justify-content: space-between;
   align-items: flex-start;
   gap: 12px;
+  transition:
+    border-color 0.55s ease,
+    background-color 0.55s ease,
+    box-shadow 0.55s ease;
 }
 
 .card-row-body {
@@ -1771,8 +1775,23 @@ a.library-suggestion {
   user-select: none;
 }
 
+.card-row.is-dragging,
+.card-row.just-moved {
+  position: relative;
+  z-index: 1;
+  border-color: var(--cobalt);
+  transition: none;
+}
+
 .card-row.is-dragging {
-  opacity: 0.72;
+  z-index: 2;
+  background: var(--surface-2);
+  box-shadow: var(--shadow);
+}
+
+.card-row.just-moved {
+  background: color-mix(in srgb, var(--cobalt) 18%, var(--card));
+  box-shadow: var(--shadow);
 }
 
 .btn.icon-btn {
