@@ -59,9 +59,9 @@ export default function OfflineDecksPage() {
           </button>
         ) : null}
       </div>
-      {user ? (
+      {packs && packs.length > 0 ? <p className="muted">{t('offline.intro')}</p> : null}
+      {packs && packs.length === 0 && user ? (
         <>
-          <p className="muted">{t('offline.intro')}</p>
           <section className="card-form offline-how">
             <div className="offline-how-row">
               <span className="offline-icon-sample is-focus" aria-hidden="true">
@@ -73,24 +73,22 @@ export default function OfflineDecksPage() {
               </div>
             </div>
           </section>
+          <section className="card-form">
+            {pro ? <p className="muted">{t('offline.empty')}</p> : <p className="muted">{t('offline.pitch')}</p>}
+            <p className="muted">{t('offline.limits')}</p>
+            {pro ? null : (
+              <>
+                <p>{t('offline.proRequired')}</p>
+                <Link className="btn primary" to="/pro">
+                  {t('pro.goToPro')}
+                </Link>
+              </>
+            )}
+          </section>
         </>
       ) : null}
       {packs === null ? <p>{t('app.loading')}</p> : null}
-      {user && !pro ? (
-        <section className="card-form">
-          <p>{t('offline.proRequired')}</p>
-          <p>{t('offline.proWhy')}</p>
-          <ul className="pro-feature-list">
-            <li>{t('offline.proExample1')}</li>
-            <li>{t('offline.proExample2')}</li>
-            <li>{t('offline.proExample3')}</li>
-          </ul>
-          <Link className="btn primary" to="/pro">
-            {t('pro.goToPro')}
-          </Link>
-        </section>
-      ) : null}
-      {packs && packs.length === 0 && (!user || pro) ? <p className="muted">{t('offline.empty')}</p> : null}
+      {packs && packs.length === 0 && !user ? <p className="muted">{t('offline.empty')}</p> : null}
       {packs && packs.length > 0 ? (
         <div className="offline-list">
           {visiblePacks.map((pack) => (

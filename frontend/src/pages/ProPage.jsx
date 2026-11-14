@@ -20,6 +20,7 @@ import {
   syncApplePurchases,
 } from '../billing'
 import { isProLicensed } from '../pro'
+import { useMediaQuery } from '../useMediaQuery'
 import { useResumeExpiredSubscription } from '../useResumeExpiredSubscription'
 import { translateError } from '../i18n/errors'
 
@@ -64,6 +65,9 @@ function ProSection({ user, onError, onStub, refresh }) {
   const [notice, setNotice] = useState('')
   const [billingError, setBillingError] = useState('')
   const [plan, setPlan] = useState('YEARLY')
+  const [featuresOpen, setFeaturesOpen] = useState(false)
+  const [creditsOpen, setCreditsOpen] = useState(false)
+  const narrow = useMediaQuery('(max-width: 859px)')
   const pro = isProLicensed(user)
   const native = isNativeApp()
   const android = isAndroidApp()
@@ -323,7 +327,7 @@ function ProSection({ user, onError, onStub, refresh }) {
           {showComingSoon ? <p className="muted">{t('pro.comingSoon')}</p> : null}
           <div className="pro-benefits">
             <h2 className="pro-benefits-heading">{t('pro.benefitsHeading')}</h2>
-            <ul className="pro-benefit-list">
+            <ul className={`pro-benefit-list${featuresOpen ? ' is-expanded' : ''}`}>
               <BenefitItem tone="ai" title={t('pro.featureAi')} detail={t('pro.featureAiDetail')} />
               <BenefitItem tone="rehearse" title={t('pro.featureRehearse')} detail={t('pro.featureRehearseDetail')} />
               <BenefitItem tone="mix" title={t('pro.featureMix')} detail={t('pro.featureMixDetail')} />
@@ -344,6 +348,16 @@ function ProSection({ user, onError, onStub, refresh }) {
               />
               <BenefitItem tone="devices" title={t('pro.featureDevices')} detail={t('pro.featureDevicesDetail')} />
             </ul>
+            {narrow ? (
+              <button
+                className="btn pro-features-more"
+                type="button"
+                aria-expanded={featuresOpen}
+                onClick={() => setFeaturesOpen((open) => !open)}
+              >
+                {featuresOpen ? t('pro.showFewer') : t('pro.featuresShowAll')}
+              </button>
+            ) : null}
           </div>
           {stubButton}
         </section>
@@ -400,63 +414,77 @@ function ProSection({ user, onError, onStub, refresh }) {
                     allowance: billing?.monthlyAllowance ?? 10,
                   })}
             </p>
-            <p className="muted">{t('pro.creditRule')}</p>
-            <p className="muted">{t('pro.creditReset')}</p>
-            {billing?.addonEnabled && !native && canPay ? (
-              <div className="billing-actions">
-                <button
-                  className="btn"
-                  type="button"
-                  disabled={busy}
-                  onClick={() => runBilling(() => startCheckout('ADDON', '/pro'))}
-                >
-                  {t('settings.buyCredits', {
-                    count: billing.addonPackCredits,
-                    price: billing.addonPrice,
-                  })}
-                </button>
+            <div className="pro-balance-actions">
+              <div className={`pro-credit-rules${creditsOpen ? ' is-open' : ''}`}>
+                <p className="muted">{t('pro.creditRule')}</p>
+                <p className="muted">{t('pro.creditReset')}</p>
               </div>
-            ) : null}
-            {billing?.googleAddonEnabled && android ? (
-              <div className="billing-actions">
+              {billing?.addonEnabled && !native && canPay ? (
+                <div className="billing-actions">
+                  <button
+                    className="btn"
+                    type="button"
+                    disabled={busy}
+                    onClick={() => runBilling(() => startCheckout('ADDON', '/pro'))}
+                  >
+                    {t('settings.buyCredits', {
+                      count: billing.addonPackCredits,
+                      price: billing.addonPrice,
+                    })}
+                  </button>
+                </div>
+              ) : null}
+              {billing?.googleAddonEnabled && android ? (
+                <div className="billing-actions">
+                  <button
+                    className="btn"
+                    type="button"
+                    disabled={busy}
+                    onClick={() =>
+                      buy(() => startPlayPurchase(billing, billing.googleProductAddon, user?.id))
+                    }
+                  >
+                    {t('settings.buyCredits', {
+                      count: billing.addonPackCredits,
+                      price: billing.addonPrice,
+                    })}
+                  </button>
+                </div>
+              ) : null}
+              {billing?.appleAddonEnabled && ios ? (
+                <div className="billing-actions">
+                  <button
+                    className="btn"
+                    type="button"
+                    disabled={busy}
+                    onClick={() =>
+                      buy(() => startApplePurchase(billing.appleProductAddon, user?.id))
+                    }
+                  >
+                    {t('settings.buyCredits', {
+                      count: billing.addonPackCredits,
+                      price: billing.addonPrice,
+                    })}
+                  </button>
+                </div>
+              ) : null}
+              {narrow ? (
                 <button
-                  className="btn"
+                  className="btn pro-credits-how"
                   type="button"
-                  disabled={busy}
-                  onClick={() =>
-                    buy(() => startPlayPurchase(billing, billing.googleProductAddon, user?.id))
-                  }
+                  aria-expanded={creditsOpen}
+                  onClick={() => setCreditsOpen((open) => !open)}
                 >
-                  {t('settings.buyCredits', {
-                    count: billing.addonPackCredits,
-                    price: billing.addonPrice,
-                  })}
+                  {creditsOpen ? t('pro.showFewer') : t('pro.creditsHow')}
                 </button>
-              </div>
-            ) : null}
-            {billing?.appleAddonEnabled && ios ? (
-              <div className="billing-actions">
-                <button
-                  className="btn"
-                  type="button"
-                  disabled={busy}
-                  onClick={() =>
-                    buy(() => startApplePurchase(billing.appleProductAddon, user?.id))
-                  }
-                >
-                  {t('settings.buyCredits', {
-                    count: billing.addonPackCredits,
-                    price: billing.addonPrice,
-                  })}
-                </button>
-              </div>
-            ) : null}
+              ) : null}
+            </div>
             {stubButton}
           </section>
 
           <section className="card-form pro-account-card">
             <h2 className="section-heading">{t('pro.featuresTitle')}</h2>
-            <ul className="pro-feature-list">
+            <ul className={`pro-feature-list${featuresOpen ? ' is-expanded' : ''}`}>
               <FeatureItem title={t('pro.featureAi')} detail={t('pro.featureAiDetail')} />
               <FeatureItem title={t('pro.featureRehearse')} detail={t('pro.featureRehearseDetail')} />
               <FeatureItem title={t('pro.featureMix')} detail={t('pro.featureMixDetail')} />
@@ -470,6 +498,16 @@ function ProSection({ user, onError, onStub, refresh }) {
               <FeatureItem title={t('pro.featureStudio')} detail={t('pro.featureStudioDetail')} />
               <FeatureItem title={t('pro.featureExport')} detail={t('pro.featureExportDetail')} />
             </ul>
+            {narrow ? (
+              <button
+                className="btn pro-features-more"
+                type="button"
+                aria-expanded={featuresOpen}
+                onClick={() => setFeaturesOpen((open) => !open)}
+              >
+                {featuresOpen ? t('pro.showFewer') : t('pro.featuresShowAll')}
+              </button>
+            ) : null}
           </section>
         </>
       )}

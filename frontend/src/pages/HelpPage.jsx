@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { createContext, useCallback, useContext, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { SUPPORT_EMAIL, SUPPORT_MAILTO } from '../support'
@@ -9,6 +9,8 @@ const CSV_EXAMPLE = `front,back,hint
 photosynthesis,process plants use to make food
 "hello, world",hola,greeting
 mitochondria,powerhouse of the cell`
+
+const HelpOpenContext = createContext(() => {})
 
 const SECTIONS = [
   { id: 'help-start', titleKey: 'help.startTitle' },
@@ -31,6 +33,29 @@ const SECTIONS = [
 
 export default function HelpPage() {
   const { t } = useTranslation()
+  const [openIds, setOpenIds] = useState(() => {
+    const ids = new Set(['help-start'])
+    const hash = window.location.hash.replace(/^#/, '')
+    if (hash) {
+      ids.add(hash)
+    }
+    return ids
+  })
+
+  const onSectionOpen = useCallback((id, isOpen) => {
+    setOpenIds((current) => {
+      if (current.has(id) === isOpen) {
+        return current
+      }
+      const next = new Set(current)
+      if (isOpen) {
+        next.add(id)
+      } else {
+        next.delete(id)
+      }
+      return next
+    })
+  }, [])
 
   function jump(id) {
     const el = document.getElementById(id)
@@ -51,6 +76,7 @@ export default function HelpPage() {
   }, [])
 
   return (
+    <HelpOpenContext.Provider value={onSectionOpen}>
     <div className="page help-page">
       <div className="page-title">
         <div>
@@ -61,7 +87,13 @@ export default function HelpPage() {
 
       <nav className="help-toc" aria-label={t('help.tocLabel')}>
         {SECTIONS.map((section) => (
-          <button key={section.id} className="help-toc-btn" type="button" onClick={() => jump(section.id)}>
+          <button
+            key={section.id}
+            className={`help-toc-btn${openIds.has(section.id) ? ' is-open' : ''}`}
+            type="button"
+            aria-current={openIds.has(section.id) ? 'true' : undefined}
+            onClick={() => jump(section.id)}
+          >
             {t(section.titleKey)}
           </button>
         ))}
@@ -323,13 +355,20 @@ export default function HelpPage() {
         </a>
       </section>
     </div>
+    </HelpOpenContext.Provider>
   )
 }
 
 function HelpSection({ id, title, defaultOpen = false, children }) {
+  const onOpenChange = useContext(HelpOpenContext)
   const [open, setOpen] = useState(
     () => defaultOpen || window.location.hash.replace(/^#/, '') === id,
   )
+
+  useEffect(() => {
+    onOpenChange(id, open)
+  }, [id, open, onOpenChange])
+
   return (
     <details
       id={id}

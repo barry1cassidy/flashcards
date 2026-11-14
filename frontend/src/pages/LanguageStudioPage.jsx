@@ -23,12 +23,6 @@ import {
 import ConfirmModal from './ConfirmModal'
 import MenuIcon from './MenuIcon'
 
-const INTRO_POINTS = [
-  { icon: 'cafe', title: 'studio.introPoint1Title', body: 'studio.introPoint1Body' },
-  { icon: 'reveal', title: 'studio.introPoint2Title', body: 'studio.introPoint2Body' },
-  { icon: 'listen', title: 'studio.introPoint3Title', body: 'studio.introPoint3Body' },
-]
-
 export default function LanguageStudioPage() {
   const { t } = useTranslation()
   const { user } = useAuth()
@@ -175,7 +169,7 @@ export default function LanguageStudioPage() {
       {showIntro ? <StudioIntro pro={pro} /> : null}
 
       {showLibrary ? (
-        <>
+        <div className="studio-library">
           <div className="page-title">
             <div>
               <h1>{t('studio.title')}</h1>
@@ -364,7 +358,7 @@ export default function LanguageStudioPage() {
               })}
             </div>
           ) : null}
-        </>
+        </div>
       ) : null}
 
       {pendingPlaylistDelete ? (
@@ -405,30 +399,18 @@ function StudioIntro({ pro }) {
   const { t } = useTranslation()
 
   return (
-    <section className="studio-intro">
+    <section className={`studio-intro${pro ? ' is-pro' : ''}`}>
+      {pro ? (
+        <div className="studio-intro-start">
+          <h1>{t('studio.startTitle')}</h1>
+          <p className="studio-intro-lede">{t('studio.startLede')}</p>
+        </div>
+      ) : null}
       <div className="studio-intro-top">
         <div className="studio-intro-copy">
           <h1>{t('studio.introTitle')}</h1>
-          <p className="studio-intro-lede">{t('studio.introLede')}</p>
-          <p className="studio-intro-why">{t('studio.introWhy')}</p>
-          <div className="studio-intro-cta">
-            {pro ? (
-              <>
-                <Link className="btn primary" to="/language-studio/new">
-                  {t('studio.new')}
-                </Link>
-                <Link className="btn" to="/language-studio/samples">
-                  {t('studio.samples')}
-                </Link>
-              </>
-            ) : (
-              <Link className="btn primary" to="/pro">
-                {t('pro.goToPro')}
-              </Link>
-            )}
-          </div>
-          <p className="muted">{pro ? t('studio.samplesHint') : t('studio.introProNote')}</p>
-          <p className="muted">{t('studio.schedule')}</p>
+          <p className="studio-intro-lede studio-intro-lede-long">{t('studio.introLede')}</p>
+          <p className="studio-intro-lede studio-intro-lede-short">{t('studio.introLedeShort')}</p>
         </div>
 
         <figure className="studio-intro-demo" aria-label={t('studio.introDemoCaption')}>
@@ -450,20 +432,32 @@ function StudioIntro({ pro }) {
           </div>
           <figcaption>{t('studio.introDemoCaption')}</figcaption>
         </figure>
-      </div>
 
-      <div className="studio-intro-points">
-        {INTRO_POINTS.map((point) => (
-          <article key={point.title} className="studio-intro-point">
-            <span className="studio-intro-point-icon" aria-hidden="true">
-              <MenuIcon name={point.icon} />
-            </span>
-            <div>
-              <h2>{t(point.title)}</h2>
-              <p className="muted">{t(point.body)}</p>
-            </div>
-          </article>
-        ))}
+        <div className="studio-intro-offer">
+          {pro ? null : <p>{t('studio.proRequired')}</p>}
+          <div className="studio-intro-cta">
+            {pro ? (
+              <>
+                <Link className="btn primary" to="/language-studio/new">
+                  {t('studio.new')}
+                </Link>
+                <Link className="btn" to="/language-studio/samples">
+                  {t('studio.samples')}
+                </Link>
+              </>
+            ) : (
+              <Link className="btn primary" to="/pro">
+                {t('pro.goToPro')}
+              </Link>
+            )}
+          </div>
+          {pro ? (
+            <>
+              <p className="muted studio-samples-hint">{t('studio.samplesHint')}</p>
+              <p className="muted studio-samples-hint-short">{t('studio.samplesHintShort')}</p>
+            </>
+          ) : null}
+        </div>
       </div>
 
       <div className="studio-intro-places-block">

@@ -1,10 +1,11 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { api } from '../api'
 import { useAuth } from '../AuthContext'
 import { useAiCredits } from '../AiCreditsContext'
 import { completeCheckout, isNativeApp, startCheckout } from '../billing'
+import { webMarketing } from '../webOnly'
 import { isProLicensed } from '../pro'
 import { trackDeckCreated, useTrackProGate } from '../analytics'
 import { useResumeExpiredSubscription } from '../useResumeExpiredSubscription'
@@ -30,7 +31,11 @@ export default function AgentPage() {
   const { reportCredits } = useAiCredits()
   useResumeExpiredSubscription()
   const navigate = useNavigate()
-  const [searchParams] = useSearchParams()
+  const [searchParams, setSearchParams] = useSearchParams()
+  const wizardStep = searchParams.get('step') === '3' ? 3 : searchParams.get('step') === '2' ? 2 : 1
+  const [wizardKind, setWizardKind] = useState('')
+  const backRef = useRef(null)
+  const wizardWas = useRef(null)
   const [status, setStatus] = useState(null)
   const [groups, setGroups] = useState([])
   const [prompt, setPrompt] = useState('')
@@ -105,6 +110,27 @@ export default function AgentPage() {
     }
   }, [searchParams, navigate])
 
+  useLayoutEffect(() => {
+    if (webMarketing) {
+      return
+    }
+    const previous = wizardWas.current
+    wizardWas.current = wizardStep
+    if (previous === null && wizardStep === 1) {
+      return
+    }
+    if (previous === wizardStep) {
+      return
+    }
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' })
+    if (wizardStep === 2) {
+      promptRef.current?.focus({ preventScroll: true })
+    } else if (wizardStep > 1) {
+      backRef.current?.focus({ preventScroll: true })
+    }
+  }, [wizardStep])
+
   useEffect(() => {
     if (!busy) {
       return undefined
@@ -126,6 +152,36 @@ export default function AgentPage() {
     setPresetId('')
     setPrompt('')
     window.setTimeout(() => promptRef.current?.focus(), 0)
+  }
+
+  function goStep(next) {
+    setSearchParams({ step: String(next) })
+  }
+
+  function backStep() {
+    const index = window.history.state?.idx
+    if (typeof index === 'number' && index > 0) {
+      navigate(-1)
+      return
+    }
+    if (wizardStep > 2) {
+      setSearchParams({ step: '2' }, { replace: true })
+      return
+    }
+    setSearchParams({}, { replace: true })
+  }
+
+  function choosePreset(id) {
+    applyPreset(id)
+    setWizardKind(id)
+    goStep(2)
+  }
+
+  function chooseOwn() {
+    setPresetId('')
+    setPrompt('')
+    setWizardKind('own')
+    goStep(2)
   }
 
   function pickFile(event) {
@@ -259,6 +315,213 @@ export default function AgentPage() {
   const canBuyAddon = Boolean(status?.addonCheckoutEnabled) && !native
   const canSubmit =
     !busy && remaining > 0 && !promptOverLimit && !fileError && Boolean(prompt.trim() || upload)
+  const canContinue = !promptOverLimit && !fileError && Boolean(prompt.trim() || upload)
+  const nativeForm = !webMarketing && canUseAi && Boolean(status?.configured)
+
+  if (nativeForm && busy) {
+    return (
+      <div className="page agent-wizard">
+        <h1>{t('agent.working', { seconds: elapsed })}</h1>
+        <div className="agent-progress" aria-live="polite">
+          {elapsed >= 45 ? <p className="muted">{t('agent.stillWaiting')}</p> : null}
+          {steps.length > 0 ? (
+            <ol>
+              {steps.map((step, index) => (
+                <li
+                  key={`${step.code}-${step.at}-${index}`}
+                  aria-current={index === steps.length - 1 ? 'true' : undefined}
+                >
+                  <span>{t(`agent.step.${step.code}`, { defaultValue: step.code })}</span>
+                  {step.detail ? <span className="muted"> {step.detail}</span> : null}
+                </li>
+              ))}
+            </ol>
+          ) : (
+            <p className="muted">{t('agent.step.starting')}</p>
+          )}
+        </div>
+      </div>
+    )
+  }
+
+  if (nativeForm) {
+    const materialTitle =
+      wizardKind && wizardKind !== 'own'
+        ? t(`agent.presets.${wizardKind}.title`)
+        : t('agent.wizard.ownTitle')
+    return (
+      <div className="page agent-wizard">
+        {error ? <div className="error">{translateError(t, error)}</div> : null}
+        {wizardStep === 1 ? (
+          <>
+            <p className="muted agent-step-count">{t('agent.wizard.step', { current: 1, total: 3 })}</p>
+            <h1>{t('agent.title')}</h1>
+            <p className="muted">{creditBrief(t, status)}</p>
+            {!pro ? <p className="muted">{t('agent.addonWithoutPro')}</p> : null}
+            {remaining <= 0 ? (
+              <div className="billing-actions">
+                {canBuyAddon ? (
+                  <button
+                    className="btn primary"
+                    type="button"
+                    onClick={() =>
+                      startCheckout('ADDON', '/create-with-ai').catch((err) => setError(err.message))
+                    }
+                  >
+                    {t('agent.buyCredits', {
+                      count: status.addonPackCredits,
+                      price: status.addonPrice,
+                    })}
+                  </button>
+                ) : native ? (
+                  <Link className="btn primary" to="/pro">
+                    {t('agent.buyCredits', {
+                      count: status.addonPackCredits,
+                      price: status.addonPrice,
+                    })}
+                  </Link>
+                ) : (
+                  <p>{t('agent.outOfCredits')}</p>
+                )}
+              </div>
+            ) : null}
+            <div className="agent-presets" role="group" aria-label={t('agent.presetsHeading')}>
+              {PRESETS.map((preset) => (
+                <button
+                  key={preset.id}
+                  type="button"
+                  className={`agent-preset agent-preset-${preset.id}${wizardKind === preset.id ? ' selected' : ''}`}
+                  disabled={remaining <= 0}
+                  onClick={() => choosePreset(preset.id)}
+                >
+                  <span className="agent-preset-icon" aria-hidden="true">
+                    <MenuIcon name={preset.icon} />
+                  </span>
+                  <span className="agent-preset-copy">
+                    <strong>{t(`agent.presets.${preset.id}.title`)}</strong>
+                    <span className="muted">{t(`agent.wizard.${preset.id}`)}</span>
+                  </span>
+                </button>
+              ))}
+            </div>
+            <button className="btn agent-own" type="button" disabled={remaining <= 0} onClick={chooseOwn}>
+              {t('agent.wizard.own')}
+            </button>
+          </>
+        ) : null}
+        {wizardStep === 2 ? (
+          <>
+            <p className="muted agent-step-count">{t('agent.wizard.step', { current: 2, total: 3 })}</p>
+            <button ref={backRef} className="agent-step-back" type="button" onClick={backStep}>
+              {t('agent.wizard.back')}
+            </button>
+            <h1>{materialTitle}</h1>
+            <div className="agent-prompt-field">
+              <div className="agent-prompt-heading">
+                <label htmlFor="agent-prompt">{t('agent.prompt')}</label>
+                {prompt ? (
+                  <button className="btn ghost agent-prompt-clear" type="button" onClick={clearPrompt}>
+                    {t('common.clear')}
+                  </button>
+                ) : null}
+              </div>
+              <textarea
+                id="agent-prompt"
+                ref={promptRef}
+                value={prompt}
+                onChange={(event) => {
+                  setPrompt(event.target.value)
+                  setPresetId('')
+                }}
+                rows={6}
+                placeholder={t('agent.wizard.placeholder')}
+                className={promptOverLimit ? 'over-limit' : ''}
+                aria-invalid={promptOverLimit}
+                aria-describedby="agent-prompt-count"
+              />
+              <span id="agent-prompt-count" className={`prompt-count ${promptOverLimit ? 'over' : 'muted'}`}>
+                {t('agent.promptCount', { used: prompt.length, max: MAX_PROMPT_CHARS })}
+              </span>
+              {promptOverLimit ? (
+                <span className="field-error">{t('agent.promptOverLimit', { max: MAX_PROMPT_CHARS })}</span>
+              ) : null}
+            </div>
+            <div className="agent-file">
+              <span className="agent-file-label">{t('agent.upload')}</span>
+              <p className="muted">{t('agent.uploadHint')}</p>
+              <div className="agent-file-row">
+                <button className="btn" type="button" onClick={() => fileRef.current?.click()}>
+                  {t('agent.chooseFile')}
+                </button>
+                <input ref={fileRef} type="file" accept={FILE_ACCEPT} hidden onChange={pickFile} />
+                {upload ? (
+                  <>
+                    <span className="agent-file-name">
+                      {upload.name} · {formatBytes(upload.size)}
+                    </span>
+                    <button
+                      className="btn ghost"
+                      type="button"
+                      onClick={() => {
+                        setUpload(null)
+                        setFileError('')
+                      }}
+                    >
+                      {t('agent.removeFile')}
+                    </button>
+                  </>
+                ) : null}
+              </div>
+              {fileError ? <p className="field-error">{fileError}</p> : null}
+            </div>
+            <button className="btn primary" type="button" disabled={!canContinue} onClick={() => goStep(3)}>
+              {t('common.continue')}
+            </button>
+          </>
+        ) : null}
+        {wizardStep === 3 ? (
+          <form className="agent-wizard-form" onSubmit={generate}>
+            <p className="muted agent-step-count">{t('agent.wizard.step', { current: 3, total: 3 })}</p>
+            <button ref={backRef} className="agent-step-back" type="button" onClick={backStep}>
+              {t('agent.wizard.back')}
+            </button>
+            <h1>{t('agent.wizard.ready')}</h1>
+            <div className="lang-row">
+              <LanguageSelect
+                id="agent-front-language"
+                label={t('agent.frontLanguage')}
+                value={frontLanguage}
+                autoLabel={t('agent.languageAuto')}
+                onChange={setFrontLanguage}
+              />
+              <LanguageSelect
+                id="agent-back-language"
+                label={t('agent.backLanguage')}
+                value={backLanguage}
+                autoLabel={t('agent.languageAuto')}
+                onChange={setBackLanguage}
+              />
+            </div>
+            <p className="muted">{t('agent.wizard.languageHint')}</p>
+            <label>
+              {t('agent.set')}
+              <select value={setId} onChange={(event) => setSetId(event.target.value)}>
+                <option value="">{t('agent.noSet')}</option>
+                {groups.map((group) => (
+                  <option key={group.id} value={String(group.id)}>
+                    {group.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <button className="btn primary" type="submit" disabled={!canSubmit}>
+              {t('agent.generate')}
+            </button>
+          </form>
+        ) : null}
+      </div>
+    )
+  }
 
   return (
     <div className="page">
@@ -273,7 +536,6 @@ export default function AgentPage() {
       {status && !canUseAi ? (
         <section className="card-form agent-locked">
           <p>{t('agent.proRequired')}</p>
-          <p>{t('agent.proWhy')}</p>
           <div className="agent-presets is-locked" aria-label={t('agent.presetsHeading')}>
             {PRESETS.map((preset) => (
               <div key={preset.id} className={`agent-preset agent-preset-${preset.id}`}>
@@ -287,11 +549,6 @@ export default function AgentPage() {
               </div>
             ))}
           </div>
-          <ul className="pro-feature-list">
-            <li>{t('agent.proExample1')}</li>
-            <li>{t('agent.proExample2')}</li>
-            <li>{t('agent.proExample3')}</li>
-          </ul>
           <Link className="btn primary" to="/pro">
             {t('pro.goToPro')}
           </Link>
@@ -492,6 +749,17 @@ export default function AgentPage() {
       ) : null}
     </div>
   )
+}
+
+function creditBrief(t, status) {
+  if (status?.addonCredits > 0) {
+    return t('agent.wizard.creditsExtra', {
+      total: status.remainingCredits,
+      included: status.includedCredits,
+      extra: status.addonCredits,
+    })
+  }
+  return t('agent.wizard.credits', { count: status?.remainingCredits ?? 0 })
 }
 
 function creditSummary(t, status) {

@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { api } from '../api'
 import { useAuth } from '../AuthContext'
 import { translateError } from '../i18n/errors'
 import { isTeacherMode } from '../teacher'
+import { webMarketing } from '../webOnly'
 import MenuIcon from './MenuIcon'
 import Modal from './Modal'
 
@@ -19,8 +20,11 @@ export default function ClassesPage() {
   const [name, setName] = useState('')
   const [busy, setBusy] = useState(false)
   const creating = searchParams.get('new') === '1'
+  const howOpen = !webMarketing && searchParams.get('how') === '1'
   const teacher = isTeacherMode(user)
   const empty = data.teaching.length === 0 && data.joined.length === 0
+  const backRef = useRef(null)
+  const howWasOpen = useRef(null)
 
   async function load() {
     setData(await api('/api/classes'))
@@ -29,6 +33,35 @@ export default function ClassesPage() {
   useEffect(() => {
     load().catch((err) => setError(err.message))
   }, [])
+
+  useLayoutEffect(() => {
+    if (webMarketing) {
+      return
+    }
+    const previous = howWasOpen.current
+    howWasOpen.current = howOpen
+    if (previous === null && !howOpen) {
+      return
+    }
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' })
+    if (howOpen) {
+      backRef.current?.focus({ preventScroll: true })
+    }
+  }, [howOpen])
+
+  function openHow() {
+    setSearchParams({ how: '1' })
+  }
+
+  function closeHow() {
+    const index = window.history.state?.idx
+    if (typeof index === 'number' && index > 0) {
+      navigate(-1)
+      return
+    }
+    setSearchParams({}, { replace: true })
+  }
 
   async function createClass(event) {
     event.preventDefault()
@@ -75,12 +108,26 @@ export default function ClassesPage() {
     }
   }
 
+  if (howOpen) {
+    return (
+      <div className="page classes-how-view">
+        <div className="classes-how-sticky">
+          <button ref={backRef} className="page-back classes-how-back" type="button" onClick={closeHow}>
+            {t('classes.back')}
+          </button>
+        </div>
+        <h1>{t('classes.howHeading')}</h1>
+        <ClassHowSteps />
+      </div>
+    )
+  }
+
   return (
-    <div className="page">
+    <div className={webMarketing ? 'page' : 'page classes-native'}>
       <div className="page-title">
         <div>
           <h1>{t('classes.title')}</h1>
-          <p className="muted">{t('classes.subtitle')}</p>
+          {webMarketing ? <p className="muted">{t('classes.subtitle')}</p> : null}
         </div>
         {teacher ? (
           <button
@@ -98,35 +145,7 @@ export default function ClassesPage() {
       </div>
       {error && !creating ? <div className="error">{translateError(t, error)}</div> : null}
 
-      <ol className="class-how-strip" aria-label={t('classes.howHeading')}>
-        <li className="class-how-step">
-          <span className="class-how-icon" aria-hidden="true">
-            <MenuIcon name="teacher" />
-          </span>
-          <span className="class-how-copy">
-            <strong>{t('classes.howStep1Title')}</strong>
-            <span className="muted">{t('classes.howStep1Body')}</span>
-          </span>
-        </li>
-        <li className="class-how-step">
-          <span className="class-how-icon" aria-hidden="true">
-            <MenuIcon name="joinCode" />
-          </span>
-          <span className="class-how-copy">
-            <strong>{t('classes.howStep2Title')}</strong>
-            <span className="muted">{t('classes.howStep2Body')}</span>
-          </span>
-        </li>
-        <li className="class-how-step">
-          <span className="class-how-icon" aria-hidden="true">
-            <MenuIcon name="deckCopy" />
-          </span>
-          <span className="class-how-copy">
-            <strong>{t('classes.howStep3Title')}</strong>
-            <span className="muted">{t('classes.howStep3Body')}</span>
-          </span>
-        </li>
-      </ol>
+      {webMarketing ? <ClassHowSteps /> : null}
 
       <div className="class-paths">
         <section className="class-path class-path-student" aria-labelledby="class-path-student-title">
@@ -218,7 +237,13 @@ export default function ClassesPage() {
         </section>
       </div>
 
-      {empty ? (
+      {webMarketing ? null : (
+        <button className="classes-how-open" type="button" onClick={openHow}>
+          {t('classes.howHeading')}
+        </button>
+      )}
+
+      {empty && webMarketing ? (
         <div className="empty class-empty">
           {teacher ? t('classes.emptyTeacher') : t('classes.emptyStudent')}
         </div>
@@ -280,6 +305,41 @@ export default function ClassesPage() {
         </Modal>
       ) : null}
     </div>
+  )
+}
+
+function ClassHowSteps() {
+  const { t } = useTranslation()
+  return (
+    <ol className="class-how-strip" aria-label={t('classes.howHeading')}>
+      <li className="class-how-step">
+        <span className="class-how-icon" aria-hidden="true">
+          <MenuIcon name="teacher" />
+        </span>
+        <span className="class-how-copy">
+          <strong>{t('classes.howStep1Title')}</strong>
+          <span className="muted">{t('classes.howStep1Body')}</span>
+        </span>
+      </li>
+      <li className="class-how-step">
+        <span className="class-how-icon" aria-hidden="true">
+          <MenuIcon name="joinCode" />
+        </span>
+        <span className="class-how-copy">
+          <strong>{t('classes.howStep2Title')}</strong>
+          <span className="muted">{t('classes.howStep2Body')}</span>
+        </span>
+      </li>
+      <li className="class-how-step">
+        <span className="class-how-icon" aria-hidden="true">
+          <MenuIcon name="deckCopy" />
+        </span>
+        <span className="class-how-copy">
+          <strong>{t('classes.howStep3Title')}</strong>
+          <span className="muted">{t('classes.howStep3Body')}</span>
+        </span>
+      </li>
+    </ol>
   )
 }
 

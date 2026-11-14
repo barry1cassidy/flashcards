@@ -371,13 +371,8 @@ export default function ListenPage() {
           <h1>{t('listen.title')}</h1>
         </div>
         <section className="listen-gate">
-          <p className="listen-gate-lead">{t('listen.proLead')}</p>
-          <p className="listen-gate-pitch">{t('listen.proMemory')}</p>
-          <ul className="pro-feature-list listen-gate-points">
-            <li>{t('listen.proPoint1')}</li>
-            <li>{t('listen.proPoint2')}</li>
-            <li>{t('listen.proPoint3')}</li>
-          </ul>
+          <p>{t('listen.proRequired')}</p>
+          <p className="muted listen-gate-lead">{t('listen.proLead')}</p>
           <div className="listen-uses listen-gate-uses">
             {GATE_SCENES.map((item) => (
               <figure className="listen-use" key={item.scene}>

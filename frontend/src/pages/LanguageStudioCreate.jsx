@@ -47,6 +47,7 @@ export default function LanguageStudioCreate() {
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
   const [step, setStep] = useState(1)
+  const narrow = useNarrowLayout()
   const cancelled = useRef(false)
   const primed = useRef(false)
 
@@ -109,6 +110,14 @@ export default function LanguageStudioCreate() {
   const learnedCount = selectedPair?.learnedCount || 0
   const pairsReady = Array.isArray(pairs)
   const firstTime = pairsReady && pairs.length === 0
+  const wizard = firstTime || narrow
+
+  useEffect(() => {
+    if (!wizard) {
+      return
+    }
+    window.scrollTo(0, 0)
+  }, [step, wizard])
 
   function applyPair(pair) {
     setNativeLanguage(pair.nativeLanguage)
@@ -219,7 +228,7 @@ export default function LanguageStudioCreate() {
     (scenario !== 'custom' || Boolean(customPrompt.trim()))
 
   function goBack() {
-    if (firstTime && step > 1) {
+    if (wizard && step > 1) {
       setStep((current) => current - 1)
       return
     }
@@ -227,21 +236,25 @@ export default function LanguageStudioCreate() {
   }
 
   const title =
-    firstTime && step === 1
+    wizard && step === 1
       ? t('studio.setupLanguagesTitle')
-      : firstTime && step === 2
+      : wizard && step === 2
         ? t('studio.setupLevelTitle')
-        : firstTime
+        : wizard && firstTime
           ? t('studio.setupSceneTitle')
-          : t('studio.createTitle')
+          : wizard
+            ? t('studio.setupSceneTitleAgain')
+            : t('studio.createTitle')
   const intro =
-    firstTime && step === 1
+    wizard && step === 1
       ? t('studio.setupLanguagesIntro')
-      : firstTime && step === 2
+      : wizard && step === 2
         ? t('studio.setupLevelIntro')
-        : firstTime
+        : wizard && firstTime
           ? t('studio.setupSceneIntro')
-          : t('studio.createIntro')
+          : wizard
+            ? ''
+            : t('studio.createIntro')
 
   return (
     <div className="page">
@@ -251,8 +264,13 @@ export default function LanguageStudioCreate() {
       <div className="page-title">
         <div>
           <h1>{title}</h1>
-          <p className="muted">{intro}</p>
-          {firstTime ? <p className="muted">{t('studio.stepProgress', { current: step, total: 3 })}</p> : null}
+          {intro ? (
+            <p className={`muted${wizard && step > 1 ? ' studio-setup-intro' : ''}`}>{intro}</p>
+          ) : null}
+          {wizard && step === 2 ? (
+            <p className="muted studio-setup-intro-short">{t('studio.setupLevelIntroShort')}</p>
+          ) : null}
+          {wizard ? <p className="muted">{t('studio.stepProgress', { current: step, total: 3 })}</p> : null}
         </div>
       </div>
       {error ? <div className="error">{translateError(t, error)}</div> : null}
@@ -263,15 +281,16 @@ export default function LanguageStudioCreate() {
       <form
         className="card-form studio-create"
         onSubmit={(event) => {
-          if (firstTime && step < 3) {
+          if (wizard && step < 3) {
             event.preventDefault()
             return
           }
           generate(event)
         }}
       >
-        {firstTime && step === 1 ? (
+        {wizard && step === 1 ? (
           <>
+            <PairChoices pairs={pairs} selectedPair={selectedPair} applyPair={applyPair} busy={busy} />
             <LanguageFields
               nativeLanguage={nativeLanguage}
               targetLanguage={targetLanguage}
@@ -292,7 +311,7 @@ export default function LanguageStudioCreate() {
           </>
         ) : null}
 
-        {firstTime && step === 2 ? (
+        {wizard && step === 2 ? (
           <>
             <LevelCards level={level} setLevel={setLevel} busy={busy} />
             <div className="studio-setup-actions">
@@ -303,9 +322,12 @@ export default function LanguageStudioCreate() {
           </>
         ) : null}
 
-        {firstTime && step === 3 ? (
+        {wizard && step === 3 ? (
           <>
-            <p className="muted studio-setup-pair">{studioPairLabel({ nativeLanguage, targetLanguage }, t)} · {level}</p>
+            <p className="muted studio-setup-pair">
+              {studioPairLabel({ nativeLanguage, targetLanguage }, t)} · {level}
+              <span className="studio-setup-credits"> · {t('pro.balanceLeft', { count: remaining })}</span>
+            </p>
             <CreditNote remaining={remaining} />
             <SceneFields
               scenario={scenario}
@@ -314,31 +336,22 @@ export default function LanguageStudioCreate() {
               setCustomPrompt={setCustomPrompt}
               busy={busy}
             />
+            <LearnedToggle
+              learnedCount={learnedCount}
+              useLearned={useLearned}
+              setUseLearned={setUseLearned}
+              busy={busy}
+            />
             <button className="btn primary listen-play" type="submit" disabled={!canSubmit}>
               {busy ? t('studio.generating') : t('studio.generate')}
             </button>
           </>
         ) : null}
 
-        {!firstTime ? (
+        {!wizard ? (
           <>
             <CreditNote remaining={remaining} />
-            {pairs?.length > 1 ? (
-              <div className="listen-choice-row studio-filters" role="radiogroup" aria-label={t('studio.pairs')}>
-                {pairs.map((pair) => (
-                  <button
-                    key={pair.id}
-                    className={`btn${selectedPair?.id === pair.id ? ' primary' : ''}`}
-                    type="button"
-                    disabled={busy}
-                    aria-pressed={selectedPair?.id === pair.id}
-                    onClick={() => applyPair(pair)}
-                  >
-                    {studioPairLabel(pair, t)}
-                  </button>
-                ))}
-              </div>
-            ) : null}
+            <PairChoices pairs={pairs} selectedPair={selectedPair} applyPair={applyPair} busy={busy} />
             <LanguageFields
               nativeLanguage={nativeLanguage}
               targetLanguage={targetLanguage}
@@ -383,20 +396,12 @@ export default function LanguageStudioCreate() {
               </div>
               <p className="muted">{t(`studio.levelHint${level}`)}</p>
             </fieldset>
-            {learnedCount > 0 ? (
-              <div className="studio-learned">
-                <button
-                  className={`btn${useLearned ? ' primary' : ''}`}
-                  type="button"
-                  disabled={busy}
-                  aria-pressed={useLearned}
-                  onClick={() => setUseLearned((value) => !value)}
-                >
-                  {useLearned ? t('studio.useLearned') : t('studio.ignoreLearned')}
-                </button>
-                <p className="muted">{t('studio.useLearnedHint', { count: learnedCount })}</p>
-              </div>
-            ) : null}
+            <LearnedToggle
+              learnedCount={learnedCount}
+              useLearned={useLearned}
+              setUseLearned={setUseLearned}
+              busy={busy}
+            />
             <button className="btn primary listen-play" type="submit" disabled={!canSubmit}>
               {busy ? t('studio.generating') : t('studio.generate')}
             </button>
@@ -404,6 +409,64 @@ export default function LanguageStudioCreate() {
         ) : null}
       </form>
       ) : null}
+    </div>
+  )
+}
+
+function useNarrowLayout() {
+  const query = '(max-width: 859px)'
+  const [narrow, setNarrow] = useState(() => window.matchMedia(query).matches)
+
+  useEffect(() => {
+    const media = window.matchMedia(query)
+    const onChange = () => setNarrow(media.matches)
+    media.addEventListener('change', onChange)
+    return () => media.removeEventListener('change', onChange)
+  }, [])
+
+  return narrow
+}
+
+function PairChoices({ pairs, selectedPair, applyPair, busy }) {
+  const { t } = useTranslation()
+  if (!pairs || pairs.length < 2) {
+    return null
+  }
+  return (
+    <div className="listen-choice-row studio-filters" role="radiogroup" aria-label={t('studio.pairs')}>
+      {pairs.map((pair) => (
+        <button
+          key={pair.id}
+          className={`btn${selectedPair?.id === pair.id ? ' primary' : ''}`}
+          type="button"
+          disabled={busy}
+          aria-pressed={selectedPair?.id === pair.id}
+          onClick={() => applyPair(pair)}
+        >
+          {studioPairLabel(pair, t)}
+        </button>
+      ))}
+    </div>
+  )
+}
+
+function LearnedToggle({ learnedCount, useLearned, setUseLearned, busy }) {
+  const { t } = useTranslation()
+  if (learnedCount <= 0) {
+    return null
+  }
+  return (
+    <div className="studio-learned">
+      <button
+        className={`btn${useLearned ? ' primary' : ''}`}
+        type="button"
+        disabled={busy}
+        aria-pressed={useLearned}
+        onClick={() => setUseLearned((value) => !value)}
+      >
+        {useLearned ? t('studio.useLearned') : t('studio.ignoreLearned')}
+      </button>
+      <p className="muted">{t('studio.useLearnedHint', { count: learnedCount })}</p>
     </div>
   )
 }
@@ -468,12 +531,13 @@ function LevelCards({ level, setLevel, busy }) {
 
 function SceneFields({ scenario, setScenario, customPrompt, setCustomPrompt, busy }) {
   const { t } = useTranslation()
+  const narrow = useNarrowLayout()
   const examples = sceneExamples(scenario, t)
   return (
     <fieldset className="listen-panel">
       <legend>{t('studio.scenario')}</legend>
       <div className="studio-locations" role="radiogroup" aria-label={t('studio.scenario')}>
-        {STUDIO_LOCATIONS.map((item) => (
+        {STUDIO_LOCATIONS.filter((item) => item !== 'custom' || !narrow).map((item) => (
           <button
             key={item}
             className={`studio-location studio-location-${item}${scenario === item ? ' is-selected' : ''}`}
@@ -489,6 +553,17 @@ function SceneFields({ scenario, setScenario, customPrompt, setCustomPrompt, bus
           </button>
         ))}
       </div>
+      {narrow ? (
+        <button
+          className={`studio-own-link${scenario === 'custom' ? ' is-on' : ''}`}
+          type="button"
+          disabled={busy}
+          aria-pressed={scenario === 'custom'}
+          onClick={() => setScenario('custom')}
+        >
+          {t('studio.describeOwn')}
+        </button>
+      ) : null}
       <label htmlFor="studio-custom">
         {scenario === 'custom' ? t('studio.describeRequired') : t('studio.describeOptional')}
         <textarea
