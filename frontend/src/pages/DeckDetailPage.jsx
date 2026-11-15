@@ -70,6 +70,8 @@ export default function DeckDetailPage() {
   const [translating, setTranslating] = useState(false)
   const [confirm, setConfirm] = useState(null)
   const [editingDeck, setEditingDeck] = useState(false)
+  const [detailsFromList, setDetailsFromList] = useState(false)
+  const [cardsFromList, setCardsFromList] = useState(false)
   const [editingCards, setEditingCards] = useState(false)
   const [editName, setEditName] = useState('')
   const [editDescription, setEditDescription] = useState('')
@@ -117,9 +119,9 @@ export default function DeckDetailPage() {
       return
     }
     if (intent === 'details') {
-      beginEdit()
+      beginEdit(true)
     } else if (intent === 'cards') {
-      beginCardEdit()
+      beginCardEdit(true)
     } else if (intent === 'add') {
       openAddCard()
     }
@@ -267,7 +269,7 @@ export default function DeckDetailPage() {
     return updated
   }
 
-  function beginEdit() {
+  function beginEdit(fromList = false) {
     setEditName(deck.name)
     setEditDescription(deck.description || '')
     setEditGroupId(deck.group?.id ?? '')
@@ -275,12 +277,16 @@ export default function DeckDetailPage() {
     setEditBackLanguage(normalizeSpeechLanguage(deck.backLanguage, 'en-US'))
     setError('')
     setEditingCards(false)
+    setCardsFromList(false)
+    setDetailsFromList(fromList === true)
     setEditingDeck(true)
   }
 
-  function beginCardEdit() {
+  function beginCardEdit(fromList = false) {
     setError('')
     setEditingDeck(false)
+    setDetailsFromList(false)
+    setCardsFromList(fromList === true)
     setEditingCards(true)
   }
 
@@ -305,6 +311,8 @@ export default function DeckDetailPage() {
     drag.current = null
     setDraggingId(null)
     setEditingDeck(false)
+    setDetailsFromList(false)
+    setCardsFromList(false)
     setEditingCards(false)
     resetCardForm()
   }
@@ -315,6 +323,7 @@ export default function DeckDetailPage() {
     window.removeEventListener('pointercancel', reorderWindow.current.onEnd)
     drag.current = null
     setDraggingId(null)
+    setCardsFromList(false)
     setEditingCards(false)
     resetCardForm()
   }
@@ -618,16 +627,71 @@ export default function DeckDetailPage() {
   }
 
   return (
-    <div className="page">
+    <div className="page deck-page">
       <div className="page-title">
         <div className="deck-hero">
-          <Link className="page-back" to={mixReturn || '/'}>
-            {mixReturn ? t('nav.backToMix') : t('decks.back')}
-          </Link>
+          {(editingDeck && !detailsFromList) || (editingCards && !cardsFromList) ? (
+            <button
+              className="page-back"
+              type="button"
+              onClick={() => {
+                if (editingDeck) {
+                  commitDeckDetails({}, { exit: true })
+                } else {
+                  finishCardEdit()
+                }
+              }}
+            >
+              {t('decks.back')}
+            </button>
+          ) : (
+            <Link className="page-back" to={mixReturn || '/'}>
+              {mixReturn ? t('nav.backToMix') : t('decks.back')}
+            </Link>
+          )}
           <GroupBadge group={deck.group} />
           <h1>{deck.name}</h1>
           {deck.description ? <p>{deck.description}</p> : null}
+          <p className="deck-face-meta">
+            <span>
+              {languageName(frontLanguage)}
+              <span aria-hidden="true"> → </span>
+              {languageName(backLanguage)}
+            </span>
+            <GroupBadge group={deck.group} />
+          </p>
           <p className="muted">{stats.join(' · ')}</p>
+          {hasCards && !editingDeck && !editingCards ? (
+            <div className="deck-face-stack">
+              <div className="deck-face-back deck-face-back-far" aria-hidden="true" />
+              <div className="deck-face-back deck-face-back-near" aria-hidden="true" />
+              <div className="deck-face">
+                {cards[0].hasFrontImage || cards[0].hasBackImage ? (
+                  <div className="card-row-thumbs">
+                    {cards[0].hasFrontImage ? (
+                      <AuthImage cardId={cards[0].id} side="front" alt="" className="card-row-thumb" />
+                    ) : null}
+                    {cards[0].hasBackImage ? (
+                      <AuthImage cardId={cards[0].id} side="back" alt="" className="card-row-thumb" />
+                    ) : null}
+                  </div>
+                ) : null}
+                <div className="deck-face-line">
+                  <strong>{cards[0].front}</strong>
+                  <SpeakButton text={cards[0].front} lang={frontLanguage} />
+                </div>
+                <div className="deck-face-line">
+                  <p>{cards[0].back}</p>
+                  <SpeakButton text={cards[0].back} lang={backLanguage} />
+                </div>
+                {cards[0].hint ? (
+                  <p className="muted small card-hint">
+                    {t('decks.hint')}: {cards[0].hint}
+                  </p>
+                ) : null}
+              </div>
+            </div>
+          ) : null}
         </div>
         {editingDeck || editingCards ? null : (
           <div className="header-actions deck-hero-actions">
@@ -678,7 +742,7 @@ export default function DeckDetailPage() {
                 <span>{t('decks.studyDeck')}</span>
               </button>
             ) : null}
-            <button className="btn with-icon deck-action-edit" type="button" onClick={beginEdit}>
+            <button className="btn with-icon deck-action-edit" type="button" onClick={() => beginEdit()}>
               <MenuIcon name="edit" />
               <span>{t('decks.editDeck')}</span>
             </button>
@@ -688,7 +752,7 @@ export default function DeckDetailPage() {
       {offlineError ? <div className="error">{translateError(t, offlineError)}</div> : null}
       {error ? <div className="error">{translateError(t, error)}</div> : null}
 
-      <section className="deck-section" aria-labelledby="deck-details-heading">
+      <section className="deck-section deck-details-section" aria-labelledby="deck-details-heading">
         <div className="deck-section-header">
           <h2 id="deck-details-heading" className="section-heading">
             {t('decks.detailsSection')}
@@ -795,12 +859,12 @@ export default function DeckDetailPage() {
         )}
       </section>
 
+      {editingDeck ? null : (
       <section className="deck-section" aria-labelledby="deck-cards-heading">
         <div className="deck-section-header" id="deck-cards">
           <h2 id="deck-cards-heading" className="section-heading">
             {t('decks.cardsSection')}
           </h2>
-          {editingDeck ? null : (
             <div className="header-actions deck-card-actions">
               {editingCards ? (
                 <div className="deck-card-actions-row">
@@ -815,7 +879,7 @@ export default function DeckDetailPage() {
                 <>
                   <div className="deck-card-actions-row">
                     {hasCards ? (
-                      <button className="btn with-icon" type="button" onClick={beginCardEdit}>
+                      <button className="btn with-icon" type="button" onClick={() => beginCardEdit()}>
                         <MenuIcon name="decks" />
                         <span>{t('decks.editCards')}</span>
                       </button>
@@ -852,7 +916,6 @@ export default function DeckDetailPage() {
                 </>
               )}
             </div>
-          )}
           <input ref={fileRef} type="file" accept=".csv,text/csv" hidden onChange={importCsv} />
         </div>
         {cards.length === 0 ? (
@@ -954,6 +1017,7 @@ export default function DeckDetailPage() {
           </>
         )}
       </section>
+      )}
       {cardFormOpen ? (
         <Modal
           variant="form"
