@@ -1066,6 +1066,11 @@ a.btn {
   width: 100%;
 }
 
+.pro-benefits,
+.pro-account-features {
+  scroll-margin-top: calc(var(--header-height) + var(--safe-top) + 12px);
+}
+
 .pro-benefits {
   display: grid;
   gap: 12px;
@@ -1177,25 +1182,45 @@ html[data-theme='light'] .pro-benefit-item {
   gap: 12px;
 }
 
+.pro-features-more,
+.pro-buy-credits {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  border: 1.5px solid var(--cobalt);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--cobalt) 18%, var(--surface-2));
+  color: var(--text);
+  font-size: 1.02rem;
+  font-weight: 700;
+}
+
+.pro-features-more:hover,
+.pro-buy-credits:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--cobalt) 28%, var(--surface-2));
+}
+
 @media (max-width: 859px) {
-  .pro-benefit-list:not(.is-expanded) .pro-benefit-item:nth-child(n + 4),
-  .pro-feature-list:not(.is-expanded) li:nth-child(n + 4) {
+  .page:has(.pro-upgrade-card) .page-title {
+    margin-bottom: 8px;
+  }
+
+  .pro-upgrade-card {
+    gap: 14px;
+  }
+
+  .pro-benefits.is-collapsed .pro-benefits-heading,
+  .pro-benefits.is-collapsed .pro-benefit-list,
+  .pro-account-card.is-collapsed > .section-heading,
+  .pro-account-card.is-collapsed > .pro-feature-list {
     display: none;
   }
 
-  .pro-benefit-list:not(.is-expanded) .pro-benefit-item p,
-  .pro-benefit-list:not(.is-expanded) .speech-languages-note,
-  .pro-feature-list:not(.is-expanded) p,
-  .pro-feature-list:not(.is-expanded) .speech-languages-note {
-    display: none;
+  .pro-features-more {
+    width: 100%;
   }
 
-  .pro-benefit-list:not(.is-expanded) .pro-benefit-item {
-    align-items: center;
-    padding: 8px 10px;
-  }
-
-  .pro-features-more,
   .pro-credits-how {
     display: flex;
     align-items: center;

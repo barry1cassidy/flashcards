@@ -124,9 +124,7 @@ export default function AgentPage() {
     }
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' })
-    if (wizardStep === 2) {
-      promptRef.current?.focus({ preventScroll: true })
-    } else if (wizardStep > 1) {
+    if (wizardStep > 1) {
       backRef.current?.focus({ preventScroll: true })
     }
   }, [wizardStep])
@@ -145,7 +143,9 @@ export default function AgentPage() {
     const next = t(`agent.presets.${id}.prompt`)
     setPresetId(id)
     setPrompt(next)
-    window.setTimeout(() => promptRef.current?.focus(), 0)
+    if (webMarketing) {
+      window.setTimeout(() => promptRef.current?.focus(), 0)
+    }
   }
 
   function clearPrompt() {

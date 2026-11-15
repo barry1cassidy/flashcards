@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '../AuthContext'
@@ -67,7 +67,21 @@ function ProSection({ user, onError, onStub, refresh }) {
   const [plan, setPlan] = useState('YEARLY')
   const [featuresOpen, setFeaturesOpen] = useState(false)
   const [creditsOpen, setCreditsOpen] = useState(false)
+  const featuresAnchor = useRef(null)
+  const featuresOpenRef = useRef(featuresOpen)
   const narrow = useMediaQuery('(max-width: 859px)')
+
+  useEffect(() => {
+    const changed = featuresOpenRef.current !== featuresOpen
+    featuresOpenRef.current = featuresOpen
+    if (!changed || !narrow) {
+      return
+    }
+    featuresAnchor.current?.scrollIntoView({
+      behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+      block: 'start',
+    })
+  }, [featuresOpen, narrow])
   const pro = isProLicensed(user)
   const native = isNativeApp()
   const android = isAndroidApp()
@@ -325,9 +339,22 @@ function ProSection({ user, onError, onStub, refresh }) {
             </div>
           ) : null}
           {showComingSoon ? <p className="muted">{t('pro.comingSoon')}</p> : null}
-          <div className="pro-benefits">
+          <div
+            className={`pro-benefits${narrow && !featuresOpen ? ' is-collapsed' : ''}`}
+            ref={featuresAnchor}
+          >
+            {narrow ? (
+              <button
+                className="btn pro-features-more"
+                type="button"
+                aria-expanded={featuresOpen}
+                onClick={() => setFeaturesOpen((open) => !open)}
+              >
+                {featuresOpen ? t('pro.featuresHide') : t('pro.featuresShowAll')}
+              </button>
+            ) : null}
             <h2 className="pro-benefits-heading">{t('pro.benefitsHeading')}</h2>
-            <ul className={`pro-benefit-list${featuresOpen ? ' is-expanded' : ''}`}>
+            <ul className="pro-benefit-list">
               <BenefitItem tone="ai" title={t('pro.featureAi')} detail={t('pro.featureAiDetail')} />
               <BenefitItem tone="rehearse" title={t('pro.featureRehearse')} detail={t('pro.featureRehearseDetail')} />
               <BenefitItem tone="mix" title={t('pro.featureMix')} detail={t('pro.featureMixDetail')} />
@@ -348,16 +375,6 @@ function ProSection({ user, onError, onStub, refresh }) {
               />
               <BenefitItem tone="devices" title={t('pro.featureDevices')} detail={t('pro.featureDevicesDetail')} />
             </ul>
-            {narrow ? (
-              <button
-                className="btn pro-features-more"
-                type="button"
-                aria-expanded={featuresOpen}
-                onClick={() => setFeaturesOpen((open) => !open)}
-              >
-                {featuresOpen ? t('pro.showFewer') : t('pro.featuresShowAll')}
-              </button>
-            ) : null}
           </div>
           {stubButton}
         </section>
@@ -422,7 +439,7 @@ function ProSection({ user, onError, onStub, refresh }) {
               {billing?.addonEnabled && !native && canPay ? (
                 <div className="billing-actions">
                   <button
-                    className="btn"
+                    className="btn pro-buy-credits"
                     type="button"
                     disabled={busy}
                     onClick={() => runBilling(() => startCheckout('ADDON', '/pro'))}
@@ -437,7 +454,7 @@ function ProSection({ user, onError, onStub, refresh }) {
               {billing?.googleAddonEnabled && android ? (
                 <div className="billing-actions">
                   <button
-                    className="btn"
+                    className="btn pro-buy-credits"
                     type="button"
                     disabled={busy}
                     onClick={() =>
@@ -454,7 +471,7 @@ function ProSection({ user, onError, onStub, refresh }) {
               {billing?.appleAddonEnabled && ios ? (
                 <div className="billing-actions">
                   <button
-                    className="btn"
+                    className="btn pro-buy-credits"
                     type="button"
                     disabled={busy}
                     onClick={() =>
@@ -482,9 +499,22 @@ function ProSection({ user, onError, onStub, refresh }) {
             {stubButton}
           </section>
 
-          <section className="card-form pro-account-card">
+          <section
+            className={`card-form pro-account-card pro-account-features${narrow && !featuresOpen ? ' is-collapsed' : ''}`}
+            ref={featuresAnchor}
+          >
+            {narrow ? (
+              <button
+                className="btn pro-features-more"
+                type="button"
+                aria-expanded={featuresOpen}
+                onClick={() => setFeaturesOpen((open) => !open)}
+              >
+                {featuresOpen ? t('pro.featuresHide') : t('pro.featuresShowAll')}
+              </button>
+            ) : null}
             <h2 className="section-heading">{t('pro.featuresTitle')}</h2>
-            <ul className={`pro-feature-list${featuresOpen ? ' is-expanded' : ''}`}>
+            <ul className="pro-feature-list">
               <FeatureItem title={t('pro.featureAi')} detail={t('pro.featureAiDetail')} />
               <FeatureItem title={t('pro.featureRehearse')} detail={t('pro.featureRehearseDetail')} />
               <FeatureItem title={t('pro.featureMix')} detail={t('pro.featureMixDetail')} />
@@ -498,16 +528,6 @@ function ProSection({ user, onError, onStub, refresh }) {
               <FeatureItem title={t('pro.featureStudio')} detail={t('pro.featureStudioDetail')} />
               <FeatureItem title={t('pro.featureExport')} detail={t('pro.featureExportDetail')} />
             </ul>
-            {narrow ? (
-              <button
-                className="btn pro-features-more"
-                type="button"
-                aria-expanded={featuresOpen}
-                onClick={() => setFeaturesOpen((open) => !open)}
-              >
-                {featuresOpen ? t('pro.showFewer') : t('pro.featuresShowAll')}
-              </button>
-            ) : null}
           </section>
         </>
       )}
