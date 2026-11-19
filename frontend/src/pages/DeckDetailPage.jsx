@@ -24,6 +24,7 @@ import { getOfflinePack, saveOfflinePack } from '../offlinePacks'
 import { useResumeExpiredSubscription } from '../useResumeExpiredSubscription'
 import { mixReturnTo, withMixReturn } from '../mixReturn'
 import EditCardsWithAi from './EditCardsWithAi'
+import DeckTitle from './DeckTitle'
 
 function deckUpdateBody(deck, overrides = {}) {
   return {
@@ -650,7 +651,7 @@ export default function DeckDetailPage() {
             </Link>
           )}
           <GroupBadge group={deck.group} />
-          <h1>{deck.name}</h1>
+          <DeckTitle name={deck.name} />
           {deck.description ? <p>{deck.description}</p> : null}
           <p className="deck-face-meta">
             <span>

@@ -28,7 +28,7 @@ services:
       context: ./backend
     restart: unless-stopped
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/${MYSQL_DATABASE:-flashcards}?characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_URL: jdbc:mysql://${MYSQL_HOST}:3306/${MYSQL_DATABASE:-flashcards}?characterEncoding=utf8&sslMode=REQUIRED&serverTimezone=UTC
       SPRING_DATASOURCE_USERNAME: ${MYSQL_USER:-flashcards}
       SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD}
       APP_JWT_SECRET: ${APP_JWT_SECRET}
@@ -78,9 +78,6 @@ services:
       TRANSLATE_URL: http://translate:5000
     volumes:
       - ${GOOGLE_PLAY_CREDENTIALS_HOST_PATH:-/opt/zipdeck/google-play.json}:/app/google-play.json:ro
-    depends_on:
-      mysql:
-        condition: service_healthy
     networks:
       - internal
 

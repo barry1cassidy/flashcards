@@ -8,6 +8,7 @@ import { formatSleepLeft } from '../listenPrefs'
 import { canListenSpeak } from '../listenSpeech'
 import { ListenLiveOptions, ListenOptionsToggle, listenLiveSummary } from './ListenOptions'
 import StudioRatePanel from './StudioRatePanel'
+import DeckTitle from './DeckTitle'
 
 export default function ListenPlayer({
   playback,
@@ -125,7 +126,7 @@ export default function ListenPlayer({
       <>
       <div className="page-title">
         <div>
-          <h1>{title || card?.deckName || t('listen.menu')}</h1>
+          <DeckTitle name={title || card?.deckName || t('listen.menu')} />
           <p className="muted">
             {card?.deckName && title && card.deckName !== title ? `${card.deckName} · ` : ''}
             {playback?.total

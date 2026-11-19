@@ -12,6 +12,7 @@ import SpeakButton from './SpeakButton'
 import ConfirmModal from './ConfirmModal'
 import StudyModeModal from './StudyModeModal'
 import LibraryGuestActions from './LibraryGuestActions'
+import DeckTitle from './DeckTitle'
 import { normalizeSpeechLanguage } from '../speechLanguages'
 import { trackSampleCopied } from '../analytics'
 
@@ -195,7 +196,7 @@ export default function LibraryDeckPage() {
           <div className="page-title">
             <div className="deck-hero">
               <GroupBadge group={deck.group} />
-              <h1>{deck.name}</h1>
+              <DeckTitle name={deck.name} />
               {deck.description ? <p>{deck.description}</p> : null}
               <p className="muted">{t('decks.cards', { count: deck.cards.length })}</p>
               {!user ? <p className="muted library-public-note">{t('library.publicNote')}</p> : null}

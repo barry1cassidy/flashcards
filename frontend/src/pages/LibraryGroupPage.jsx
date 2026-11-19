@@ -10,6 +10,7 @@ import { isLanguageLibraryGroup } from '../libraryGroup'
 import { clearPageMeta, setPageMeta } from '../seo'
 import { GroupBadge } from './ColorPicker'
 import LibraryGuestActions from './LibraryGuestActions'
+import DeckTitle from './DeckTitle'
 import { trackSampleCopied } from '../analytics'
 
 export default function LibraryGroupPage() {
@@ -112,7 +113,7 @@ export default function LibraryGroupPage() {
           <div className="page-title">
             <div className="deck-hero">
               <GroupBadge group={group} />
-              <h1>{group.name}</h1>
+              <DeckTitle name={group.name} />
               <p className="muted">
                 {isLanguageLibraryGroup(group)
                   ? t('library.groupSubtitle', { language: group.name })
@@ -128,7 +129,7 @@ export default function LibraryGroupPage() {
               <article key={deck.id} className="deck-card library-card">
                 <Link to={deckPath} className="deck-card-main">
                   <h2 title={deck.name}>{deck.name}</h2>
-                  {deck.description ? <p>{deck.description}</p> : null}
+                  {deck.description ? <p className="clamp-2">{deck.description}</p> : null}
                   <p className="muted">{t('decks.cards', { count: deck.cardCount })}</p>
                 </Link>
                 <div className="deck-card-actions">

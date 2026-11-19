@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import SpeakButton from './SpeakButton'
+import DeckTitle from './DeckTitle'
 import { getOfflinePack } from '../offlinePacks'
 
 export default function OfflineStudyPage() {
@@ -70,7 +71,7 @@ export default function OfflineStudyPage() {
       </Link>
       <div className="page-title">
         <div>
-          <h1>{pack.name}</h1>
+          <DeckTitle name={pack.name} />
           <p className="muted">{t('offline.scheduleNote')}</p>
         </div>
         <Link className="btn" to={`/offline/listen?id=${encodeURIComponent(pack.id)}`}>

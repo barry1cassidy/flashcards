@@ -408,7 +408,7 @@ export default function DecksPage() {
                       </div>
                     ) : null}
                     <h2 className={deck.group ? undefined : 'deck-card-title'} title={deck.name}>{deck.name}</h2>
-                    <p className="muted">{deck.description || t('decks.noDescription')}</p>
+                    <p className="muted clamp-2">{deck.description || t('decks.noDescription')}</p>
                     <div className="stat-row">
                       <span>{t('decks.cards', { count: deck.cardCount })}</span>
                       <span className="due-badge">{t('decks.due', { count: deck.dueCount })}</span>

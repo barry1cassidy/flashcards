@@ -9,6 +9,7 @@ import { translateError } from '../i18n/errors'
 import { webMarketing } from '../webOnly'
 import MarketingHeader, { MarketingFooter } from './MarketingHeader'
 import NativeGuestBar from './NativeGuestBar'
+import DeckTitle from './DeckTitle'
 
 const joiningCodes = new Set()
 
@@ -99,7 +100,7 @@ export default function JoinClassPage() {
         <p className="kicker">{t('classes.joinKicker')}</p>
         {preview ? (
           <>
-            <h1>{preview.name}</h1>
+            <DeckTitle name={preview.name} />
             <p className="muted">
               {t('classes.joinPreview', {
                 teacher: preview.teacherName,

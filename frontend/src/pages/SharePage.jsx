@@ -7,6 +7,7 @@ import { isEmailVerified } from '../email'
 import { inviteAuthState, peekJoinInvite, rememberJoinInvite, takeJoinInvite } from '../authRedirect'
 import { translateError } from '../i18n/errors'
 import MarketingHeader, { MarketingFooter } from './MarketingHeader'
+import DeckTitle from './DeckTitle'
 
 const copyingCodes = new Set()
 
@@ -117,7 +118,7 @@ export default function SharePage() {
           {preview ? <p className="kicker">{isSet ? t('share.setKicker') : t('share.deckKicker')}</p> : null}
           {preview ? (
             <>
-              <h1>{preview.name}</h1>
+              <DeckTitle name={preview.name} />
               <p className="muted">
                 {isSet
                   ? t('share.setPreview', {

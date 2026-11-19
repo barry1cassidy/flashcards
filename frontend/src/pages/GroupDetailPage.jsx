@@ -12,6 +12,7 @@ import GroupForm from './GroupForm'
 import { useAuth } from '../AuthContext'
 import { sortDecks } from '../deckSort'
 import { mixReturnTo, withMixReturn } from '../mixReturn'
+import DeckTitle from './DeckTitle'
 
 export default function GroupDetailPage() {
   const { t } = useTranslation()
@@ -95,7 +96,7 @@ export default function GroupDetailPage() {
             {mixReturn ? t('nav.backToMix') : t('groups.back')}
           </Link>
           <GroupBadge group={group} />
-          <h1>{group.name}</h1>
+          <DeckTitle name={group.name} />
           <p className="muted">{t('groups.decks', { count: group.deckCount })}</p>
         </div>
           <div className="header-actions">
@@ -172,9 +173,9 @@ export default function GroupDetailPage() {
           <ul className="card-list">
             {sortDecks(decks, user?.deckSort).map((deck) => (
               <li key={deck.id} className="card-row">
-                <div>
+                <div className="card-row-text">
                   <Link to={withMixReturn(`/decks/${deck.id}`, mixReturn)}>
-                    <strong>{deck.name}</strong>
+                    <strong className="clamp-2">{deck.name}</strong>
                   </Link>
                   <p className="muted small">
                     {t('decks.cards', { count: deck.cardCount })}

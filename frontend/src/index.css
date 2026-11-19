@@ -123,6 +123,46 @@ h3,
 h1 {
   font-size: 2rem;
   font-weight: 700;
+  min-width: 0;
+}
+
+.deck-title-text {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  overflow-wrap: break-word;
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+  text-align: start;
+}
+
+button.deck-title-text {
+  cursor: pointer;
+}
+
+.deck-title-text.is-expanded {
+  display: block;
+  overflow: visible;
+  -webkit-line-clamp: unset;
+}
+
+.clamp-2 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  overflow-wrap: break-word;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .muted {
@@ -1294,6 +1334,10 @@ html[data-theme='light'] .pro-benefit-item {
   margin: 8px 0 20px;
 }
 
+.page-title > div:not(.header-actions):not(.page-title-actions) {
+  min-width: 0;
+}
+
 .page-title-actions {
   display: flex;
   flex-wrap: wrap;
@@ -1768,7 +1812,17 @@ a.library-suggestion {
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
   overflow: hidden;
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
+}
+
+.card-row-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.card-row-text a {
+  display: block;
+  min-width: 0;
 }
 
 .due-badge {

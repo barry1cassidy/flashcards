@@ -93,7 +93,7 @@ export default function OfflineDecksPage() {
         <div className="offline-list">
           {visiblePacks.map((pack) => (
             <section className="card-form" key={pack.id}>
-              <h2 className="section-heading">{pack.name}</h2>
+              <h2 className="section-heading clamp-2">{pack.name}</h2>
               <p className="muted">
                 {t('decks.cards', { count: pack.cards.length })}
                 {' · '}

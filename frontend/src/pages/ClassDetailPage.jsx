@@ -6,6 +6,7 @@ import { publicSiteOrigin } from '../publicOrigin'
 import { formatDate } from '../i18n/format'
 import { translateError } from '../i18n/errors'
 import ConfirmModal from './ConfirmModal'
+import DeckTitle from './DeckTitle'
 
 const ROSTER_PAGE_SIZE = 8
 
@@ -230,7 +231,7 @@ export default function ClassDetailPage() {
           <Link className="page-back" to="/classes">
             {t('classes.back')}
           </Link>
-          <h1>{detail.name}</h1>
+          <DeckTitle name={detail.name} />
           <p className="muted">
             {teacher
               ? t('classes.teacherMeta', { members: detail.memberCount, decks: detail.decks.length })
@@ -318,9 +319,9 @@ export default function ClassDetailPage() {
         <ul className="card-list">
           {detail.decks.map((deck) => (
             <li key={deck.deckId} className="card-row class-deck-row">
-              <div>
-                <strong>{deck.name}</strong>
-                {deck.description ? <p className="muted">{deck.description}</p> : null}
+              <div className="card-row-text">
+                <strong className="clamp-2">{deck.name}</strong>
+                {deck.description ? <p className="muted clamp-2">{deck.description}</p> : null}
                 <p className="muted small">
                   {t('decks.cards', { count: deck.cardCount })}
                   {deck.lastStudiedAt
@@ -517,7 +518,7 @@ function ClassRoster({ members, decks, status, deckId, page, onStatus, onDeck, o
                     <ul className="class-progress-list">
                       {lines.map((deck) => (
                         <li key={deck.deckId}>
-                          <span>{deck.name}</span>
+                          <span className="clamp-2">{deck.name}</span>
                           <span className="muted">
                             {deck.copied
                               ? t('classes.progressCopied', {

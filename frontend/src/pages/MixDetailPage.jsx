@@ -14,6 +14,7 @@ import { withMixReturn } from '../mixReturn'
 import MenuIcon from './MenuIcon'
 import StudyModeModal from './StudyModeModal'
 import { GroupBadge } from './ColorPicker'
+import DeckTitle from './DeckTitle'
 
 const PAGE_SIZE = 6
 
@@ -113,7 +114,7 @@ export default function MixDetailPage() {
           <Link className="page-back" to="/mixes">
             {t('mix.menu')}
           </Link>
-          <h1>{mix.name}</h1>
+          <DeckTitle name={mix.name} />
           <p className="muted">{stats.join(' · ')}</p>
           {mix.includeAll ? <p className="muted">{t('mix.summaryAll')}</p> : null}
           <p className="muted">{t(orderKey)}</p>
@@ -201,7 +202,7 @@ function MixSources({ sets, decks, mixPath }) {
                   <h2 className={deck.group ? undefined : 'deck-card-title'} title={deck.name}>
                     {deck.name}
                   </h2>
-                  <p className="muted">{deck.description || t('decks.noDescription')}</p>
+                  <p className="muted clamp-2">{deck.description || t('decks.noDescription')}</p>
                   <div className="stat-row">
                     <span>{t('decks.cards', { count: deck.cardCount })}</span>
                     <span className="due-badge">{t('decks.due', { count: deck.dueCount })}</span>
