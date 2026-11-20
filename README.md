@@ -264,14 +264,14 @@ mitochondria,powerhouse of the cell
 backend/    Spring Boot REST API
 frontend/   React (Vite) app + Capacitor Android project
 docker-compose.yml          MySQL for local development, plus a paused LibreTranslate profile
-docker-compose.prod.yml     Nginx + API + MySQL for a small VM, plus a paused LibreTranslate profile
+docker-compose.prod.yml     Nginx + API for the Lightsail app instance, plus a paused LibreTranslate profile
 ```
 
 ## Deploy (cheap VM)
 
-The production compose file runs Nginx (the React build + `/api` proxy), Spring Boot, and MySQL on one host. The frontend already calls `/api` with relative URLs. Production Nginx listens on 80 and 443 and redirects HTTP to `https://zipdeck.app`.
+The production compose file runs Nginx (the React build + `/api` proxy) and Spring Boot on the app instance. MySQL is a Lightsail managed database in the same region. The frontend already calls `/api` with relative URLs. Production Nginx listens on 80 and 443 and redirects HTTP to `https://zipdeck.app`.
 
-Recommended box: **AWS Lightsail $10/month (2 GB RAM)**. Java 21 + MySQL is uncomfortable on 1 GB. Skip GCP e2-micro until the app is tiny and tuned.
+Recommended app box: **AWS Lightsail $10/month (2 GB RAM)**. The database is a separate Lightsail MySQL database. Leave that database in private mode.
 
 Card translation calls Azure from the API. The `translate` profile in this file is the paused LibreTranslate container. Leave it off on the 2 GB box. See **LibreTranslate (paused)** below.
 
@@ -286,7 +286,7 @@ sudo usermod -aG docker $USER
 git clone https://github.com/barry1cassidy/flashcards.git
 cd flashcards
 cp .env.example .env
-# edit .env: set MYSQL_PASSWORD, MYSQL_ROOT_PASSWORD, APP_JWT_SECRET, AGENT_API_KEY, and RESEND_API_KEY
+# edit .env: set MYSQL_HOST, MYSQL_PASSWORD, APP_JWT_SECRET, AGENT_API_KEY, and RESEND_API_KEY
 docker compose -f docker-compose.prod.yml up -d --build
 ```
 
@@ -350,26 +350,11 @@ sudo chmod +x /etc/letsencrypt/renewal-hooks/deploy/reload-nginx.sh
 
 Adjust the `cd` path if the repo lives somewhere else on the instance.
 
-### Database backups
+### Database
 
-The nightly dump is not in this repo. It is a script and a cron job on the Lightsail host, installed for the `ubuntu` user.
+Production data is in the Lightsail MySQL database named `flashcards`. The API connects with `MYSQL_HOST`, `MYSQL_USER`, and `MYSQL_PASSWORD` from the server `.env`. The app user is `flashcards`. The Lightsail master user is for administration.
 
-| Piece | Where |
-|---|---|
-| Cron | `ubuntu` crontab: `0 3 * * * /home/ubuntu/bin/backup-flashcards.sh` (3:00 AM server time; Lightsail Ubuntu is usually UTC) |
-| Script | `/home/ubuntu/bin/backup-flashcards.sh` |
-| Dump files | `/home/ubuntu/backups/flashcards-YYYY-MM-DD.sql.gz` |
-| Log | `/home/ubuntu/backups/backup.log` |
-
-The script runs `mysqldump` through `docker compose -f docker-compose.prod.yml` from `/home/ubuntu/flashcards`, keeps the newest 6 dump files, and overwrites that day’s file if it runs again. Check it with:
-
-```bash
-crontab -l
-ls -lh /home/ubuntu/backups
-tail -n 30 /home/ubuntu/backups/backup.log
-```
-
-These files are on the same VM as the database. Copy `/home/ubuntu/backups/*.sql.gz` off the box (laptop, S3, or another disk) if the instance itself is lost. Lightsail automatic instance snapshots are the separate “the disk died” copy.
+Lightsail keeps automatic daily backups and can restore to any point in the last 7 days. Take a manual snapshot in the Lightsail database console before a risky migration. A manual snapshot remains until you delete it. Automatic backups are deleted with the database.
 
 ### Play Billing key
 

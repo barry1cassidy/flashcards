@@ -1,7 +1,6 @@
 import { useEffect, useId, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { contrastText, normalizeHex } from '../colors'
-import { GroupBadge } from './ColorPicker'
 
 export default function SetFilter({ groups, value, onChange }) {
   const { t } = useTranslation()
@@ -14,6 +13,8 @@ export default function SetFilter({ groups, value, onChange }) {
   const label = t('decks.filterGroup')
   const allLabel = t('decks.allGroups')
   const selected = groups.find((group) => String(group.id) === value) || null
+  const selectedBackground = selected ? normalizeHex(selected.color) : undefined
+  const selectedColor = selectedBackground ? contrastText(selectedBackground) : undefined
 
   useEffect(() => {
     if (!open) {
@@ -113,17 +114,23 @@ export default function SetFilter({ groups, value, onChange }) {
       <button
         ref={triggerRef}
         id={`${listId}-trigger`}
-        className="set-filter-trigger"
+        className={`set-filter-trigger${selected ? ' is-colored' : ''}`}
         type="button"
         aria-labelledby={`${labelId} ${valueId}`}
         aria-haspopup="listbox"
         aria-expanded={open}
         aria-controls={open ? listId : undefined}
+        style={selected ? { background: `color-mix(in srgb, ${selectedBackground} 80%, transparent)`, color: selectedColor } : undefined}
         onClick={() => setOpen((current) => !current)}
       >
         <span className="set-filter-value" id={valueId}>
-          {selected ? <GroupBadge group={selected} /> : allLabel}
+          {selected ? selected.name : allLabel}
         </span>
+        {selected ? (
+          <svg className="set-filter-check" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M5 12.5l4.5 4.5L19 7.5" />
+          </svg>
+        ) : null}
         <span className="set-filter-chevron" aria-hidden="true">
           <svg viewBox="0 0 24 24">
             <path d="M6 9l6 6 6-6" />

@@ -1412,12 +1412,21 @@ html[data-theme='light'] .pro-benefit-item {
   white-space: nowrap;
 }
 
-.set-filter-trigger .group-badge {
-  display: block;
-  max-width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+.set-filter-trigger.is-colored {
+  border-radius: 6px;
+  border-color: transparent;
+}
+
+.set-filter-trigger.is-colored:hover,
+.set-filter-trigger.is-colored[aria-expanded='true'] {
+  border-color: transparent;
+  filter: brightness(1.08);
+}
+
+.set-filter-trigger.is-colored .set-filter-chevron,
+.set-filter-trigger.is-colored .set-filter-check {
+  color: inherit;
+  stroke: currentColor;
 }
 
 .set-filter-chevron {
