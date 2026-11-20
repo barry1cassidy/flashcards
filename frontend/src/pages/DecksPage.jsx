@@ -20,6 +20,7 @@ import { clearAfterAuth } from '../authRedirect'
 import { defaultSpeechLanguage } from '../speechLanguages'
 import { trackDeckCreated } from '../analytics'
 import LanguageSelect from './LanguageSelect'
+import SetFilter from './SetFilter'
 
 const GROUP_FILTER_KEY = 'flashcards.deckGroupFilter'
 
@@ -367,20 +368,7 @@ export default function DecksPage() {
             />
             <div className="deck-toolbar-row">
               {groups.length > 0 ? (
-                <label className="deck-filter">
-                  {t('decks.filterGroup')}
-                  <select
-                    value={groupFilter}
-                    onChange={(event) => onGroupFilterChange(event.target.value)}
-                  >
-                    <option value="">{t('decks.allGroups')}</option>
-                    {groups.map((group) => (
-                      <option key={group.id} value={String(group.id)}>
-                        {group.name}
-                      </option>
-                    ))}
-                  </select>
-                </label>
+                <SetFilter groups={groups} value={groupFilter} onChange={onGroupFilterChange} />
               ) : null}
               <ShareCodeToggle open={shareOpen} onToggle={() => setShareOpen((open) => !open)} label={t('decks.welcomeShare')} />
             </div>

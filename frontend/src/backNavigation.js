@@ -98,6 +98,10 @@ function closeTransientOverlay(pathname) {
     menu.click()
     return true
   }
+  if (document.querySelector('.set-filter-menu')) {
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }))
+    return true
+  }
   if (document.querySelector('.user-menu-dropdown')) {
     document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }))
     return true
