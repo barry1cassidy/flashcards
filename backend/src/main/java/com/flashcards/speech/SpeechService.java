@@ -23,6 +23,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -44,6 +45,7 @@ public class SpeechService {
     private final ConcurrentHashMap<String, Object> locks = new ConcurrentHashMap<>();
     private volatile Path cacheDir;
 
+    @Autowired
     public SpeechService(SpeechProperties properties) {
         this(properties, HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(5)).build(), Clock.systemUTC());
     }
