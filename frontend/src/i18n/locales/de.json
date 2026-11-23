@@ -1360,7 +1360,7 @@
     "rateGettingHint": "Sie konnten Ihre Zeilen beginnen, aber nicht ohne Hinsehen beenden.",
     "rateReadyHint": "Sie konnten Ihren Teil mit einem kurzen Blick auf die Zeile sagen.",
     "rateLearnedHint": "Sie können diese Szene ohne Hilfe spielen.",
-    "rateLearnedNote": "Beherrscht ist die Stufe, die danach etwas ändert. Diese Szenen bleiben in Ihrer Bibliothek, und wenn Sie ein neues Gespräch erzeugen, kann Zipdeck die hier gesagt Zeilen wiederverwenden, damit die nächste Szene auf Wörtern aufbaut, die Sie schon kennen. Schwer, Kommt schon und Fast gelernt halten nur fest, wie diese Übung lief.",
+    "rateLearnedNote": "Beherrscht ist die Stufe, die danach etwas ändert. Diese Szenen bleiben in Ihrer Bibliothek, und ein neues Gespräch kann diese Wörter wieder aufgreifen.",
     "choose": "Wählen",
     "deleteTitle": "Dieses Gespräch löschen?",
     "deleteMessage": "{{name}} löschen? Es wird aus jeder Playlist entfernt. Das ändert keine Stapel in Meine Stapel.",

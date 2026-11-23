@@ -51,7 +51,7 @@ export const STUDIO_LOCATION_ICONS = {
   custom: 'custom',
 }
 export const STUDIO_LEVELS = ['A1', 'A2', 'B1', 'B2', 'C1']
-export const STUDIO_STATUSES = ['LEARNING', 'GETTING', 'READY', 'LEARNED']
+export const STUDIO_STATUSES = ['LEARNING', 'LEARNED']
 
 export function defaultStudioLanguages(uiLocale) {
   const native = defaultSpeechLanguage(uiLocale)
@@ -128,8 +128,6 @@ export function studioListenReturnPath(path) {
 
 export const STUDIO_RATE_KINDS = {
   LEARNING: 'again',
-  GETTING: 'hard',
-  READY: 'good',
   LEARNED: 'easy',
 }
 
@@ -144,20 +142,17 @@ export function studioGradeKind(conversation) {
   if (!conversationIsGraded(conversation)) {
     return ''
   }
-  return STUDIO_RATE_KINDS[conversation.status] || ''
+  return STUDIO_RATE_KINDS[conversation.status] || 'again'
 }
 
 export function studioStatusLabel(status, t, graded = true) {
   if (!graded) {
     return t('studio.statusUngraded')
   }
-  const key = {
-    LEARNING: 'studio.statusLearning',
-    GETTING: 'studio.statusGetting',
-    READY: 'studio.statusReady',
-    LEARNED: 'studio.statusLearned',
-  }[status]
-  return key ? t(key) : status
+  if (status === 'LEARNED') {
+    return t('studio.statusLearned')
+  }
+  return t('studio.statusPracticing')
 }
 
 export function conversationToListenQueue(conversation) {

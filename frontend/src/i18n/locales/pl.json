@@ -1390,7 +1390,7 @@
     "rateGettingHint": "Potrafiłeś zacząć kwestie, ale nie dokończyć ich bez patrzenia.",
     "rateReadyHint": "Potrafiłeś powiedzieć swoją część po jednym spojrzeniu na kwestię.",
     "rateLearnedHint": "Potrafisz zagrać tę scenę bez pomocy.",
-    "rateLearnedNote": "Opanowane to ocena, która zmienia, co będzie dalej. Te sceny zostają w bibliotece, a gdy wygenerujesz nową rozmowę, Zipdeck może użyć kwestii powiedzianych tutaj, żeby kolejna scena budowała na słowach, które już znasz. Trudne, Idzie coraz lepiej i Prawie nauczone tylko zapisują, jak poszło to ćwiczenie.",
+    "rateLearnedNote": "Opanowane to ocena, która zmienia, co będzie dalej. Te sceny zostają w bibliotece, a nowa rozmowa może przywrócić te słowa.",
     "choose": "Wybierz",
     "deleteTitle": "Usunąć tę rozmowę?",
     "deleteMessage": "Usunąć {{name}}? Znika z każdej playlisty. To nie zmienia talii w Moje Talie.",

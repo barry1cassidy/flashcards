@@ -84,7 +84,7 @@ export function isNetworkError(error) {
 }
 
 export async function api(path, options = {}) {
-  const { skipSaving, ...request } = options
+  const { skipSaving, redirectOn401 = true, ...request } = options
   const headers = { ...(request.headers || {}) }
   const token = getToken()
   if (token) {
@@ -102,7 +102,7 @@ export async function api(path, options = {}) {
     beginSaving()
   }
   try {
-    return await send(path, { ...request, headers }, true)
+    return await send(path, { ...request, headers, redirectOn401 }, true)
   } finally {
     if (track) {
       endSaving()
@@ -211,6 +211,9 @@ async function send(path, options, allowRefresh) {
     throw offlineError(error)
   }
   if (response.status === 401) {
+    if (options.redirectOn401 === false) {
+      throw new Error(await readError(response))
+    }
     if (allowRefresh && canRefresh(path)) {
       const outcome = await refreshSession()
       if (outcome === 'ok') {
@@ -252,7 +255,7 @@ async function send(path, options, allowRefresh) {
     return null
   }
   const contentType = response.headers.get('content-type') || ''
-  if (contentType.includes('text/csv')) {
+  if (contentType.includes('text/csv') || contentType.includes('audio/')) {
     return response.blob()
   }
   if (contentType.startsWith('image/')) {

@@ -563,7 +563,7 @@ export const featurePosts = [
         blocks: [
           {
             type: 'p',
-            text: 'Practice shows the meaning in your language and asks you to say the line in theirs. Reveal after you try. At the end you grade the whole conversation, not each line: Hard, Getting there, Almost learned, or Fully learned.',
+            text: 'Practice shows the meaning in your language and asks you to say the line in theirs. Reveal after you try. At the end you grade the whole conversation, not each line: Still practicing, or Fully learned.',
           },
           {
             type: 'p',

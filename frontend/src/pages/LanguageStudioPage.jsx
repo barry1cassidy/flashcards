@@ -9,9 +9,7 @@ import { useResumeExpiredSubscription } from '../useResumeExpiredSubscription'
 import { translateError } from '../i18n/errors'
 import {
   STUDIO_LOCATION_ICONS,
-  STUDIO_RATE_KINDS,
   STUDIO_SCENARIOS,
-  STUDIO_STATUSES,
   conversationIsGraded,
   findStudioPair,
   studioGradeKind,
@@ -22,6 +20,7 @@ import {
 } from '../languageStudio'
 import ConfirmModal from './ConfirmModal'
 import MenuIcon from './MenuIcon'
+import ChoiceMenu from './ChoiceMenu'
 
 export default function LanguageStudioPage() {
   const { t } = useTranslation()
@@ -37,7 +36,7 @@ export default function LanguageStudioPage() {
   const [pendingPlaylistDelete, setPendingPlaylistDelete] = useState(null)
   const [ready, setReady] = useState(!pro)
   const [error, setError] = useState('')
-  const [filter, setFilter] = useState('all')
+  const [group, setGroup] = useState('practicing')
   const [pendingDelete, setPendingDelete] = useState(null)
   const selectedPair = findStudioPair(pairs, params.get('native'), params.get('target'))
 
@@ -108,12 +107,10 @@ export default function LanguageStudioPage() {
     }
   }, [pro, selectedPair])
 
-  const visible = items.filter((item) => {
-    if (filter === 'all') {
-      return true
-    }
-    return conversationIsGraded(item) && item.status === filter
-  })
+  const practicing = items.filter((item) => item.status !== 'LEARNED')
+  const learned = items.filter((item) => item.status === 'LEARNED')
+  const showGroups = practicing.length > 0 && learned.length > 0
+  const visible = showGroups ? (group === 'learned' ? learned : practicing) : items
 
   async function remove(item) {
     setError('')
@@ -195,33 +192,29 @@ export default function LanguageStudioPage() {
           {selectedPair ? (
             <div className="studio-library-head">
               {pairs.length > 1 ? (
-                <label className="studio-pair-kicker" htmlFor="studio-pair-filter">
+                <label className="studio-pair-kicker" id="studio-pair-filter-label" htmlFor="studio-pair-filter">
                   {t('studio.pairFilter')}
                 </label>
               ) : (
                 <p className="studio-pair-kicker">{t('studio.pairFilter')}</p>
               )}
               {pairs.length > 1 ? (
-                <select
+                <ChoiceMenu
                   id="studio-pair-filter"
+                  labelledBy="studio-pair-filter-label"
                   value={studioPairKey(selectedPair.nativeLanguage, selectedPair.targetLanguage)}
-                  onChange={(event) => {
-                    const [native, target] = event.target.value.split('::')
-                    const next = findStudioPair(pairs, native, target)
-                    if (next) {
-                      setParams({ native: next.nativeLanguage, target: next.targetLanguage })
+                  options={pairs.map((pair) => ({
+                    value: studioPairKey(pair.nativeLanguage, pair.targetLanguage),
+                    label: studioPairLabel(pair, t),
+                  }))}
+                  onChange={(next) => {
+                    const [native, target] = next.split('::')
+                    const pair = findStudioPair(pairs, native, target)
+                    if (pair) {
+                      setParams({ native: pair.nativeLanguage, target: pair.targetLanguage })
                     }
                   }}
-                >
-                  {pairs.map((pair) => (
-                    <option
-                      key={pair.id}
-                      value={studioPairKey(pair.nativeLanguage, pair.targetLanguage)}
-                    >
-                      {studioPairLabel(pair, t)}
-                    </option>
-                  ))}
-                </select>
+                />
               ) : (
                 <h2>{studioPairLabel(selectedPair, t)}</h2>
               )}
@@ -276,30 +269,26 @@ export default function LanguageStudioPage() {
             </section>
           ) : null}
 
-          <div className="listen-choice-row studio-filters" role="radiogroup" aria-label={t('studio.filters')}>
-            <button
-              className={`btn${filter === 'all' ? ' primary' : ''}`}
-              type="button"
-              aria-pressed={filter === 'all'}
-              onClick={() => setFilter('all')}
-            >
-              {t('studio.filterAll')}
-            </button>
-            {STUDIO_STATUSES.map((status) => {
-              const kind = STUDIO_RATE_KINDS[status]
-              return (
-                <button
-                  key={status}
-                  className={`btn rating ${kind}${filter === status ? ' is-on' : ''}`}
-                  type="button"
-                  aria-pressed={filter === status}
-                  onClick={() => setFilter(status)}
-                >
-                  {studioStatusLabel(status, t)}
-                </button>
-              )
-            })}
-          </div>
+          {showGroups ? (
+            <div className="listen-choice-row studio-filters" role="radiogroup" aria-label={t('studio.filters')}>
+              <button
+                className={`btn${group === 'practicing' ? ' primary' : ''}`}
+                type="button"
+                aria-pressed={group === 'practicing'}
+                onClick={() => setGroup('practicing')}
+              >
+                {t('studio.filterPracticing')} · {practicing.length}
+              </button>
+              <button
+                className={`btn${group === 'learned' ? ' primary' : ''}`}
+                type="button"
+                aria-pressed={group === 'learned'}
+                onClick={() => setGroup('learned')}
+              >
+                {t('studio.filterLearned')} · {learned.length}
+              </button>
+            </div>
+          ) : null}
 
           {visible.length === 0 ? <p className="muted">{t('studio.filterEmpty')}</p> : null}
 

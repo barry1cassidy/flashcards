@@ -1360,7 +1360,7 @@
     "rateGettingHint": "Riuscivi a iniziare le battute ma non a finirle senza guardare.",
     "rateReadyHint": "Riuscivi a dire la tua parte con solo un’occhiata alla battuta.",
     "rateLearnedHint": "Puoi recitare questa scena senza aiuto.",
-    "rateLearnedNote": "Padroneggiata è quella che cambia quello che succede dopo. Quelle scene restano in libreria e, quando generi una nuova conversazione, Zipdeck può riutilizzare le battute dette qui perché la scena successiva si appoggi a parole che già conosci. Difficile, Ci sto arrivando e Quasi imparata registrano solo come è andata questa pratica.",
+    "rateLearnedNote": "Padroneggiata è quella che cambia quello che succede dopo. Quelle scene restano in libreria, e una nuova conversazione può riportare quelle parole.",
     "choose": "Scegli",
     "deleteTitle": "Eliminare questa conversazione?",
     "deleteMessage": "Eliminare {{name}}? Viene tolta da ogni playlist. Non cambia nessun mazzo in I Miei Mazzi.",

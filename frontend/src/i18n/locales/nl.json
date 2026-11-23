@@ -1360,7 +1360,7 @@
     "rateGettingHint": "Je kon je regels beginnen maar niet afmaken zonder te kijken.",
     "rateReadyHint": "Je kon je deel zeggen met alleen een blik op de regel.",
     "rateLearnedHint": "Je kunt deze scène zonder hulp spelen.",
-    "rateLearnedNote": "Beheerst is degene die daarna iets verandert. Die scènes blijven in je bibliotheek, en als je een nieuw gesprek genereert kan Zipdeck de regels die je hier zei hergebruiken zodat de volgende scène voortbouwt op woorden die je al kent. Moeilijk, Komt al en Bijna geleerd leggen alleen vast hoe deze oefening ging.",
+    "rateLearnedNote": "Beheerst is degene die daarna iets verandert. Die scènes blijven in je bibliotheek, en een nieuw gesprek kan die woorden terughalen.",
     "choose": "Kiezen",
     "deleteTitle": "Dit gesprek verwijderen?",
     "deleteMessage": "{{name}} verwijderen? Het verdwijnt uit elke afspeellijst. Dit verandert geen stapels in Mijn Stapels.",

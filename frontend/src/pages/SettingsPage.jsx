@@ -11,6 +11,7 @@ import { LOCALES, currentLocale } from '../i18n'
 import { translateError } from '../i18n/errors'
 import { SUPPORT_EMAIL, SUPPORT_MAILTO } from '../support'
 import DeleteAccountSection from './DeleteAccountSection'
+import ChoiceMenu from './ChoiceMenu'
 
 export default function SettingsPage() {
   const { t } = useTranslation()
@@ -83,19 +84,14 @@ export default function SettingsPage() {
       <section className="card-form">
         <h2 className="section-heading">{t('language.label')}</h2>
         <p className="muted">{t('settings.languageHint')}</p>
-        <label className="locale-select">
-          <select
-            value={locale}
-            aria-label={t('language.label')}
-            onChange={(event) => run(() => setLocale(event.target.value))}
-          >
-            {LOCALES.map((option) => (
-              <option key={option.code} value={option.code}>
-                {option.nativeName}
-              </option>
-            ))}
-          </select>
-        </label>
+        <ChoiceMenu
+          id="settings-language"
+          className="locale-select"
+          ariaLabel={t('language.label')}
+          value={locale}
+          options={LOCALES.map((option) => ({ value: option.code, label: option.nativeName }))}
+          onChange={(next) => run(() => setLocale(next))}
+        />
       </section>
 
       <section className="card-form">

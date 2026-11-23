@@ -11,6 +11,7 @@ import { trackDeckCreated, useTrackProGate } from '../analytics'
 import { useResumeExpiredSubscription } from '../useResumeExpiredSubscription'
 import { translateError } from '../i18n/errors'
 import LanguageSelect from './LanguageSelect'
+import ChoiceMenu from './ChoiceMenu'
 import MenuIcon from './MenuIcon'
 
 const POLL_MS = 500
@@ -503,17 +504,20 @@ export default function AgentPage() {
               />
             </div>
             <p className="muted">{t('agent.wizard.languageHint')}</p>
-            <label>
-              {t('agent.set')}
-              <select value={setId} onChange={(event) => setSetId(event.target.value)}>
-                <option value="">{t('agent.noSet')}</option>
-                {groups.map((group) => (
-                  <option key={group.id} value={String(group.id)}>
-                    {group.name}
-                  </option>
-                ))}
-              </select>
-            </label>
+            <ChoiceMenu
+              id="agent-wizard-set"
+              label={t('agent.set')}
+              value={setId}
+              options={[
+                { value: '', label: t('agent.noSet') },
+                ...groups.map((group) => ({
+                  value: String(group.id),
+                  label: group.name,
+                  color: group.color,
+                })),
+              ]}
+              onChange={setSetId}
+            />
             <button className="btn primary" type="submit" disabled={!canSubmit}>
               {t('agent.generate')}
             </button>
@@ -701,17 +705,21 @@ export default function AgentPage() {
             />
           </div>
           <p className="muted">{t('agent.languageHint')}</p>
-          <label>
-            {t('agent.set')}
-            <select value={setId} onChange={(event) => setSetId(event.target.value)} disabled={busy}>
-              <option value="">{t('agent.noSet')}</option>
-              {groups.map((group) => (
-                <option key={group.id} value={String(group.id)}>
-                  {group.name}
-                </option>
-              ))}
-            </select>
-          </label>
+          <ChoiceMenu
+            id="agent-set"
+            label={t('agent.set')}
+            value={setId}
+            disabled={busy}
+            options={[
+              { value: '', label: t('agent.noSet') },
+              ...groups.map((group) => ({
+                value: String(group.id),
+                label: group.name,
+                color: group.color,
+              })),
+            ]}
+            onChange={setSetId}
+          />
           <p className="muted">{t('agent.waitHint')}</p>
           <button className="btn primary" type="submit" disabled={!canSubmit}>
             {busy ? t('agent.generating') : t('agent.generate')}

@@ -1390,7 +1390,7 @@
     "rateGettingHint": "You could start your lines but not finish them without looking.",
     "rateReadyHint": "You could say your part with only a glance at the line.",
     "rateLearnedHint": "You can play this scene without help.",
-    "rateLearnedNote": "Fully learned is the one that changes what happens next. Those scenes stay in your library, and when you generate a new conversation Zipdeck can reuse the lines you said here so the next scene builds on words you already know. Hard, Getting there, and Almost learned only record how this practice went.",
+    "rateLearnedNote": "Fully learned is the one that changes what happens next. Those scenes stay in your library, and a new conversation can bring those words back.",
     "choose": "Choose",
     "deleteTitle": "Delete this conversation?",
     "deleteMessage": "Удалить {{name}}? Он исчезнет из любого плейлиста. Это не меняет колоды в Моих Колодах.",

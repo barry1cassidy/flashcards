@@ -1360,7 +1360,7 @@
     "rateGettingHint": "Vous pouviez commencer vos répliques, mais pas les finir sans regarder.",
     "rateReadyHint": "Vous pouviez dire votre rôle avec un simple coup d’œil à la réplique.",
     "rateLearnedHint": "Vous pouvez jouer cette scène sans aide.",
-    "rateLearnedNote": "Maîtrisée est celle qui change la suite. Ces scènes restent dans votre bibliothèque, et quand vous générez une nouvelle conversation Zipdeck peut réutiliser les répliques dites ici pour que la suivante s’appuie sur des mots que vous connaissez déjà. Difficile, Ça vient et Presque apprise notent seulement comment s’est passée cette pratique.",
+    "rateLearnedNote": "Maîtrisée est celle qui change la suite. Ces scènes restent dans votre bibliothèque, et une nouvelle conversation peut faire revenir ces mots.",
     "choose": "Choisir",
     "deleteTitle": "Supprimer cette conversation ?",
     "deleteMessage": "Supprimer {{name}} ? Elle est retirée de toute liste. Cela ne change aucun paquet dans Mes Paquets.",

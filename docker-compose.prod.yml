@@ -48,6 +48,10 @@ services:
       AZURE_TRANSLATOR_KEY: ${AZURE_TRANSLATOR_KEY:-}
       AZURE_TRANSLATOR_REGION: ${AZURE_TRANSLATOR_REGION:-}
       AZURE_TRANSLATOR_ENDPOINT: ${AZURE_TRANSLATOR_ENDPOINT:-https://api.cognitive.microsofttranslator.com}
+      AZURE_SPEECH_KEY: ${AZURE_SPEECH_KEY:-}
+      AZURE_SPEECH_REGION: ${AZURE_SPEECH_REGION:-}
+      SPEECH_CACHE_DIR: ${SPEECH_CACHE_DIR:-/tmp/zipdeck-speech}
+      SPEECH_CACHE_MAX_BYTES: ${SPEECH_CACHE_MAX_BYTES:-104857600}
       POSTHOG_PROJECT_KEY: ${POSTHOG_PROJECT_KEY:-phc_yeSHD4zZb2ttaiX6skWnwPmM3AA7Rptbt48w92rWGHzP}
       POSTHOG_HOST: ${POSTHOG_HOST:-https://us.i.posthog.com}
       # Used only if card translation is switched back to the LibreTranslate container.

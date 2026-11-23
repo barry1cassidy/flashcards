@@ -46,6 +46,9 @@ export default function Modal({
       if (event.key !== 'Escape' || closeDisabled) {
         return
       }
+      if (document.querySelector('.choice-menu, .set-filter-menu')) {
+        return
+      }
       const open = document.querySelectorAll('.modal-backdrop')
       if (open[open.length - 1] !== rootRef.current) {
         return

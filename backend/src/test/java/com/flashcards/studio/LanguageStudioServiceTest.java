@@ -111,9 +111,9 @@ class LanguageStudioServiceTest {
                 .thenReturn(Optional.of(conversation));
         when(conversationRepository.save(conversation)).thenReturn(conversation);
 
-        studioService.rate(USER_ID, conversation.getId(), new LanguageStudioRateRequest("GETTING"));
+        studioService.rate(USER_ID, conversation.getId(), new LanguageStudioRateRequest("LEARNING"));
 
-        assertEquals(LanguageSceneStatus.GETTING, conversation.getStatus());
+        assertEquals(LanguageSceneStatus.LEARNING, conversation.getStatus());
         assertNull(conversation.getLearnedAt());
     }
 

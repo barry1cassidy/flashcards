@@ -1,7 +1,8 @@
 import { Capacitor } from '@capacitor/core'
 import { TextToSpeech } from '@capacitor-community/text-to-speech'
 import { speakMissingLanguages } from './speechPrefs'
-import { deviceLanguage, deviceVoiceAvailable, fallbackVoice, nativeVoiceAvailable, stopSpeaking } from './tts'
+import { isIrish, playHostedSpeech, stopHostedSpeech, unlockHostedAudio } from './hostedSpeech'
+import { deviceLanguage, fallbackVoice, nativeVoiceAvailable, stopDeviceSpeech, waitForDeviceVoice } from './tts'
 
 function abortError() {
   return new DOMException('Aborted', 'AbortError')
@@ -62,11 +63,12 @@ function enqueue(task) {
 }
 
 async function engineStop() {
+  stopHostedSpeech()
   if (Capacitor.isNativePlatform()) {
     await TextToSpeech.stop().catch(() => {})
     return
   }
-  stopSpeaking()
+  stopDeviceSpeech()
 }
 
 function settle(ms, signal) {
@@ -138,11 +140,32 @@ function speakEngine(spoken, lang, speechRate, signal, onProgress, estimate, myT
       onProgress?.(Math.min(0.97, (performance.now() - started) / estimate))
     }, 80)
 
+    if (isIrish(lang)) {
+      unlockHostedAudio()
+    }
+
+    const playIrish = async () => {
+      stopDeviceSpeech()
+      return playHostedSpeech(spoken, { signal, rate: speechRate, wait: true, onProgress })
+    }
+
     if (Capacitor.isNativePlatform()) {
-      nativeVoiceAvailable(lang || 'en-US').then((supported) => {
+      nativeVoiceAvailable(lang || 'en-US').then(async (supported) => {
         if (stale(myTurn, signal)) {
           ended(abortError())
           return
+        }
+        if (!supported && isIrish(lang)) {
+          try {
+            const played = await playIrish()
+            if (played === 'ok') {
+              ended(null)
+              return
+            }
+          } catch (error) {
+            ended(error)
+            return
+          }
         }
         if (!supported && !speakMissingLanguages()) {
           ended(new Error('voice-unsupported'))
@@ -166,33 +189,53 @@ function speakEngine(spoken, lang, speechRate, signal, onProgress, estimate, myT
       finish(new Error('speech-unavailable'))
       return
     }
-    const voiceReady = deviceVoiceAvailable(lang || 'en-US')
-    if (voiceReady === false && !speakMissingLanguages()) {
-      finish(new Error('voice-unsupported'))
-      return
-    }
-    const utterance = new SpeechSynthesisUtterance(spoken)
-    utterance.rate = speechRate
-    const voice = voiceReady === false ? fallbackVoice() : pickVoice(lang || 'en-US')
-    if (voice) {
-      utterance.voice = voice
-      utterance.lang = voiceReady === false ? voice.lang || deviceLanguage() : lang || 'en-US'
-    } else {
-      utterance.lang = voiceReady === false ? deviceLanguage() : lang || 'en-US'
-    }
-    utterance.onend = () => ended(null)
-    utterance.onerror = (event) => {
-      const reason = event?.error || 'speech'
-      if (reason === 'interrupted' || reason === 'canceled') {
+
+    const speakWeb = async () => {
+      const voiceReady = await waitForDeviceVoice(lang || 'en-US')
+      if (stale(myTurn, signal)) {
         ended(abortError())
         return
       }
-      ended(new Error(reason))
+      if (voiceReady !== true && isIrish(lang)) {
+        try {
+          const played = await playIrish()
+          if (played === 'ok') {
+            ended(null)
+            return
+          }
+        } catch (error) {
+          ended(error)
+          return
+        }
+      }
+      if (voiceReady === false && !speakMissingLanguages()) {
+        finish(new Error('voice-unsupported'))
+        return
+      }
+      const utterance = new SpeechSynthesisUtterance(spoken)
+      utterance.rate = speechRate
+      const voice = voiceReady === false ? fallbackVoice() : pickVoice(lang || 'en-US')
+      if (voice) {
+        utterance.voice = voice
+        utterance.lang = voiceReady === false ? voice.lang || deviceLanguage() : lang || 'en-US'
+      } else {
+        utterance.lang = voiceReady === false ? deviceLanguage() : lang || 'en-US'
+      }
+      utterance.onend = () => ended(null)
+      utterance.onerror = (event) => {
+        const reason = event?.error || 'speech'
+        if (reason === 'interrupted' || reason === 'canceled') {
+          ended(abortError())
+          return
+        }
+        ended(new Error(reason))
+      }
+      window.speechSynthesis.speak(utterance)
+      if (window.speechSynthesis.paused) {
+        window.speechSynthesis.resume()
+      }
     }
-    window.speechSynthesis.speak(utterance)
-    if (window.speechSynthesis.paused) {
-      window.speechSynthesis.resume()
-    }
+    speakWeb().catch((error) => ended(error))
   })
 }
 

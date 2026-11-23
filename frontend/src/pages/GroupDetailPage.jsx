@@ -5,6 +5,7 @@ import { api } from '../api'
 import { formatDate } from '../i18n/format'
 import { translateError } from '../i18n/errors'
 import ConfirmModal from './ConfirmModal'
+import ChoiceMenu from './ChoiceMenu'
 import ShareModal from './ShareModal'
 import MenuIcon from './MenuIcon'
 import { GroupBadge } from './ColorPicker'
@@ -152,16 +153,20 @@ export default function GroupDetailPage() {
             <p className="muted">{t('groups.allDecksInSet')}</p>
           ) : (
             <form className="create-row" onSubmit={addDeck}>
-              <select value={addDeckId} onChange={(e) => setAddDeckId(e.target.value)} required>
-                <option value="">{t('groups.chooseADeck')}</option>
-                {availableDecks.map((deck) => (
-                  <option key={deck.id} value={deck.id}>
-                    {deck.name}
-                    {deck.group ? ` ${t('groups.inGroup', { name: deck.group.name })}` : ''}
-                  </option>
-                ))}
-              </select>
-              <button className="btn primary" type="submit">
+              <ChoiceMenu
+                id="set-add-deck"
+                ariaLabel={t('groups.chooseADeck')}
+                value={addDeckId}
+                options={[
+                  { value: '', label: t('groups.chooseADeck') },
+                  ...availableDecks.map((deck) => ({
+                    value: String(deck.id),
+                    label: deck.group ? `${deck.name} ${t('groups.inGroup', { name: deck.group.name })}` : deck.name,
+                  })),
+                ]}
+                onChange={setAddDeckId}
+              />
+              <button className="btn primary" type="submit" disabled={!addDeckId}>
                 {t('groups.addToGroup')}
               </button>
             </form>

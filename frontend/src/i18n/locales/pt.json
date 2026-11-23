@@ -1360,7 +1360,7 @@
     "rateGettingHint": "Você conseguia começar as falas, mas não terminá-las sem olhar.",
     "rateReadyHint": "Você conseguia dizer a sua parte com só uma olhada na fala.",
     "rateLearnedHint": "Você consegue interpretar esta cena sem ajuda.",
-    "rateLearnedNote": "Dominada é a que muda o que vem depois. Essas cenas ficam na sua biblioteca, e quando você gerar uma conversa nova o Zipdeck pode reutilizar as falas que você disse aqui para a próxima cena se apoiar em palavras que você já conhece. Difícil, Estou chegando lá e Quase aprendida só registram como foi esta prática.",
+    "rateLearnedNote": "Dominada é a que muda o que vem depois. Essas cenas ficam na sua biblioteca, e uma conversa nova pode trazer essas palavras de volta.",
     "choose": "Escolher",
     "deleteTitle": "Excluir esta conversa?",
     "deleteMessage": "Excluir {{name}}? Ela sai de qualquer lista. Isso não muda nenhum baralho em Meus Baralhos.",

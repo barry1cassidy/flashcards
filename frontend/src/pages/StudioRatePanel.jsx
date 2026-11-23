@@ -2,9 +2,7 @@ import { useTranslation } from 'react-i18next'
 import { STUDIO_RATE_KINDS, STUDIO_STATUSES, studioStatusLabel } from '../languageStudio'
 
 const RATE_HINTS = {
-  LEARNING: 'studio.rateLearningHint',
-  GETTING: 'studio.rateGettingHint',
-  READY: 'studio.rateReadyHint',
+  LEARNING: 'studio.ratePracticingHint',
   LEARNED: 'studio.rateLearnedHint',
 }
 

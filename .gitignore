@@ -41,8 +41,9 @@ Thumbs.db
 # Logs
 *.log
 
-# Local card image files
+# Local card image files and cached speech
 backend/data/
+data/speech-cache/
 /bucket_keys.txt
 local_notes_files
 /macfiles

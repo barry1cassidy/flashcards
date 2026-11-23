@@ -13,6 +13,7 @@ import MenuIcon from './MenuIcon'
 import StudyModeModal from './StudyModeModal'
 import { GroupBadge } from './ColorPicker'
 import LanguageSelect from './LanguageSelect'
+import ChoiceMenu from './ChoiceMenu'
 import SpeakButton from './SpeakButton'
 import CardImageField from './CardImageField'
 import Modal from './Modal'
@@ -803,24 +804,24 @@ export default function DeckDetailPage() {
                 onBlur={() => commitDeckDetails()}
               />
             </label>
-            <label className="group-select-label">
-              {t('decks.deckGroup')}
-              <select
-                value={editGroupId}
-                onChange={(event) => {
-                  const groupId = event.target.value
-                  setEditGroupId(groupId)
-                  commitDeckDetails({ groupId: groupId || null })
-                }}
-              >
-                <option value="">{t('decks.noGroup')}</option>
-                {groups.map((group) => (
-                  <option key={group.id} value={group.id}>
-                    {group.name}
-                  </option>
-                ))}
-              </select>
-            </label>
+            <ChoiceMenu
+              id="deck-group"
+              className="group-select-label"
+              label={t('decks.deckGroup')}
+              value={editGroupId ? String(editGroupId) : ''}
+              options={[
+                { value: '', label: t('decks.noGroup') },
+                ...groups.map((group) => ({
+                  value: String(group.id),
+                  label: group.name,
+                  color: group.color,
+                })),
+              ]}
+              onChange={(groupId) => {
+                setEditGroupId(groupId)
+                commitDeckDetails({ groupId: groupId || null })
+              }}
+            />
             <div className="lang-row">
               <LanguageSelect
                 id="deck-front-language"

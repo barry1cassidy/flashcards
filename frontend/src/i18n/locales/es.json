@@ -1127,7 +1127,7 @@
     "rateGettingHint": "Podías empezar tus frases, pero no terminarlas sin mirar.",
     "rateReadyHint": "Podías decir tu parte con solo un vistazo a la frase.",
     "rateLearnedHint": "Puedes interpretar esta escena sin ayuda.",
-    "rateLearnedNote": "Dominada es la que cambia lo que pasa después. Esas escenas se quedan en tu biblioteca, y cuando generes una conversación nueva Zipdeck puede reutilizar las frases que dijiste aquí para que la siguiente escena se apoye en palabras que ya conoces. Difícil, Voy mejorando y Casi aprendida solo registran cómo te fue esta práctica.",
+    "rateLearnedNote": "Dominada es la que cambia lo que pasa después. Esas escenas se quedan en tu biblioteca, y una conversación nueva puede volver a usar esas palabras.",
     "choose": "Elegir",
     "deleteTitle": "¿Eliminar esta conversación?",
     "deleteMessage": "¿Eliminar {{name}}? Se quita de cualquier lista. Esto no cambia ningún mazo en Mis Mazos.",

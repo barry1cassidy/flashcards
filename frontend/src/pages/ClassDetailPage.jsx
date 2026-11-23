@@ -6,6 +6,7 @@ import { publicSiteOrigin } from '../publicOrigin'
 import { formatDate } from '../i18n/format'
 import { translateError } from '../i18n/errors'
 import ConfirmModal from './ConfirmModal'
+import ChoiceMenu from './ChoiceMenu'
 import DeckTitle from './DeckTitle'
 
 const ROSTER_PAGE_SIZE = 8
@@ -296,15 +297,17 @@ export default function ClassDetailPage() {
               <p className="muted">{t('classes.allDecksAssigned')}</p>
             ) : (
               <form className="create-row" onSubmit={assignDeck}>
-                <select value={addDeckId} onChange={(event) => setAddDeckId(event.target.value)} required>
-                  <option value="">{t('classes.chooseADeck')}</option>
-                  {availableDecks.map((deck) => (
-                    <option key={deck.id} value={deck.id}>
-                      {deck.name}
-                    </option>
-                  ))}
-                </select>
-                <button className="btn primary" type="submit" disabled={busy}>
+                <ChoiceMenu
+                  id="class-add-deck"
+                  ariaLabel={t('classes.chooseADeck')}
+                  value={addDeckId}
+                  options={[
+                    { value: '', label: t('classes.chooseADeck') },
+                    ...availableDecks.map((deck) => ({ value: String(deck.id), label: deck.name })),
+                  ]}
+                  onChange={setAddDeckId}
+                />
+                <button className="btn primary" type="submit" disabled={busy || !addDeckId}>
                   {t('classes.assignDeck')}
                 </button>
               </form>
@@ -470,17 +473,21 @@ function ClassRoster({ members, decks, status, deckId, page, onStatus, onDeck, o
         <>
           <div className="class-roster-tools">
             {decks.length > 1 ? (
-              <label className="class-roster-deck">
-                <span className="field-label">{t('listen.sourceDeck')}</span>
-                <select value={activeDeckId} onChange={(event) => onDeck(event.target.value)}>
-                  <option value="">{t('classes.allDecks')}</option>
-                  {decks.map((deck) => (
-                    <option key={deck.deckId} value={deck.deckId}>
-                      {deck.name}
-                    </option>
-                  ))}
-                </select>
-              </label>
+              <div className="class-roster-deck">
+                <span className="field-label" id="class-roster-deck-label">
+                  {t('listen.sourceDeck')}
+                </span>
+                <ChoiceMenu
+                  id="class-roster-deck"
+                  labelledBy="class-roster-deck-label"
+                  value={activeDeckId}
+                  options={[
+                    { value: '', label: t('classes.allDecks') },
+                    ...decks.map((deck) => ({ value: deck.deckId, label: deck.name })),
+                  ]}
+                  onChange={onDeck}
+                />
+              </div>
             ) : null}
             <div className="class-roster-filters" role="group" aria-label={t('classes.roster')}>
               {filters.map(([key, label]) => (

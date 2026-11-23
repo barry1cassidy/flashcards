@@ -6,8 +6,6 @@ import com.flashcards.common.ApiException;
 
 public enum LanguageSceneStatus {
     LEARNING,
-    GETTING,
-    READY,
     LEARNED;
 
     static LanguageSceneStatus from(String value) {

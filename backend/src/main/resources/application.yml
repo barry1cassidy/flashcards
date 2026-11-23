@@ -103,6 +103,12 @@ app:
       key: ${AZURE_TRANSLATOR_KEY:}
       region: ${AZURE_TRANSLATOR_REGION:}
       endpoint: ${AZURE_TRANSLATOR_ENDPOINT:https://api.cognitive.microsofttranslator.com}
+  speech:
+    key: ${AZURE_SPEECH_KEY:}
+    region: ${AZURE_SPEECH_REGION:}
+    cache-dir: ${SPEECH_CACHE_DIR:./data/speech-cache}
+    cache-max-bytes: ${SPEECH_CACHE_MAX_BYTES:104857600}
+    endpoint: ${AZURE_SPEECH_ENDPOINT:}
   mail:
     resend-api-key: ${RESEND_API_KEY:}
     from: "${APP_MAIL_FROM:Zipdeck <onboarding@resend.dev>}"

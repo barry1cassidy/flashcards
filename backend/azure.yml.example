@@ -5,3 +5,6 @@ app:
     azure:
       key: YOUR_KEY_1
       region: westus2
+  speech:
+    key: YOUR_SPEECH_KEY_1
+    region: westus2
