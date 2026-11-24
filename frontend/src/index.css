@@ -8595,6 +8595,38 @@ button.page-back {
   margin-bottom: 8px;
 }
 
+.studio-list-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin: 2px 0 20px;
+  border-bottom: 1px solid var(--line);
+}
+
+.studio-list-tab {
+  min-height: 48px;
+  margin: 0;
+  padding: 8px 4px 10px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.studio-list-tab[aria-selected='true'] {
+  border-bottom-color: var(--cobalt);
+  color: var(--text);
+}
+
+.studio-list-count {
+  margin-left: 4px;
+  color: var(--muted);
+  font-weight: 400;
+}
+
 .studio-schedule {
   margin-top: 0.75rem;
 }
@@ -8691,22 +8723,6 @@ button.page-back {
     display: none;
   }
 
-  .studio-library .studio-filters .btn {
-    min-height: 36px;
-    padding: 6px 10px;
-  }
-}
-
-.studio-filters .btn.rating {
-  flex-direction: row;
-  min-height: 44px;
-  padding: 8px 12px;
-  opacity: 0.72;
-}
-
-.studio-filters .btn.rating.is-on {
-  opacity: 1;
-  box-shadow: inset 0 0 0 2px currentColor;
 }
 
 .studio-setup-pair {

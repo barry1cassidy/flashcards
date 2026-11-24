@@ -307,6 +307,43 @@ input {
   color: #fff;
 }
 
+.list-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-top: 20px;
+  border-bottom: 1px solid var(--line);
+}
+
+.list-tabs button {
+  min-height: 48px;
+  margin: 0;
+  padding: 8px 4px 10px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  color: var(--muted);
+  font-size: 15px;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.list-tabs button[aria-selected='true'] {
+  border-bottom-color: #3e56c8;
+  color: var(--ink);
+}
+
+.list-tabs .count {
+  margin-left: 4px;
+  color: var(--muted);
+  font-weight: 450;
+}
+
+.list-tabs + .conversation-list,
+.list-tabs + .empty,
+.list-tabs + .error {
+  margin-top: 20px;
+}
+
 .conversation-list {
   display: flex;
   flex-direction: column;

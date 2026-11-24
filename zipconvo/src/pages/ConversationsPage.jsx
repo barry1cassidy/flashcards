@@ -102,9 +102,25 @@ export default function ConversationsPage() {
       ) : null}
 
       {showGroups ? (
-        <div className="filters" role="radiogroup" aria-label="Conversation filters">
-          <Filter status="practicing" label={`To practice · ${practicing.length}`} group={group} setGroup={setGroup} />
-          <Filter status="learned" label={`Fully learned · ${learned.length}`} group={group} setGroup={setGroup} />
+        <div
+          className="list-tabs"
+          role="tablist"
+          aria-label="Conversation lists"
+          onKeyDown={(event) => {
+            if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') {
+              return
+            }
+            event.preventDefault()
+            const next = group === 'practicing' ? 'learned' : 'practicing'
+            setGroup(next)
+            const target = event.currentTarget.querySelector(`[data-group="${next}"]`)
+            if (target instanceof HTMLElement) {
+              target.focus()
+            }
+          }}
+        >
+          <Filter status="practicing" label="To practice" count={practicing.length} group={group} setGroup={setGroup} />
+          <Filter status="learned" label="Fully learned" count={learned.length} group={group} setGroup={setGroup} />
         </div>
       ) : null}
 
@@ -138,16 +154,18 @@ export default function ConversationsPage() {
   )
 }
 
-function Filter({ status, label, group, setGroup }) {
+function Filter({ status, label, count, group, setGroup }) {
+  const selected = group === status
   return (
     <button
-      className={group === status ? 'is-on' : ''}
       type="button"
-      role="radio"
-      aria-checked={group === status}
+      role="tab"
+      data-group={status}
+      aria-selected={selected}
+      tabIndex={selected ? 0 : -1}
       onClick={() => setGroup(status)}
     >
-      {label}
+      {label} <span className="count">({count})</span>
     </button>
   )
 }

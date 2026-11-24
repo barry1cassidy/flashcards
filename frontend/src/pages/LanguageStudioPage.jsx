@@ -270,22 +270,44 @@ export default function LanguageStudioPage() {
           ) : null}
 
           {showGroups ? (
-            <div className="listen-choice-row studio-filters" role="radiogroup" aria-label={t('studio.filters')}>
+            <div
+              className="studio-list-tabs"
+              role="tablist"
+              aria-label={t('studio.filters')}
+              onKeyDown={(event) => {
+                if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') {
+                  return
+                }
+                event.preventDefault()
+                const next = group === 'practicing' ? 'learned' : 'practicing'
+                setGroup(next)
+                const target = event.currentTarget.querySelector(`[data-group="${next}"]`)
+                if (target instanceof HTMLElement) {
+                  target.focus()
+                }
+              }}
+            >
               <button
-                className={`btn${group === 'practicing' ? ' primary' : ''}`}
+                className="studio-list-tab"
                 type="button"
-                aria-pressed={group === 'practicing'}
+                role="tab"
+                data-group="practicing"
+                aria-selected={group === 'practicing'}
+                tabIndex={group === 'practicing' ? 0 : -1}
                 onClick={() => setGroup('practicing')}
               >
-                {t('studio.filterPracticing')} · {practicing.length}
+                {t('studio.filterPracticing')} <span className="studio-list-count">({practicing.length})</span>
               </button>
               <button
-                className={`btn${group === 'learned' ? ' primary' : ''}`}
+                className="studio-list-tab"
                 type="button"
-                aria-pressed={group === 'learned'}
+                role="tab"
+                data-group="learned"
+                aria-selected={group === 'learned'}
+                tabIndex={group === 'learned' ? 0 : -1}
                 onClick={() => setGroup('learned')}
               >
-                {t('studio.filterLearned')} · {learned.length}
+                {t('studio.filterLearned')} <span className="studio-list-count">({learned.length})</span>
               </button>
             </div>
           ) : null}
