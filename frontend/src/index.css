@@ -9103,6 +9103,10 @@ button.page-back {
     font-size: 1rem;
   }
 
+  .studio-create .studio-learned p {
+    display: none;
+  }
+
   .studio-own-link {
     width: 100%;
     min-height: 44px;

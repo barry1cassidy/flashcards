@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
-import { api, getToken, setCachedUser, setToken } from './api'
+import { api, getCachedUser, getToken, setCachedUser, setToken } from './api'
+import { applyLocale, currentLocale } from './i18n'
 
 const AuthContext = createContext(null)
 
@@ -42,6 +43,16 @@ export function AuthProvider({ children }) {
     }
   }, [])
 
+  useEffect(() => {
+    document.documentElement.dataset.theme = user?.theme === 'DARK' ? 'dark' : 'light'
+  }, [user?.theme])
+
+  useEffect(() => {
+    if (user?.locale) {
+      applyLocale(user.locale)
+    }
+  }, [user?.locale])
+
   const value = useMemo(
     () => ({
       user,
@@ -56,14 +67,14 @@ export function AuthProvider({ children }) {
       async register(displayName, email, password) {
         const result = await api('/api/auth/register', {
           method: 'POST',
-          body: JSON.stringify({ displayName, email, password, locale: 'en' }),
+          body: JSON.stringify({ displayName, email, password, locale: currentLocale() }),
         })
         return storeSession(setUser, result)
       },
       async loginWithGoogle(idToken) {
         const result = await api('/api/auth/google', {
           method: 'POST',
-          body: JSON.stringify({ idToken, locale: 'en' }),
+          body: JSON.stringify({ idToken, locale: currentLocale() }),
         })
         return storeSession(setUser, result)
       },
@@ -81,6 +92,25 @@ export function AuthProvider({ children }) {
         setUser(updated)
         setCachedUser(updated)
         return updated
+      },
+      async patchMe(body) {
+        const previous = user
+        setUser((current) => (current ? { ...current, ...body } : current))
+        try {
+          const updated = await api('/api/auth/me', {
+            method: 'PATCH',
+            body: JSON.stringify(body),
+          })
+          setUser(updated)
+          setCachedUser(updated)
+          return updated
+        } catch (error) {
+          setUser(previous)
+          if (previous) {
+            setCachedUser(previous)
+          }
+          throw error
+        }
       },
       logout() {
         setToken(null)

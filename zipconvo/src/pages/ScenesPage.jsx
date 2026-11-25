@@ -1,10 +1,14 @@
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { api } from '../api'
-import { LANGUAGES, languageName } from '../languages'
+import ChoiceMenu from '../ChoiceMenu'
+import { translateError } from '../i18n/errors'
+import { LANGUAGES } from '../languages'
 import { LEVELS, SCENES, generateConversation } from '../studio'
 
 export default function ScenesPage() {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const [scene, setScene] = useState(null)
   const [pairs, setPairs] = useState([])
@@ -14,6 +18,7 @@ export default function ScenesPage() {
   const [customPrompt, setCustomPrompt] = useState('')
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
+  const [useLearned, setUseLearned] = useState(true)
 
   useEffect(() => {
     let cancelled = false
@@ -40,25 +45,28 @@ export default function ScenesPage() {
     return (
       <main className="screen">
         <div className="screen-copy">
-          <h1>Choose a scene</h1>
-          <p>Pick a place. The conversation starts there.</p>
+          <h1>{t('scenes.title')}</h1>
+          <p>{t('scenes.lede')}</p>
         </div>
         <div className="scene-list">
           {SCENES.map((item) => (
             <button key={item.id} className="scene-card" type="button" onClick={() => setScene(item)}>
               <img src={item.image} alt="" />
               <span>
-                <h2>{item.title}</h2>
-                <p>{item.line}</p>
+                <h2>{t(`scenes.${item.id}Title`)}</h2>
               </span>
             </button>
           ))}
         </div>
+        <button className="scene-own" type="button" onClick={() => setScene({ id: 'custom' })}>
+          {t('scenes.describeOwn')}
+        </button>
       </main>
     )
   }
 
   const learned = pairs.find((pair) => pair.nativeLanguage === nativeLanguage && pair.targetLanguage === targetLanguage)
+  const learnedCount = learned?.learnedCount || 0
 
   async function onSubmit(event) {
     event.preventDefault()
@@ -66,7 +74,11 @@ export default function ScenesPage() {
       return
     }
     if (nativeLanguage === targetLanguage) {
-      setError('Choose two different languages.')
+      setError(t('scenes.differentLanguages'))
+      return
+    }
+    if (scene.id === 'custom' && !customPrompt.trim()) {
+      setError(t('scenes.describeRequired'))
       return
     }
     setBusy(true)
@@ -78,7 +90,7 @@ export default function ScenesPage() {
         scenario: scene.id,
         customPrompt: customPrompt.trim(),
         level,
-        useLearned: Boolean(learned?.learnedCount),
+        useLearned: learnedCount > 0 && useLearned,
       })
       navigate(`/conversations/${conversation.id}`)
     } catch (err) {
@@ -90,36 +102,32 @@ export default function ScenesPage() {
   return (
     <main className="screen">
       <button className="back" type="button" onClick={() => setScene(null)} disabled={busy}>
-        Back
+        {t('back')}
       </button>
       <form className="scene-form" onSubmit={onSubmit}>
-        <img className="scene-hero" src={scene.image} alt="" />
         <div className="screen-copy">
-          <h1>{scene.title}</h1>
-          <p>{scene.line}</p>
+          <h1>{scene.id === 'custom' ? t('scenes.ownTitle') : t(`scenes.${scene.id}Title`)}</h1>
         </div>
-        <label className="field">
-          <span>I speak</span>
-          <select value={nativeLanguage} onChange={(event) => setNativeLanguage(event.target.value)}>
-            {LANGUAGES.map((language) => (
-              <option key={language.code} value={language.code}>
-                {language.name}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label className="field">
-          <span>I am learning</span>
-          <select value={targetLanguage} onChange={(event) => setTargetLanguage(event.target.value)}>
-            {LANGUAGES.map((language) => (
-              <option key={language.code} value={language.code}>
-                {language.name}
-              </option>
-            ))}
-          </select>
-        </label>
+        <div className="scene-langs">
+          <ChoiceMenu
+            id="scene-native"
+            label={t('scenes.iSpeak')}
+            value={nativeLanguage}
+            options={LANGUAGES.map((language) => ({ value: language.code, label: language.name }))}
+            onChange={setNativeLanguage}
+            disabled={busy}
+          />
+          <ChoiceMenu
+            id="scene-target"
+            label={t('scenes.learning')}
+            value={targetLanguage}
+            options={LANGUAGES.map((language) => ({ value: language.code, label: language.name }))}
+            onChange={setTargetLanguage}
+            disabled={busy}
+          />
+        </div>
         <div className="field">
-          <span>Level</span>
+          <span>{t('scenes.level')}</span>
           <div className="filters">
             {LEVELS.map((item) => (
               <button key={item} className={level === item ? 'is-on' : ''} type="button" onClick={() => setLevel(item)}>
@@ -129,22 +137,30 @@ export default function ScenesPage() {
           </div>
         </div>
         <label className="field">
-          <span>What should happen?</span>
+          <span>{scene.id === 'custom' ? t('scenes.describe') : t('scenes.what')}</span>
           <textarea
-            rows={3}
+            rows={2}
             maxLength={240}
-            placeholder={scene.line}
+            placeholder={scene.id === 'custom' ? t('scenes.customPlaceholder') : t(`scenes.${scene.id}Line`)}
             value={customPrompt}
             onChange={(event) => setCustomPrompt(event.target.value)}
           />
         </label>
-        {error ? <p className="error">{error}</p> : null}
+        {learnedCount > 0 ? (
+          <button
+            className={`scene-learned${useLearned ? ' is-on' : ''}`}
+            type="button"
+            disabled={busy}
+            aria-pressed={useLearned}
+            onClick={() => setUseLearned((value) => !value)}
+          >
+            {useLearned ? t('scenes.useLearned') : t('scenes.ignoreLearned')}
+          </button>
+        ) : null}
+        {error ? <p className="error">{translateError(error)}</p> : null}
         <button className="btn email" type="submit" disabled={busy}>
-          {busy ? 'Writing the conversation…' : 'Generate'}
+          {busy ? t('scenes.writing') : t('scenes.generate')}
         </button>
-        <p className="rate-note">
-          {languageName(nativeLanguage)} is the meaning. {languageName(targetLanguage)} is the line to say. Generating uses 1 credit.
-        </p>
       </form>
     </main>
   )

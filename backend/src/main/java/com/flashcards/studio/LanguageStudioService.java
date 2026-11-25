@@ -402,7 +402,8 @@ public class LanguageStudioService {
                 turns,
                 conversation.getRatedAt(),
                 conversation.getCreatedAt(),
-                conversation.getUpdatedAt());
+                conversation.getUpdatedAt(),
+                conversation.getDeckId());
     }
 
     private static String normalizeScenario(String value) {

@@ -30,14 +30,17 @@ public class LanguageStudioController {
     private final LanguageStudioService studioService;
     private final LanguageStudioPairService pairService;
     private final LanguageStudioCatalogService catalogService;
+    private final ConversationDeckService conversationDeckService;
 
     public LanguageStudioController(
             LanguageStudioService studioService,
             LanguageStudioPairService pairService,
-            LanguageStudioCatalogService catalogService) {
+            LanguageStudioCatalogService catalogService,
+            ConversationDeckService conversationDeckService) {
         this.studioService = studioService;
         this.pairService = pairService;
         this.catalogService = catalogService;
+        this.conversationDeckService = conversationDeckService;
     }
 
     @GetMapping("/pairs")
@@ -62,6 +65,11 @@ public class LanguageStudioController {
     @GetMapping("/conversations/{conversationId}")
     public LanguageConversationResponse get(Authentication authentication, @PathVariable UUID conversationId) {
         return studioService.get(AuthSupport.requireUser(authentication).id(), conversationId);
+    }
+
+    @PostMapping("/conversations/{conversationId}/deck")
+    public LanguageConversationResponse createDeck(Authentication authentication, @PathVariable UUID conversationId) {
+        return conversationDeckService.create(AuthSupport.requireUser(authentication).id(), conversationId);
     }
 
     @PatchMapping("/conversations/{conversationId}")

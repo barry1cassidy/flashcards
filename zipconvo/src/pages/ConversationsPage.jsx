@@ -1,10 +1,16 @@
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import { api } from '../api'
+import ChoiceMenu from '../ChoiceMenu'
+import { translateError } from '../i18n/errors'
 import { languageName } from '../languages'
-import { gradeClass, gradeLabel, placeLabel } from '../studio'
+import ConversationCover from '../ConversationCover'
+import { customCover } from '../covers'
+import { gradeClass, gradeLabel, placeLabel, sceneImage } from '../studio'
 
 export default function ConversationsPage() {
+  const { t } = useTranslation()
   const [pairs, setPairs] = useState([])
   const [pairKey, setPairKey] = useState('')
   const [items, setItems] = useState([])
@@ -78,34 +84,38 @@ export default function ConversationsPage() {
   return (
     <main className="screen">
       <div className="screen-copy">
-        <h1>Conversations</h1>
+        <h1>{t('conversations.title')}</h1>
         {selected ? (
           <p>
-            {languageName(selected.nativeLanguage)} → {languageName(selected.targetLanguage)}
+            {t('conversations.pair', {
+              native: languageName(selected.nativeLanguage),
+              target: languageName(selected.targetLanguage),
+            })}
           </p>
         ) : (
-          <p>Choose a scene to start the first one.</p>
+          <p>{t('conversations.start')}</p>
         )}
       </div>
 
       {pairs.length > 1 ? (
-        <label className="field">
-          <span>Language pair</span>
-          <select value={pairKey} onChange={(event) => setPairKey(event.target.value)}>
-            {pairs.map((pair) => (
-              <option key={keyOf(pair)} value={keyOf(pair)}>
-                {languageName(pair.nativeLanguage)} → {languageName(pair.targetLanguage)}
-              </option>
-            ))}
-          </select>
-        </label>
+        <ChoiceMenu
+          id="conversation-pair"
+          className="field"
+          label={t('conversations.languagePair')}
+          value={pairKey}
+          options={pairs.map((pair) => ({
+            value: keyOf(pair),
+            label: `${languageName(pair.nativeLanguage)} → ${languageName(pair.targetLanguage)}`,
+          }))}
+          onChange={setPairKey}
+        />
       ) : null}
 
       {showGroups ? (
         <div
           className="list-tabs"
           role="tablist"
-          aria-label="Conversation lists"
+          aria-label={t('conversations.filters')}
           onKeyDown={(event) => {
             if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') {
               return
@@ -119,36 +129,45 @@ export default function ConversationsPage() {
             }
           }}
         >
-          <Filter status="practicing" label="To practice" count={practicing.length} group={group} setGroup={setGroup} />
-          <Filter status="learned" label="Fully learned" count={learned.length} group={group} setGroup={setGroup} />
+          <Filter status="practicing" label={t('conversations.toPractice')} count={practicing.length} group={group} setGroup={setGroup} />
+          <Filter status="learned" label={t('conversations.fullyLearned')} count={learned.length} group={group} setGroup={setGroup} />
         </div>
       ) : null}
 
-      {error ? <p className="error">{error}</p> : null}
-      {loading ? <p className="empty">Loading…</p> : null}
+      {error ? <p className="error">{translateError(error)}</p> : null}
+      {loading ? <p className="empty">{t('loading')}</p> : null}
       {!loading && !error && visible.length === 0 ? (
         <p className="empty">
-          {items.length === 0 ? 'No conversations yet.' : 'Nothing in this filter yet.'}{' '}
-          <Link to="/scenes">Choose a scene</Link>
+          {items.length === 0 ? t('conversations.empty') : t('conversations.filterEmpty')}{' '}
+          <Link to="/scenes">{t('conversations.chooseScene')}</Link>
         </p>
       ) : null}
 
       <div className="conversation-list">
-        {visible.map((item) => (
-          <Link key={item.id} className="conversation-card" to={`/conversations/${item.id}`}>
-            <div className="card-title">
-              <h2>{item.title}</h2>
-              <span className="pill">{item.level}</span>
-            </div>
-            <p className={`grade grade-${gradeClass(item.status, item.ratedAt)}`}>
-              {gradeLabel(item.status, item.ratedAt)}
-            </p>
-            <p className="card-meta">
-              {placeLabel(item.scenario)} · {item.turnCount} turns
-            </p>
-            <span className="card-action">Practice</span>
-          </Link>
-        ))}
+        {visible.map((item) => {
+          const image = sceneImage(item.scenario)
+          const cover = image ? null : customCover(item.id)
+          return (
+            <Link key={item.id} className="conversation-card has-scene" to={`/conversations/${item.id}`}>
+              {image ? <img className="conversation-scene" src={image} alt="" /> : (
+                <ConversationCover motif={cover.motif} palette={cover.palette} />
+              )}
+              <div className="card-copy">
+                <div className="card-title">
+                  <h2>{item.title}</h2>
+                  <span className="pill">{item.level}</span>
+                </div>
+                <p className={`grade grade-${gradeClass(item.status, item.ratedAt)}`}>
+                  {gradeLabel(item.status, item.ratedAt)}
+                </p>
+                <p className="card-meta">
+                  {placeLabel(item.scenario)} · {t('conversations.turns', { count: item.turnCount })}
+                </p>
+                <span className="card-action">{t('conversations.practice')}</span>
+              </div>
+            </Link>
+          )
+        })}
       </div>
     </main>
   )

@@ -1,23 +1,25 @@
+import { useTranslation } from 'react-i18next'
 import { NavLink, useLocation } from 'react-router-dom'
 
 const TABS = [
-  { to: '/conversations', label: 'Home', icon: 'home', match: '/conversations' },
-  { to: '/scenes', label: 'Scenes', icon: 'scenes', match: '/scenes' },
-  { to: '/listen', label: 'Listen', icon: 'listen', match: '/listen' },
-  { to: '/me', label: 'Me', icon: 'me', match: '/me' },
+  { to: '/conversations', label: 'tabs.home', icon: 'home', match: '/conversations' },
+  { to: '/scenes', label: 'tabs.scenes', icon: 'scenes', match: '/scenes' },
+  { to: '/listen', label: 'tabs.listen', icon: 'listen', match: '/listen' },
+  { to: '/me', label: 'tabs.me', icon: 'me', match: '/me' },
 ]
 
 export default function TabBar() {
   const { pathname } = useLocation()
+  const { t } = useTranslation()
 
   return (
-    <nav className="tab-bar" aria-label="Main">
+    <nav className="tab-bar" aria-label={t('tabs.main')}>
       {TABS.map((tab) => {
         const active = pathname === tab.match || pathname.startsWith(`${tab.match}/`)
         return (
           <NavLink key={tab.to} to={tab.to} className={active ? 'is-active' : ''} aria-current={active ? 'page' : undefined}>
             <TabIcon name={tab.icon} active={active} />
-            {tab.label}
+            {t(tab.label)}
           </NavLink>
         )
       })}

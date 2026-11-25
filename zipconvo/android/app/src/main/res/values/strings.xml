@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">ZipCONVO</string>
+    <string name="title_activity_main">ZipCONVO</string>
+    <string name="package_name">com.zipconvo.app</string>
+    <string name="custom_url_scheme">com.zipconvo.app</string>
+    <string name="asset_statements" translatable="false">[{\n  \"relation\": [\"delegate_permission/common.get_login_creds\"],\n  \"target\": {\n    \"namespace\": \"web\",\n    \"site\": \"https://zipdeck.app\"\n  }\n}]</string>
+</resources>

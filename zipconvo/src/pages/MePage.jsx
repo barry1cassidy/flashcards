@@ -1,7 +1,9 @@
-import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
+import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth'
 
 export default function MePage() {
+  const { t } = useTranslation()
   const { user, logout } = useAuth()
   const navigate = useNavigate()
 
@@ -13,14 +15,17 @@ export default function MePage() {
   return (
     <main className="screen">
       <div className="screen-copy">
-        <h1>{user?.displayName || 'Me'}</h1>
+        <h1>{user?.displayName || t('me.fallback')}</h1>
         <p>{user?.email}</p>
       </div>
-      <p className="card-meta">{user?.proLicensed ? 'Zipdeck Pro is on for this account.' : 'This account does not have Zipdeck Pro yet.'}</p>
-      {!user?.emailVerified ? <p className="error">Email is not verified yet.</p> : null}
+      <p className="card-meta">{user?.proLicensed ? t('me.proOn') : t('me.proOff')}</p>
+      {!user?.emailVerified ? <p className="error">{t('me.unverified')}</p> : null}
       <div className="practice-bar">
+        <Link className="settings-link" to="/me/settings">
+          {t('me.settings')}
+        </Link>
         <button className="btn google" type="button" onClick={signOut}>
-          Log out
+          {t('logOut')}
         </button>
       </div>
     </main>

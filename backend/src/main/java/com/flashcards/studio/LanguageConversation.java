@@ -95,6 +95,10 @@ public class LanguageConversation {
     @Column(name = "rated_at")
     private Instant ratedAt;
 
+    @JdbcTypeCode(SqlTypes.CHAR)
+    @Column(name = "deck_id", length = 36, columnDefinition = "CHAR(36)")
+    private UUID deckId;
+
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 

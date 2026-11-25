@@ -1,9 +1,11 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Link, Navigate, useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth'
 import AuthScreen from './AuthScreen'
 
 export default function LoginPage() {
+  const { t } = useTranslation()
   const { user, ready, login } = useAuth()
   const navigate = useNavigate()
   const [email, setEmail] = useState('')
@@ -33,27 +35,27 @@ export default function LoginPage() {
 
   return (
     <AuthScreen
-      title="Log in"
-      lede="Use the email and password for your Zipdeck account."
+      title={t('login.title')}
+      lede={t('login.lede')}
       error={error}
       onSubmit={onSubmit}
       action={
         <button className="btn email" type="submit" disabled={busy}>
-          {busy ? 'Logging in…' : 'Log in'}
+          {busy ? t('login.busy') : t('login.title')}
         </button>
       }
       footer={
         <>
-          New here? <Link to="/register">Continue with email</Link>
+          {t('login.newHere')} <Link to="/register">{t('welcome.email')}</Link>
         </>
       }
     >
       <label className="field">
-        <span>Email</span>
+        <span>{t('email')}</span>
         <input type="email" autoComplete="email" value={email} onChange={(event) => setEmail(event.target.value)} required />
       </label>
       <label className="field">
-        <span>Password</span>
+        <span>{t('password')}</span>
         <input
           type="password"
           autoComplete="current-password"

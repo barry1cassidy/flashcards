@@ -22,5 +22,6 @@ public record LanguageConversationResponse(
         List<LanguageTurnResponse> turns,
         Instant ratedAt,
         Instant createdAt,
-        Instant updatedAt) {
+        Instant updatedAt,
+        UUID deckId) {
 }

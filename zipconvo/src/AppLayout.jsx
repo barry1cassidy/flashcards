@@ -6,7 +6,7 @@ export default function AppLayout() {
     <div className="app-shell">
       <header className="app-bar">
         <Link to="/conversations" className="brand brand-link">
-          <img src="/mark.svg?v=6" alt="" width="36" height="36" />
+          <img src="/mark.png?v=7" alt="" width="36" height="36" />
           <p className="wordmark">
             <span>Zip</span>CONVO
           </p>

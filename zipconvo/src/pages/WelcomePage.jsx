@@ -1,7 +1,9 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Navigate, useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth'
 import GoogleSignIn from '../GoogleSignIn'
+import { translateError } from '../i18n/errors'
 
 function GoogleMark() {
   return (
@@ -52,6 +54,7 @@ function Person({ tone }) {
 
 export default function WelcomePage() {
   const navigate = useNavigate()
+  const { t } = useTranslation()
   const { user, ready, loginWithGoogle } = useAuth()
   const [error, setError] = useState('')
 
@@ -78,7 +81,7 @@ export default function WelcomePage() {
   return (
     <main className="welcome">
       <header className="brand">
-        <img src="/mark.svg?v=6" alt="" width="44" height="44" />
+        <img src="/mark.png?v=7" alt="" width="44" height="44" />
         <p className="wordmark">
           <span>Zip</span>CONVO
         </p>
@@ -101,23 +104,23 @@ export default function WelcomePage() {
       </div>
 
       <div className="copy">
-        <h1>Learn in conversation.</h1>
-        <p>Learn a new language through quick, real conversations.</p>
+        <h1>{t('welcome.title')}</h1>
+        <p>{t('welcome.lede')}</p>
       </div>
 
       <div className="actions">
         <GoogleSignIn onCredential={onGoogle}>
           <GoogleMark />
-          Continue with Google
+          {t('welcome.google')}
         </GoogleSignIn>
-        {error ? <p className="error">{error}</p> : null}
+        {error ? <p className="error">{translateError(error)}</p> : null}
         <button className="btn email" type="button" onClick={() => navigate('/register')}>
-          Continue with email
+          {t('welcome.email')}
         </button>
         <p className="signin">
-          Already have an account?{' '}
+          {t('welcome.haveAccount')}{' '}
           <button type="button" onClick={() => navigate('/login')}>
-            Log in
+            {t('welcome.logIn')}
           </button>
         </p>
       </div>

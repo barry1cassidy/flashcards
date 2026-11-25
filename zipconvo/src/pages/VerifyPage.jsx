@@ -1,9 +1,11 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Navigate } from 'react-router-dom'
 import { useAuth } from '../auth'
 import AuthScreen from './AuthScreen'
 
 export default function VerifyPage() {
+  const { t } = useTranslation()
   const { user, ready, verifyEmail, resendVerification, logout } = useAuth()
   const [code, setCode] = useState('')
   const [error, setError] = useState('')
@@ -37,7 +39,7 @@ export default function VerifyPage() {
     setNote('')
     try {
       await resendVerification()
-      setNote('A new code is on its way.')
+      setNote(t('verify.sent'))
     } catch (err) {
       setError(err.message)
     }
@@ -45,30 +47,30 @@ export default function VerifyPage() {
 
   return (
     <AuthScreen
-      title="Check your email"
-      lede={`Enter the code sent to ${user.email}.`}
+      title={t('verify.title')}
+      lede={t('verify.lede', { email: user.email })}
       error={error}
       onSubmit={onSubmit}
       action={
         <button className="btn email" type="submit" disabled={busy}>
-          {busy ? 'Checking…' : 'Verify'}
+          {busy ? t('verify.busy') : t('verify.verify')}
         </button>
       }
       footer={
         <>
           <button type="button" onClick={resend}>
-            Resend code
+            {t('verify.resend')}
           </button>
           {' · '}
           <button type="button" onClick={logout}>
-            Log out
+            {t('logOut')}
           </button>
           {note ? <span className="note">{note}</span> : null}
         </>
       }
     >
       <label className="field">
-        <span>Code</span>
+        <span>{t('code')}</span>
         <input inputMode="numeric" autoComplete="one-time-code" value={code} onChange={(event) => setCode(event.target.value)} required />
       </label>
     </AuthScreen>

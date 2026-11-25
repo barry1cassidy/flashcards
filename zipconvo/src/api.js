@@ -1,5 +1,13 @@
 const TOKEN_KEY = 'zipconvo.token'
 const USER_KEY = 'zipconvo.user'
+const API_BASE = String(import.meta.env.VITE_API_BASE || '').replace(/\/$/, '')
+
+function apiUrl(path) {
+  if (!API_BASE || !path.startsWith('/')) {
+    return path
+  }
+  return `${API_BASE}${path}`
+}
 
 export function getToken() {
   return localStorage.getItem(TOKEN_KEY)
@@ -43,7 +51,7 @@ export async function api(path, options = {}) {
 
   let response
   try {
-    response = await fetch(path, { ...options, headers })
+    response = await fetch(apiUrl(path), { ...options, headers })
   } catch {
     throw new Error('No connection')
   }
@@ -60,6 +68,10 @@ export async function api(path, options = {}) {
   }
   if (response.status === 204) {
     return null
+  }
+  const contentType = response.headers.get('content-type') || ''
+  if (contentType.includes('audio/')) {
+    return response.blob()
   }
   return response.json()
 }

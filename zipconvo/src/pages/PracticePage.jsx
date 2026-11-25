@@ -1,18 +1,48 @@
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { api } from '../api'
+import { translateError } from '../i18n/errors'
 import { languageName } from '../languages'
-import { GRADES } from '../studio'
+import SpeakButton from './SpeakButton'
 
 export default function PracticePage() {
   const { id } = useParams()
   const navigate = useNavigate()
+  const { t } = useTranslation()
   const [conversation, setConversation] = useState(null)
   const [error, setError] = useState('')
   const [turn, setTurn] = useState(0)
   const [revealed, setRevealed] = useState(false)
   const [rating, setRating] = useState(false)
   const [saving, setSaving] = useState(false)
+  const [deck, setDeck] = useState(undefined)
+
+  useEffect(() => {
+    if (!conversation) {
+      return undefined
+    }
+    if (!conversation.deckId) {
+      setDeck(null)
+      return undefined
+    }
+    let cancelled = false
+    setDeck(undefined)
+    api(`/api/decks/${conversation.deckId}`)
+      .then((found) => {
+        if (!cancelled) {
+          setDeck(found)
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setDeck(null)
+        }
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [conversation])
 
   useEffect(() => {
     let cancelled = false
@@ -35,9 +65,9 @@ export default function PracticePage() {
   if (error) {
     return (
       <main className="screen">
-        <p className="error">{error}</p>
+        <p className="error">{translateError(error)}</p>
         <Link className="btn email" to="/conversations">
-          Back to conversations
+          {t('practice.backToList')}
         </Link>
       </main>
     )
@@ -46,7 +76,7 @@ export default function PracticePage() {
   if (!conversation) {
     return (
       <main className="screen">
-        <p className="empty">Loading…</p>
+        <p className="empty">{t('loading')}</p>
       </main>
     )
   }
@@ -86,18 +116,21 @@ export default function PracticePage() {
   return (
     <main className="screen practice">
       <button className="back" type="button" onClick={() => (rating ? setRating(false) : navigate('/conversations'))}>
-        Back
+        {t('back')}
       </button>
-      {error ? <p className="error">{error}</p> : null}
+      {error ? <p className="error">{translateError(error)}</p> : null}
 
       {rating ? (
         <div className="rate">
           <div className="screen-copy">
-            <h1>How did that conversation go?</h1>
-            <p>{conversation.title}. Grade the whole scene, not each line.</p>
+            <h1>{t('practice.how')}</h1>
+            <p>{t('practice.gradeWhole', { title: conversation.title })}</p>
           </div>
           <div className="rate-list">
-            {GRADES.map((option) => (
+            {[
+              { status: 'LEARNING', label: t('grades.practicing'), hint: t('grades.practicingHint') },
+              { status: 'LEARNED', label: t('grades.learned'), hint: t('grades.learnedHint') },
+            ].map((option) => (
               <button
                 key={option.status}
                 className={`rate-choice grade-${option.status.toLowerCase()}`}
@@ -110,17 +143,47 @@ export default function PracticePage() {
               </button>
             ))}
           </div>
-          <p className="rate-note">Fully learned is the one that stays with you. A later conversation can bring those words back. Still practicing keeps the scene in the list you are working through.</p>
+          <p className="rate-note">{t('practice.note')}</p>
         </div>
       ) : (
         <>
           <div className="screen-copy">
             <h1>{conversation.title}</h1>
             <p>
-              Turn {turn + 1} of {turns.length}. You play the {conversation.yourRole}. {languageName(conversation.nativeLanguage)} is the
-              meaning; {languageName(conversation.targetLanguage)} is the line to say.
+              {t('practice.turn', {
+                current: turn + 1,
+                total: turns.length,
+                role: conversation.yourRole,
+                native: languageName(conversation.nativeLanguage),
+                target: languageName(conversation.targetLanguage),
+              })}
             </p>
           </div>
+          <section className="conv-cards">
+            <h2>{t('cards.title')}</h2>
+            {conversation.deckId && deck === undefined ? <p>{t('loading')}</p> : null}
+            {deck ? (
+              <>
+                <p>{t('cards.count', { count: deck.cardCount })}</p>
+                <div className="conv-cards-actions">
+                  <Link className="btn email" to={`/conversations/${id}/cards/study`}>
+                    {t('cards.study')}
+                  </Link>
+                  <Link className="btn google" to={`/conversations/${id}/cards/edit`}>
+                    {t('cards.edit')}
+                  </Link>
+                </div>
+              </>
+            ) : null}
+            {deck === null ? (
+              <>
+                <p>{t('cards.makeLead')}</p>
+                <Link className="btn email" to={`/conversations/${id}/cards`}>
+                  {t('cards.make')}
+                </Link>
+              </>
+            ) : null}
+          </section>
           <div className="chat" aria-live="polite">
             {shown.map((item, index) => {
               const yours = item.role === 'you'
@@ -130,17 +193,17 @@ export default function PracticePage() {
                   <p className="speaker">{item.speaker}</p>
                   {yours ? (
                     <>
-                      <p className="line">{item.nativeText}</p>
+                      <SpokenLine text={item.nativeText} lang={conversation.nativeLanguage} className="line" />
                       {open ? (
-                        <p className="meaning">{item.targetText}</p>
+                        <SpokenLine text={item.targetText} lang={conversation.targetLanguage} className="meaning" />
                       ) : (
-                        <p className="meaning">Say the {languageName(conversation.targetLanguage)}, then reveal.</p>
+                        <p className="meaning">{t('practice.sayThenReveal', { language: languageName(conversation.targetLanguage) })}</p>
                       )}
                     </>
                   ) : (
                     <>
-                      <p className="line">{item.targetText}</p>
-                      <p className="meaning">{item.nativeText}</p>
+                      <SpokenLine text={item.targetText} lang={conversation.targetLanguage} className="line" />
+                      <SpokenLine text={item.nativeText} lang={conversation.nativeLanguage} className="meaning" />
                     </>
                   )}
                 </article>
@@ -150,16 +213,25 @@ export default function PracticePage() {
           <div className="practice-bar">
             {current?.role === 'you' && !revealed ? (
               <button className="btn email" type="button" onClick={() => setRevealed(true)}>
-                Reveal {languageName(conversation.targetLanguage)}
+                {t('practice.reveal', { language: languageName(conversation.targetLanguage) })}
               </button>
             ) : (
               <button className="btn email" type="button" onClick={nextTurn}>
-                {last ? 'Finish' : 'Next turn'}
+                {last ? t('practice.finish') : t('practice.next')}
               </button>
             )}
           </div>
         </>
       )}
     </main>
+  )
+}
+
+function SpokenLine({ text, lang, className }) {
+  return (
+    <div className="spoken-line">
+      <p className={className}>{text}</p>
+      <SpeakButton text={text} lang={lang} />
+    </div>
   )
 }

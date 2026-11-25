@@ -1,10 +1,12 @@
 import { Navigate, Outlet, Route, Routes } from 'react-router-dom'
 import AppLayout from './AppLayout'
 import { useAuth } from './auth'
+import ConversationCardsPage from './pages/ConversationCardsPage'
 import ConversationsPage from './pages/ConversationsPage'
 import ListenPage from './pages/ListenPage'
 import LoginPage from './pages/LoginPage'
 import MePage from './pages/MePage'
+import SettingsPage from './pages/SettingsPage'
 import PracticePage from './pages/PracticePage'
 import RegisterPage from './pages/RegisterPage'
 import ScenesPage from './pages/ScenesPage'
@@ -22,10 +24,14 @@ export default function App() {
         <Route element={<AppLayout />}>
           <Route path="/conversations" element={<ConversationsPage />} />
           <Route path="/conversations/:id" element={<PracticePage />} />
+          <Route path="/conversations/:id/cards" element={<ConversationCardsPage />} />
+          <Route path="/conversations/:id/cards/study" element={<ConversationCardsPage />} />
+          <Route path="/conversations/:id/cards/edit" element={<ConversationCardsPage />} />
           <Route path="/scenes" element={<ScenesPage />} />
           <Route path="/listen" element={<ListenPage />} />
           <Route path="/listen/:id" element={<ListenPage />} />
           <Route path="/me" element={<MePage />} />
+          <Route path="/me/settings" element={<SettingsPage />} />
         </Route>
       </Route>
     </Routes>

@@ -1,0 +1,22 @@
+{
+  "appId": "com.zipconvo.app",
+  "appName": "ZipCONVO",
+  "webDir": "dist",
+  "backgroundColor": "#F4F6FB",
+  "android": {
+    "backgroundColor": "#F4F6FB"
+  },
+  "server": {
+    "hostname": "zipdeck.app",
+    "androidScheme": "https"
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchAutoHide": true,
+      "launchShowDuration": 2000,
+      "launchFadeOutDuration": 200,
+      "backgroundColor": "#F4F6FB",
+      "showSpinner": false
+    }
+  }
+}

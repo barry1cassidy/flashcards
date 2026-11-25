@@ -494,7 +494,7 @@ A private copy of the hand-tuned Xcode settings lives at `macfiles/` in the repo
 | `App.entitlements` | `frontend/ios/App/App/App.entitlements` |
 | `App.xcodeproj.zip` | unzip into `frontend/ios/App/` so it replaces `App.xcodeproj` |
 
-`Info.plist` is the Google iOS client ID, the reversed URL scheme, `ITSAppUsesNonExemptEncryption` = NO, background audio, and the version numbers. `App.entitlements` is Sign in with Apple plus `applinks:zipdeck.app` and `webcredentials:zipdeck.app`. The zip is the Xcode project: the Apple team, bundle ID `com.zipdeck.app`, and the Swift files in the App target. The file that matters inside the zip is `project.pbxproj`. The zip may also contain `xcuserdata` from the cloud Mac; that user state can stay or be deleted after unzip.
+`Info.plist` is the Google iOS client ID, the reversed URL scheme, `ITSAppUsesNonExemptEncryption` = NO, background audio, camera/photo-library usage strings (`NSCameraUsageDescription`, `NSPhotoLibraryUsageDescription` — required so **Take Photo** / card images do not crash under App Review), and the version numbers. `App.entitlements` is Sign in with Apple plus `applinks:zipdeck.app` and `webcredentials:zipdeck.app`. The zip is the Xcode project: the Apple team, bundle ID `com.zipdeck.app`, and the Swift files in the App target. The file that matters inside the zip is `project.pbxproj`. The zip may also contain `xcuserdata` from the cloud Mac; that user state can stay or be deleted after unzip.
 
 From the repo root, after `npx cap add ios` on a new Mac:
 

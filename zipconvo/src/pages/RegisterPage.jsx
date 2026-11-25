@@ -1,9 +1,11 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Link, Navigate, useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth'
 import AuthScreen from './AuthScreen'
 
 export default function RegisterPage() {
+  const { t } = useTranslation()
   const { user, ready, register } = useAuth()
   const navigate = useNavigate()
   const [displayName, setDisplayName] = useState('')
@@ -34,31 +36,31 @@ export default function RegisterPage() {
 
   return (
     <AuthScreen
-      title="Continue with email"
-      lede="This is the same account as Zipdeck."
+      title={t('register.title')}
+      lede={t('register.lede')}
       error={error}
       onSubmit={onSubmit}
       action={
         <button className="btn email" type="submit" disabled={busy}>
-          {busy ? 'Creating account…' : 'Create account'}
+          {busy ? t('register.busy') : t('register.create')}
         </button>
       }
       footer={
         <>
-          Already have an account? <Link to="/login">Log in</Link>
+          {t('register.haveAccount')} <Link to="/login">{t('welcome.logIn')}</Link>
         </>
       }
     >
       <label className="field">
-        <span>Name</span>
+        <span>{t('name')}</span>
         <input value={displayName} onChange={(event) => setDisplayName(event.target.value)} required maxLength={100} />
       </label>
       <label className="field">
-        <span>Email</span>
+        <span>{t('email')}</span>
         <input type="email" autoComplete="email" value={email} onChange={(event) => setEmail(event.target.value)} required />
       </label>
       <label className="field">
-        <span>Password</span>
+        <span>{t('password')}</span>
         <input
           type="password"
           autoComplete="new-password"
