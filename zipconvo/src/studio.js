@@ -12,7 +12,44 @@ export const SCENES = [
   { id: 'hotel', image: '/scenes/scene-hotel.jpg' },
   { id: 'pharmacy', image: '/scenes/scene-pharmacy.jpg' },
   { id: 'interview', image: '/scenes/scene-interview.jpg' },
+  { id: 'restaurant', image: '/scenes/scene-restaurant.jpg' },
+  { id: 'taxi', image: '/scenes/scene-taxi.jpg' },
+  { id: 'supermarket', image: '/scenes/scene-supermarket.jpg' },
+  { id: 'directions', image: '/scenes/scene-directions.jpg' },
 ]
+
+export const SAMPLE_LANGUAGES = [
+  'en-US',
+  'zh-CN',
+  'zh-HK',
+  'hi-IN',
+  'es-ES',
+  'ar-SA',
+  'fr-FR',
+  'bn-IN',
+  'pt-BR',
+  'ru-RU',
+  'id-ID',
+  'de-DE',
+  'ja-JP',
+  'tr-TR',
+  'vi-VN',
+  'ko-KR',
+  'it-IT',
+  'th-TH',
+  'pl-PL',
+  'nl-NL',
+  'ga-IE',
+]
+
+export function samplePairOk(nativeLanguage, targetLanguage) {
+  if (!nativeLanguage || !targetLanguage || nativeLanguage === targetLanguage) {
+    return false
+  }
+  const nativeEnglish = nativeLanguage === 'en-US'
+  const targetEnglish = targetLanguage === 'en-US'
+  return nativeEnglish !== targetEnglish && SAMPLE_LANGUAGES.includes(nativeLanguage) && SAMPLE_LANGUAGES.includes(targetLanguage)
+}
 
 export function placeLabel(scenario) {
   if (!scenario) {

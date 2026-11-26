@@ -71,7 +71,11 @@
     "pharmacy": "약국",
     "interview": "면접",
     "custom": "사용자 지정",
-    "scene": "장면"
+    "scene": "장면",
+    "restaurant": "식당에서",
+    "taxi": "택시에서",
+    "supermarket": "마트에서",
+    "directions": "길 묻기"
   },
   "scenes": {
     "title": "장면 고르기",
@@ -102,7 +106,11 @@
     "writing": "대화를 쓰는 중…",
     "generate": "생성 · 1 크레딧",
     "useLearned": "완전히 배운 장면 사용",
-    "ignoreLearned": "완전히 배운 장면 사용 안 함"
+    "ignoreLearned": "완전히 배운 장면 사용 안 함",
+    "restaurantTitle": "식당에서",
+    "taxiTitle": "택시에서",
+    "supermarketTitle": "마트에서",
+    "directionsTitle": "길 묻기"
   },
   "practice": {
     "backToList": "대화 목록으로",

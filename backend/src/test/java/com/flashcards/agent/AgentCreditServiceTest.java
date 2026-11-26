@@ -164,6 +164,25 @@ class AgentCreditServiceTest {
     }
 
     @Test
+    void raisesIncludedCreditsWhenMonthlyAllowanceGrows() {
+        String period = YearMonth.now(ZoneOffset.UTC).toString();
+        String ref = USER_ID + ":" + period;
+        ledger.removeIf(row -> row.getReason() == CreditReason.PERIOD_GRANT && ref.equals(row.getProviderRef()));
+        AgentCreditLedger grant = new AgentCreditLedger();
+        grant.setReason(CreditReason.PERIOD_GRANT);
+        grant.setProviderRef(ref);
+        grant.setAmount(10);
+        ledger.add(grant);
+        user.setAgentIncludedCredits(7);
+        user.setAgentCreditPeriod(period);
+        AgentCreditService larger = new AgentCreditService(
+                userRepository, ledgerRepository, new AgentProperties("", "", "", 20, 10, 40, 90, 0, 0, 0, 0));
+        CreditBalance balance = larger.snapshot(user);
+        assertEquals(17, balance.includedCredits());
+        assertEquals(20, grant.getAmount());
+    }
+
+    @Test
     void capsIncludedCreditsWhenAllowanceDrops() {
         user.setAgentIncludedCredits(40);
         user.setAgentCreditPeriod(YearMonth.now(ZoneOffset.UTC).toString());

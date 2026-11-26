@@ -79,11 +79,14 @@ app:
       product-monthly: ${APPLE_PRODUCT_MONTHLY:pro_monthly}
       product-yearly: ${APPLE_PRODUCT_YEARLY:pro_yearly}
       product-addon: ${APPLE_PRODUCT_ADDON:credits_addon}
+    zipconvo:
+      google-package-name: ${GOOGLE_PLAY_ZIPCONVO_PACKAGE_NAME:com.zipconvo.app}
+      apple-bundle-id: ${APPLE_ZIPCONVO_BUNDLE_ID:com.zipconvo.app}
   agent:
     api-key: ${AGENT_API_KEY:}
     base-url: ${AGENT_BASE_URL:https://generativelanguage.googleapis.com/v1beta/openai}
     model: ${AGENT_MODEL:gemini-3.8-flash}
-    monthly-credits: 10
+    monthly-credits: ${AGENT_MONTHLY_CREDITS:20}
     addon-credits: 10
     max-cards: 40
     timeout-seconds: 90

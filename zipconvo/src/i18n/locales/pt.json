@@ -71,7 +71,11 @@
     "pharmacy": "Farmácia",
     "interview": "Entrevista",
     "custom": "Personalizado",
-    "scene": "Cena"
+    "scene": "Cena",
+    "restaurant": "No restaurante",
+    "taxi": "No táxi",
+    "supermarket": "No supermercado",
+    "directions": "Pedindo informações"
   },
   "scenes": {
     "title": "Escolha uma cena",
@@ -102,7 +106,11 @@
     "writing": "Escrevendo a conversa…",
     "generate": "Gerar · 1 crédito",
     "useLearned": "Usar cenas dominadas",
-    "ignoreLearned": "Não usar cenas dominadas"
+    "ignoreLearned": "Não usar cenas dominadas",
+    "restaurantTitle": "No restaurante",
+    "taxiTitle": "No táxi",
+    "supermarketTitle": "No supermercado",
+    "directionsTitle": "Pedindo informações"
   },
   "practice": {
     "backToList": "Voltar às conversas",

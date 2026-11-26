@@ -71,7 +71,11 @@
     "pharmacy": "Аптека",
     "interview": "Собеседование",
     "custom": "Своё",
-    "scene": "Сцена"
+    "scene": "Сцена",
+    "restaurant": "В ресторане",
+    "taxi": "В такси",
+    "supermarket": "В супермаркете",
+    "directions": "Как пройти"
   },
   "scenes": {
     "title": "Выберите сцену",
@@ -102,7 +106,11 @@
     "writing": "Пишем разговор…",
     "generate": "Создать · 1 кредит",
     "useLearned": "Использовать полностью выученные сцены",
-    "ignoreLearned": "Не использовать полностью выученные сцены"
+    "ignoreLearned": "Не использовать полностью выученные сцены",
+    "restaurantTitle": "В ресторане",
+    "taxiTitle": "В такси",
+    "supermarketTitle": "В супермаркете",
+    "directionsTitle": "Как пройти"
   },
   "practice": {
     "backToList": "К разговорам",

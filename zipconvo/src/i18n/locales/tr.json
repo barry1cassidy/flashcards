@@ -71,7 +71,11 @@
     "pharmacy": "Eczane",
     "interview": "Mülakat",
     "custom": "Özel",
-    "scene": "Sahne"
+    "scene": "Sahne",
+    "restaurant": "Restoranda",
+    "taxi": "Taksi'de",
+    "supermarket": "Markette",
+    "directions": "Yol sorma"
   },
   "scenes": {
     "title": "Bir sahne seçin",
@@ -102,7 +106,11 @@
     "writing": "Konuşma yazılıyor…",
     "generate": "Oluştur · 1 kredi",
     "useLearned": "Tam öğrenilen sahneleri kullan",
-    "ignoreLearned": "Tam öğrenilen sahneleri kullanma"
+    "ignoreLearned": "Tam öğrenilen sahneleri kullanma",
+    "restaurantTitle": "Restoranda",
+    "taxiTitle": "Taksi'de",
+    "supermarketTitle": "Markette",
+    "directionsTitle": "Yol sorma"
   },
   "practice": {
     "backToList": "Konuşmalara dön",

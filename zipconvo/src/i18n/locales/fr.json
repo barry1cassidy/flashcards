@@ -71,7 +71,11 @@
     "pharmacy": "Pharmacie",
     "interview": "Entretien",
     "custom": "Personnalisé",
-    "scene": "Scène"
+    "scene": "Scène",
+    "restaurant": "Au restaurant",
+    "taxi": "Dans un taxi",
+    "supermarket": "Au supermarché",
+    "directions": "Demander son chemin"
   },
   "scenes": {
     "title": "Choisissez une scène",
@@ -102,7 +106,11 @@
     "writing": "Écriture de la conversation…",
     "generate": "Générer · 1 crédit",
     "useLearned": "Utiliser les scènes maîtrisées",
-    "ignoreLearned": "Ne pas utiliser les scènes maîtrisées"
+    "ignoreLearned": "Ne pas utiliser les scènes maîtrisées",
+    "restaurantTitle": "Au restaurant",
+    "taxiTitle": "Dans un taxi",
+    "supermarketTitle": "Au supermarché",
+    "directionsTitle": "Demander son chemin"
   },
   "practice": {
     "backToList": "Retour aux conversations",

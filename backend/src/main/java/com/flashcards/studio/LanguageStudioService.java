@@ -41,7 +41,18 @@ public class LanguageStudioService {
     private static final Logger log = LoggerFactory.getLogger(LanguageStudioService.class);
     private static final Duration RETAIN = Duration.ofMinutes(30);
     private static final Set<String> SCENARIOS =
-            Set.of("cafe", "airport", "doctor", "hotel", "pharmacy", "interview", "custom");
+            Set.of(
+                    "cafe",
+                    "airport",
+                    "doctor",
+                    "hotel",
+                    "pharmacy",
+                    "interview",
+                    "restaurant",
+                    "taxi",
+                    "supermarket",
+                    "directions",
+                    "custom");
     private static final int LEARNED_CONTEXT_CHARS = 4000;
     static final int LEARNED_CONTEXT_SCENES = 5;
     private static final int LEARNED_CONTEXT_YOU_LINES = 4;

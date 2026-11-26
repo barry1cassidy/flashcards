@@ -71,7 +71,11 @@
     "pharmacy": "Apteka",
     "interview": "Rozmowa o pracę",
     "custom": "Własne",
-    "scene": "Scena"
+    "scene": "Scena",
+    "restaurant": "W restauracji",
+    "taxi": "W taksówce",
+    "supermarket": "W supermarkecie",
+    "directions": "Pytanie o drogę"
   },
   "scenes": {
     "title": "Wybierz scenę",
@@ -102,7 +106,11 @@
     "writing": "Pisanie rozmowy…",
     "generate": "Generuj · 1 kredyt",
     "useLearned": "Użyj opanowanych scen",
-    "ignoreLearned": "Nie używaj opanowanych scen"
+    "ignoreLearned": "Nie używaj opanowanych scen",
+    "restaurantTitle": "W restauracji",
+    "taxiTitle": "W taksówce",
+    "supermarketTitle": "W supermarkecie",
+    "directionsTitle": "Pytanie o drogę"
   },
   "practice": {
     "backToList": "Wróć do rozmów",

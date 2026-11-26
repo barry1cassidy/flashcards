@@ -71,7 +71,11 @@
     "pharmacy": "ফার্মেসি",
     "interview": "সাক্ষাৎকার",
     "custom": "কাস্টম",
-    "scene": "দৃশ্য"
+    "scene": "দৃশ্য",
+    "restaurant": "রেস্তোরাঁয়",
+    "taxi": "ট্যাক্সিতে",
+    "supermarket": "সুপারমার্কেটে",
+    "directions": "রাস্তা জিজ্ঞাসা"
   },
   "scenes": {
     "title": "একটি দৃশ্য বেছে নিন",
@@ -102,7 +106,11 @@
     "writing": "কথোপকথন লেখা হচ্ছে…",
     "generate": "তৈরি করুন · ১ ক্রেডিট",
     "useLearned": "পুরোপুরি শেখা দৃশ্য ব্যবহার করুন",
-    "ignoreLearned": "পুরোপুরি শেখা দৃশ্য ব্যবহার করবেন না"
+    "ignoreLearned": "পুরোপুরি শেখা দৃশ্য ব্যবহার করবেন না",
+    "restaurantTitle": "রেস্তোরাঁয়",
+    "taxiTitle": "ট্যাক্সিতে",
+    "supermarketTitle": "সুপারমার্কেটে",
+    "directionsTitle": "রাস্তা জিজ্ঞাসা"
   },
   "practice": {
     "backToList": "কথোপকথনে ফিরুন",

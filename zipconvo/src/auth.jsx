@@ -112,6 +112,12 @@ export function AuthProvider({ children }) {
           throw error
         }
       },
+      async refresh() {
+        const me = await api('/api/auth/me')
+        setUser(me)
+        setCachedUser(me)
+        return me
+      },
       logout() {
         setToken(null)
         setUser(null)

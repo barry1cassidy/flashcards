@@ -71,7 +71,11 @@
     "pharmacy": "صيدلية",
     "interview": "مقابلة",
     "custom": "مخصص",
-    "scene": "مشهد"
+    "scene": "مشهد",
+    "restaurant": "في المطعم",
+    "taxi": "في سيارة أجرة",
+    "supermarket": "في السوبرماركت",
+    "directions": "السؤال عن الطريق"
   },
   "scenes": {
     "title": "اختر مشهداً.",
@@ -102,7 +106,11 @@
     "writing": "جارٍ كتابة الحوار…",
     "generate": "إنشاء · رصيد واحد",
     "useLearned": "استخدام المشاهد المتعلَّمة تمامًا",
-    "ignoreLearned": "عدم استخدام المشاهد المتعلَّمة تمامًا"
+    "ignoreLearned": "عدم استخدام المشاهد المتعلَّمة تمامًا",
+    "restaurantTitle": "في المطعم",
+    "taxiTitle": "في سيارة أجرة",
+    "supermarketTitle": "في السوبرماركت",
+    "directionsTitle": "السؤال عن الطريق"
   },
   "practice": {
     "backToList": "العودة إلى الحوارات",

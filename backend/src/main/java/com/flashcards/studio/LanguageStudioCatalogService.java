@@ -44,7 +44,35 @@ public class LanguageStudioCatalogService {
 
     @Transactional(readOnly = true)
     public List<LanguageStudioSampleSummary> list(UUID userId, String nativeLanguage, String targetLanguage) {
-        User user = requireProUser(userId);
+        return listFor(requireProUser(userId), nativeLanguage, targetLanguage);
+    }
+
+    @Transactional(readOnly = true)
+    public List<LanguageStudioSampleSummary> listOpen(UUID userId, String nativeLanguage, String targetLanguage) {
+        return listFor(requireUser(userId), nativeLanguage, targetLanguage);
+    }
+
+    @Transactional(readOnly = true)
+    public LanguageStudioSampleResponse get(UUID userId, String slug, String nativeLanguage, String targetLanguage) {
+        return getFor(requireProUser(userId), slug, nativeLanguage, targetLanguage);
+    }
+
+    @Transactional(readOnly = true)
+    public LanguageStudioSampleResponse getOpen(UUID userId, String slug, String nativeLanguage, String targetLanguage) {
+        return getFor(requireUser(userId), slug, nativeLanguage, targetLanguage);
+    }
+
+    @Transactional
+    public LanguageConversationResponse copy(UUID userId, String slug, String nativeLanguage, String targetLanguage) {
+        return copyFor(requireProUser(userId), slug, nativeLanguage, targetLanguage);
+    }
+
+    @Transactional
+    public LanguageConversationResponse copyOpen(UUID userId, String slug, String nativeLanguage, String targetLanguage) {
+        return copyFor(requireUser(userId), slug, nativeLanguage, targetLanguage);
+    }
+
+    private List<LanguageStudioSampleSummary> listFor(User user, String nativeLanguage, String targetLanguage) {
         Pair pair = pair(nativeLanguage, targetLanguage, user);
         return sceneRepository.findAllByOrderByPositionAsc().stream()
                 .map(scene -> toSummary(scene, pair, user.getId()))
@@ -52,9 +80,7 @@ public class LanguageStudioCatalogService {
                 .toList();
     }
 
-    @Transactional(readOnly = true)
-    public LanguageStudioSampleResponse get(UUID userId, String slug, String nativeLanguage, String targetLanguage) {
-        User user = requireProUser(userId);
+    private LanguageStudioSampleResponse getFor(User user, String slug, String nativeLanguage, String targetLanguage) {
         Pair pair = pair(nativeLanguage, targetLanguage, user);
         StudioSampleScene scene = sceneRepository
                 .findBySlug(slug)
@@ -66,9 +92,7 @@ public class LanguageStudioCatalogService {
         return response;
     }
 
-    @Transactional
-    public LanguageConversationResponse copy(UUID userId, String slug, String nativeLanguage, String targetLanguage) {
-        User user = requireProUser(userId);
+    private LanguageConversationResponse copyFor(User user, String slug, String nativeLanguage, String targetLanguage) {
         Pair pair = pair(nativeLanguage, targetLanguage, user);
         StudioSampleScene scene = sceneRepository
                 .findBySlug(slug)

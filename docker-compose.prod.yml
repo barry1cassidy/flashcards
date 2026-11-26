@@ -13,6 +13,7 @@ services:
       AGENT_API_KEY: ${AGENT_API_KEY:-}
       AGENT_BASE_URL: ${AGENT_BASE_URL:-https://generativelanguage.googleapis.com/v1beta/openai}
       AGENT_MODEL: ${AGENT_MODEL:-gemini-3.8-flash}
+      AGENT_MONTHLY_CREDITS: ${AGENT_MONTHLY_CREDITS:-20}
       STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:-}
       STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET:-}
       STRIPE_PRICE_MONTHLY: ${STRIPE_PRICE_MONTHLY:-}

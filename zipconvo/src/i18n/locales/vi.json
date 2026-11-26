@@ -71,7 +71,11 @@
     "pharmacy": "Nhà thuốc",
     "interview": "Phỏng vấn",
     "custom": "Tùy chỉnh",
-    "scene": "Cảnh"
+    "scene": "Cảnh",
+    "restaurant": "Ở nhà hàng",
+    "taxi": "Trên taxi",
+    "supermarket": "Ở siêu thị",
+    "directions": "Hỏi đường"
   },
   "scenes": {
     "title": "Chọn một cảnh",
@@ -102,7 +106,11 @@
     "writing": "Đang viết hội thoại…",
     "generate": "Tạo · 1 tín dụng",
     "useLearned": "Dùng các cảnh đã học vững",
-    "ignoreLearned": "Không dùng các cảnh đã học vững"
+    "ignoreLearned": "Không dùng các cảnh đã học vững",
+    "restaurantTitle": "Ở nhà hàng",
+    "taxiTitle": "Trên taxi",
+    "supermarketTitle": "Ở siêu thị",
+    "directionsTitle": "Hỏi đường"
   },
   "practice": {
     "backToList": "Về danh sách hội thoại",

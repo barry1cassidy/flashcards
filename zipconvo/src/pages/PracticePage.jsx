@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { api } from '../api'
 import { translateError } from '../i18n/errors'
 import { languageName } from '../languages'
 import SpeakButton from './SpeakButton'
 
 export default function PracticePage() {
-  const { id } = useParams()
+  const { id, slug } = useParams()
+  const [searchParams] = useSearchParams()
+  const sample = Boolean(slug)
   const navigate = useNavigate()
   const { t } = useTranslation()
   const [conversation, setConversation] = useState(null)
@@ -15,6 +17,7 @@ export default function PracticePage() {
   const [turn, setTurn] = useState(0)
   const [revealed, setRevealed] = useState(false)
   const [rating, setRating] = useState(false)
+  const [finished, setFinished] = useState(false)
   const [saving, setSaving] = useState(false)
   const [deck, setDeck] = useState(undefined)
 
@@ -46,7 +49,14 @@ export default function PracticePage() {
 
   useEffect(() => {
     let cancelled = false
-    api(`/api/language-studio/conversations/${id}`)
+    const nativeLanguage = searchParams.get('native') || 'en-US'
+    const targetLanguage = searchParams.get('target') || 'es-ES'
+    const request = sample
+      ? api(
+          `/api/zipconvo/samples/${encodeURIComponent(slug)}?nativeLanguage=${encodeURIComponent(nativeLanguage)}&targetLanguage=${encodeURIComponent(targetLanguage)}`,
+        ).then((found) => ({ ...found, id: found.slug }))
+      : api(`/api/language-studio/conversations/${id}`)
+    request
       .then((found) => {
         if (!cancelled) {
           setConversation(found)
@@ -60,7 +70,7 @@ export default function PracticePage() {
     return () => {
       cancelled = true
     }
-  }, [id])
+  }, [id, sample, slug, searchParams])
 
   if (error) {
     return (
@@ -88,6 +98,10 @@ export default function PracticePage() {
 
   function nextTurn() {
     if (last) {
+      if (sample) {
+        setFinished(true)
+        return
+      }
       setRating(true)
       return
     }
@@ -145,6 +159,22 @@ export default function PracticePage() {
           </div>
           <p className="rate-note">{t('practice.note')}</p>
         </div>
+      ) : finished ? (
+        <div className="screen-copy">
+          <h1>{conversation.title}</h1>
+          <p>{t('practice.sampleDone')}</p>
+          <div className="practice-bar">
+            <Link
+              className="btn email"
+              to={`/listen/sample/${slug}?native=${encodeURIComponent(conversation.nativeLanguage)}&target=${encodeURIComponent(conversation.targetLanguage)}`}
+            >
+              {t('practice.listenScene')}
+            </Link>
+            <Link className="btn google" to="/scenes">
+              {t('practice.backToScenes')}
+            </Link>
+          </div>
+        </div>
       ) : (
         <>
           <div className="screen-copy">
@@ -159,6 +189,7 @@ export default function PracticePage() {
               })}
             </p>
           </div>
+          {sample ? null : (
           <section className="conv-cards">
             <h2>{t('cards.title')}</h2>
             {conversation.deckId && deck === undefined ? <p>{t('loading')}</p> : null}
@@ -184,6 +215,7 @@ export default function PracticePage() {
               </>
             ) : null}
           </section>
+          )}
           <div className="chat" aria-live="polite">
             {shown.map((item, index) => {
               const yours = item.role === 'you'

@@ -155,6 +155,15 @@ public class AgentCreditService {
         String period = YearMonth.now(ZoneOffset.UTC).toString();
         int grant = properties.monthlyCredits();
         if (period.equals(user.getAgentCreditPeriod())) {
+            String ref = user.getId() + ":" + period;
+            ledgerRepository.findByReasonAndProviderRef(CreditReason.PERIOD_GRANT, ref).ifPresent(row -> {
+                if (row.getAmount() < grant) {
+                    int bump = grant - row.getAmount();
+                    user.setAgentIncludedCredits(Math.max(0, user.getAgentIncludedCredits()) + bump);
+                    row.setAmount(grant);
+                    ledgerRepository.save(row);
+                }
+            });
             if (user.getAgentIncludedCredits() > grant) {
                 user.setAgentIncludedCredits(grant);
             }

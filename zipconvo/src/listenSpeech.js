@@ -136,16 +136,25 @@ function speakEngine(spoken, lang, speechRate, signal, onProgress, estimate, myT
       finish(error)
     }
     signal?.addEventListener('abort', onAbort, { once: true })
-    timer = window.setInterval(() => {
-      onProgress?.(Math.min(0.97, (performance.now() - started) / estimate))
-    }, 80)
+    const startEstimate = () => {
+      window.clearInterval(timer)
+      timer = window.setInterval(() => {
+        onProgress?.(Math.min(0.97, (performance.now() - started) / estimate))
+      }, 80)
+    }
+    startEstimate()
 
     if (isIrish(lang)) {
       unlockHostedAudio()
     }
 
+    // Irish uses /api/speech + Audio.currentTime. Keep that as the only progress
+    // source so the listen bars do not fight the estimate timer and flicker.
     const playIrish = async () => {
       stopDeviceSpeech()
+      window.clearInterval(timer)
+      timer = 0
+      onProgress?.(0)
       return playHostedSpeech(spoken, { signal, rate: speechRate, wait: true, onProgress })
     }
 
@@ -162,6 +171,7 @@ function speakEngine(spoken, lang, speechRate, signal, onProgress, estimate, myT
               ended(null)
               return
             }
+            startEstimate()
           } catch (error) {
             ended(error)
             return
@@ -203,6 +213,7 @@ function speakEngine(spoken, lang, speechRate, signal, onProgress, estimate, myT
             ended(null)
             return
           }
+          startEstimate()
         } catch (error) {
           ended(error)
           return

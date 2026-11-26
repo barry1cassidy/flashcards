@@ -370,8 +370,8 @@ function ProSection({ user, onError, onStub, refresh }) {
               <BenefitItem tone="export" title={t('pro.featureExport')} detail={t('pro.featureExportDetail')} />
               <BenefitItem
                 tone="credits"
-                title={t('pro.featureCredits', { count: billing?.monthlyAllowance || 10 })}
-                detail={t('pro.featureCreditsDetail', { count: billing?.monthlyAllowance || 10 })}
+                title={t('pro.featureCredits', { count: billing?.monthlyAllowance || 20 })}
+                detail={t('pro.featureCreditsDetail', { count: billing?.monthlyAllowance || 20 })}
               />
               <BenefitItem tone="devices" title={t('pro.featureDevices')} detail={t('pro.featureDevicesDetail')} />
             </ul>
@@ -428,7 +428,7 @@ function ProSection({ user, onError, onStub, refresh }) {
                   })
                 : t('pro.balanceBreakdown', {
                     included: billing?.includedCredits ?? 0,
-                    allowance: billing?.monthlyAllowance ?? 10,
+                    allowance: billing?.monthlyAllowance ?? 20,
                   })}
             </p>
             <div className="pro-balance-actions">

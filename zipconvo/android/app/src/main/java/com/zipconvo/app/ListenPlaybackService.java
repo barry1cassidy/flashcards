@@ -9,8 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ServiceInfo;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.drawable.Drawable;
+import android.graphics.BitmapFactory;
 import android.media.AudioAttributes;
 import android.media.AudioFocusRequest;
 import android.media.AudioFormat;
@@ -258,19 +257,7 @@ public class ListenPlaybackService extends Service {
         if (art != null) {
             return art;
         }
-        Drawable drawable = ContextCompat.getDrawable(this, R.mipmap.ic_launcher);
-        if (drawable == null) {
-            return null;
-        }
-        int size = drawable.getIntrinsicWidth();
-        if (size <= 0) {
-            size = 128;
-        }
-        Bitmap bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        drawable.setBounds(0, 0, size, size);
-        drawable.draw(canvas);
-        art = bitmap;
+        art = BitmapFactory.decodeResource(getResources(), R.drawable.listen_art);
         return art;
     }
 

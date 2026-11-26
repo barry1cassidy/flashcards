@@ -71,7 +71,11 @@
     "pharmacy": "Apotek",
     "interview": "Wawancara",
     "custom": "Kustom",
-    "scene": "Adegan"
+    "scene": "Adegan",
+    "restaurant": "Di restoran",
+    "taxi": "Di taksi",
+    "supermarket": "Di supermarket",
+    "directions": "Menanyakan arah"
   },
   "scenes": {
     "title": "Pilih adegan",
@@ -102,7 +106,11 @@
     "writing": "Menulis percakapan…",
     "generate": "Buat · 1 kredit",
     "useLearned": "Gunakan adegan yang sudah dikuasai",
-    "ignoreLearned": "Jangan gunakan adegan yang sudah dikuasai"
+    "ignoreLearned": "Jangan gunakan adegan yang sudah dikuasai",
+    "restaurantTitle": "Di restoran",
+    "taxiTitle": "Di taksi",
+    "supermarketTitle": "Di supermarket",
+    "directionsTitle": "Menanyakan arah"
   },
   "practice": {
     "backToList": "Kembali ke percakapan",

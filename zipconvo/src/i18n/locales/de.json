@@ -71,7 +71,11 @@
     "pharmacy": "Apotheke",
     "interview": "Vorstellungsgespräch",
     "custom": "Benutzerdefiniert",
-    "scene": "Szene"
+    "scene": "Szene",
+    "restaurant": "Im Restaurant",
+    "taxi": "Im Taxi",
+    "supermarket": "Im Supermarkt",
+    "directions": "Nach dem Weg fragen"
   },
   "scenes": {
     "title": "Wählen Sie eine Szene",
@@ -102,7 +106,11 @@
     "writing": "Gespräch wird geschrieben…",
     "generate": "Erzeugen · 1 Guthaben",
     "useLearned": "Beherrschte Szenen nutzen",
-    "ignoreLearned": "Beherrschte Szenen nicht nutzen"
+    "ignoreLearned": "Beherrschte Szenen nicht nutzen",
+    "restaurantTitle": "Im Restaurant",
+    "taxiTitle": "Im Taxi",
+    "supermarketTitle": "Im Supermarkt",
+    "directionsTitle": "Nach dem Weg fragen"
   },
   "practice": {
     "backToList": "Zurück zu den Gesprächen",

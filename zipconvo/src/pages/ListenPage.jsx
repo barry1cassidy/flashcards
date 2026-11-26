@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { api } from '../api'
 import { useAuth } from '../auth'
 import { translateError } from '../i18n/errors'
@@ -10,10 +10,15 @@ import AudioTrack from '../AudioTrack'
 import ListenOptions, { ListenOptionsToggle, listenPrefsSummary } from './ListenOptions'
 import { createListenSession } from '../listenSession'
 import { canListenSpeak } from '../listenSpeech'
-import { placeLabel } from '../studio'
+import { placeLabel, SAMPLE_LANGUAGES } from '../studio'
+import { isProLicensed } from '../pro'
+import ProStrip, { MoreScenes } from '../ProStrip'
 
 export default function ListenPage() {
-  const { id } = useParams()
+  const { id, slug } = useParams()
+  if (slug) {
+    return <ListenPlayer sampleSlug={slug} />
+  }
   if (id) {
     return <ListenPlayer id={id} />
   }
@@ -21,12 +26,19 @@ export default function ListenPage() {
 }
 
 function ListenList() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
+  const { user } = useAuth()
+  const pro = isProLicensed(user)
   const [items, setItems] = useState([])
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    if (!pro) {
+      setItems([])
+      setLoading(false)
+      return undefined
+    }
     let cancelled = false
     api('/api/language-studio/conversations')
       .then((rows) => {
@@ -36,7 +48,8 @@ function ListenList() {
       })
       .catch((err) => {
         if (!cancelled) {
-          setError(err.message)
+          setError(err.message === 'Pro license required' ? '' : err.message)
+          setItems([])
         }
       })
       .finally(() => {
@@ -47,21 +60,42 @@ function ListenList() {
     return () => {
       cancelled = true
     }
-  }, [])
+  }, [pro])
+
+  if (!loading && items.length === 0 && !error) {
+    const target = sampleTargetFor(i18n.language)
+    const query = `native=en-US&target=${encodeURIComponent(target)}`
+    return (
+      <main className="screen start-home">
+        <div className="screen-copy">
+          <h1 className="start-title">{t('listen.emptyTitle')}</h1>
+          <p>{t('listen.lede')}</p>
+        </div>
+        <section className="start-sample">
+          <img src="/scenes/scene-cafe.jpg" alt="" />
+          <div>
+            <p className="start-kicker">{t('listen.sampleKicker')}</p>
+            <h2>{t('scenes.cafeTitle')}</h2>
+            <p>{t('listen.sampleBody')}</p>
+          </div>
+          <Link className="btn email" to={`/listen/sample/cafe?${query}`}>
+            {t('listen.startSample')}
+          </Link>
+        </section>
+        <MoreScenes />
+        {pro ? null : <ProStrip />}
+      </main>
+    )
+  }
 
   return (
     <main className="screen">
       <div className="screen-copy">
-        <h1>{t('listen.title')}</h1>
+        <h1 className="start-title">{t('listen.title')}</h1>
         <p>{t('listen.lede')}</p>
       </div>
       {error ? <p className="error">{translateError(error)}</p> : null}
       {loading ? <p className="empty">{t('loading')}</p> : null}
-      {!loading && items.length === 0 ? (
-        <p className="empty">
-          {t('listen.empty')} <Link to="/scenes">{t('listen.chooseScene')}</Link>
-        </p>
-      ) : null}
       <div className="conversation-list">
         {items.map((item) => (
           <Link key={item.id} className="conversation-card" to={`/listen/${item.id}`}>
@@ -80,8 +114,17 @@ function ListenList() {
   )
 }
 
-function ListenPlayer({ id }) {
+function sampleTargetFor(language) {
+  const code = String(language || 'en').slice(0, 2).toLowerCase()
+  if (code === 'en') {
+    return 'es-ES'
+  }
+  return SAMPLE_LANGUAGES.find((item) => item.toLowerCase().startsWith(code)) || 'es-ES'
+}
+
+function ListenPlayer({ id, sampleSlug }) {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const { t } = useTranslation()
   const { user, patchMe } = useAuth()
   const [conversation, setConversation] = useState(null)
@@ -95,7 +138,14 @@ function ListenPlayer({ id }) {
 
   useEffect(() => {
     let cancelled = false
-    api(`/api/language-studio/conversations/${id}`)
+    const nativeLanguage = searchParams.get('native') || 'en-US'
+    const targetLanguage = searchParams.get('target') || 'es-ES'
+    const request = sampleSlug
+      ? api(
+          `/api/zipconvo/samples/${encodeURIComponent(sampleSlug)}?nativeLanguage=${encodeURIComponent(nativeLanguage)}&targetLanguage=${encodeURIComponent(targetLanguage)}`,
+        ).then((found) => ({ ...found, id: found.slug }))
+      : api(`/api/language-studio/conversations/${id}`)
+    request
       .then((found) => {
         if (!cancelled) {
           setConversation(found)
@@ -111,7 +161,7 @@ function ListenPlayer({ id }) {
       sessionRef.current?.stop()
       sessionRef.current = null
     }
-  }, [id])
+  }, [id, sampleSlug, searchParams])
 
   useEffect(() => {
     const next = listenPrefsFromUser(user)

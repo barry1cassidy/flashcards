@@ -144,6 +144,10 @@ final class LanguageStudioDraftParser {
             case "hotel" -> "checking into a hotel";
             case "pharmacy" -> "at the pharmacy";
             case "interview" -> "a first job interview";
+            case "restaurant" -> "ordering in a restaurant";
+            case "taxi" -> "riding in a taxi";
+            case "supermarket" -> "shopping in a supermarket";
+            case "directions" -> "asking for directions";
             case "custom" -> "a custom scene";
             default -> scenario.replace('_', ' ').trim();
         };

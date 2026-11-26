@@ -71,7 +71,11 @@
     "pharmacy": "药店",
     "interview": "面试",
     "custom": "自定义",
-    "scene": "场景"
+    "scene": "场景",
+    "restaurant": "在餐厅",
+    "taxi": "在出租车上",
+    "supermarket": "在超市",
+    "directions": "问路"
   },
   "scenes": {
     "title": "选择一个场景",
@@ -102,7 +106,11 @@
     "writing": "正在写这段对话…",
     "generate": "生成 · 1 点数",
     "useLearned": "使用完全学会的场景",
-    "ignoreLearned": "不使用完全学会的场景"
+    "ignoreLearned": "不使用完全学会的场景",
+    "restaurantTitle": "在餐厅",
+    "taxiTitle": "在出租车上",
+    "supermarketTitle": "在超市",
+    "directionsTitle": "问路"
   },
   "practice": {
     "backToList": "返回对话",

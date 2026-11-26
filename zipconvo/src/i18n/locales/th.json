@@ -71,7 +71,11 @@
     "pharmacy": "ร้านขายยา",
     "interview": "สัมภาษณ์",
     "custom": "กำหนดเอง",
-    "scene": "ฉาก"
+    "scene": "ฉาก",
+    "restaurant": "ที่ร้านอาหาร",
+    "taxi": "ในแท็กซี่",
+    "supermarket": "ที่ซูเปอร์มาร์เก็ต",
+    "directions": "ถามทาง"
   },
   "scenes": {
     "title": "เลือกฉาก",
@@ -102,7 +106,11 @@
     "writing": "กำลังเขียนบทสนทนา…",
     "generate": "สร้าง · 1 เครดิต",
     "useLearned": "ใช้ฉากที่เรียนจนชำนาญ",
-    "ignoreLearned": "ไม่ใช้ฉากที่เรียนจนชำนาญ"
+    "ignoreLearned": "ไม่ใช้ฉากที่เรียนจนชำนาญ",
+    "restaurantTitle": "ที่ร้านอาหาร",
+    "taxiTitle": "ในแท็กซี่",
+    "supermarketTitle": "ที่ซูเปอร์มาร์เก็ต",
+    "directionsTitle": "ถามทาง"
   },
   "practice": {
     "backToList": "กลับไปที่บทสนทนา",

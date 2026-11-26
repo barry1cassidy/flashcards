@@ -22,7 +22,7 @@ public record AgentProperties(
                 ? "https://generativelanguage.googleapis.com/v1beta/openai"
                 : baseUrl;
         model = (model == null || model.isBlank()) ? "gemini-3.8-flash" : model;
-        monthlyCredits = monthlyCredits <= 0 ? 10 : monthlyCredits;
+        monthlyCredits = monthlyCredits <= 0 ? 20 : monthlyCredits;
         addonCredits = addonCredits <= 0 ? 10 : addonCredits;
         maxCards = maxCards <= 0 ? 40 : maxCards;
         timeoutSeconds = timeoutSeconds <= 0 ? 90 : timeoutSeconds;

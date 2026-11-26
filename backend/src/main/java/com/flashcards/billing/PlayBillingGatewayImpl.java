@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Instant;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,10 +35,13 @@ public class PlayBillingGatewayImpl implements PlayBillingGateway {
     private static final int ACKNOWLEDGED = 1;
 
     private final BillingProperties properties;
+    private final ZipconvoStoreProperties zipconvoStores;
+    private final ConcurrentHashMap<String, String> packageByToken = new ConcurrentHashMap<>();
     private AndroidPublisher publisher;
 
-    public PlayBillingGatewayImpl(BillingProperties properties) {
+    public PlayBillingGatewayImpl(BillingProperties properties, ZipconvoStoreProperties zipconvoStores) {
         this.properties = properties;
+        this.zipconvoStores = zipconvoStores;
     }
 
     @Override
@@ -53,39 +57,59 @@ public class PlayBillingGatewayImpl implements PlayBillingGateway {
     @Override
     public PlayPurchaseRecord verifySubscription(String productId, String purchaseToken) {
         requireEnabled();
-        try {
-            SubscriptionPurchaseV2 purchase = client()
-                    .purchases()
-                    .subscriptionsv2()
-                    .get(packageName(), purchaseToken)
-                    .execute();
-            return fromSubscription(productId, purchaseToken, purchase);
-        } catch (GoogleJsonResponseException ex) {
-            log.warn("Play subscription lookup failed: {}", ex.getStatusCode());
-            throw paymentFailed();
-        } catch (IOException ex) {
-            log.warn("Play subscription lookup failed", ex);
-            throw paymentFailed();
+        GoogleJsonResponseException last = null;
+        for (String pkg : packageNames()) {
+            try {
+                SubscriptionPurchaseV2 purchase = client()
+                        .purchases()
+                        .subscriptionsv2()
+                        .get(pkg, purchaseToken)
+                        .execute();
+                packageByToken.put(purchaseToken, pkg);
+                return fromSubscription(productId, purchaseToken, purchase);
+            } catch (GoogleJsonResponseException ex) {
+                last = ex;
+                if (ex.getStatusCode() == 404 || ex.getStatusCode() == 400) {
+                    continue;
+                }
+                log.warn("Play subscription lookup failed: {}", ex.getStatusCode());
+                throw paymentFailed();
+            } catch (IOException ex) {
+                log.warn("Play subscription lookup failed", ex);
+                throw paymentFailed();
+            }
         }
+        log.warn("Play subscription lookup failed: {}", last == null ? 0 : last.getStatusCode());
+        throw paymentFailed();
     }
 
     @Override
     public PlayPurchaseRecord verifyProduct(String productId, String purchaseToken) {
         requireEnabled();
-        try {
-            ProductPurchase purchase = client()
-                    .purchases()
-                    .products()
-                    .get(packageName(), productId, purchaseToken)
-                    .execute();
-            return fromProduct(productId, purchaseToken, purchase);
-        } catch (GoogleJsonResponseException ex) {
-            log.warn("Play product lookup failed: {}", ex.getStatusCode());
-            throw paymentFailed();
-        } catch (IOException ex) {
-            log.warn("Play product lookup failed", ex);
-            throw paymentFailed();
+        GoogleJsonResponseException last = null;
+        for (String pkg : packageNames()) {
+            try {
+                ProductPurchase purchase = client()
+                        .purchases()
+                        .products()
+                        .get(pkg, productId, purchaseToken)
+                        .execute();
+                packageByToken.put(purchaseToken, pkg);
+                return fromProduct(productId, purchaseToken, purchase);
+            } catch (GoogleJsonResponseException ex) {
+                last = ex;
+                if (ex.getStatusCode() == 404 || ex.getStatusCode() == 400) {
+                    continue;
+                }
+                log.warn("Play product lookup failed: {}", ex.getStatusCode());
+                throw paymentFailed();
+            } catch (IOException ex) {
+                log.warn("Play product lookup failed", ex);
+                throw paymentFailed();
+            }
         }
+        log.warn("Play product lookup failed: {}", last == null ? 0 : last.getStatusCode());
+        throw paymentFailed();
     }
 
     @Override
@@ -96,7 +120,7 @@ public class PlayBillingGatewayImpl implements PlayBillingGateway {
                     .purchases()
                     .subscriptions()
                     .acknowledge(
-                            packageName(),
+                            packageFor(purchaseToken),
                             productId,
                             purchaseToken,
                             new SubscriptionPurchasesAcknowledgeRequest())
@@ -116,7 +140,7 @@ public class PlayBillingGatewayImpl implements PlayBillingGateway {
                     .purchases()
                     .products()
                     .acknowledge(
-                            packageName(),
+                            packageFor(purchaseToken),
                             productId,
                             purchaseToken,
                             new ProductPurchasesAcknowledgeRequest())
@@ -131,7 +155,7 @@ public class PlayBillingGatewayImpl implements PlayBillingGateway {
 
     private void consumeProduct(String productId, String purchaseToken) {
         try {
-            client().purchases().products().consume(packageName(), productId, purchaseToken).execute();
+            client().purchases().products().consume(packageFor(purchaseToken), productId, purchaseToken).execute();
         } catch (GoogleJsonResponseException ex) {
             log.warn("Play product consume failed: {}", ex.getStatusCode());
         } catch (IOException ex) {
@@ -238,8 +262,22 @@ public class PlayBillingGatewayImpl implements PlayBillingGateway {
         return Path.of(System.getProperty("user.dir", ".")).resolve(path).normalize();
     }
 
-    private String packageName() {
-        return properties.google().packageName();
+    private List<String> packageNames() {
+        String primary = properties.google() == null ? "" : properties.google().packageName();
+        List<String> names = zipconvoStores == null ? List.of() : zipconvoStores.googlePackages(primary);
+        if (!names.isEmpty()) {
+            return names;
+        }
+        return primary == null || primary.isBlank() ? List.of() : List.of(primary.trim());
+    }
+
+    private String packageFor(String purchaseToken) {
+        String known = packageByToken.get(purchaseToken);
+        if (known != null && !known.isBlank()) {
+            return known;
+        }
+        List<String> names = packageNames();
+        return names.isEmpty() ? "" : names.get(0);
     }
 
     private void requireEnabled() {

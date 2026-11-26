@@ -71,7 +71,11 @@
     "pharmacy": "薬局",
     "interview": "面接",
     "custom": "カスタム",
-    "scene": "場面"
+    "scene": "場面",
+    "restaurant": "レストランで",
+    "taxi": "タクシーで",
+    "supermarket": "スーパーで",
+    "directions": "道を尋ねる"
   },
   "scenes": {
     "title": "場面を選ぶ",
@@ -102,7 +106,11 @@
     "writing": "会話を書いています…",
     "generate": "生成 · 1 クレジット",
     "useLearned": "完全に覚えた場面を使う",
-    "ignoreLearned": "完全に覚えた場面は使わない"
+    "ignoreLearned": "完全に覚えた場面は使わない",
+    "restaurantTitle": "レストランで",
+    "taxiTitle": "タクシーで",
+    "supermarketTitle": "スーパーで",
+    "directionsTitle": "道を尋ねる"
   },
   "practice": {
     "backToList": "会話一覧へ戻る",

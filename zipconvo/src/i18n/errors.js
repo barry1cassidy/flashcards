@@ -35,6 +35,10 @@ const ERROR_KEYS = {
   'Deck not found': 'errors.deckNotFound',
   'Card not found': 'errors.cardNotFound',
   'You already have a deck with that name': 'errors.deckNameTaken',
+  'Payment failed': 'errors.paymentFailed',
+  'Samples are to and from English': 'errors.samplesEnglish',
+  'This Apple subscription belongs to another Zipdeck account. Sign in with that account.': 'errors.storeOtherAccount',
+  'This Google Play subscription belongs to another Zipdeck account. Sign in with that account.': 'errors.storeOtherAccount',
 }
 
 export function translateError(message) {

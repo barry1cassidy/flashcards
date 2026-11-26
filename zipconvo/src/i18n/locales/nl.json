@@ -71,7 +71,11 @@
     "pharmacy": "Apotheek",
     "interview": "Sollicitatie",
     "custom": "Aangepast",
-    "scene": "Scène"
+    "scene": "Scène",
+    "restaurant": "In het restaurant",
+    "taxi": "In een taxi",
+    "supermarket": "In de supermarkt",
+    "directions": "De weg vragen"
   },
   "scenes": {
     "title": "Kies een scène",
@@ -102,7 +106,11 @@
     "writing": "Gesprek wordt geschreven…",
     "generate": "Genereren · 1 tegoed",
     "useLearned": "Beheerste scènes gebruiken",
-    "ignoreLearned": "Beheerste scènes niet gebruiken"
+    "ignoreLearned": "Beheerste scènes niet gebruiken",
+    "restaurantTitle": "In het restaurant",
+    "taxiTitle": "In een taxi",
+    "supermarketTitle": "In de supermarkt",
+    "directionsTitle": "De weg vragen"
   },
   "practice": {
     "backToList": "Terug naar gesprekken",

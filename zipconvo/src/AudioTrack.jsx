@@ -29,7 +29,7 @@ export default function AudioTrack({ text, progress = 0, active = false }) {
     <div className={`listen-track${active ? ' is-speaking' : ''}`} aria-hidden="true">
       {bars.map((height, index) => (
         <span
-          key={`${text}-${index}`}
+          key={index}
           className={index / bars.length < played ? 'is-played' : ''}
           style={{ height: `${height}%` }}
         />

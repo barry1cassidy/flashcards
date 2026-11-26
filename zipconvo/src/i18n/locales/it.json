@@ -71,7 +71,11 @@
     "pharmacy": "Farmacia",
     "interview": "Colloquio",
     "custom": "Personalizzato",
-    "scene": "Scena"
+    "scene": "Scena",
+    "restaurant": "Al ristorante",
+    "taxi": "In taxi",
+    "supermarket": "Al supermercato",
+    "directions": "Chiedere indicazioni"
   },
   "scenes": {
     "title": "Scegli una scena",
@@ -102,7 +106,11 @@
     "writing": "Scrittura della conversazione…",
     "generate": "Genera · 1 credito",
     "useLearned": "Usa scene padroneggiate",
-    "ignoreLearned": "Non usare scene padroneggiate"
+    "ignoreLearned": "Non usare scene padroneggiate",
+    "restaurantTitle": "Al ristorante",
+    "taxiTitle": "In taxi",
+    "supermarketTitle": "Al supermercato",
+    "directionsTitle": "Chiedere indicazioni"
   },
   "practice": {
     "backToList": "Torna alle conversazioni",

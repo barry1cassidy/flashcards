@@ -71,7 +71,11 @@
     "pharmacy": "दवाखाना",
     "interview": "साक्षात्कार",
     "custom": "कस्टम",
-    "scene": "दृश्य"
+    "scene": "दृश्य",
+    "restaurant": "रेस्तरां में",
+    "taxi": "टैक्सी में",
+    "supermarket": "सुपरमार्केट में",
+    "directions": "रास्ता पूछना"
   },
   "scenes": {
     "title": "एक दृश्य चुनें",
@@ -102,7 +106,11 @@
     "writing": "बातचीत लिखी जा रही है…",
     "generate": "बनाएँ · 1 क्रेडिट",
     "useLearned": "पूरी तरह सीखे दृश्य इस्तेमाल करें",
-    "ignoreLearned": "पूरी तरह सीखे दृश्य इस्तेमाल न करें"
+    "ignoreLearned": "पूरी तरह सीखे दृश्य इस्तेमाल न करें",
+    "restaurantTitle": "रेस्तरां में",
+    "taxiTitle": "टैक्सी में",
+    "supermarketTitle": "सुपरमार्केट में",
+    "directionsTitle": "रास्ता पूछना"
   },
   "practice": {
     "backToList": "बातचीत पर वापस",

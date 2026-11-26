@@ -15,10 +15,12 @@ public class AppleBillingGatewayImpl implements AppleBillingGateway {
     private static final Logger log = LoggerFactory.getLogger(AppleBillingGatewayImpl.class);
 
     private final BillingProperties properties;
+    private final ZipconvoStoreProperties zipconvoStores;
     private final AppleJwsVerifier verifier = new AppleJwsVerifier();
 
-    public AppleBillingGatewayImpl(BillingProperties properties) {
+    public AppleBillingGatewayImpl(BillingProperties properties, ZipconvoStoreProperties zipconvoStores) {
         this.properties = properties;
+        this.zipconvoStores = zipconvoStores;
     }
 
     @Override
@@ -36,7 +38,7 @@ public class AppleBillingGatewayImpl implements AppleBillingGateway {
         requireEnabled();
         try {
             AppleJwsVerifier.DecodedTransaction decoded = verifier.verify(signedTransaction);
-            if (!properties.appleBundleId().equals(decoded.bundleId())) {
+            if (zipconvoStores == null || !zipconvoStores.acceptsAppleBundle(properties.appleBundleId(), decoded.bundleId())) {
                 throw paymentFailed();
             }
             boolean revoked = decoded.revokedAt() != null;

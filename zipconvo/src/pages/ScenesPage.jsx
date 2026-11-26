@@ -1,16 +1,27 @@
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { api } from '../api'
+import { useAuth } from '../auth'
 import ChoiceMenu from '../ChoiceMenu'
 import { translateError } from '../i18n/errors'
 import { LANGUAGES } from '../languages'
-import { LEVELS, SCENES, generateConversation } from '../studio'
+import { isProLicensed } from '../pro'
+import { LEVELS, SAMPLE_LANGUAGES, SCENES, generateConversation, samplePairOk } from '../studio'
+import ProStrip, { MoreScenes } from '../ProStrip'
+
+const sampleLanguages = LANGUAGES.filter((language) => SAMPLE_LANGUAGES.includes(language.code))
 
 export default function ScenesPage() {
   const { t } = useTranslation()
   const navigate = useNavigate()
+  const { user } = useAuth()
+  const pro = isProLicensed(user)
+  const [params, setParams] = useSearchParams()
   const [scene, setScene] = useState(null)
+  const [sampleNative, setSampleNative] = useState('en-US')
+  const [sampleTarget, setSampleTarget] = useState('es-ES')
+  const [samples, setSamples] = useState([])
   const [pairs, setPairs] = useState([])
   const [nativeLanguage, setNativeLanguage] = useState('en-US')
   const [targetLanguage, setTargetLanguage] = useState('es-ES')
@@ -19,6 +30,31 @@ export default function ScenesPage() {
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
   const [useLearned, setUseLearned] = useState(true)
+
+  const samplesReady = samplePairOk(sampleNative, sampleTarget)
+
+  useEffect(() => {
+    if (!samplesReady) {
+      setSamples([])
+      return undefined
+    }
+    let cancelled = false
+    const query = `nativeLanguage=${encodeURIComponent(sampleNative)}&targetLanguage=${encodeURIComponent(sampleTarget)}`
+    api(`/api/zipconvo/samples?${query}`)
+      .then((rows) => {
+        if (!cancelled) {
+          setSamples(rows || [])
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setSamples([])
+        }
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [sampleNative, sampleTarget, samplesReady])
 
   useEffect(() => {
     let cancelled = false
@@ -41,26 +77,105 @@ export default function ScenesPage() {
     }
   }, [])
 
+  function openCreate(item) {
+    if (!pro) {
+      navigate('/pro')
+      return
+    }
+    setCustomPrompt('')
+    setScene(item)
+  }
+
+  const showSamples = !pro || params.get('view') === 'samples'
+
+  function showSampleList() {
+    setParams({ view: 'samples' }, { replace: true })
+  }
+
+  function showCreateList() {
+    setParams({}, { replace: true })
+  }
+
   if (!scene) {
+    const sampleQuery = `native=${encodeURIComponent(sampleNative)}&target=${encodeURIComponent(sampleTarget)}`
+    const sampleCards = samples.length
+      ? samples.map((item) => ({
+          id: item.slug,
+          image: SCENES.find((sceneItem) => sceneItem.id === item.scenario)?.image || '',
+          title: item.title,
+        }))
+      : SCENES.map((item) => ({ id: item.id, image: item.image, title: t(`scenes.${item.id}Title`) }))
     return (
-      <main className="screen">
+      <main className="screen is-fit">
         <div className="screen-copy">
-          <h1>{t('scenes.title')}</h1>
-          <p>{t('scenes.lede')}</p>
+          <h1 className="start-title">{showSamples ? t('scenes.samplesTitle') : t('scenes.createTitle')}</h1>
+          <p>{showSamples ? t('scenes.samplesLede') : t('scenes.createLede')}</p>
         </div>
-        <div className="scene-list">
-          {SCENES.map((item) => (
-            <button key={item.id} className="scene-card" type="button" onClick={() => setScene(item)}>
-              <img src={item.image} alt="" />
-              <span>
-                <h2>{t(`scenes.${item.id}Title`)}</h2>
-              </span>
+        {showSamples ? (
+          <div className="scene-langs">
+            <ChoiceMenu
+              id="sample-native"
+              label={t('scenes.iSpeak')}
+              value={sampleNative}
+              options={sampleLanguages.map((language) => ({ value: language.code, label: language.name }))}
+              onChange={setSampleNative}
+            />
+            <ChoiceMenu
+              id="sample-target"
+              label={t('scenes.learning')}
+              value={sampleTarget}
+              options={sampleLanguages.map((language) => ({ value: language.code, label: language.name }))}
+              onChange={setSampleTarget}
+            />
+          </div>
+        ) : null}
+        {showSamples && !samplesReady ? <p className="card-meta">{t('scenes.samplesEnglish')}</p> : null}
+        <div className="scene-list is-fit">
+          {showSamples
+            ? sampleCards.map((item) =>
+                samplesReady ? (
+                  <Link key={item.id} className="scene-card" to={`/samples/${item.id}?${sampleQuery}`}>
+                    {item.image ? <img src={item.image} alt="" /> : null}
+                    <span>
+                      <h2>{item.title}</h2>
+                    </span>
+                  </Link>
+                ) : (
+                  <div key={item.id} className="scene-card is-quiet">
+                    {item.image ? <img src={item.image} alt="" /> : null}
+                    <span>
+                      <h2>{item.title}</h2>
+                    </span>
+                  </div>
+                ),
+              )
+            : SCENES.map((item) => (
+                <button key={item.id} className="scene-card" type="button" onClick={() => openCreate(item)}>
+                  <img src={item.image} alt="" />
+                  <span>
+                    <h2>{t(`scenes.${item.id}Title`)}</h2>
+                  </span>
+                </button>
+              ))}
+        </div>
+        {showSamples ? (
+          pro ? (
+            <div className="scene-foot">
+              <button className="scene-own" type="button" onClick={showCreateList}>
+                {t('scenes.createLink')}
+              </button>
+            </div>
+          ) : (
+            <ProStrip />
+          )
+        ) : (
+          <div className="scene-foot is-stack">
+            <MoreScenes onClick={showSampleList} />
+            <button className="scene-own" type="button" onClick={() => openCreate({ id: 'custom' })}>
+              {t('scenes.describeOwn')}
             </button>
-          ))}
-        </div>
-        <button className="scene-own" type="button" onClick={() => setScene({ id: 'custom' })}>
-          {t('scenes.describeOwn')}
-        </button>
+          </div>
+        )}
       </main>
     )
   }
@@ -94,6 +209,10 @@ export default function ScenesPage() {
       })
       navigate(`/conversations/${conversation.id}`)
     } catch (err) {
+      if (err.message === 'Pro license required' || err.message === 'Out of AI credits') {
+        navigate('/pro')
+        return
+      }
       setError(err.message)
       setBusy(false)
     }
