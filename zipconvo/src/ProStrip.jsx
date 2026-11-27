@@ -14,6 +14,36 @@ export default function ProStrip() {
   )
 }
 
+export function StartPro({ compact = false }) {
+  const { t } = useTranslation()
+  return (
+    <section className={compact ? 'start-pro is-compact' : 'start-pro'}>
+      <p className="start-pro-badge">{t('conversations.proKicker')}</p>
+      <div>
+        <h2>{t('conversations.proTitle')}</h2>
+        <p>{t(compact ? 'conversations.proPitchShort' : 'conversations.proPitchHome')}</p>
+      </div>
+      <ul className="start-pro-examples">
+        <li>
+          <img src="/scenes/scene-interview.jpg" alt="" />
+          <span>{t('conversations.proExample1')}</span>
+        </li>
+        <li>
+          <img src="/scenes/scene-pharmacy.jpg" alt="" />
+          <span>{t('conversations.proExample2')}</span>
+        </li>
+        <li>
+          <span className="start-pro-own" aria-hidden="true">+</span>
+          <span>{t('conversations.proExample3')}</span>
+        </li>
+      </ul>
+      <Link className="btn upgrade" to="/pro">
+        {t('conversations.upgrade')}
+      </Link>
+    </section>
+  )
+}
+
 export function MoreScenes({ to = '/scenes', onClick }) {
   const { t } = useTranslation()
   const inner = (

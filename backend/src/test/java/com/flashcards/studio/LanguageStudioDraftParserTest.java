@@ -51,4 +51,49 @@ class LanguageStudioDraftParserTest {
         assertEquals(HttpStatus.BAD_REQUEST, error.getStatus());
         assertEquals("The AI did not create a conversation. You were not charged.", error.getMessage());
     }
+
+    @Test
+    void quickLengthRejectsSixTurns() {
+        ApiException error = assertThrows(
+                ApiException.class,
+                () -> LanguageStudioDraftParser.parse(dialogue(6), ConversationLength.QUICK));
+        assertEquals(HttpStatus.BAD_REQUEST, error.getStatus());
+    }
+
+    @Test
+    void quickLengthKeepsEightTurns() {
+        LanguageStudioDraft draft = LanguageStudioDraftParser.parse(dialogue(8), ConversationLength.QUICK);
+        assertEquals(8, draft.turns().size());
+    }
+
+    @Test
+    void fullLengthRejectsAShortDialogue() {
+        ApiException error = assertThrows(
+                ApiException.class,
+                () -> LanguageStudioDraftParser.parse(
+                        """
+                        {"title":"Too short for full","yourRole":"you","theirRole":"them","turns":[
+                          {"role":"them","speaker":"A","native":"n","target":"t"},
+                          {"role":"you","speaker":"B","native":"n","target":"t"},
+                          {"role":"them","speaker":"A","native":"n","target":"t"},
+                          {"role":"you","speaker":"B","native":"n","target":"t"},
+                          {"role":"them","speaker":"A","native":"n","target":"t"},
+                          {"role":"you","speaker":"B","native":"n","target":"t"}
+                        ]}
+                        """,
+                        ConversationLength.FULL));
+        assertEquals(HttpStatus.BAD_REQUEST, error.getStatus());
+    }
+
+    private static String dialogue(int turns) {
+        StringBuilder body = new StringBuilder();
+        for (int i = 0; i < turns; i++) {
+            if (i > 0) {
+                body.append(',');
+            }
+            String role = i % 2 == 0 ? "them" : "you";
+            body.append("{\"role\":\"").append(role).append("\",\"speaker\":\"A\",\"native\":\"n\",\"target\":\"t\"}");
+        }
+        return "{\"title\":\"Cafe\",\"yourRole\":\"you\",\"theirRole\":\"them\",\"turns\":[" + body + "]}";
+    }
 }

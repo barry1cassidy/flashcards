@@ -5,7 +5,7 @@ import { api } from '../api'
 import { useAuth } from '../auth'
 import ChoiceMenu from '../ChoiceMenu'
 import { translateError } from '../i18n/errors'
-import { LANGUAGES } from '../languages'
+import { LANGUAGES, languageName } from '../languages'
 import { isProLicensed } from '../pro'
 import { LEVELS, SAMPLE_LANGUAGES, SCENES, generateConversation, samplePairOk } from '../studio'
 import ProStrip, { MoreScenes } from '../ProStrip'
@@ -30,6 +30,14 @@ export default function ScenesPage() {
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
   const [useLearned, setUseLearned] = useState(true)
+  const [advanced, setAdvanced] = useState(false)
+  const [length, setLength] = useState('QUICK')
+  const [sourceIds, setSourceIds] = useState([])
+  const [learnedScenes, setLearnedScenes] = useState([])
+  const [terms, setTerms] = useState([])
+  const [draftNative, setDraftNative] = useState('')
+  const [draftTarget, setDraftTarget] = useState('')
+  const [translating, setTranslating] = useState(false)
 
   const samplesReady = samplePairOk(sampleNative, sampleTarget)
 
@@ -57,6 +65,9 @@ export default function ScenesPage() {
   }, [sampleNative, sampleTarget, samplesReady])
 
   useEffect(() => {
+    if (!pro) {
+      return undefined
+    }
     let cancelled = false
     api('/api/language-studio/pairs')
       .then((rows) => {
@@ -83,6 +94,12 @@ export default function ScenesPage() {
       return
     }
     setCustomPrompt('')
+    setAdvanced(false)
+    setLength('QUICK')
+    setSourceIds([])
+    setTerms([])
+    setDraftNative('')
+    setDraftTarget('')
     setScene(item)
   }
 
@@ -95,6 +112,35 @@ export default function ScenesPage() {
   function showCreateList() {
     setParams({}, { replace: true })
   }
+
+  useEffect(() => {
+    setSourceIds([])
+    setTerms([])
+    setDraftNative('')
+    setDraftTarget('')
+  }, [nativeLanguage, targetLanguage])
+
+  useEffect(() => {
+    if (!advanced || !pro) {
+      return undefined
+    }
+    let cancelled = false
+    const query = `nativeLanguage=${encodeURIComponent(nativeLanguage)}&targetLanguage=${encodeURIComponent(targetLanguage)}`
+    api(`/api/language-studio/conversations?${query}`)
+      .then((rows) => {
+        if (!cancelled) {
+          setLearnedScenes((rows || []).filter((row) => row.status === 'LEARNED'))
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setLearnedScenes([])
+        }
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [advanced, nativeLanguage, targetLanguage, pro])
 
   if (!scene) {
     const sampleQuery = `native=${encodeURIComponent(sampleNative)}&target=${encodeURIComponent(sampleTarget)}`
@@ -183,6 +229,54 @@ export default function ScenesPage() {
   const learned = pairs.find((pair) => pair.nativeLanguage === nativeLanguage && pair.targetLanguage === targetLanguage)
   const learnedCount = learned?.learnedCount || 0
 
+  function chooseLength(next) {
+    setLength(next)
+    setTerms((current) => current.slice(0, wordCap(next)))
+  }
+
+  function toggleSource(id) {
+    setSourceIds((current) => {
+      if (current.includes(id)) {
+        return current.filter((item) => item !== id)
+      }
+      if (current.length >= 3) {
+        return current
+      }
+      return [...current, id]
+    })
+  }
+
+  async function translateWord() {
+    const text = draftNative.trim()
+    if (!text || translating) {
+      return
+    }
+    setTranslating(true)
+    setError('')
+    try {
+      const result = await api('/api/translate', {
+        method: 'POST',
+        body: JSON.stringify({ text, source: nativeLanguage, target: targetLanguage }),
+      })
+      setDraftTarget(result.text || '')
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setTranslating(false)
+    }
+  }
+
+  function addWord() {
+    const nativeText = draftNative.trim()
+    const targetText = draftTarget.trim()
+    if (!nativeText || !targetText || terms.length >= wordCap(length)) {
+      return
+    }
+    setTerms((current) => [...current, { nativeText, targetText }])
+    setDraftNative('')
+    setDraftTarget('')
+  }
+
   async function onSubmit(event) {
     event.preventDefault()
     if (busy) {
@@ -206,6 +300,9 @@ export default function ScenesPage() {
         customPrompt: customPrompt.trim(),
         level,
         useLearned: learnedCount > 0 && useLearned,
+        length,
+        sourceIds: learnedCount > 0 && useLearned ? sourceIds : [],
+        terms,
       })
       navigate(`/conversations/${conversation.id}`)
     } catch (err) {
@@ -276,6 +373,106 @@ export default function ScenesPage() {
             {useLearned ? t('scenes.useLearned') : t('scenes.ignoreLearned')}
           </button>
         ) : null}
+        <button
+          className={`scene-advanced-toggle${advanced ? ' is-on' : ''}`}
+          type="button"
+          aria-expanded={advanced}
+          onClick={() => setAdvanced((open) => !open)}
+        >
+          <strong>{t('scenes.advanced')}</strong>
+          <small>{advancedSummary(t, length, sourceIds, terms, learnedCount > 0 && useLearned)}</small>
+        </button>
+        {advanced ? (
+          <div className="scene-advanced">
+            <div className="field">
+              <span>{t('scenes.length')}</span>
+              <div className="scene-length" role="radiogroup" aria-label={t('scenes.length')}>
+                <button
+                  className={length === 'QUICK' ? 'is-on' : ''}
+                  type="button"
+                  onClick={() => chooseLength('QUICK')}
+                >
+                  {t('scenes.quick')}
+                  <small>{t('scenes.quickHint')}</small>
+                </button>
+                <button
+                  className={length === 'FULL' ? 'is-on' : ''}
+                  type="button"
+                  onClick={() => chooseLength('FULL')}
+                >
+                  {t('scenes.full')}
+                  <small>{t('scenes.fullHint')}</small>
+                </button>
+              </div>
+            </div>
+            <div className="field">
+              <span>{t('scenes.buildOn')}</span>
+              <p className="scene-advanced-note">
+                {learnedCount > 0 && useLearned ? t('scenes.buildOnHint') : t('scenes.buildOnOff')}
+              </p>
+              {learnedCount > 0 && useLearned && learnedScenes.length === 0 ? <p className="scene-advanced-note">{t('scenes.noLearned')}</p> : null}
+              {learnedCount > 0 && useLearned
+                ? learnedScenes.map((item) => (
+                    <button
+                      key={item.id}
+                      className={`scene-source${sourceIds.includes(item.id) ? ' is-on' : ''}`}
+                      type="button"
+                      aria-pressed={sourceIds.includes(item.id)}
+                      disabled={busy || (!sourceIds.includes(item.id) && sourceIds.length >= 3)}
+                      onClick={() => toggleSource(item.id)}
+                    >
+                      {item.title}
+                    </button>
+                  ))
+                : null}
+            </div>
+            <div className="field">
+              <span>{t('scenes.includeWords')}</span>
+              <p className="scene-advanced-note">
+                {t('scenes.includeWordsHint', { language: languageName(nativeLanguage) })}{' '}
+                {length === 'FULL' ? t('scenes.wordLimitFull') : t('scenes.wordLimitQuick')}
+              </p>
+              <label className="field">
+                <span>{t('scenes.wordIn', { language: languageName(nativeLanguage) })}</span>
+                <input
+                  value={draftNative}
+                  maxLength={80}
+                  onChange={(event) => setDraftNative(event.target.value)}
+                />
+              </label>
+              <button className="btn google" type="button" disabled={busy || translating || !draftNative.trim()} onClick={translateWord}>
+                {translating ? t('scenes.translating') : t('scenes.translate')}
+              </button>
+              <label className="field">
+                <span>{t('scenes.wordIn', { language: languageName(targetLanguage) })}</span>
+                <input
+                  value={draftTarget}
+                  maxLength={80}
+                  onChange={(event) => setDraftTarget(event.target.value)}
+                />
+              </label>
+              <button
+                className="btn email"
+                type="button"
+                disabled={busy || !draftNative.trim() || !draftTarget.trim() || terms.length >= wordCap(length)}
+                onClick={addWord}
+              >
+                {t('scenes.addWord')}
+              </button>
+              {terms.map((term) => (
+                <div className="scene-word" key={`${term.nativeText}-${term.targetText}`}>
+                  <span>
+                    {term.nativeText}
+                    <small>{term.targetText}</small>
+                  </span>
+                  <button type="button" onClick={() => setTerms((current) => current.filter((item) => item !== term))}>
+                    {t('scenes.removeWord')}
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : null}
         {error ? <p className="error">{translateError(error)}</p> : null}
         <button className="btn email" type="submit" disabled={busy}>
           {busy ? t('scenes.writing') : t('scenes.generate')}
@@ -283,4 +480,19 @@ export default function ScenesPage() {
       </form>
     </main>
   )
+}
+
+function wordCap(length) {
+  return length === 'FULL' ? 4 : 2
+}
+
+function advancedSummary(t, length, sourceIds, terms, reviewing) {
+  const parts = [length === 'FULL' ? t('scenes.summaryFull') : t('scenes.summaryQuick')]
+  if (reviewing) {
+    parts.push(sourceIds.length ? t('scenes.buildOnCount', { count: sourceIds.length }) : t('scenes.buildOnRecent'))
+  }
+  if (terms.length) {
+    parts.push(t('scenes.wordCount', { count: terms.length }))
+  }
+  return parts.join(' · ')
 }

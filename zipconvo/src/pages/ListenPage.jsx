@@ -12,7 +12,7 @@ import { createListenSession } from '../listenSession'
 import { canListenSpeak } from '../listenSpeech'
 import { placeLabel, SAMPLE_LANGUAGES } from '../studio'
 import { isProLicensed } from '../pro'
-import ProStrip, { MoreScenes } from '../ProStrip'
+import { MoreScenes, StartPro } from '../ProStrip'
 
 export default function ListenPage() {
   const { id, slug } = useParams()
@@ -83,7 +83,7 @@ function ListenList() {
           </Link>
         </section>
         <MoreScenes />
-        {pro ? null : <ProStrip />}
+        {pro ? null : <StartPro />}
       </main>
     )
   }

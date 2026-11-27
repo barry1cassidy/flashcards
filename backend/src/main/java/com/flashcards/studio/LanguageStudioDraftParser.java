@@ -23,6 +23,10 @@ final class LanguageStudioDraftParser {
     }
 
     static LanguageStudioDraft parse(String raw) {
+        return parse(raw, null);
+    }
+
+    static LanguageStudioDraft parse(String raw, ConversationLength length) {
         JsonNode root;
         try {
             root = JSON.readTree(extractJson(raw));
@@ -41,6 +45,8 @@ final class LanguageStudioDraftParser {
         if (turnsNode == null || !turnsNode.isArray()) {
             throw failed();
         }
+        int minTurns = length == null ? MIN_TURNS : length.minTurns();
+        int maxTurns = length == null ? MAX_TURNS : length.maxTurns();
         List<LanguageStudioDraft.Turn> turns = new ArrayList<>();
         int youTurns = 0;
         for (JsonNode node : turnsNode) {
@@ -58,11 +64,11 @@ final class LanguageStudioDraftParser {
                 youTurns++;
             }
             turns.add(new LanguageStudioDraft.Turn(role, speaker, nativeText, targetText));
-            if (turns.size() == MAX_TURNS) {
+            if (turns.size() == maxTurns) {
                 break;
             }
         }
-        if (turns.size() < MIN_TURNS || youTurns < 2) {
+        if (turns.size() < minTurns || youTurns < 2) {
             throw failed();
         }
         return new LanguageStudioDraft(

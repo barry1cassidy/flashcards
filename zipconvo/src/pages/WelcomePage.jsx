@@ -114,15 +114,20 @@ export default function WelcomePage() {
           {t('welcome.google')}
         </GoogleSignIn>
         {error ? <p className="error">{translateError(error)}</p> : null}
-        <button className="btn email" type="button" onClick={() => navigate('/register')}>
-          {t('welcome.email')}
-        </button>
-        <p className="signin">
-          {t('welcome.haveAccount')}{' '}
-          <button type="button" onClick={() => navigate('/login')}>
-            {t('welcome.logIn')}
-          </button>
-        </p>
+        <div className="auth-paths">
+          <div className="auth-path">
+            <p>{t('welcome.newHere')}</p>
+            <button className="btn email" type="button" onClick={() => navigate('/register')}>
+              {t('welcome.email')}
+            </button>
+          </div>
+          <div className="auth-path">
+            <p>{t('welcome.haveAccount')}</p>
+            <button className="btn google" type="button" onClick={() => navigate('/login')}>
+              {t('welcome.logIn')}
+            </button>
+          </div>
+        </div>
       </div>
     </main>
   )

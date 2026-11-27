@@ -157,6 +157,8 @@ public class LanguageStudioService {
             throw new ApiException(HttpStatus.BAD_REQUEST, "Describe the scene");
         }
         LanguageLevel level = LanguageLevel.from(request.level());
+        ConversationLength length = ConversationLength.fromOptional(request.length());
+        List<StudioTerm> terms = cleanTerms(request.terms(), length);
         CreditBalance credits = creditService.snapshot(user);
         if (credits.remainingCredits() <= 0) {
             throw new ApiException(HttpStatus.TOO_MANY_REQUESTS, "Out of AI credits");
@@ -169,7 +171,15 @@ public class LanguageStudioService {
         LanguageStudioJob job = new LanguageStudioJob(jobId, userId, credits.remainingCredits());
         jobs.put(jobId, job);
         job.step("starting");
-        String learned = request.useLearned() ? learnedContext(userId, nativeLanguage, targetLanguage) : "";
+        String learned;
+        if (request.useLearned()) {
+            List<UUID> sourceIds = request.sourceIds() == null ? List.of() : request.sourceIds();
+            learned = sourceIds.isEmpty()
+                    ? learnedContext(userId, nativeLanguage, targetLanguage)
+                    : learnedContext(userId, nativeLanguage, targetLanguage, sourceIds);
+        } else {
+            learned = "";
+        }
         String inProgress = inProgressContext(userId, nativeLanguage, targetLanguage);
         jobExecutor.execute(() -> {
             try {
@@ -181,6 +191,8 @@ public class LanguageStudioService {
                         scenario,
                         customPrompt,
                         level,
+                        length,
+                        terms,
                         request.useLearned(),
                         learned,
                         inProgress);
@@ -208,6 +220,8 @@ public class LanguageStudioService {
             String scenario,
             String customPrompt,
             LanguageLevel level,
+            ConversationLength length,
+            List<StudioTerm> terms,
             boolean useLearned,
             String learned,
             String inProgress) {
@@ -221,7 +235,15 @@ public class LanguageStudioService {
                     reply = chatClient.prompt()
                             .system(systemPrompt())
                             .user(userMessage(
-                                    nativeLanguage, targetLanguage, scenario, customPrompt, level, learned, inProgress))
+                                    nativeLanguage,
+                                    targetLanguage,
+                                    scenario,
+                                    customPrompt,
+                                    level,
+                                    length,
+                                    terms,
+                                    learned,
+                                    inProgress))
                             .call()
                             .content();
                     log.info(
@@ -241,7 +263,7 @@ public class LanguageStudioService {
                     return;
                 }
             }
-            LanguageStudioDraft draft = LanguageStudioDraftParser.parse(reply);
+            LanguageStudioDraft draft = LanguageStudioDraftParser.parse(reply, length);
             job.step("finishing");
             User user = requireProUser(userId);
             LanguageConversation saved = saveDraft(
@@ -307,6 +329,52 @@ public class LanguageStudioService {
         LanguageConversation saved = conversationRepository.save(conversation);
         pairService.touch(user, nativeLanguage, targetLanguage, level);
         return saved;
+    }
+
+    String learnedContext(UUID userId, String nativeLanguage, String targetLanguage, List<UUID> sourceIds) {
+        if (sourceIds.size() > 3) {
+            throw new ApiException(HttpStatus.BAD_REQUEST, "Choose up to 3 learned conversations");
+        }
+        List<LanguageConversation> chosen = new ArrayList<>();
+        for (UUID sourceId : sourceIds) {
+            LanguageConversation conversation = conversationRepository
+                    .findByIdAndUser_Id(sourceId, userId)
+                    .orElseThrow(() -> new ApiException(
+                            HttpStatus.BAD_REQUEST, "Choose learned conversations in these languages"));
+            boolean samePair = nativeLanguage.equalsIgnoreCase(conversation.getNativeLanguage())
+                    && targetLanguage.equalsIgnoreCase(conversation.getTargetLanguage());
+            if (conversation.getStatus() != LanguageSceneStatus.LEARNED || !samePair) {
+                throw new ApiException(HttpStatus.BAD_REQUEST, "Choose learned conversations in these languages");
+            }
+            chosen.add(conversation);
+        }
+        return appendSceneLines(chosen, LEARNED_CONTEXT_YOU_LINES, LEARNED_CONTEXT_CHARS);
+    }
+
+    private static List<StudioTerm> cleanTerms(List<StudioTerm> raw, ConversationLength length) {
+        if (raw == null || raw.isEmpty()) {
+            return List.of();
+        }
+        int cap = length == null ? ConversationLength.FULL.wordCap() : length.wordCap();
+        List<StudioTerm> terms = new ArrayList<>();
+        for (StudioTerm term : raw) {
+            if (term == null) {
+                continue;
+            }
+            String nativeText = term.nativeText() == null ? "" : term.nativeText().trim();
+            String targetText = term.targetText() == null ? "" : term.targetText().trim();
+            if (nativeText.isBlank() || targetText.isBlank()) {
+                continue;
+            }
+            if (nativeText.length() > 80 || targetText.length() > 80) {
+                throw new ApiException(HttpStatus.BAD_REQUEST, "Keep each word or phrase under 80 characters");
+            }
+            terms.add(new StudioTerm(nativeText, targetText));
+        }
+        if (terms.size() > cap) {
+            throw new ApiException(HttpStatus.BAD_REQUEST, "Keep the word list shorter");
+        }
+        return List.copyOf(terms);
     }
 
     String learnedContext(UUID userId, String nativeLanguage, String targetLanguage) {
@@ -436,7 +504,8 @@ public class LanguageStudioService {
                 target is the spoken line in the language they are learning.
                 THEM turns are what the other person says in the target language.
                 YOU turns are the line the learner should say in the target language.
-                Write 8 turns when you can, never fewer than 6 or more than 12.
+                Write the turn count requested in the user message.
+                If no count is requested, write 8 turns when you can, never fewer than 6 or more than 12.
                 Alternate speakers. Keep lines speakable aloud, not written essays.
                 If the user lists known lines, recycle a few of those words in a new situation; do not remake the old scene.
                 If the user lists in-progress scenes, do not copy them or treat their lines as known.
@@ -449,14 +518,39 @@ public class LanguageStudioService {
             String scenario,
             String customPrompt,
             LanguageLevel level,
+            ConversationLength length,
+            List<StudioTerm> terms,
             String learned,
             String inProgress) {
         String extra = customPrompt.isBlank() ? "" : " Extra details: " + customPrompt;
+        String lengthLine = length == null ? "" : " " + length.instruction();
         return "I speak " + nativeLanguage + ". I am learning " + targetLanguage + ". "
                 + LanguageStudioDraftParser.levelHint(level) + " The scene is "
-                + LanguageStudioDraftParser.scenarioLabel(scenario) + "." + extra
+                + LanguageStudioDraftParser.scenarioLabel(scenario) + "." + lengthLine + extra
                 + " I play the visitor, customer, patient, guest, or applicant as the scene requires."
-                + historyBlock(learned, inProgress);
+                + historyBlock(learned, inProgress)
+                + termsBlock(terms, learned != null && !learned.isBlank());
+    }
+
+    static String termsBlock(List<StudioTerm> terms, boolean alsoReviewing) {
+        if (terms == null || terms.isEmpty()) {
+            return "";
+        }
+        StringBuilder out = new StringBuilder();
+        out.append("""
+
+                The learner suggested these words or phrases. Use the target wording. The native text is only the meaning.
+                Include a suggestion in a YOU line only when it fits this scene naturally. Leave it out when it would sound forced or would change what the speakers are doing.
+                Work any word you do include in as a speakable chunk with different surrounding language. Do not list the suggestions.
+                """);
+        if (alsoReviewing) {
+            out.append("When a suggestion fits, use it before recycling known words, and recycle fewer known words so the scene still has new language.\n");
+        }
+        out.append('\n');
+        for (StudioTerm term : terms) {
+            out.append("- ").append(term.targetText()).append(" (").append(term.nativeText()).append(")\n");
+        }
+        return out.toString();
     }
 
     static String historyBlock(String learned, String inProgress) {

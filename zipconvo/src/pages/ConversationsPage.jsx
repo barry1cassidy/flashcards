@@ -9,7 +9,7 @@ import { languageName } from '../languages'
 import ConversationCover from '../ConversationCover'
 import { customCover } from '../covers'
 import { isProLicensed } from '../pro'
-import { MoreScenes } from '../ProStrip'
+import { MoreScenes, StartPro } from '../ProStrip'
 import { SAMPLE_LANGUAGES, gradeClass, gradeLabel, placeLabel, sceneImage } from '../studio'
 
 export default function ConversationsPage() {
@@ -276,30 +276,7 @@ function StartHome({ pro, language }) {
           <span>{t('conversations.moreScenesHint')}</span>
         </span>
       </Link>
-      <section className="start-pro">
-        <p className="start-pro-badge">{t('conversations.proKicker')}</p>
-        <div>
-          <h2>{t('conversations.proTitle')}</h2>
-          <p>{t('conversations.proPitchHome')}</p>
-        </div>
-        <ul className="start-pro-examples">
-          <li>
-            <img src="/scenes/scene-interview.jpg" alt="" />
-            <span>{t('conversations.proExample1')}</span>
-          </li>
-          <li>
-            <img src="/scenes/scene-pharmacy.jpg" alt="" />
-            <span>{t('conversations.proExample2')}</span>
-          </li>
-          <li>
-            <span className="start-pro-own" aria-hidden="true">+</span>
-            <span>{t('conversations.proExample3')}</span>
-          </li>
-        </ul>
-        <Link className="btn upgrade" to="/pro">
-          {t('conversations.upgrade')}
-        </Link>
-      </section>
+      <StartPro />
     </main>
   )
 }

@@ -244,7 +244,7 @@ class LanguageStudioServiceTest {
         ApiException error = assertThrows(
                 ApiException.class,
                 () -> studioService.startGenerate(
-                        USER_ID, new LanguageStudioCreateRequest("es-ES", "en-US", "cafe", "", "A2", false)));
+                        USER_ID, new LanguageStudioCreateRequest("es-ES", "en-US", "cafe", "", "A2", false, null, null, null)));
         assertEquals(HttpStatus.SERVICE_UNAVAILABLE, error.getStatus());
         assertEquals("AI is not configured", error.getMessage());
     }
@@ -262,7 +262,7 @@ class LanguageStudioServiceTest {
         ApiException error = assertThrows(
                 ApiException.class,
                 () -> configured.startGenerate(
-                        USER_ID, new LanguageStudioCreateRequest("en-US", "en-US", "cafe", "", "A2", false)));
+                        USER_ID, new LanguageStudioCreateRequest("en-US", "en-US", "cafe", "", "A2", false, null, null, null)));
         assertEquals(HttpStatus.BAD_REQUEST, error.getStatus());
         assertEquals("Choose two different languages", error.getMessage());
     }

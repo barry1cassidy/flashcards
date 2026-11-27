@@ -5,7 +5,7 @@ import { api } from '../api'
 import { useAuth } from '../auth'
 import { translateError } from '../i18n/errors'
 import { languageName } from '../languages'
-import { deckPhrases } from '../phrases'
+import SpeakButton from './SpeakButton'
 
 export default function ConversationCardsPage() {
   const { id } = useParams()
@@ -40,7 +40,7 @@ export default function ConversationCardsPage() {
 
   useEffect(() => {
     if (conversation?.deckId && mode === 'make') {
-      navigate(`/conversations/${id}`, { replace: true })
+      navigate(`/conversations/${id}/cards/edit`, { replace: true })
     }
   }, [conversation, mode, id, navigate])
 
@@ -60,7 +60,7 @@ export default function ConversationCardsPage() {
   }
 
   if (!conversation.deckId) {
-    return <MakeView conversation={conversation} onBack={back} onMade={() => navigate(`/conversations/${id}`)} />
+    return <MakeAndOpen conversation={conversation} onBack={back} />
   }
   if (mode === 'edit') {
     return <EditView deckId={conversation.deckId} title={conversation.title} onBack={back} onDeleted={back} />
@@ -83,55 +83,35 @@ export default function ConversationCardsPage() {
   )
 }
 
-function MakeView({ conversation, onBack, onMade }) {
+function MakeAndOpen({ conversation, onBack }) {
   const { t } = useTranslation()
-  const phrases = deckPhrases(conversation.turns)
-  const [busy, setBusy] = useState(false)
+  const navigate = useNavigate()
   const [error, setError] = useState('')
 
-  async function create() {
-    setBusy(true)
-    setError('')
-    try {
-      await api(`/api/language-studio/conversations/${conversation.id}/deck`, { method: 'POST' })
-      onMade()
-    } catch (err) {
-      setError(err.message)
-      setBusy(false)
+  useEffect(() => {
+    let cancelled = false
+    api(`/api/language-studio/conversations/${conversation.id}/deck`, { method: 'POST' })
+      .then((saved) => {
+        if (!cancelled) {
+          navigate(`/conversations/${saved.id}/cards/edit`, { replace: true })
+        }
+      })
+      .catch((err) => {
+        if (!cancelled) {
+          setError(err.message)
+        }
+      })
+    return () => {
+      cancelled = true
     }
-  }
+  }, [conversation.id, navigate])
 
   return (
     <main className="screen">
       <button className="back" type="button" onClick={onBack}>
         {t('back')}
       </button>
-      <div className="screen-copy">
-        <h1>{t('cards.title')}</h1>
-        <p>{conversation.title}</p>
-        <p>
-          {t('cards.makeExplain', {
-            native: languageName(conversation.nativeLanguage),
-            target: languageName(conversation.targetLanguage),
-          })}
-        </p>
-      </div>
-      {error ? <p className="error">{translateError(error)}</p> : null}
-      {phrases.length === 0 ? (
-        <p className="error">{t('cards.noLines')}</p>
-      ) : (
-        <ol className="phrase-list">
-          {phrases.map((phrase) => (
-            <li key={`${phrase.front}\n${phrase.back}`} className="phrase">
-              <strong>{phrase.front}</strong>
-              <span>{phrase.back}</span>
-            </li>
-          ))}
-        </ol>
-      )}
-      <button className="btn email" type="button" disabled={busy || phrases.length === 0} onClick={create}>
-        {busy ? t('cards.makeBusy') : t('cards.make')}
-      </button>
+      {error ? <p className="error">{translateError(error)}</p> : <p>{t('cards.makeBusy')}</p>}
     </main>
   )
 }
@@ -144,6 +124,7 @@ function StudyView({ deckId, title, nativeLanguage, targetLanguage, onBack }) {
   const [session, setSession] = useState(null)
   const [index, setIndex] = useState(0)
   const [flipped, setFlipped] = useState(false)
+  const [hintOpen, setHintOpen] = useState(false)
   const [finished, setFinished] = useState(false)
   const [retries, setRetries] = useState(() => new Set())
   const [busy, setBusy] = useState(false)
@@ -154,6 +135,7 @@ function StudyView({ deckId, title, nativeLanguage, targetLanguage, onBack }) {
     setSession(null)
     setIndex(0)
     setFlipped(false)
+    setHintOpen(false)
     setFinished(false)
     setRetries(new Set())
     setError('')
@@ -200,6 +182,7 @@ function StudyView({ deckId, title, nativeLanguage, targetLanguage, onBack }) {
       } else {
         setIndex(index + 1)
         setFlipped(false)
+        setHintOpen(false)
       }
     } catch (err) {
       setError(err.message)
@@ -250,58 +233,99 @@ function StudyView({ deckId, title, nativeLanguage, targetLanguage, onBack }) {
         </div>
       ) : null}
       {card && !finished ? (
-        <>
-          <p className="flip-progress">
-            {t('cards.cardOf', { current: index + 1, total: cards.length })}
-          </p>
-          <button className="flip-card" type="button" onClick={() => setFlipped(true)}>
-            <span className="flip-kicker">
-              {flipped ? languageName(targetLanguage) : languageName(nativeLanguage)}
-            </span>
-            {flipped ? <span className="flip-prompt">{card.front}</span> : null}
-            <strong>{flipped ? card.back : card.front}</strong>
-          </button>
+        <div className="study-session">
+          <div className="flip-stage">
+            <div className="flip-toolbar">
+              <p className="flip-kicker">
+                {flipped ? languageName(targetLanguage) : languageName(nativeLanguage)}
+              </p>
+              {card.hint ? (
+                <button className="hint-btn" type="button" onClick={() => setHintOpen((open) => !open)}>
+                  {hintOpen ? t('cards.hideHint') : t('cards.showHint')}
+                </button>
+              ) : null}
+            </div>
+            {hintOpen && card.hint ? <p className="hint-text">{card.hint}</p> : null}
+            <p className="flip-progress">
+              {t('cards.cardOf', { current: index + 1, total: cards.length })}
+            </p>
+            <div className="flip-card">
+              <div className={`flip-inner${flipped ? ' is-flipped' : ''}`}>
+                <div
+                  className="flip-face flip-face-front"
+                  role="button"
+                  tabIndex={flipped ? -1 : 0}
+                  aria-hidden={flipped}
+                  onClick={() => setFlipped(true)}
+                  onKeyDown={(event) => {
+                    if (event.key === 'Enter' || event.key === ' ') {
+                      event.preventDefault()
+                      setFlipped(true)
+                    }
+                  }}
+                >
+                  <div className="flip-speak-row">
+                    <strong>{card.front}</strong>
+                    <SpeakButton text={card.front} lang={nativeLanguage} />
+                  </div>
+                  <span className="flip-cue">{t('cards.tap')}</span>
+                </div>
+                <div className="flip-face flip-face-back" aria-hidden={!flipped}>
+                  <div className="flip-speak-row">
+                    <p className="flip-prompt">{card.front}</p>
+                    <SpeakButton text={card.front} lang={nativeLanguage} />
+                  </div>
+                  <div className="flip-speak-row">
+                    <strong>{card.back}</strong>
+                    <SpeakButton text={card.back} lang={targetLanguage} />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
           {flipped ? (
-            <div className="rate-grid">
+            <div className="rating-row flip-ratings">
               <RateButton
+                kind="again"
                 label={t('cards.missed')}
                 hint={reviewHint(t, 0, { thisSession: true })}
                 disabled={busy}
                 onClick={() => rate('AGAIN')}
               />
               <RateButton
+                kind="hard"
                 label={t('cards.hard')}
                 hint={reviewHint(t, card.hardDays, { dueToday })}
                 disabled={busy}
                 onClick={() => rate('HARD')}
               />
               <RateButton
+                kind="good"
                 label={t('cards.good')}
                 hint={reviewHint(t, card.goodDays, { dueToday })}
                 disabled={busy}
                 onClick={() => rate('GOOD')}
               />
               <RateButton
+                kind="easy"
                 label={t('cards.easy')}
                 hint={reviewHint(t, card.easyDays, { dueToday })}
                 disabled={busy}
                 onClick={() => rate('EASY')}
               />
             </div>
-          ) : (
-            <p className="flip-cue">{t('cards.tap')}</p>
-          )}
-        </>
+          ) : null}
+        </div>
       ) : null}
     </main>
   )
 }
 
-function RateButton({ label, hint, disabled, onClick }) {
+function RateButton({ kind, label, hint, disabled, onClick }) {
   return (
-    <button type="button" disabled={disabled} onClick={onClick}>
-      <span>{label}</span>
-      <small>{hint}</small>
+    <button className={`rating ${kind}`} type="button" disabled={disabled} onClick={onClick}>
+      <span className="rating-label">{label}</span>
+      <span className="rating-hint">{hint}</span>
     </button>
   )
 }
@@ -397,7 +421,8 @@ function EditView({ deckId, title, onBack, onDeleted }) {
     setError('')
     setNotice('')
     try {
-      const body = JSON.stringify({ front, back, hint: editing.hint || null })
+      const hint = (editing.hint || '').trim()
+      const body = JSON.stringify({ front, back, hint: hint || null })
       if (editing.id) {
         await api(`/api/cards/${editing.id}`, { method: 'PUT', body })
       } else {
@@ -455,20 +480,53 @@ function EditView({ deckId, title, onBack, onDeleted }) {
           {t('back')}
         </button>
         <div className="screen-copy">
-          <h1>{editing.id ? t('cards.edit') : t('cards.add')}</h1>
+          <h1>{editing.id ? t('cards.editCard') : t('cards.add')}</h1>
         </div>
         {error ? <p className="error">{translateError(error)}</p> : null}
-        <label className="field">
-          <span>{t('cards.front')}</span>
-          <textarea rows={3} value={editing.front} onChange={(event) => setEditing({ ...editing, front: event.target.value })} />
-        </label>
-        <label className="field">
-          <span>{t('cards.back')}</span>
-          <textarea rows={3} value={editing.back} onChange={(event) => setEditing({ ...editing, back: event.target.value })} />
-        </label>
-        <button className="btn email" type="button" disabled={busy} onClick={saveCard}>
-          {t('cards.save')}
-        </button>
+        <div className="card-form">
+          <label className="field">
+            <span>{t('cards.front')}</span>
+            <textarea
+              rows={3}
+              value={editing.front}
+              onChange={(event) => setEditing({ ...editing, front: event.target.value })}
+            />
+          </label>
+          <label className="field">
+            <span>{t('cards.back')}</span>
+            <textarea
+              rows={3}
+              value={editing.back}
+              onChange={(event) => setEditing({ ...editing, back: event.target.value })}
+            />
+          </label>
+          <label className="field">
+            <span>{t('cards.hint')}</span>
+            <textarea
+              rows={2}
+              value={editing.hint || ''}
+              placeholder={t('cards.hintPlaceholder')}
+              onChange={(event) => setEditing({ ...editing, hint: event.target.value })}
+            />
+          </label>
+          <div className="card-form-actions">
+            <button className="btn email" type="button" disabled={busy} onClick={saveCard}>
+              {t('cards.save')}
+            </button>
+            <button
+              className="btn google"
+              type="button"
+              disabled={busy}
+              onClick={() => {
+                setEditing(null)
+                setConfirmCard(false)
+                setError('')
+              }}
+            >
+              {t('cards.cancel')}
+            </button>
+          </div>
+        </div>
         {editing.id ? (
           confirmCard ? (
             <div className="cards-confirm">
@@ -495,7 +553,7 @@ function EditView({ deckId, title, onBack, onDeleted }) {
         {t('back')}
       </button>
       <div className="screen-copy">
-        <h1>{t('cards.edit')}</h1>
+        <h1>{t('cards.title')}</h1>
         <p>{title}</p>
       </div>
       {error ? <p className="error">{translateError(error)}</p> : null}
@@ -528,6 +586,11 @@ function EditView({ deckId, title, onBack, onDeleted }) {
           >
             <strong>{card.front}</strong>
             <span>{card.back}</span>
+            {card.hint ? (
+              <span className="card-hint">
+                {t('cards.hint')}: {card.hint}
+              </span>
+            ) : null}
           </button>
         ))}
       </div>

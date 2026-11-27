@@ -20,6 +20,8 @@ export default function PracticePage() {
   const [finished, setFinished] = useState(false)
   const [saving, setSaving] = useState(false)
   const [deck, setDeck] = useState(undefined)
+  const [making, setMaking] = useState(false)
+  const [makeError, setMakeError] = useState('')
 
   useEffect(() => {
     if (!conversation) {
@@ -71,6 +73,21 @@ export default function PracticePage() {
       cancelled = true
     }
   }, [id, sample, slug, searchParams])
+
+  async function makeDeck() {
+    if (making) {
+      return
+    }
+    setMaking(true)
+    setMakeError('')
+    try {
+      const saved = await api(`/api/language-studio/conversations/${id}/deck`, { method: 'POST' })
+      navigate(`/conversations/${saved.id}/cards/edit`)
+    } catch (err) {
+      setMakeError(err.message)
+      setMaking(false)
+    }
+  }
 
   if (error) {
     return (
@@ -209,9 +226,10 @@ export default function PracticePage() {
             {deck === null ? (
               <>
                 <p>{t('cards.makeLead')}</p>
-                <Link className="btn email" to={`/conversations/${id}/cards`}>
-                  {t('cards.make')}
-                </Link>
+                {makeError ? <p className="error">{translateError(makeError)}</p> : null}
+                <button className="btn email" type="button" disabled={making} onClick={makeDeck}>
+                  {making ? t('cards.makeBusy') : t('cards.make')}
+                </button>
               </>
             ) : null}
           </section>
